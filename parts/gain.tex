@@ -1,0 +1,19 @@
+\section{GAIN (Generative Adversarial Imputation Networks)}
+Veir kümesindeki eksik değerleri doldurmak için geliştirilmiş GAN tabanlı bir modeldir. GAN mimarisini kullanarak eksik verileri gerçek verilere benzer şekilde tahmin etmeyi hedefler. GAN'da olduğu gibi iki ana bileşeni vardır;
+
+\begin{itemize}
+	\item \textbf{Generator (G)}: Eksik verileri doldurmak için tahminlerde bulunur.
+	\item \textbf{Discriminator (D)}: Gerçek verilerle üretici tarafından üretilen tahminleri ayırt etmeye çalışır.
+\end{itemize}
+
+\subsection{Çalışma Adımları}
+\begin{enumerate}
+	\item Eksik veri seti X ve mask matrisi M ile başlanır.
+	\item Üretici, mask matrisi ve girdi veri matrisi X kullanarak eksik yerleri tahmin eder.
+	\item Ayrıştırıcı, üretici tarafından doldurulmuş veri ve gerçek veri arasında ayrım yapmaya çalışır.
+	\item Hem üretici hem ayrıştırıcı için kayıp hesaplanır.
+	\item Ağırlıklar güncellenir.
+	\item Adımlar tekrarlanır. 
+\end{enumerate}
+
+\newpage

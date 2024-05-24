@@ -1,0 +1,29 @@
+\section{Data Leakage}
+Veri sızıntısı, bir makine öğrenimi modelinin eğitim sürecinde yanıltıcı bilgilerle karşılaşmasına ve bu nedenle gerçek dünya verilerinde beklenmedik hatalı sonuçlar üretmesine neden olur. Bu durum, modelin genellikle eğitim seti içinde olmayan bilgilere dayalı kararlar almasına yol açabilir. Veri sızıntısı, modelin yanıltıcı şekillerde yüksek doğruluk oranlarına ulaşmasına veya yanlış sonuçlar üretmesine neden olabilir. Modelin öğrenmemesi gereken bir şeyi öğrenmesidir. Aşağıdaki durumlar örnektir;
+
+\begin{enumerate}
+    \item Eksik verilerin veri setinin tümünü kullanarak (train-test ayırmadan) mean/mode/median ile doldurulması.
+    \begin{lstlisting}[language=Python]
+    df['col1'].fillna(df['col1'].mean(), inplace=True)
+    \end{lstlisting}
+    \item Scale ederken veri setinin tümünün kullanılması.
+    \begin{lstlisting}[language=Python]
+    X_scaled = StandardScaler().fit_transform(X)
+    \end{lstlisting}
+    \item Bazı metodların amacı dışında kullanımı.
+    \begin{lstlisting}
+    # LabelEncoder sadece hedef degisken icin kullanilmalidir. Train setinde bunun yerine OrdinalEncoder kullanilmalidir.
+    le = LabelEncoder()
+    X_train['col1] = le.fit_transform(X_train['col1']
+
+    # OrdinalEncoder train-test ayrimi sonrasi kullanilmalidir.
+    ord = OrdinalEncoder(encoded_missing_value=-1)
+    X_train['col1] = ord.fit_transform(X_train['col1']
+    \end{lstlisting}
+    \item Over/Under Sampling işlemlerinde veri setinin tümünün kullanılması (train-test ayırmadan)
+    \begin{lstlisting}[language=Python]
+    X_resampled, y_resampled = smote.fit_resample(X, y)
+    \end{lstlisting}
+\end{enumerate}
+
+\newpage

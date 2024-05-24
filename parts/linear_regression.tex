@@ -1,0 +1,20 @@
+\section{Linear Regression}
+Linear Regression, bağımlı ve bağımsız değişkenler arasındaki ilişkiyi temsil eden doğrusal bir denklem oluşturarak tahmin etmeye çalışır. Bu model, verilerdeki ilişkiyi en iyi şekilde temsil eden doğruyu bulmaya çalışır. Özellik sayımız bir ise "Simple Linear Regression", birden fazla ise "Multiple Linear Regression" kullanılır.
+
+\subsection{Hiperparametreler}
+\begin{table}[h]
+\centering
+{\scriptsize\renewcommand{\arraystretch}{0.4}
+{\resizebox*{\linewidth}{0.4\textwidth}{
+\begin{tabular}{|p{3cm}|p{1cm}|p{1cm}|p{6cm}|}
+\hline
+Parametre & Type & Default & Açıklama \\ \hline
+fit\_intercept & bool & True & Model için kesişiminin (intercept) hesaplanıp hesaplanmayacağını belirler. \\ \hline
+copy\_X & bool & True & Eğer True ise modeli eğitirken X değeri fonksiyonda kullanılacak ve eğitimden sonra da aynı olacaktır. False olduğunda ise X fonksiyona girdikten sonra ilk hali ile aynı olmayabilir. \\ \hline
+n\_jobs & int & None & Hesaplama için kullanılacak iş sayısı. Büyük problemlerde işe yarar, hızlanma sağlar. \\ \hline
+positive & bool & False & Katsayıyı (coefficient) pozitif olmaya zorlar. \\ \hline
+\end{tabular}
+}}}
+\end{table}
+
+\newpage

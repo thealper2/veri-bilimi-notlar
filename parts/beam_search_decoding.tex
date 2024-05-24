@@ -1,0 +1,34 @@
+\section{Beam Search Decoding}
+Beam Search Decoding, belirli bir genişlik (beam width) kullanarak, olası tüm yolları izler ve daha geniş bir arama uzayını dikkate alır. Her adımda en iyi k (beam width) sayıda olasılıklı yol saklanır. Genişlik arttıkça hesaplama maliyeti  ve zaman artar.
+
+\subsection{Çalışma Adımları}
+\begin{enumerate}
+	\item Başlangıç sembolü ile başlar.
+	\item Her adımda mevcut durumda en yüksek olasılığa sahip k yol saklanır. Bu yollar genişletilir ve yeni olasılıklar hesaplanır.
+	\item Her adımda genişletilen yeni yollar arasından yine en yüksek olasılığa sahi olan k yol seçilir ve diğer yollar elenir.
+	\item Durdurma sembolüne ulaşılana kadar işlem tekrarlanır.
+\end{enumerate}
+
+\begin{lstlisting}[language=Python]
+def beam_search_predictions(text, beam_index = 3):
+    in_text = "startseq " + text
+    start_seq = tokenizer.texts_to_sequences([in_text])[0]
+    sequences = [[start_seq, 0.0]]
+    
+    while len(sequences[0][0]) < max_length:
+        all_candidates = []
+        for seq, score in sequences:
+            padded_seq = pad_sequences([seq], maxlen=max_length)
+            preds = model.predict(padded_seq, verbose=0)[0]
+            top_preds = np.argsort(preds)[-beam_index:]
+            all_candidates.extend([[seq + [w], score + preds[w]] for w in top_preds])
+        
+        sequences = sorted(all_candidates, key=lambda x: x[1])[-beam_index:]
+    
+    final_seq = sequences[-1][0]
+    final_caption = ' '.join([tokenizer.index_word[i] for i in final_seq if i not in [tokenizer.word_index["startseq"], tokenizer.word_index.get("endseq", 0), tokenizer.word_index.get("<OOV>", 0)]])
+    
+    return final_caption
+\end{lstlisting}
+
+\newpage 

@@ -1,0 +1,22 @@
+\section{Capsule Network}
+2017 yılında Geoffrey Hinton ve arkadaşları tarafından tanıtılmıştır. Nesnelerin poziysonel bilgilerini ve hiyerarşik özelliklerini daha iyi temsil eder. CNN'ler belirli özellikleri yakalamak için eğitilirken Kapsüller o özelliğin farklı durumlara ait özelliklerini bulması için eğitilir.   Her kapsül, bir nesnesinin belirli bir özelliğini ve o özelliğin görüntüdeki konumunu temsil eder. Kapsül ağları, bir alt katmandaki kapsüllerin üst katmandaki kapsüllerle eşleşmesini sağlar. Kapsüller arasındaki bağlantılar, dinamik yönlendirme mekanizması kullanılarak güncellenir. 
+
+Capsule Network'ün temel bileşeni capsule olarak adlandırılan küçük nöron gruplarıdır. Her kapsül, belirli bir özellik veya nesne parçası hakkında bilgi taşır ve bu bilgiyi yönetlim ve pozisyon gibi parametrelerle temsil eder.
+
+\begin{itemize}
+	\item \textbf{Capsule Layer (Kapsül Katmanı)}: İlk katman geleneksel konvolüsyonel katmanlardır ve görüntüdeki temel özellikleri çıkarır.
+	\item \textbf{Primary Capsules (Birincil Kapsüller)}: İlk konvolüsyonel katmanın çıktısı birincil kapsüllere dönüştürülür. Bu kapsüller, basit özelliklerin yönelim ve pozisyon bilgilerini taşır.
+	\item \textbf{Higher-Level Capsules (Daha Yüksek Seviyeli Kapsüller)}: Birincil kapsüller, daha karmaşık nesne parçalarını temsil eden daha yüksek seviyeli kapsüllere bağlanır. Bu kapsüller, dinamik yönlendirme (dynamic routing) mekanizması ile birbirlerine bağlanır ve hangi kapsüllerin birbirine bağlı olacağını öğrenir.
+	\item \textbf{Output Capsules (Çıktı Kapsülleri)}: En üst seviyedeki kapsüller, nesnelerin tamamını ve bunların yönelim ve pozisyon bilgilerini temsil eder.
+\end{itemize}
+
+\subsection{Çalışma Adımları}
+\begin{enumerate}
+	\item Girdi görüntüsü, ilk konvolüsyonel katmana verilir ve temel özellikler çıkarılır.
+	\item Konvolüsyonel özellik haritaları, birincil kapsüller oluşturur. Her kapsül, belirli bir özellik veya nesne parçasının yönelim ve pozisyon bilgilerini taşır.
+	\item Kapsüller arasındaki bağlantılar, dinamik yönlendirme algoritması ile belirlenir. Bu algoritma, daha yüksek seviyeli kapsüllere bilgi aktarımını optimize eder. Bağlantılar, kapsüller arasındaki benzerliklere göre ayarlanır.
+	\item Birincil kapsüller, daha karmaşık nesne parçalarını temsil eden daha yüksek seviyeli kapsüllere bilgi gönderir. Bu kapsüller, nesnelerin yönelim ve pozisyon bilgilerini daha karmaşık bir şekilde modelleyebilir.
+	\item En üst seviyedeki kapsüller, nihai çıktı olarak nesnelerin tamamını ve bunların yönelim ve pozisyon bilgilerini üretir.
+\end{enumerate}
+
+\newpage

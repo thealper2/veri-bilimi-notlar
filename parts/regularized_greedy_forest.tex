@@ -1,0 +1,31 @@
+\section{Regularized Greedy Forest}
+Normal RF'den hızlıdır. Daha fazla parametreye sahiptir. İki temel bileşenden oluşur:
+
+\begin{itemize}
+    \item \textbf{Regularization (Düzenleme):} Her bir karar ağacının büyüklüğünü ve karmaşıklığını kontrol etmek için bir düzenleme yöntemi kullanır. Bu düzenleme, her bir ağacın büyüklüğünü sınırlayarak overfittingi önler.
+    \item \textbf{Greedy Learning:} Her bir ağaç, bir özellik seçerek ve bu özelliğe göre bir bölme yaparak oluşturulur. Her bir bölme için en iyi özelliği seçmek için bir düzgünleştirme işlemi uygular. Bu da daha iyi genelleme sağlar.
+\end{itemize}
+
+\begin{lstlisting}[language=Python]
+from rgf import RGFClassifier
+
+model = RGFClassifier(max_leaf=150, algorithm='RGF_Sib', test_interval=100)
+model.fit(X_train, y_train)
+\end{lstlisting}
+
+\subsection{Hiperparametreler}
+\begin{table}[h]
+\centering
+{\scriptsize\renewcommand{\arraystretch}{0.4}
+{\resizebox*{\linewidth}{0.2\textwidth}{
+\begin{tabular}{|p{2cm}|p{2cm}|p{1cm}|p{5cm}|}
+\hline
+Parametre & Type & Default & Açıklama \\ \hline
+algorithm & "RGF", "RGF\_Opt", "RGF\_Sib" & "RGF" & "RGF", "l2" düzenlileştirme, "RGF\_Opt" min-penalty, "RGF\_Sib" min-penalty + sum-to-zero sibling. \\ \hline
+loss & "LS", "Expo", "Log" & "LS" & LS square loss, Expo exponential loss, Log logistic loss. \\ \hline
+
+\end{tabular}
+}}}
+\end{table}
+
+\newpage

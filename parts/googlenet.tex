@@ -1,0 +1,43 @@
+\section{GoogleLeNet}
+2014'de ImageNet ILSVRC (Büyük Ölçekli Görsel Tanıma Yarışması)'de sunuldu. Google YZ biriminden Szegedy ve ekibi tarafından geliştirilmiştir. GoogLeNet, ağdaki parametreleri önemli derecede azaltan "inception" modülü kullanır. FC katmanları yerin "Average Pooling" kullanarak gereksiz parametrelerin ortadan kaldırılmasını sağlamıştır.
+
+\begin{lstlisting}[language=Python]
+def inception_module(x, filters):
+    conv1x1 = Conv2D(filters[0], (1, 1), padding='same', activation='relu')(x)
+    
+    conv3x3_reduce = Conv2D(filters[1], (1, 1), padding='same', activation='relu')(x)
+    conv3x3 = Conv2D(filters[2], (3, 3), padding='same', activation='relu')(conv3x3_reduce)
+    
+    conv5x5_reduce = Conv2D(filters[3], (1, 1), padding='same', activation='relu')(x)
+    conv5x5 = Conv2D(filters[4], (5, 5), padding='same', activation='relu')(conv5x5_reduce)
+    
+    maxpool = MaxPooling2D((3, 3), strides=(1, 1), padding='same')(x)
+    maxpool_conv = Conv2D(filters[5], (1, 1), padding='same', activation='relu')(maxpool)
+    
+    output = Concatenate(axis=-1)([conv1x1, conv3x3, conv5x5, maxpool_conv])
+    
+    return output
+
+input_layer = Input(shape=(224, 224, 3))
+
+x = Conv2D(64, (7, 7), strides=(2, 2), padding='same', activation='relu')(input_layer)
+x = MaxPooling2D((3, 3), strides=(2, 2), padding='same')(x)
+
+x = Conv2D(64, (1, 1), activation='relu')(x)
+x = Conv2D(192, (3, 3), padding='same', activation='relu')(x)
+x = MaxPooling2D((3, 3), strides=(2, 2), padding='same')(x)
+
+x = inception_module(x, [64, 96, 128, 16, 32, 32])
+x = inception_module(x, [128, 128, 192, 32, 96, 64])
+x = MaxPooling2D((3, 3), strides=(2, 2), padding='same')(x)
+
+x = inception_module(x, [192, 96, 208, 16, 48, 64])
+
+x = AveragePooling2D((7, 7))(x)
+x = Flatten()(x)
+x = Dense(1000, activation='softmax')(x) 
+
+model = Model(input_layer, x)
+\end{lstlisting}
+
+\newpage

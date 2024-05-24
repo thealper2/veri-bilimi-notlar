@@ -1,0 +1,59 @@
+\section{NLTK}
+
+\subsection{ARLStem}
+Arapça metinler için kullanılır. Kullanılması için tüm metinlerin unicode olarak kodlanması gerekir.
+
+\begin{lstlisting}[language=Python]
+from nltk.stem.arlstem import ARLSTem
+\end{lstlisting}
+
+\subsection{ISRIStemmer}
+Arapça metinler için kullanılır.
+
+\begin{lstlisting}[language=Python]
+from nltk.stem.isri import ISRIStemmer
+\end{lstlisting}
+
+\subsection{LancasterStemmer}
+İngilizce metinler için kullanılır.
+
+\begin{lstlisting}[language=Python]
+from nltk.stem.lancaster import LancasterStemmer
+\end{lstlisting}
+
+\subsection{PorterStemmer}
+İngilizce metinler için kullanılır. PorterStemmer, daha basit bir kural tabanlı yaklaşım kullanır. Bu nedenle, daha hızlı ve verimli bir şekilde çalışır. İstisnaları yakalamada başarısız olabilir.
+
+\begin{lstlisting}[language=Python]
+from nltk.stem.porter import PorterStemmer
+\end{lstlisting}
+
+\subsection{RSLPStemmer}
+Portekizce metinler için kullanılır.
+
+\begin{lstlisting}[language=Python]
+from nltk.stem.rslp import RSLPStemmer
+\end{lstlisting}
+
+\subsection{RegexpStemmer}
+Belirli bir regex ile eşleşen kelimelerin köklerini bulmak için kullanılır.
+
+\begin{lstlisting}[language=Python]
+from nltk.stem.regexp import RegexpStemmer
+\end{lstlisting}
+
+\subsection{SnowballStemmer}
+Çeşitli diller için farklı stemmer versiyonları içerir.
+
+\begin{lstlisting}[language=Python]
+from nltk.stem.snowball import SnowballStemmer
+\end{lstlisting}
+
+\subsection{WordNetLemmatizer}
+WordNetLemmatizer, WordNet adlı bir dil işleme veritabanını kullanarak çalışır. WordNet, sözcüklerin gruplandırıldığı ve anlamsal ilişkilerin bulunduğu bir veritabanıdır. Lemmatizer, kelimenin WordNet'teki eş anlamlı gruplarına bakarak kelimenin kökünü bulur. Anlamsal olarak doğru kökleri bulma konusunda oldukça etkilidir. Sözcüklerin gerçek dildeki anlamını korumaya çalışır. Yavaştır.
+
+\begin{lstlisting}[language=Python]
+from nltk.stem.wordnet import WordNetLemmatizer
+\end{lstlisting}
+
+\newpage

@@ -1,0 +1,15 @@
+\section{Recurrent Attention Model (RAM)}
+Görsel dikkat (visual attention) mekanizmasını modeller. Görüntü tanıma problemlerinde kullanılır. RAM, görüntüyü parçalara bölerek ve bu parçaları adım adım işleyerek çalışır. Dikkat mekanizması sayesinde, her adımda görüntünün farklı bir bölgesine odaklanır ve önemli bilgileri çıkarır. 
+
+\subsection{Çalışma Adımları}
+\begin{enumerate}
+	\item Girdi olarak verilen görüntü, görsel algılayıcı katmanlar tarafından işlenerek özellik haritaları çıkarılır.
+	\item Model, başlangıçta rastgele veya önceden belirlenmiş bir bölgeye odaklanır.
+	\item Görüntünün belirli bir bölgesine odaklanılır ve bu bölgeden elde edilen özellikler çıkarılır.
+	\item Elde edilen özellikler, LSTM veya RNN tarafından işlenir ve hafıza durumu güncellenir.
+	\item Model, bir sonraki adımda hangi bölgeye  odaklanacağına karar verir ve dikkat mekanizması buna göre ayarlanır.
+	\item Adım 3-5 belirli bir adım boyunca tekrarlanır.
+	\item Elde edilen bilgiler birleştirilerek sınıflandırma yapılır.
+\end{enumerate}
+
+\newpage

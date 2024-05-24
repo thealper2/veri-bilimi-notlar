@@ -1,0 +1,14 @@
+\section{Temporal Convolutional Network (TCN)}
+Zaman serisi verileri işlemek için kullanılan modeldir. Tek boyutlu evrişim katmanlarını kullanır ve geri besleme (feedback) yapmadan ileri besleme (feedforward) yapısı ile çalışır. Gelecek bilgiyi kullanmadan yalnızca geçmiş bilgiyi kullanarak tahmin yapar.
+
+\subsection{Çalışma Adımları}
+\begin{enumerate}
+	\item Girdi verileri verilir.
+	\item Girdi verisi üzerinde yalnızca geçmiş bilgi kullanılarak evrişim (causal convolution) yapılır.
+	\item Her evrişim katmanında belirli bir sıçrama (dilated convolution) kullanılarak daha geniş bir alandaki bağımlılıklar yakalanır.
+	\item Her genişletilmiş evişrim katmanın çıktısı orijinal girdiye eklenir.
+	\item Her evrişim katmanın çıktı aktivasyon fonksiyonundan geçirilir.
+	\item En son katmanın çıktısı nihai tahmin olarak kabul edilir.
+\end{enumerate}
+
+\newpage

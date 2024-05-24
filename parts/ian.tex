@@ -1,0 +1,18 @@
+\section{Interactive Attention Network (IAN)}
+Duygu analizi, metin sınıflandırma problemlerinde kullanılır. IAN, iki ana dikkat mekanizmasını içerir:
+\begin{itemize}
+	\item \textbf{Cümle Dikkati (Sentence-Level Attention)}: Her bir kelimenin önemini belirlemek için cümle düzeyinde dikkat mekanizması kullanılır.
+	\item \textbf{Etkileşimli Dikkat (Interactive Attention)}: Duygu analizinde, hedef kelimeler ve bağlam arasındaki etkileşimi modellemek için kullanılır.
+\end{itemize}
+
+\subsection{Çalışma Adımları}
+\begin{enumerate}
+	\item Metin verileri, kelime gömme katmanları ile vektör temsillerine dönüştürülür.
+	\item Bu vektörler, LSTM veya RNN katmanları ile işlenir ve her bir kelimenin ardışık bağlamı öğrenilir.
+	\item Cümle düzeyinde dikkat mekanizması, her bir kelimenin önem derecesini belirler.
+	\item Hedef kelimeler ve bağlam arasındaki etkileşimler, etkileşimli dikkat mekanizması kullanılarak modellenir.
+	\item Dikkat katmanlarından elde edilen özellikler birleştirilir.
+	\item Sınıflandırıcı katman ile nihai sonuç üretilir.
+\end{enumerate}
+
+\newpage

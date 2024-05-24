@@ -1,0 +1,446 @@
+\section{Kümeleme Metodları} 
+\begin{enumerate}
+    \item AffinityPropagation
+    \item AgglomerativeClustering
+    \item Birch
+    \item DBSCAN
+    \item FeatureAgglomeration
+    \item KMeans
+    \item MeanShift
+    \item MiniBatchKMeans
+    \item OPTICS
+    \item SpectralClustering
+\end{enumerate}
+
+\subsection{AffinityPropagation}
+Affinity Propagation, özellikle verinin kendi içinde mesajlaşma (iletişim) yeteneğine dayalıdır. Her veri noktasının diğer tüm veri noktalarıyla iletişim kurduğu bir "mesajlaşma" tabanlı bir yaklaşım kullanır. Affinity Propagation, küme merkezlerini otomatik olarak belirler, bu nedenle küme sayısını önceden belirlemeniz gerekmez.
+
+\subsubsection{Çalışma Adımları}
+\begin{enumerate}
+    \item Veri noktaları arasındaki benzerlikleri ölçmek ve bir benzerlik matrisi oluşturulur. Benzerlik matrisi, her bir veri noktasının diğer tüm veri noktalarına olan benzerlik derecesini içerir.
+    \item Her veri noktası, diğer veri noktalarına ne kadar "mesaj göndermeli" ve ne kadar "mesaj almalı" gerektiğini hesaplar. Bu hesaplamalar, iletişim matrisi (responsibility matrix) ve sorumluluk matrisi (availability matrix) olarak adlandırılan iki matris içinde yapılır.
+    \item Veri noktaları arasında mesajlaşma sürekli olarak gerçekleşir. Mesajlaşma sonucunda iletişim matrisi ve sorumluluk matrisi güncellenir.
+    \item İletişim matrisi ve sorumluluk matrisi kullanarak, her veri noktasının bir küme merkezi olup olmadığını belirler.
+    \item Her veri noktasını bir küme merkezine atar ve verileri bu merkezlere göre kümelendirir.
+\end{enumerate}
+
+\begin{lstlisting}[language=Python, caption=Scikit-learn'de AffinityPropagation örneği.]
+from sklearn.cluster import AffinityPropagation
+from sklearn.datasets import make_blobs
+
+# Veri olusturma
+data, _ = make_blobs(n_samples=300, centers=4, cluster_std=1.0, random_state=42)
+
+# Affinity Propagation modeli olusturma
+model = AffinityPropagation()
+
+# Veriyi modele uydurma
+model.fit(data)
+
+# Kume merkezlerini ve etiketleri al
+cluster_centers_indices = model.cluster_centers_indices_
+labels = model.labels_
+
+# Kume merkezlerini ve etiketleri yazdir
+print("Kume Merkezleri:")
+print(data[cluster_centers_indices])
+print("Kume Etiketleri:")
+print(labels)
+\end{lstlisting}
+
+\subsubsection{Hiperparametreler}
+\begin{table}[h]
+\centering
+{\scriptsize\renewcommand{\arraystretch}{0.4}
+{\resizebox*{\linewidth}{0.5\textwidth}{
+\begin{tabular}{|p{3cm}|p{1cm}|p{1cm}|p{6cm}|}
+\hline
+Parametre & Type & Default & Açıklama \\ \hline
+damping & float & 0.5 & Algoritmanın güncelleme adımlarında kullanılan bir sönümleme faktörüdür. Bu faktör, matris güncellemelerinin istikrarlı hale gelmesine yardımcı olur. Genellikle {[}0.5, 1{]} arasında bir değer alır. \\ \hline
+convergence\_iter & int & 15 & Algoritmanın dönüşüm kriterini belirlemek için kullanılır. Belli bir iterasyon sayısına veya sonuçların değişimine dayalı olarak algoritmanın sonlandırılmasını kontrol eder. \\ \hline
+preference & array & None & İlk küme merkezi tahminleri üzerinde etkilidir. Özellikle önceden belirlenmiş bir küme sayısı kullanılmadığında, veri noktalarının küme merkezi olma olasılığını ayarlamak için kullanılır. \\ \hline
+max\_iter & int & 200 & Maksimum iterasyon sayısı. \\ \hline
+
+\end{tabular}
+}}}
+\end{table}
+
+\subsection{Agglomerative Clustering}
+Agglomerative Clustering, veri noktalarını başlangıçta ayrı ayrı kümelere yerleştirir ve ardından bu kümeleri birleştirerek hiyerarşik bir yapı oluşturur. Etiketlenmemiş verilerle çalışmak için uygundur.
+
+\subsubsection{Çalışma Adımları}
+\begin{enumerate}
+    \item Başlangıçta, her veri noktası ayrı bir küme olarak kabul edilir. Yani, N veri noktası için N küme oluşturulur.
+    \item Belirli bir kriteri (örneğin, mesafe veya benzerlik) kullanarak en yakın iki küme birleştirilir.
+    \item Adımlar tekrar edilir ve tüm veri noktaları tek bir büyük küme haline gelene kadar devam eder.
+\end{enumerate}
+
+\begin{lstlisting}[language=Python, caption=Scikit-learn'de AgglomerativeClustering.]
+from sklearn.cluster import AgglomerativeClustering
+from sklearn.datasets import make_blobs
+import matplotlib.pyplot as plt
+
+# Veri olusturma
+data, _ = make_blobs(n_samples=300, centers=3, cluster_std=1.0, random_state=42)
+
+# Agglomerative Clustering modeli olusturma
+model = AgglomerativeClustering(n_clusters=3)  # Kume sayisini belirtin
+
+# Veriyi modele uydurma
+labels = model.fit_predict(data)
+
+# Sonuclari gorsellestirme
+plt.scatter(data[:, 0], data[:, 1], c=labels, cmap='viridis')
+plt.show()
+\end{lstlisting}
+
+\subsection{Birch}
+BIRCH (Balanced Iterative Reducing and Clustering Using Hierarchies), veri kümeleme için kullanılan bir hiyerarşik kümeleme algoritmasıdır. BIRCH, büyük veri kümeleri üzerinde etkili bir şekilde çalışabilen bir öğrenme yöntemidir. BIRCH, veriyi kümelemek için özel bir veri yapısı olan bir "CF-Tree" (Clustering Feature Tree) kullanır. İlk olarak, her veri noktası birer "giriş" olarak CF-Tree'ye eklenir. CF-Tree, girişlerin yoğunluğu, merkezi ve varyansı gibi özellikleri temsil eden küçük bir CF (Clustering Feature) vektörü içerir.
+
+\begin{lstlisting}[language=Python, caption=Scikit-learn'de BIRCH.]
+from sklearn.cluster import Birch
+from sklearn.datasets import make_blobs
+import matplotlib.pyplot as plt
+
+# Veri olusturma
+data, _ = make_blobs(n_samples=300, centers=3, cluster_std=1.0, random_state=42)
+
+# BIRCH modeli olusturma
+model = Birch(threshold=0.5, n_clusters=3)  # threshold degeri ve kume sayisini belirtin
+
+# Veriyi modele uydurma
+labels = model.fit_predict(data)
+
+# Sonuclari gorsellestirme
+plt.scatter(data[:, 0], data[:, 1], c=labels, cmap='viridis')
+plt.show()
+\end{lstlisting}
+
+\subsubsection{Hiperparametreler}
+\begin{table}[h]
+\centering
+{\scriptsize\renewcommand{\arraystretch}{0.4}
+{\resizebox*{\linewidth}{0.4\textwidth}{
+\begin{tabular}{|p{3cm}|p{1cm}|p{1cm}|p{6cm}|}
+\hline
+Parametre & Type & Default & Açıklama \\ \hline
+threshold & float & 0.5 & CF-Tree'ye giriş eklerken kullanılan eşik değeridir. Bu değer, her düğümde kaç girişin saklanacağını ve bir düğümün alt düğümlere bölünüp bölünmeyeceğini belirler. Eşik değeri büyüdükçe ağaç daha yüzeysel olur, bu da daha fazla düğümün alt düğümlere bölünmesi anlamına gelir. Bu değeri ayarlayarak kümeleme sonuçları üzerinde büyük bir etkiye sahip olabilirsiniz. \\ \hline
+branching\_factor & int & 50 & BIRCH ağacının her düğümünde kaç alt düğümün olacağını belirler. Düğüm sayısını etkiler ve yine ağacın derinliği ve genişliği üzerinde etkilidir. \\ \hline
+n\_clusters & int & 3 & Küme sayısını önceden belirlemeniz gereken bir hiperparametredir. \\ \hline
+
+\end{tabular}
+}}}
+\end{table}
+
+\subsection{DBSCAN}
+DBSCAN (Density-Based Spatial Clustering of Applications with Noise), yoğunluğa dayalı bir kümeleme yöntemi olarak çalışır ve noise (gürültü) noktalarını tanıyabilir. Küme sayısını önceden belirlemek gerekmez, bu nedenle veriyi esnek bir şekilde kümeleyebilir. DBSCAN, veri noktalarını üç farklı kategoriye ayırır:
+\begin{enumerate}
+    \item \textbf{Çekirdek Noktalar (Core Points):} Veri noktası, epsilon yarıçapı içinde en az "MinPts" komşusu varsa bir çekirdek noktasıdır.
+    \item \textbf{Sınırlayıcı Noktalar (Border Points):} Veri noktası, epsilon yarıçapı içinde daha az "MinPts" komşusu olmasına rağmen bir çekirdek noktasının içindedir.
+    \item \textbf{Gürültü Noktaları (Noise Points):} Veri noktası, epsilon yarıçapı içinde MinPts komşusu olmayan bir noktadır.
+\end{enumerate}
+
+Bir çekirdek noktadan başlar ve o noktanın epsilon yarıçapı içindeki tüm noktaları ziyaret eder. Eğer bu noktaların sayısı MinPts'ten büyükse, bir yeni küme başlatılır ve bu noktalar o kümeye atanır. Bu işlem tekrarlanarak tüm çekirdek noktalar ziyaret edilir. Sınırlayıcı noktalar, bir çekirdek noktasının içinde yer alır ve ilgili çekirdek noktanın kümesine atanır. Gürültü noktaları hiçbir kümeyle ilişkilendirilmez ve genellikle kümeleme sonuçlarından çıkarılır.
+
+\begin{lstlisting}[language=Python, caption=Scikit-learn'de DBSCAN.]
+from sklearn.cluster import DBSCAN
+from sklearn.datasets import make_moons
+import matplotlib.pyplot as plt
+
+# Veri olusturma
+data, _ = make_moons(n_samples=200, noise=0.05, random_state=42)
+
+# DBSCAN modeli olusturma
+model = DBSCAN(eps=0.3, min_samples=5)
+
+# Veriyi modele uydurma
+labels = model.fit_predict(data)
+
+# Sonuclari gorsellestirme
+plt.scatter(data[:, 0], data[:, 1], c=labels, cmap='viridis')
+plt.show()
+\end{lstlisting}
+
+\newpage
+
+\subsubsection{Hiperparametreler}
+\begin{table}[h]
+\centering
+{\scriptsize\renewcommand{\arraystretch}{0.4}
+{\resizebox*{\linewidth}{0.5\textwidth}{
+\begin{tabular}{|p{3cm}|p{1cm}|p{1cm}|p{6cm}|}
+\hline
+Parametre & Type & Default & Açıklama \\ \hline
+eps & float & 0.5 & DBSCAN'da bir veri noktasının komşuluk yarıçapını belirler. Bu parametre, bir veri noktasının epsilon yarıçapı içindeki diğer noktaları incelediği alandır. Doğru epsilon değeri seçmek, kümeleme sonuçlarını etkileyebilir. İyi bir epsilon değeri, verinin yoğunluğuna ve dağılımına bağlıdır. \\ \hline
+min\_samples & int & 5 & Bir veri noktasının bir çekirdek nokta olabilmesi için en az kaç komşusu olması gerektiğini belirler. Bu parametre, bir kümenin minimum boyutunu tanımlar. MinPts değerini seçerken, verinin yoğunluğunu dikkate almalısınız. Düşük MinPts değerleri daha fazla küme oluşturabilirken, yüksek MinPts değerleri daha büyük kümeler oluşturur. \\ \hline
+n\_clusters & int & 3 & Küme sayısını önceden belirlemeniz gereken bir hiperparametredir. \\ \hline
+
+\end{tabular}
+}}}
+\end{table}
+
+\subsection{Feature Agglomeration}
+Feature Agglomeration, özellik (feature) seviyesinde kümeleme (clustering) yapmak için kullanılan bir kümeleme algoritmasıdır. Bu algoritma, veri setindeki özellikleri benzerliklerine göre gruplandırarak boyut azaltma ve özellik seçimi amaçlar. Feature Agglomeration, özellik benzerlik matrisi (feature similarity matrix) oluşturur. Bu matris, her bir özelliğin diğer özelliklere göre benzerliğini ölçer. Benzerlik matrisi kullanılarak kümeleme algoritması, özellikleri gruplar. Benzer özellikler aynı kümede yer alır.
+
+\begin{lstlisting}[language=Python, caption=Scikit-learn'de FeatureAgglomeration örneği.]
+from sklearn.cluster import FeatureAgglomeration
+from sklearn.datasets import load_iris
+
+# Veri yuklemesi
+data = load_iris().data
+
+# Feature Agglomeration modeli olusturma
+model = FeatureAgglomeration(n_clusters=2)  # Kume sayisini belirtin
+
+# Veriyi modele uydurma
+transformed_data = model.fit_transform(data)
+
+# Sonuclari goruntuleme
+print("Ozgun veri sekli:", data.shape)
+print("Donusturulmus veri sekli:", transformed_data.shape)
+\end{lstlisting}
+
+\subsubsection{Hiperparametreler}
+\begin{table}[h]
+\centering
+{\scriptsize\renewcommand{\arraystretch}{0.4}
+{\resizebox*{\linewidth}{0.3\textwidth}{
+\begin{tabular}{|p{1cm}|p{2cm}|p{1cm}|p{6cm}|}
+\hline
+Parametre & Type & Default & Açıklama \\ \hline
+n\_clusters & float & 2 & Küme sayısını belirleyen bir hiperparametredir. Kaç küme oluşturulacağını kontrol eder. Küme sayısını belirlerken, verinin doğasını ve amacınızı dikkate almalısınız. \\ \hline
+metric & "euclidean", "l1", "l2", "manhattan", "cosine", "precomputed" & None & Benzerlik matrisini hesaplarken kullanılacak benzerlik ölçüsünü belirler. Özellikler arasındaki benzerliği ölçmek için Pearson korelasyonu, kosinüs benzerliği veya başka bir benzerlik metriği seçebilirsiniz. \\ \hline
+\end{tabular}
+}}}
+\end{table}
+
+\subsection{KMeans}
+K-Means, veri noktalarını belirli bir sayıda kümeye ayırmak için kullanılır ve her bir kümenin merkezini hesaplar. Küme sayısı kullanıcı tarafından belirlenir.
+
+\subsubsection{Çalışma Adımları}
+\begin{itemize}
+    \item Başlangıçta, veri noktaları rastgele seçilen "k" küme merkezi ile ilişkilendirilir.
+    \item Her veri noktası, öklidyen uzaklık gibi bir yöntemle hesaplanarak en yakın küme merkezine atanır. 
+    \item Yeni merkezler, O kümeye ait veri noktalarının ortalaması ile yeni merkezler belirlenir..
+    \item Veri noktalarının küme değiştirmemesi ve merkezlerin değişmeyene kadar işlem devam eder.
+    \item Son olarak, veri noktaları "k" küme arasında bölünür ve her bir küme kendi merkezine sahip olur.
+\end{itemize}
+
+\begin{lstlisting}[language=Python, caption=Scikit-learn'de KMeans örneği.]
+from sklearn.cluster import KMeans
+from sklearn.datasets import make_blobs
+import matplotlib.pyplot as plt
+
+# Veri olusturma
+data, _ = make_blobs(n_samples=300, centers=4, cluster_std=1.0, random_state=42)
+
+# K-Means modeli olusturma
+model = KMeans(n_clusters=4)  # Kume sayisini belirtin
+
+# Veriyi modele uydurma
+labels = model.fit_predict(data)
+
+# Sonuclari gorsellestirme
+plt.scatter(data[:, 0], data[:, 1], c=labels, cmap='viridis')
+plt.show()
+\end{lstlisting}
+
+\subsubsection{Hiperparametreler}
+\begin{table}[h]
+\centering
+{\scriptsize\renewcommand{\arraystretch}{0.4}
+{\resizebox*{\linewidth}{0.4\textwidth}{
+\begin{tabular}{|p{3cm}|p{1cm}|p{1cm}|p{6cm}|}
+\hline
+Parametre & Type & Default & Açıklama \\ \hline
+n\_clusters & int & 8 & K-Means algoritmasıyla oluşturulacak küme sayısını belirler. Bu, kullanıcının belirlemesi gereken bir hiperparametredir. \\ \hline
+init & "k-means++", "random" & None & Başlangıç küme merkezlerinin nasıl belirleneceğini kontrol eder. \\ \hline
+max\_iter & int & 300 & Atama ve güncelleme adımlarının kaç kez tekrarlanacağını belirler. Algoritmanın konverjansa ulaşana kadar maksimum kaç iterasyon yapacağını kontrol eder. \\ \hline
+n\_init & "auto", int & 10 & Başlangıç merkezlerinin farklı başlangıç noktalarıyla çalıştırılacak deneme sayısını belirler. Bu, en iyi sonuçları bulma olasılığını artırır. \\ \hline
+
+\end{tabular}
+}}}
+\end{table}
+
+\subsection{MeanShift}
+Mean Shift, veri noktalarını veri yoğunluğu temelinde kümelemek için kullanılır. Algoritma, veri noktalarını yoğunluk merkezlerine kaydırarak kümelemeyi gerçekleştirir. Mean Shift, veri yoğunluğuna dayalı olarak doğal kümeleri bulur.
+
+\subsubsection{Çalışma Adımları}
+\begin{itemize}
+    \item Her veri noktası, başlangıçta kendisinin bir merkez olarak kabul edildiği bir yoğunluk merkezine atanır.
+    \item Her bir veri noktası için yoğunluk merkezi hesaplanır. Yoğunluk merkezi, veri noktalarının yoğunluğunun maksimum olduğu noktadır.
+    \item Her veri noktası, hesaplanan yoğunluk merkezi pozisyonuna kaydırılır.
+    \item 2. ve 3. adımlar tekrar edilir, veri noktaları yoğunluk merkezlerine yaklaştıkça, yoğunluk merkezleri daha da hassaslaşır.
+    \item Veri noktaları yoğunluk merkezlerine yaklaşmayı bıraktığında sonlanır. Her bir veri noktası son yoğunluk merkezi ile ilişkilendirilir.
+\end{itemize}
+
+\begin{lstlisting}[language=Python, caption=Scikit-learn'de MeanShift örneği.]
+from sklearn.cluster import MeanShift
+from sklearn.datasets import make_blobs
+import matplotlib.pyplot as plt
+
+# Veri olusturma
+data, _ = make_blobs(n_samples=300, centers=4, cluster_std=1.0, random_state=42)
+
+# Mean Shift modeli olusturma
+model = MeanShift()  # Hiperparametreler belirtilmezse varsayilan degerler kullanilir
+
+# Veriyi modele uydurma
+labels = model.fit_predict(data)
+
+# Sonuclari gorsellestirme
+plt.scatter(data[:, 0], data[:, 1], c=labels, cmap='viridis')
+plt.show()
+\end{lstlisting}
+
+\subsubsection{Hiperparametreler}
+\begin{table}[h]
+\centering
+{\scriptsize\renewcommand{\arraystretch}{0.4}
+{\resizebox*{\linewidth}{0.3\textwidth}{
+\begin{tabular}{|p{3cm}|p{1cm}|p{1cm}|p{6cm}|}
+\hline
+Parametre & Type & Default & Açıklama \\ \hline
+bandwidth & float & None & Bandwidth, yoğunluk merkezlerini hesaplamak için kullanılan pencerenin boyutunu belirler. Büyük bir bant genişliği, daha geniş yoğunluk merkezleri üretebilirken, küçük bir bant genişliği daha küçük ve hassas yoğunluk merkezleri üretebilir. Bandwidth, Mean Shift algoritmasının en önemli hiperparametrelerinden biridir ve doğru bir şekilde ayarlanmalıdır. \\ \hline
+
+
+\end{tabular}
+}}}
+\end{table}
+
+\subsection{MiniBatchKMeans}
+MiniBatchKMeans, geleneksel K-Means kümeleme algoritması ile benzer bir yaklaşımı temel alır, ancak büyük veri kümeleri üzerinde daha hızlı çalışmak için bir örnekleme (mini-batch) tabanlı bir yaklaşım kullanır. Bu, büyük veri setlerini hızlı bir şekilde kümelemek için kullanışlıdır.
+
+\subsection{Çalışma Adımları}
+\begin{itemize}
+    \item MiniBatchKMeans, rastgele seçilen bir alt örneklemi (mini-batch) kullanır.
+    \item Mini-batch üzerinde K-Means algoritmasının adımları uygulanır.
+    \item Mini-batch'ler sırayla kullanılır ve her bir mini-batch işlendikten sonra küme merkezleri güncellenir.
+    \item İterasyonlar belirli bir duruma ulaştığında veya belirli bir iterasyon sayısına ulaştığında algoritma sonlanır.
+\end{itemize}
+
+\begin{lstlisting}[language=Python, caption=Scikit-learn'de MiniBatchKMeans.]
+from sklearn.cluster import MiniBatchKMeans
+from sklearn.datasets import make_blobs
+import matplotlib.pyplot as plt
+
+# Veri olusturma
+data, _ = make_blobs(n_samples=300, centers=4, cluster_std=1.0, random_state=42)
+
+# MiniBatchKMeans modeli olusturma
+model = MiniBatchKMeans(n_clusters=4)  # Kume sayisini belirtin
+
+# Veriyi modele uydurma
+labels = model.fit_predict(data)
+
+# Sonuclari gorsellestirme
+plt.scatter(data[:, 0], data[:, 1], c=labels, cmap='viridis')
+plt.show()
+\end{lstlisting}
+
+\subsubsection{Hiperparametreler}
+\begin{table}[h]
+\centering
+{\scriptsize\renewcommand{\arraystretch}{0.4}
+{\resizebox*{\linewidth}{0.4\textwidth}{
+\begin{tabular}{|p{3cm}|p{1cm}|p{1cm}|p{6cm}|}
+\hline
+Parametre & Type & Default & Açıklama \\ \hline
+n\_clusters & int & 8 & Kümelerin sayısını belirler. Bu, kullanıcı tarafından belirlenen bir hiperparametredir. \\ \hline
+batch\_size & int & 1024 & Her mini-batch'in boyutunu belirler. Daha büyük bir batch\_size, daha yüksek hesaplama maliyeti demektir. Mini-batch boyutunu seçerken bellek ve hesaplama gücü sınırlamalarını göz önünde bulundurmalısınız. \\ \hline
+max\_iter & int & 100 & İterasyonların maksimum sayısını belirler. Algoritmanın ne kadar süre çalışacağını kontrol eder. \\ \hline
+init & "k-means++", "random" & "k-means++" & Başlangıç merkezlerini seçme yöntemini belirler. \\ \hline
+
+\end{tabular}
+}}}
+\end{table}
+
+\subsection{OPTICS}
+OPTICS (Ordering Points To Identify the Clustering Structure), yoğunluk temelli kümeleme problemlerinde etkilidir. OPTICS, veri noktalarını sıralayarak kümeleme yapar ve doğal kümeleri ve yoğunluk tabanlı yapısını belirler.
+
+\begin{lstlisting}[language=Python, caption=Scikit-learn'de OPTICS örneği.]
+from sklearn.cluster import OPTICS
+from sklearn.datasets import make_blobs
+import matplotlib.pyplot as plt
+
+# Veri olusturma
+data, _ = make_blobs(n_samples=300, centers=4, cluster_std=1.0, random_state=42)
+
+# OPTICS modeli olusturma
+model = OPTICS()  # Hiperparametreler belirtilmezse varsayilan degerler kullanilir.
+
+# Veriyi modele uydurma
+model.fit(data)
+
+# Sonuclari gorsellestirme
+plt.scatter(data[:, 0], data[:, 1], c=model.labels_, cmap='viridis')
+plt.show()
+\end{lstlisting}
+
+\subsubsection{Hiperparametreler}
+\begin{table}[h]
+\centering
+{\scriptsize\renewcommand{\arraystretch}{0.4}
+{\resizebox*{\linewidth}{0.4\textwidth}{
+\begin{tabular}{|p{3cm}|p{1cm}|p{1cm}|p{6cm}|}
+\hline
+Parametre & Type & Default & Açıklama \\ \hline
+eps & float & None & Veri noktalarının bir yoğunluk merkezine erişilebilir kabul edilebilecek maksimum uzaklığı belirler. Bu eşik değeri, kümeleme sonuçlarını etkiler. \\ \hline
+min\_samples & int & 5 & Bir yoğunluk merkezi olarak kabul edilebilecek minimum veri noktası sayısını belirler. Bu, bir yoğunluk merkezi olarak kabul edilmesi için veri noktalarının çevresinde en az kaç veri noktasının bulunması gerektiğini kontrol eder. \\ \hline
+
+
+\end{tabular}
+}}}
+\end{table}
+
+\subsection{SpectralClustering}
+Spectral Clustering, veri noktalarının benzerlik grafiği üzerinden kümeleme yapma yeteneğine sahiptir. Bu algoritma, veri noktalarının benzerlik matrisini kullanarak bir graf oluşturur ve bu grafiği kullanarak veri kümelemesi yapar.
+
+\subsubsection{Çalışma Adımları}
+\begin{itemize}
+    \item Veri noktaları arasındaki benzerliği ölçen benzerlik matrisi oluşturulur. Benzerlik matrisi, bir grafı temsil eder. Her bir veri noktası bir düğüm ve benzerlikler arasındaki değerler ise kenarlar olarak düşünülür.
+    \item Graf üzerinde Laplace matrisi hesaplanır. Laplace matrisi, grafın yapısını ve veri noktalarının bağlantılarını yakalar.
+    \item Laplace matrisinin özdeğer ayrışımı (eigendecomposition) yapılır ve özdeğerler kullanılarak veri noktaları spektral uzayda temsil edilir.
+    \item Elde edilen spektral uzayda k-means veya diğer kümeleme yöntemleri kullanılarak veri noktaları kümelere ayrılır.
+\end{itemize}
+
+\begin{lstlisting}[language=Python, caption=Scikit-learn'de SpectralClustering örneği.]
+from sklearn.cluster import SpectralClustering
+from sklearn.datasets import make_blobs
+import matplotlib.pyplot as plt
+
+# Veri olusturma
+data, _ = make_blobs(n_samples=300, centers=4, cluster_std=1.0, random_state=42)
+
+# SpectralClustering modeli olusturma
+model = SpectralClustering(n_clusters=4)  # Kume sayisini belirtin
+
+# Veriyi modele uydurma
+labels = model.fit_predict(data)
+
+# Sonuclari gorsellestirme
+plt.scatter(data[:, 0], data[:, 1], c=labels, cmap='viridis')
+plt.show()
+\end{lstlisting}
+
+\newpage
+
+\subsubsection{Hiperparametreler}
+\begin{table}[h]
+\centering
+{\scriptsize\renewcommand{\arraystretch}{0.4}
+{\resizebox*{\linewidth}{0.4\textwidth}{
+\begin{tabular}{|p{3cm}|p{1cm}|p{1cm}|p{6cm}|}
+\hline
+Parametre & Type & Default & Açıklama \\ \hline
+n\_clusters & int & 8 & Küme sayısını belirler. Hangi sayıyı seçeceğinizi veri yapısına ve analiz amacınıza bağlı olarak belirlemelisiniz. \\ \hline
+affinity & str & "rbf" & Benzerlik matrisi hesaplama yöntemini belirler. Öklidyen uzaklık veya kosinüs benzerliği gibi farklı metrikler kullanılabilir. \\ \hline
+n\_neighbors & int & 10 & Grafiği oluştururken her veri noktasının en yakın kaç komşusunu kullanacağınızı belirler. Bu, grafın yoğunluğunu ve bağlantılarını etkiler. \\ \hline
+eigen\_solver & "arpack", "lobpcg", "amg" & "k-means++" & Özdeğer ayrışımını yaparken kullanılacak algoritmayı belirler. \\ \hline
+
+
+\end{tabular}
+}}}
+\end{table}
+
+\newpage

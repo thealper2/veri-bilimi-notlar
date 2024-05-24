@@ -1,0 +1,166 @@
+\section{OpenCV}
+
+\subsection{Görüntü Okuma}
+OpenCV'de bir dosyadaki görüntüyü okumak için "imread()" fonksiyonu kullanılır. Parametre olarak da dosya yolu verilir. Okunan görüntünün boyutları ".shape" ve veri tipi ".dtype" ile tutulur. Görüntü boyutları çıktısı (h, w, l) şeklindedir. İlk olarak görüntünün yüksekliği (height), ikinci olarak genişliği (width), son olarak da görüntü RGB ise yani renkli bir görüntü ise katman sayısı döndürülür. Renksiz (siyah-beyaz) görüntülerde çıktıda katman sayısı görülmez.
+
+\begin{lstlisting}
+import cv2
+
+img = cv2.imread("image.png")
+print("shape:", img.shape)
+print("dtype:", img.dtype)
+
+# Output:
+# shape: (512, 256, 3)
+# dtype: uint8
+\end{lstlisting}
+
+\subsection{Pencere (Window)}
+Okunan veya oluşturulan görüntüyü ekranda göstermek için "imshow()" fonksiyonu kullanılır. İlk olarak "string" tipinde bir değer ile pencere adı verilir, ikinci parametre olarak da görüntü değişkeni verilir. "waitKey()" fonksiyonu ile görüntü penceresinin ekranda gösterilme süresini verir. 1000 değeri 1 saniyeye eşittir. Eğer herhangi bir değer verilmezse pencere sürekli olarak ekranda kalır. "destroyAllWindows()" fonksiyonu ile ekranda açık olan pencerelerin hepsi kapatılır.\\
+"namedWindow()" fonksiyonu ile daha sonra kullanılacak "imshow()" fonskiyonundaki pencere boyutu özelleştirilebilir. İlk parametre olarak pencere adı verilir, ikinci parametre olarak pencere tipi belirtilir. OpenCV'de pencere tipleri:
+\begin{itemize}
+	\item \textbf{cv2.WINDOW\_NORMAL}: Normal pencere tipidir. Kapanabilir, genişletilebilir veya ikon boyutuna küçültülebilir.
+	\item \textbf{cv2.WINDOW\_AUTOSIZE}: Pencere boyutu gösterilecek görüntü ile aynı boyuttadır. 
+	\item \textbf{cv2.WINDOW\_FULLSCREEN}: Tam ekran boyutunda bir pencere oluşturur.
+\end{itemize}
+
+Bu fonksiyonların birbiri ile doğru çalışması için aynı "pencere adı" parametrelerine sahip olması gerekir. Belirli bir ada sahip bir pencereyi kapatmak için ise "destroyWindow()" fonksiyonu kullanılır.
+
+\begin{lstlisting}
+img = cv2.imread("image.png")
+
+cv2.namedWindow("image", cv2.WINDOW_NORMAL)
+
+cv2.imshow("image", img)
+cv2.waitKey(0)
+# cv2.destroyWindow("image")
+cv2.destroyAllWindows()
+\end{lstlisting}
+
+\subsection{Sıkıştırma (Compression)}
+OpenCV'de oluşturulan görüntüyü kaydetmek için "imwrite()" fonksiyonu kullanılır. İlk parametre olarak kaydedilecek dosya adı verilir. İkinci parametre olarak da görüntü değişkeni verilir. Kaydedilecek dosya adını verirken uzantı ile birlikte verilmelidir. Üçüncü parametre olarak da fotoğraftın sıkıştırma türü verilir. Bir dizi içerisinde sıkıştırma tipi ve kalitesi (0-100 arasında bir değer, arttıkça iyileşir.) verilir.
+\begin{itemize}
+	\item \textbf{cv2.IMWRITE\_JPEG\_QUALITY}: JPG kalitesinde sıkıştırmak için kullanılır.
+	\item \textbf{cv2.IMWRITE\_PNG\_QUALITY}: PNG kalitesinde sıkıştırmak için kullanılır.
+\end{itemize}
+
+\begin{lstlisting}
+cv2.imwrite("image.png", img)
+cv2.imwrite("image.jpg", img, [cv2.IMWRITE_JPEG_QUALITY, 95])
+cv2.imwrite("image.png", img, [cv2.IMWRITE_PNG_QUALITY, 95])
+\end{lstlisting}
+
+\subsection{UI Elementleri}
+
+\begin{itemize}
+	\item \textbf{cv2.createButton()}: Buton.
+	\item \textbf{cv2.createTrackbar()}: Slider.
+\end{itemize}
+
+\subsection{Çizim Fonksiyonları}
+\subsubsection{Fontlar}
+\begin{itemize}
+	\item \textbf{cv2.FONT\_ITALIC}: italic font.
+	\item \textbf{cv2.FONT\_HERSHEY\_PLAIN}: Ufak boyuttaki sans-serif fontu.
+	\item \textbf{cv2.FONT\_HERSHEY\_SIMPLEX}: Normal boyuttaki sans-serif fontu.
+	\item \textbf{cv2.FONT\_HERSHEY\_DUPLEX}: Normal boyuttaki sans-serif fontu.
+	\item \textbf{cv2.FONT\_HERSHEY\_COMPLEX}: Normal boyuttaki serif fontu.
+	\item \textbf{cv2.FONT\_HERSHEY\_TRIPLEX}: Normal boyuttaki serif fontu.
+	\item \textbf{cv2.FONT\_HERSHEY\_COMPLEX\_SMALL}: Daha küçük boyutta serif fontu.
+	\item \textbf{cv2.FONT\_HERSHEY\_SCRIPT\_SIMPLEX}: El yazısı fontu.
+	\item \textbf{cv2.FONT\_HERSHEY\_SCRIPT\_COMPLEX}: El yazısı fontu. 
+\end{itemize}
+
+\subsubsection{İşaretçiler}
+\begin{itemize}
+	\item \textbf{cv.MARKER\_CROSS}: Artı işareti.
+	\item \textbf{cv.MARKER\_TILTED\_CROSS}: Çarpı işareti.
+	\item \textbf{cv.MARKER\_STAR}: Yıldız işareti.
+	\item \textbf{cv.MARKER\_DIAMOND}: Dörtgen işareti.
+	\item \textbf{cv.MARKER\_SQUARE}: Kare işareti.
+	\item \textbf{cv.MARKER\_TRIANGLE\_UP}: Üçgen işareti.
+	\item \textbf{cv.MARKER\_TRIANGLE\_DOWN}: Ters üçgen işareti.
+\end{itemize}
+
+\subsection{Çizgi}
+\begin{itemize}
+	\item \textbf{cv2.FILLED}: İçini doldur.
+	\item \textbf{cv2.LINE\_4}: 
+	\item \textbf{cv2.LINE\_8}: 
+	\item \textbf{cv2.LINE\_AA}: 
+\end{itemize}
+
+\subsection{Şekiller}
+\begin{itemize}
+	\item \textbf{cv2.circle(image, (x, y), r, (255, 255, 255), cv2.FILLED)}: Çember.
+	\item \textbf{cv2.line(image, (x, y), (w, h), (255, 255, 255), cv2.LINE\_AA)}: Çizgi.
+	\item \textbf{cv2.arrowedLine(image, (x, y), (w, h), (255, 255, 255), cv2.LINE\_AA)}: Oklu çizgi.
+	\item \textbf{cv2.rectangle(image, (x,y), (w,h), (255, 255, 255), 3)}: Üçgen.
+	\item \textbf{cv2.ellipse(image, (x, y), (w, h), 250, 0, 360, (255, 255, 255), 3)}: Elips.
+	\item \textbf{cv2.putText(image, 'text', (x, y), cv2.FONT\_HERSHEY\_SIMPLEX, 1, (255, 255, 255), 3)}: Metin.
+\end{itemize}
+
+\begin{lstlisting}
+cv2.circle(image, (75, 150), 4, (255, 0, 0))
+cv2.circle(image, (75, 150), 5, (0, 0, 0), cv2.FILLED)
+cv2.circle(image, (75, 150), 4, (0, 0, 255), 2, cv2.LINE_AA)
+
+cv2.line(image, (20, 40), (100, 100), (0, 255, 0), 3)
+cv2.line(image, (30, 50), (100, 150), (0, 255, 0), 3, cv2.LINE_AA)
+cv2.arrowedLine(image, (40, 60), (100, 200), (0, 255, 255), 3, cv2.LINE_AA)
+
+cv2.rectangle(image, (100, 125), (25, 30), (0, 255, 0), 3)
+
+cv2.ellipse(image, (10, 50), (40, 50), 200, 0, 360, (255, 0, 0), 1)
+
+cv2.putText(image, 'text', (10, 25), cv2.FONT_HERSHEY_SIMPLEX, 1, (0, 255, 0), 3)
+\end{lstlisting}
+
+\subsection{Klavye ve Fare Etkileşimi}
+Python'da ord() fonksiyonu alınan unicode ifadeyi sayısal değere (int) dönüştürür. Bu kontrol sağlanarak klavye ile etkileşim sağlanır. setMouseCallback() fonksiyonu ile fare etkileşimi sağlanır. Klavye ile etkileşime benzer şekildedir.
+\begin{itemize}
+	\item \textbf{cv2.EVENT\_LBUTTONUP}: Sol fare düğmesi serbest bırakıldığında tetiklenir.
+	\item \textbf{cv2.EVENT\_LBUTTONDOWN}: Sol fare düğmesi tıklandığında tetiklenir.
+	\item \textbf{cv2.EVENT\_MOUSEMOVE}: Fare hareket ettiğinde tetiklenir.
+	\item \textbf{cv2.EVENT\_LBUTTONDBLCLK}: Sol fare düğmesine çift tıklandığında tetiklenir.
+\end{itemize}
+
+\begin{lstlisting}
+q = True
+while finish:
+	key = cv2.waitKey(0)
+	if key == ord('c'):
+		...
+	elif key == ord('q'): 
+		finish = False
+\end{lstlisting}
+
+\subsection{Video Oynatma}
+"cv2.VideoCapture()" fonksiyonu ile video işlenir. Eğer parametre olarak int yani sayısal bir değer verilirse cihaza bağlı olan kameralardan görüntü alır. Eğer bir dosya yolu verilirse dosyadaki videodan görüntü alır.
+
+\begin{lstlisting}
+cap = cv2.VideoCapture(0)
+
+while True:
+	has_frame, frame = cap.read()
+	if not has_frame:
+		break
+
+	cv2.imshow('frame', frame)
+	if cv2.waitKey(5) & 0xFF == ord("q"):
+		break
+
+cap.release()
+cv2.destroyAllWindows()
+\end{lstlisting}
+
+\subsection{Renk Uzayları}
+\begin{itemize}
+	\item \textbf{RGB}: Kırmızı (red), yeşil (green) ve maviden (blue) oluşan renk uzayıdır. Bu üç bileşenin kombinasyonuyla bir renk oluşturur. Her bileşen 0-255 arasında bir değer alır. Bunlar bir pikselin rengini tanımlamak için kullanılır.
+	\item \textbf{HSV}: Ton (hue), doygunluk (saturation) ve değer (value) oluşan renk uzayıdır. Ton, rengin türünü temsil eder. Doygunluk, renk ile beyaz arasındaki mesafeyi ölçer. Değer, renk ile siyah arasındaki mesafeyi ölçer. 
+	\item \textbf{Gray}: Siyah ve beyazdan oluşan renk uzayıdır. Her pikseli tek bir yoğunluk değeriyle ifade eder. Renk bilgisi sadece parlaklık bilgisini içerir. 
+	\item \textbf{CMYK}: Cyan (mavi-yeşil), magenta (kırmızı-mor), sarı (yellow) ve key/black (anahtar/siyah).
+	\item \textbf{HSL}: Ton (hue), doygunluk (saturation) ve parlaklık (lightness) oluşur. 
+\end{itemize}
+
+\newpage

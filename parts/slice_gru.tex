@@ -1,0 +1,14 @@
+\section{Slice GRU}
+Slice GRU girdi verisini parçalara (slice) ayırarak işlemler yapar ve bu sayede hesaplama verimliliğini artırır. 
+
+\subsection{Çalışma Adımları}
+\begin{enumerate}
+	\item Girdi verisi alınır.
+	\item Girdi verisi belirli boyutlarda parçalara ayrılır.
+	\item Her parça üzerinde update ve reset kapıları uygulanır.
+	\item Her parça için yeni aday durumu hesaplanır.
+	\item Yeni aday durumu ve kapılar kullanılarak mevcut hafıza hücresi güncellenir.
+	\item Nihai tahmin yapılır.
+\end{enumerate}
+
+\newpage

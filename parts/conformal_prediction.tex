@@ -1,0 +1,22 @@
+\section{Conformal Prediction}
+Belirsizlik tahmini yapmak için uyumluluk tahmini prensiplerini kullanan bir yaklaşımdır. Bir modelin tahminlerinin güvenirliliğini değerlendirmek ve belirsizlikleri hesaba katmak için kullanılır. Model eğitim verilerini kullanarak bir uyumluluk bölgesi oluşturur. Bu bölge, modelin eğitim verilerinde yakaladığı örüntüleri gösterir. Sınama verileri için bu uyumluluk bölgesine dayanarak bir tahmin yapılır. Böylece belirli bir güven düzeyinde tahminler yapılır.
+
+\subsubsection{Inductive Conformal Predictors}
+\begin{enumerate}
+    \item Bir modelin eğitim verilerine dayanarak belirli bir güven düzeyinde uyumluluk tahmini yapar.
+    \item Model, eğitim verilerindeki benzer örneklerin dağılımına dayanarak bir güven aralığı hesaplar.
+    \item Her bir tahmin için güven aralığı belirlenir.
+\end{enumerate}
+
+\subsubsection{Aggregated Conformal Predictors}
+\begin{enumerate}
+    \item Birden fazla modelin çıktılarını bir araya getirerek daha güvenilir tahminler elde etmeyi amaçlar.
+    \item Her bir modelin tahminleri, uyumluluk tahminine göre bir araya getirilir. Böylece toplu bir güven aralığı sağlanır.
+\end{enumerate}
+
+\subsubsection{Transductive Conformal Prediction}
+\begin{enumerate}
+    \item Her bir test örneği için, modelin oluşturduğu uyumluluk bölgesine dayanarak bir tahmin yapılır. Bu tahmin için test örneği yanında diğer eğitim örneklerini de kullanır.
+\end{enumerate}
+
+\newpage

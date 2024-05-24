@@ -1,0 +1,74 @@
+\section{CNN}
+Evrişimli Sinir Ağları (CNN veya ConvNet), özellikle görüntü işleme görevlerinde başarılı olan bir derin öğrenme mimarisidir. 2012'de AlexNet'in ImageNet yarışmasında çığır açmasıyla birlikte popülerlik kazanmıştır. CNN'ler, verinin özelliklerini belirlemek için evrişim (convolution) ve havuzlama (pooling) katmanlarını kullanır. Bir görüntüden çıkarılan özellikler şunlardır;
+
+\subsection{Özellikler}
+\begin{itemize}
+    \item \textbf{Low Level:} Kenarlar, köşeler, renkler, dokular.
+    \item \textbf{Mid Level:} Şekiller, nesne parçaları.
+    \item \textbf{High Level:} Nesne kategorileri, özel nesneler.
+\end{itemize}
+
+Bir CNN içerisinde şunlar bulunur:
+
+\begin{itemize}
+    \item \textbf{Konvolüsyon Katmanı (Convolutional Layer):} Özellik çıkarmak için kullanılır. Bu katmanda filtreler yer alır. Çekirdekteki değerler görüntü üzerinde kaydırılır ve değerler görüntünün değerleriyle çarpılır. Elde edilen değerler toplanır. Örneğin, 6x6’lik bir görüntüye 2x2 lik bir filter uygulandığında yeni görüntü 4x4 lük olur. Bu işlem tüm görsele uygulanır.
+    \item \textbf{Aktivasyon Fonksiyonu (Activation Function):} Her konvolüsyon katmanından sonra aktivasyon işlemi uygulanır. Genellikle ReLU gibi doğrusal olmayan aktivasyon işlevleri kullanılır. Bu, ağın daha karmaşık ve genel özellikler öğrenmesine yardımcı olur.
+    \item \textbf{Havuzlama Katmanı (Pooling Layer):} Özellik haritalarının boyutunu küçültmek ve ağı daha da hızlandırmak için kullanılır.
+    \item \textbf{Düzleştirme Katmanı (Flattening Layer):} Veriyi 1x1 haline getirir. Böylece veri FC katmanının girişine hazırlanmış olur.
+    \item \textbf{Tam Bağlı Katman (Fully-Connected Layer):} Çıktılar sınıflandırılmak üzere bu katmandan geçirilir. Bu katmanlar, özellik haritalarını düzleştirir ve "softmax" gibi bir aktivasyon işlemi ile sınıflandırma sonuçlarını üretir.
+    \item \textbf{Filtreler ve Özellik Haritaları (Filters and Feature Maps):} Filtre belirli desenleri tarar ve ortaya çıkan çıktılar özellik haritasıdır.
+\end{itemize}
+
+CNN'in avantajları;
+\begin{itemize}
+	\item Otomatik Özellik Çıkarma: Özelliklerin hiyerarşik temsillerini doğrudan ham verilerden otomatik olarak öğrenme yeteneği.
+	\item Görüntü tabanlı problemlerde etkili: CNN'ler parametre paylaşımı ve havuzlama işlemlerinden yararlanarak onları hesaplama açısından verimli ve aşırı uyum sağlamaya daha az eğilimli hale getirir, böylece büyük ölçekli veri kümelerine ölçeklenebilirliklerini kolaylaştırır.
+	\item Transfer Learning: CNN'ler, görüntü sınıflandırma, nesne algılama, anlamsal segmentasyon ve daha fazlası dahil olmak üzere çeşitli bilgisayarla görme görevlerinde en gelişmiş performansı elde etmiştir.
+	\item Girdi çevirisine karşı değişmezlik: Giriş görüntüsündeki konumlarından bağımsız olarak desenleri tanıyabilirler.
+\end{itemize}
+
+CNN'in dezavantajları;
+\begin{itemize}
+	\item Hesaplama yoğunluğu
+	\item Veri Bağımlılığı
+	\item Overfitting
+	\item Hiperparametre Ayarlama
+\end{itemize}
+
+\subsection{R-CNN}
+Region-Based CNN, görüntü nesnelerinin algılanması ve sınıflandırılması için kullanılan bir tekniktir. R-CNN, Convolutional Neural Networks (CNN) ve nesne algılama tekniklerini bir araya getirerek nesneleri tanımak ve çerçevelemek için kullanılır. R-CNN, aşağıdaki temel adımları içerir:
+
+\begin{itemize}
+    \item \textbf{Bölge Önerileri (Region Proposals):} İlk adımda, görüntü üzerinde potansiyel nesne bölgelerini belirlemek için seçici arama (Selective Search) gibi bir yöntem kullanılır. Bu adım, görüntüyü bölgelere böler ve her bir bölgenin içerisinde muhtemel bir nesne bulunduğu düşünülen bölgeleri seçer.
+    \item \textbf{Özellik Çıkarma (Feature Extraction):} Her bölge, bir CNN kullanılarak özellik vektörlerine dönüştürülür. Bu özellik vektörleri, belirli nesne bölgelerini temsil eden özellikleri içerir.
+    \item \textbf{Sınıflandırma:} Özellik vektörleri, bir sınıflandırma algoritması ile sınıflandırılır. Bu adım, her bölgenin hangi sınıfa ait olduğunu belirler.
+    \item \textbf{Birleştirme (Bounding Box Regression):} Bölge önerileri, nesnelerin sınırlayıcı kutularını belirlemek için bir regresyon modeli kullanılarak düzeltilir. Bu, nesne sınırlayıcı kutularının daha iyi hizalanmasına yardımcı olur.
+\end{itemize}
+R-CNN, nesne algılamada oldukça etkili olsa da, işlemci ve bellek açısından oldukça maliyetlidir, çünkü her bölge önerisi ayrı ayrı işlenir. Bu nedenle daha sonraki çalışmalar, R-CNN'nin hızını artırmak ve daha efektif hale getirmek için farklı türevler geliştirdi.
+
+\subsection{Fast R-CNN}
+Fast R-CNN (Fast Region-based Convolutional Neural Network), nesne algılama alanında etkili bir yöntemdir ve özellikle Convolutional Neural Networks (CNN) tabanlı nesne algılama modellerini hızlandırmak için tasarlanmıştır. Fast R-CNN, girdi görüntüsündeki nesneleri algılamak ve çerçevelemek için bir bölge tabanlı yaklaşım kullanır, ancak önceki versiyonlara göre daha hızlıdır. Fast R-CNN, aşağıdaki temel bileşenlerden oluşur:
+
+\begin{itemize}
+    \item \textbf{Bölge Önerileri (Region Proposals):} Fast R-CNN, görüntüdeki olası nesne bölgelerini belirlemek için önceden eğitilmiş bir seçici arama (Selective Search) veya benzeri bir yöntem kullanır. Bu adım, muhtemel nesne bölgelerini tanımlar ve sınıflandırır.
+    \item \textbf{Özellik Haritası Oluşturma (Feature Map Generation):} Görüntü, bir evrişim ağı (CNN) kullanılarak özellik haritasına dönüştürülür. Bu, her bölge önerisi için özellik vektörlerini elde etmek için kullanılır.
+    \item \textbf{Özellik Vektörlerini Düzleştirme (Flatten Feature Vectors):} Özellik haritaları, her bir bölge önerisi için tek bir özellik vektörüne dönüştürülür.
+    \item \textbf{Sınıflandırma ve Sınırlayıcı Kutu Regresyonu (Classification and Bounding Box Regression):} Özellik vektörleri, bir sınıflandırma ağı ve bir sınırlayıcı kutu regresyon ağı kullanılarak aynı anda sınıflandırılır ve sınırlayıcı kutuları (bounding box) belirlenir. Bu, her bölge önerisinin hangi sınıfa ait olduğunu ve nesnenin sınırlayıcı kutusunun nasıl olması gerektiğini belirler.
+\end{itemize}
+
+Fast R-CNN, özellikle önceki R-CNN versiyonlarına (Region-CNN) göre daha hızlıdır, çünkü tüm işlemleri tek bir CNN modelinde gerçekleştirir.
+
+\subsection{Mask R-CNN}
+Mask R-CNN (Mask Region-based Convolutional Neural Network), nesne algılama ve nesne segmentasyonu (maskelenmiş nesne bölgelerini belirleme) görevlerini gerçekleştirmek için kullanılan gelişmiş bir derin öğrenme modelidir. Mask R-CNN, özellikle nesne algılamanın yanı sıra nesne bölgelerinin kesin piksel düzeyinde tanımlanması gereken görevlerde etkilidir. Mask R-CNN, aşağıdaki temel özelliklere sahiptir:
+
+\begin{itemize}
+    \item \textbf{Bölge Önerileri (Region Proposals):} Mask R-CNN, görüntüdeki potansiyel nesne bölgelerini belirlemek için bir bölge önerisi ağı (Region Proposal Network, RPN) kullanır. RPN, olası nesne bölgelerini önerir ve bu bölgeler daha sonra detaylı işlem için kullanılır.
+    \item \textbf{Özellik Çıkarma (Feature Extraction):} Görüntü, bir evrişim ağı (CNN) kullanılarak özellik haritasına dönüştürülür. Bu özellik haritası, her bölge için ayrı ayrı özellik vektörleri üretmek için kullanılır.
+    \item \textbf{Sınıflandırma:} Mask R-CNN, her bölge için nesne türünü (sınıfı) belirlemek için bir sınıflandırma ağı kullanır. Bu, nesnelerin ne olduğunu sınıflandırır.
+    \item \textbf{Sınırlayıcı Kutu Regresyonu (Bounding Box Regression):} Nesne sınırlayıcı kutuları, bölge önerilerini düzeltmek ve daha iyi hizalamak için bir regresyon modeli kullanılarak hesaplanır.
+    \item \textbf{Maske Tahmini:} Mask R-CNN, her bölge için maske tahmini yapmak için bir maske ağı kullanır. Bu, nesnenin her pikselinin nesneye ait olma olasılığını tahmin eder, böylece nesne bölgeleri kesin olarak belirlenir.
+\end{itemize}
+
+Mask R-CNN, özellikle medikal görüntüleme, otonom sürüş, nesne izleme ve insan tanıma gibi birçok uygulama alanında kullanılır. Mask R-CNN, nesneleri algılamanın yanı sıra, bu nesnelerin piksel düzeyinde kesin segmentasyonunu sağladığı için oldukça hassas ve ayrıntılı sonuçlar üretebilir.
+
+\newpage

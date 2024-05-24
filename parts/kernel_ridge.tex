@@ -1,0 +1,21 @@
+\section{Kernel Ridge}
+Doğrusal olmayan regresyon problemlerini çözmek için kullanılır. Temelde, Ridge fonksiyonu ile aynıdır. Sadece düzenleme (regularization) işleminden önce doğrusal olmayan ilişkileri modellemek için özellik vektörlerini doğrusal olmayan bir şekilde dönüştürür. Bu dönüşüm işlemi için çekirdek fonksiyonlarını kullanır.
+
+\subsection{Hiperparametreler}
+\begin{table}[h]
+\centering
+{\scriptsize\renewcommand{\arraystretch}{0.4}
+{\resizebox*{\linewidth}{0.4\textwidth}{
+\begin{tabular}{|p{3cm}|p{1cm}|p{1cm}|p{6cm}|}
+\hline
+Parametre & Type & Default & Açıklama \\ \hline
+alpha & float & 1 & Ridge regresyonundaki düzenleme parametresi. \\ \hline
+kernel & str & "linear" & Kullanılacak olan çekirdek fonksiyonu. \\ \hline
+gamma & float & None & RBF ve Polinom çekirdeklerinde kullanılan çekirdek parametresidir. Çekirdek fonksiyonunun esnekliğini belirler. \\ \hline
+degree & float & 3 & Polinom çekirdeklerinde kullanılır. Polinomun derecesini belirler. \\ \hline
+
+\end{tabular}
+}}}
+\end{table}
+
+\newpage

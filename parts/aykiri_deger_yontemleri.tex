@@ -1,0 +1,294 @@
+\section{Aykırı Değer Yöntemleri}
+
+\subsection{Tukey's IQR Method}
+IQR (Interquartile Range) methodu, veri dağılımının merkezi eğilimini ve dağılımın yayılmasını analiz etmek için kullanılan bir istatistiksel yöntemdir. Bu yöntem, aykırı değerleri tanımlamak ve ele almak için sıkça kullanılır. IQR, verinin üçüncü çeyrek (Q3) ile birinci çeyrek (Q1) arasındaki farkı temsil eder. IQR, veri dağılımının merkezi eğilimini ve dağılımın yayılmasını belirlemeye yardımcı olur. Birinci çeyrek (Q1), verinin alt yarısının (25. persentil) merkezi değeri. Üçüncü çeyrek (Q3), verinin üst yarısının (75. persentil) merkezi değeri. Eğer veri setinde bu alt sınırın altındaki değerler veya üst sınırın üstündeki değerler bulunuyorsa, bu değerler aykırı değerler olarak kabul edilir.
+
+\[ \text{IQR} = Q_3 - Q_1 \]
+
+Burada $Q_1$ veri setinin alt çeyreğini (25. yüzdelik) ve $Q_3$ üst çeyreğini (75. yüzdelik) temsil eder. $Q_3$ ve $Q_1$ sırasıyla veri setinin üst ve alt çeyrekleridir.
+
+\begin{lstlisting}[language=Python]
+import numpy as np
+
+data = np.array([15, 18, 19, 20, 21, 22, 24, 28, 29, 30, 35, 40, 200])
+
+# IQR hesaplama
+q1 = np.percentile(data, 25)
+q3 = np.percentile(data, 75)
+iqr = q3 - q1
+
+# Alt sinir ve ust sinir hesaplama
+lower_bound = q1 - 1.5 * iqr
+upper_bound = q3 + 1.5 * iqr
+
+# Aykiri degerleri belirleme
+outliers = data[(data < lower_bound) | (data > upper_bound)]
+
+print("IQR:", iqr) # IQR: 10.0
+print("Alt Sinir:", lower_bound) # Alt Sinir: 5.0
+print("Ust Sinir:", upper_bound) # Ust Sinir: 45.0
+print("Aykiri Degerler:", outliers) # Aykiri Degerler: [200]
+\end{lstlisting}
+
+\subsection{Standard Deviation Method}
+Standart sapma (standard deviation) veya z-skor metodu olarak bilinir. Bu mtot, veri noktalarının ortalama değerine göre ne kadar sapma gösterdiğini analiz eder ve bu sapmaları kullanarak aykırı değerleri tanımlar. Standart sapma, veri noktalarının ortalama etrafındaki dağılımı ölçer. Yüksek bir standart sapma, veri noktalarının ortalama etrafında daha fazla yayıldığını gösterir.
+
+\begin{lstlisting}[language=Python]
+import numpy as np
+
+data = np.array([15, 18, 19, 20, 21, 22, 24, 28, 29, 30, 35, 40, 200])
+
+# Verilerin ortalama ve standart sapmasini hesaplama
+mean = np.mean(data)
+std_dev = np.std(data)
+
+# Aykiri degerleri belirleme (ornegin, +/-2 standart sapma sinirini kullanabiliriz)
+lower_bound = mean - 2 * std_dev
+upper_bound = mean + 2 * std_dev
+
+outliers = data[(data < lower_bound) | (data > upper_bound)]
+
+print("Ortalama:", mean) # Ortalama: 38.53846153846154
+print("Standart Sapma:", std_dev) # Standart Sapma: 47.11134990573745
+print("Alt Sinir:", lower_bound) # Alt Sinir: -55.68423827301336
+print("Ust Sinir:", upper_bound) # Ust Sinir: 132.76116134993643
+print("Aykiri Degerler:", outliers) # Aykiri Degerler: [200]
+\end{lstlisting}
+
+\subsection{Z-Score Method}
+Z-skor metodu, aykırı değerleri tespit etmek ve değerlerin ortalama etrafındaki sapmalarını ölçmek için kullanılan bir istatistiksel yöntemdir. Bu yöntem, bir veri noktasının, ortalama etrafındaki sapmasını standart sapma birimleri cinsinden ifade eder. Bir veri noktasının z-skoru, o noktanın veri setinin noktalama değerinden ne kadar sapma gösterdiğini standart sapma birimleri cinsinden ifade eder. Z-skor, genellikle bir normal dağılıma (ortalama=0, standart sapma=1) dönüştürülür. Dolayısıyla, Z-skorları kullanarak bir veri noktasının hangi yüzde dilimine veya persentile ait olduğu belirlenebilir.
+
+\begin{lstlisting}[language=Python]
+import numpy as np
+from scipy import stats
+
+data = np.array([15, 18, 19, 20, 21, 22, 24, 28, 29, 30, 35, 40, 200])
+
+# Verilerin ortalama ve standart sapmasini hesaplama
+mean = np.mean(data)
+std_dev = np.std(data)
+
+# Z-skorlari hesaplama
+z_scores = (data - mean) / std_dev
+
+# Aykiri degerleri belirleme (ornegin, Z-skor +/-2 sinirini kullanabiliriz)
+threshold = 2
+outliers = data[np.abs(z_scores) > threshold]
+
+print("Ortalama:", mean) # Ortalama: 38.53846153846154
+print("Standart Sapma:", std_dev) # Standart Sapma: 47.11134990573745
+print("Aykiri Degerler:", outliers) # Aykiri Degerler: [200]
+\end{lstlisting}
+
+\subsection{Modified Z-Score Method}
+Modified Z-score metodu, Z-skor yöntemine benzer bir aykırı değer tespit yöntemidir; ancak veri setinin normal dağılımını varsayımını zorlamaz. Bu yöntem, Z-skorlara benzer bir hesaplama kullanırken, medyanı ve medyan kesintiye dayalı olarak aykırı değerleri tanımlar. Modified Z-score, veri setindeki standard sapmayı ölçer ve bu sapma değerlerini aykırı değerleri tanımlamak için kullanır. Modified Z-score hesaplandığında, tipik olarak bir eşik değeri belirlenir (örneğin, 3.5 veya 2.0 gibi). Bu eşik değerini aşan veya altına inen Modified Z-skorları, aykırı değerler olarak kabul edilir.
+
+\begin{lstlisting}[language=Python]
+import numpy as np
+
+data = np.array([15, 18, 19, 20, 21, 22, 24, 28, 29, 30, 35, 40, 200])
+
+# Verilerin medyanini hesaplama
+median = np.median(data)
+
+# Medyan Kesintisini Hesaplama (MAD)
+mad = np.median(np.abs(data - median))
+
+# Modified Z-score hesaplama
+threshold = 3.5  # Aykiri deger esik degeri
+modified_z_scores = 0.6745 * (data - median) / mad
+
+# Aykiri degerleri belirleme
+outliers = data[np.abs(modified_z_scores) > threshold]
+
+print("Medyan:", median) # Medyan: 24.0
+print("MAD (Median Absolute Deviation):", mad) # MAD (Median Absolute Deviation): 5.0
+print("Aykiri Degerler:", outliers) # Aykiri Degerler: [200]
+\end{lstlisting}
+
+\subsection{Isolation Forest}
+Isolation Forest, aykırı değerleri tespit etmek için kullanılan bir makine öğrenimi algoritmasıdır. Bu algoritma, veri noktalarını izole ederek aykırı değerleri tanımlar. Isolation Forest, verilerin normal gözlemlerden daha hızlı ve kolay bir şekilde izole edilmesini sağlar. Bu nedenle büyük veri setleri üzerinde etkili bir şekilde çalışabilir. Isolation Forest, bir ağaç yapısı kullanarak veri noktalarını izole eder. Bu ağaç, rastgele veri noktalarını bölen ve böldüğü kısmın büyüklüğüne göre aykırı değerlerin izolasyon derecesini ölçen bir yapıdır. Aykırı değerler, daha az bölünmüş veya yüksek bir izolasyon derecesine sahip olan yapraklada bulunma eğilimindedirler.
+
+\begin{lstlisting}[language=Python]
+from sklearn.ensemble import IsolationForest
+
+data = [
+    [15], [18], [19], [20],
+    [21], [22], [24], [28],
+    [29], [30], [35], [40],
+    [200]
+]
+
+# contamination, aykiri degerlerin orani
+clf = IsolationForest(contamination=0.05)
+clf.fit(data)
+
+outliers = clf.predict(data)
+
+# Aykiri degerlerin indekslerini bulma
+outlier_indices = [i for i, prediction in enumerate(outliers) if prediction == -1]
+print("Aykiri Degerlerin Indeksleri:", outlier_indices) # Aykiri Degerlerin Indeksleri: [12]
+\end{lstlisting}
+
+\subsection{DBSCAN}
+DBSCAN (Density-Based Spatial Clustering of Applications with Noise), veri madenciliği ve kümeleme problemleri için kullanılan bir kümeleme algoritmasıdır. DBSCAN, yoğunluk temelli bir yaklaşımı benimser ve aykırı değerleri tespit etmek için kullanılabilir. Algoritma, veri noktalarının yoğun bölgelerini ve bu bölgelerden uzakta kalan noktaları tanımlar. Aykırı değerler, yoğun bölgelerin dışında kalan noktalar olarak kabul edilir. DBSCAN, veri noktalarını iki temel parametre kullanarak sınıflandırır: epsilon ve minimum nokta sayısı (MinPts). Bu iki parametre, DBSCAN'in aykırı değerleri belirleme yeteneğini belirler. Aykırı değerler, yoğunluk tabanlı bir yaklaşım kullanılarak tespit edilir. DBSCAN algoritması, bir veri noktasının "çekirdek nokta" olup olmadığını belirlemek için kullanılır. Bir noktanın çekirdek nokta olabilmesi için, epsilon mesafesi içinde en az MinPts sayısında diğer noktaları içermesi gerekir. Aykırı değerler, bu kriteri karşılayamayan noktalar olarak kabul edilir.
+
+\begin{lstlisting}[language=Python]
+from sklearn.cluster import DBSCAN
+import numpy as np
+
+data = np.array([[1, 2], [2, 2], [2, 3], [8, 7], [8, 8], [25, 25]])
+
+dbscan = DBSCAN(eps=3, min_samples=2)
+dbscan.fit(data)
+
+# Aykiri degerlerin indekslerini bulma
+outlier_indices = np.where(dbscan.labels_ == -1)
+print("Aykiri Degerlerin Indeksleri:", outlier_indices)
+\end{lstlisting}
+
+\subsection{Local Outlier Factor (LOF)}
+LOF, aykırı değerleri tespit etmek için kullanılan bir yoğunluk tabanlı algoritmadır. LOF, bir veri noktasının lokal yoğunluğunu hesaplar ve bu lokal yoğunluğun, çevresindeki diğer noktalardan ne kadar farklı olduğunu ölçer. Aykırı değerler, diğer noktalardan belirgin bir şekilde yoğunluklara sahip olan noktalar olarak kabul edilir. LOF, bu nedenle, veri noktalarını çevresel yoğunluklarına göre sıralar ve aykırı değerleri tanımlar. LOF, bir veri noktasının çevresel yoğunluğunu KNN algoritması kullanarak hesaplar. Daha sonra bu çevresel yoğunluğu, diğer noktalardan sapma ile karşılaştırır ve aykırı değer olarak tanımlar.
+
+\begin{lstlisting}[language=Python]
+from sklearn.neighbors import LocalOutlierFactor
+import numpy as np
+
+data = np.array([[1, 2], [2, 2], [2, 3], [8, 7], [8, 8], [25, 25]])
+
+# LOF modeli olusturma
+lof = LocalOutlierFactor(n_neighbors=3)  # K komsularin sayisi
+
+# Modeli veriye uydurma ve aykiri degerleri tespit etme
+outliers = lof.fit_predict(data)
+
+# Aykiri degerlerin indekslerini bulma
+outlier_indices = np.where(outliers == -1)
+print("Aykiri Degerlerin Indeksleri:", outlier_indices)
+\end{lstlisting}
+
+\subsection{Winsorization Method}
+Winsorization, aykırı değerleri ele almak ve sınırlandırmak için kullanılan bir yöntemdir. Bu yöntemde, belirli bir yüzdelik dilimi temsil eden alt ve üst sınırlar belirlenir ve bu sınırlar dışındaki değerler, sınırların kendisi ile değiştirilir. Winsorization, veri setinin uç değerlerini sınırlandırarak aykırı değerlerin etkisini azaltmayı amaçlar. Winsorization, aykırı değerleri tespit etmek yerine sınırlamak amacıyla kullanılır. Alt ve üst sınırlar belirlenir ve bu sınırlar dışındaki değerler, sınırların kendisi ile değiştirilir. Bu, veri setinin uç değerlerinin etkisini azaltmaya yardımcı olabilir. Winsorization için kesme noktaları (alt ve üst sınırlar) belirlenir ve bu sınırlar dışındaki değerler, sınırların kendisi ile değiştirilir.
+
+\begin{lstlisting}[language=Python]
+import numpy as np
+
+data = np.array([15, 18, 19, 20, 21, 22, 24, 28, 29, 30, 35, 40, 200])
+
+# Winsorization icin alt ve ust sinirlari belirleme
+k = 1.5  # Katsayi (genellikle 1.5 veya 2 kullanilir)
+q1 = np.percentile(data, 25)
+q3 = np.percentile(data, 75)
+iqr = q3 - q1
+lower_bound = q1 - k * iqr
+upper_bound = q3 + k * iqr
+
+# Alt ve ust sinirlar disindaki degerleri sinirlarla degistirme
+data[data < lower_bound] = lower_bound
+data[data > upper_bound] = upper_bound
+
+print("Alt Sinir:", lower_bound)
+print("Ust Sinir:", upper_bound)
+print("Winsorized Veri:", data)
+\end{lstlisting}
+
+\subsection{Pandas - Rank Function}
+pandas kütüphanesindeki rank fonksiyonu, bir veri serisindeki değerleri sıralamak ve sıralama bilgilerini döndürmek için kullanılır. Bu sıralama bilgilerini kullanarak aykırı değerleri belirlemek veya sıralamaya dayalı analizler yapmak mümkün olur. Özellikle veri serilerinin sıralama sırasında hangi pozisyonda olduğunu anlamak için faydalıdır.
+
+\begin{lstlisting}[language=Python]
+import pandas as pd
+
+data = pd.Series([15, 18, 19, 20, 21, 22, 24, 28, 29, 30, 35, 40, 200])
+
+# Degerleri siralama
+ranked_data = data.rank()
+
+# Aykiri degerleri belirleme icin sira sinirlarini belirleme
+q1 = data.quantile(0.25)
+q3 = data.quantile(0.75)
+iqr = q3 - q1
+
+lower_bound = q1 - 1.5 * iqr
+upper_bound = q3 + 1.5 * iqr
+
+# Aykiri degerleri belirleme
+outliers = data[(ranked_data < 2) | (ranked_data > len(data) - 1)]
+print("Alt Sinir:", lower_bound)
+print("Ust Sinir:", upper_bound)
+print("Aykiri Degerler:", outliers)
+\end{lstlisting}
+
+\subsection{Mahalanobis Distance}
+Mahalanobis Uzaklığı (Mahalanobis Distance), aykırı değerleri tespit etmek ve çok boyutlu veri setlerinde veri noktalarının bir merkeze olan uzaklığını ölçmek için kullanılan bir istatistiksel yöntemdir. Bu yöntem, veri noktalarının dağılımının ve kovaryans matrisinin bilgisini kullanır. Mahalanobis Uzaklığı, aykırı değerleri tespit etmek için kullanıldığında, veri noktalarının merkeze olan uzaklığını standart sapma birimleri ile ölçer.
+
+\begin{lstlisting}[language=Python]
+import numpy as np
+from scipy.spatial import distance
+
+data = np.array([[1, 2, 3],
+                 [4, 5, 6],
+                 [7, 8, 9],
+                 [10, 11, 12],
+                 [13, 14, 15]])
+
+# Merkez (ortalama vektor) hesaplama
+mean_vector = np.mean(data, axis=0)
+
+# Kovaryans matrisini hesaplama
+covariance_matrix = np.cov(data, rowvar=False)
+
+# Hedef veri noktasini belirleme
+target_point = np.array([8, 9, 10])
+
+# Mahalanobis Uzakligini hesaplama
+mahalanobis_distance = distance.mahalanobis(target_point, mean_vector, np.linalg.inv(covariance_matrix))
+print("Mahalanobis Uzakligi:", mahalanobis_distance)
+\end{lstlisting}
+
+\subsection{One-Class SVM}
+One-Class SVM (One-Class Support Vector Machine), aykırı değer tespiti için kullanılan bir makine öğrenimi algoritmasıdır. Bu yöntem, bir veri kümesinin çoğunluğundan farklı olan ve nadiren bulunan aykırı değerleri tanımlamak amacıyla kullanılır. One-Class SVM, veri kümesinin normal bölgesini yakalamak ve bu bölge dışında kalan noktaları aykırı değer olarak tanımlamak için bir sınıflandırma yaklaşımı kullanır. One-Class SVM, normal gözlemleri temsil eden bir hiper-düzlem (SVM düzlemi) oluşturur. Bu düzlem, veri noktalarının çoğunluğunu içerir ve aykırı değerler bu düzlemin dışında kalır. One-Class SVM, bu denklemin çözülmesi yoluyla hiper-düzlemi tanımlar ve aykırı değerleri tanımlamak için bu düzlemin dışındaki gözlemleri tespit eder.
+
+\begin{lstlisting}[language=Python]
+from sklearn.svm import OneClassSVM
+import numpy as np
+
+data = np.array([1, 2, 2, 3, 3, 3, 4, 4, 5, 10, 12, 12, 13])
+
+# One-Class SVM modeli olusturma
+nu = 0.1  # Normal gozlemlerin orani
+svm = OneClassSVM(kernel="rbf", nu=nu)
+
+# Modeli veriye uydurma
+svm.fit(data.reshape(-1, 1))
+
+# Aykiri degerleri tespit etme
+outliers = data[svm.predict(data.reshape(-1, 1)) == -1]
+print("Aykiri Degerler:", outliers)
+\end{lstlisting}
+
+\subsection{Robust Principal Component Analysis (PCA)}
+Robust Principal Component Analysis (RPCA), aykırı değerleri tespit etmek ve veri setini bileşenlere ayırırken aykırı değerlerden etkilenmemek için kullanılan bir tekniktir. RPCA, özellikle çok boyutlu veri setlerinde aykırı değerleri tespit etmek için etkilidir ve bileşen analizi ile aykırı değerleri ayırmak için kullanılır. RPCA, veri matrisini düşük rütbeli ve aykırı bileşenlere ayırır. RPCA, veri matrisini düşük rütbeli bileşenler (L) ve aykırı değerler (S) olarak iki farklı bileşenlere böler. Bu işlem, veri matrisindeki aykırı değerlerin diğer bileşenlerden izole edilmesini sağlar.
+
+\begin{lstlisting}[language=Python]
+import numpy as np
+from sklearn.decomposition import PCA
+from sklearn.preprocessing import StandardScaler
+from sklearn.datasets import make_multilabel_classification
+
+# Veri seti ornegi
+data, _ = make_multilabel_classification(n_samples=100, n_features=5, n_classes=2, n_labels=2, n_clusters_per_class=1, random_state=42)
+
+# Veriyi standartlastirma
+scaler = StandardScaler()
+data = scaler.fit_transform(data)
+
+# RPCA modeli olusturma
+pca = PCA(n_components=2)
+pca.fit(data)
+
+# Aykiri degerleri tespit etme
+outliers = data[pca.explained_variance_ratio_ < 0.01]
+print("Aykiri Degerler:", outliers)
+\end{lstlisting}
+
+\newpage

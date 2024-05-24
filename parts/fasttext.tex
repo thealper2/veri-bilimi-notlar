@@ -1,0 +1,26 @@
+\section{FastText}
+FastText, Facebook tarafından geliştirilmiştir. Karakter n-gramlarını dikkate alarak kelime temsilleri oluşturur. Bu, kelime seviyesindeki gömme yöntemlerine kıyasla küçük veri setlerinde daha iyi performans göstermesini sağlar. 
+
+\begin{lstlisting}[language=Python]
+import fasttext
+
+# Ornek metin veri seti
+train_data = "train.txt"
+test_data = "test.txt"
+
+# Modeli egitme
+model = fasttext.train_supervised(input=train_data, lr=0.1, epoch=25, wordNgrams=2)
+
+# Modeli degerlendirme
+result = model.test(test_data)
+print("Precision:", result[1])
+print("Recall:", result[2])
+print("F1 Score:", result[3])
+
+# Ornek metin siniflandirma
+text = "Bu bir ornek metin."
+predicted_label = model.predict(text)
+print("Predicted Label:", predicted_label[0][0])
+\end{lstlisting}
+
+\newpage

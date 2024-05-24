@@ -1,0 +1,12 @@
+\section{DeepMoji}
+DeepMoji, metinde duyguları ve tonları anlamak için geliştirilmiş bir modeldir. Bu model, sosyal medya gönderileri gibi kısa metinlerde duygu ve ifadeleri sınıflandırmak için emoji tahminlerini kullanır. Mimarisinde Embedding Layer, LSTM Layer, Dense Layer bulunur. DeepMoji, büyük bir emoji etiketli veri seti üzerinde eğitilmiş ve duygu analizi, ton tespiti gibi görevlerde yüksek performans gösteren bir modeldir.
+
+\subsection{Çalışma Adımları}
+\begin{enumerate}
+	\item Girdi metinleri, önceden eğitilmiş kelime vektörlerine dönüştürülür.
+	\item İki yönlü LSTM kullanılarak metindeki ileri ve geri bağımlılıkları öğrenilir. LSTM, her kelimenin çevresindeki kelimelerle ilişkisini öğrenir ve bu ilişkileri hafızasında saklar.
+	\item LSTM katmanından gelen çıktılar, yoğun bir katman aracılığıyla işlenir. Aktivasyon fonksiyonları kullanılarak doğrusal olmayan dönüşümler yapılır.
+	\item Softmax aktivasyon fonksiyonu kullanılarak her bir emoji için olasılık dağılımı elde edilir.
+\end{enumerate}
+
+\newpage

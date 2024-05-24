@@ -1,0 +1,43 @@
+\section{Latent Dirichlet Allocation (LDA)}
+LDA, metin belgelerindeki gizli temaları ve bu temaların belgeler arasındaki dağılımını modellemek için kullanılan bir olasılık temelli bir modeldir.  Metin belgelerindeki kelimelerin belirli konularla ilişkilendirilmesine dayanır. Her belgenin birden fazla tema tarafından temsil edildiği varsayılır ve LDA, bu gizli temaları ve belgeler arasındaki tema dağılımlarını çıkarır. Bu, belgeleri temsil etmek için daha esnek bir model sunar ve belgelerin içerdiği konuların anlaşılmasına yardımcı olur.
+
+\subsection{Çalışma Adımları}
+\begin{enumerate}
+    \item Analiz için bir metin belgesi koleksiyonu hazırlanır. Bu belgeler önceden işlenmiş ve gerektiğinde metin temizleme işlemlerinden geçirilmiş olmalıdır.
+    \item Metin belgeleri, belirli bir kelime dağarcığına ve sayısal bir temsil yöntemine dönüştürülür.
+    \item LDA modeli, belirli bir sayıda temayı ve her bir belgenin bu temalarla ilişkili olma olasılığını belirlemek için eğitilir. 
+    \item Model eğitildikten sonra, her bir tema belirlenir. Temalar, en yüksek olasılığa sahip kelimelerin bir araya getirilmesiyle tanımlanır.
+    \item Her belge, içerdiği temaların dağılımı ile temsil edilir. Bu dağılım, belgenin hangi temalara ne kadar bağlı olduğunu gösterir.
+    \item Son olarak, elde edilen temalar ve belge temsilleri incelenir ve yorumlanır. Bu adım, belirli bir belge koleksiyonundaki temaların ve içeriklerin anlaşılması için yapılır.
+\end{enumerate}
+
+\begin{lstlisting}[language=Python]
+import gensim
+from gensim import corpora
+from pprint import pprint
+
+# Ornek metin belgeleri
+documents = [
+    "Gemini modeli ortaya cikti.",
+    "Yapay zeka modeli SORA tanitildi.",
+    "Makine ogrenimi guzeldir.",
+    "Bu problem icin makine ogrenimi kullanilabilir."
+]
+
+# Belge koleksiyonunu bir kelime listesi olarak tokenize edin
+text_data = [[word for word in document.lower().split()] for document in documents]
+
+# Bir kelime-sayma modeli olusturun
+dictionary = corpora.Dictionary(text_data)
+
+# Belge terim matrisini olusturun (BoW modeli)
+corpus = [dictionary.doc2bow(text) for text in text_data]
+
+# LDA modelini egitin
+lda_model = gensim.models.LdaModel(corpus=corpus, id2word=dictionary, num_topics=2, passes=10)
+
+# Sonuclari yazdirin
+pprint(lda_model.print_topics())
+\end{lstlisting}
+
+\newpage

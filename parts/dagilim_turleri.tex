@@ -1,0 +1,387 @@
+\section{Dağılım Türleri}
+Bir olasılık dağılımı bir rassal olayın ortaya çıkabilmesi için değerleri ve olasılıkları tanımlar. Değerler olay için mümkün olan tüm sonuçları kapsamalıdır ve olasılıkların toplamı bire eşit olmalıdır. Sonuçların birbirinden ayrı olduğu ve devamlılık arz etmeyen dağılımlara kesikli (discrete) dağılım denir. 
+
+\begin{figure}[h]
+    \centering
+    \includegraphics[width=1\textwidth]{images/types_of_distribution.png}
+    \caption{Dağılım türleri.}
+    \label{fig:enter-label}
+\end{figure}
+
+\subsection{Normal Dağılım}
+Gauss dağılımı olarak da bilinir. Belirli bir ortalama değer etrafında simetrik bir şekilde dağılan bir olasılık dağılımıdır. Çan eğrisi olarak adlandırılan bir görünüme sahiptir.
+
+\[f(x | \mu, \sigma^2) = \frac{1}{\sqrt{2\pi\sigma^2}} \exp\left(-\frac{(x-\mu)^2}{2\sigma^2}\right)\]
+\begin{itemize}
+	\item $x$: Değer.
+	\item $\mu$ Ortalama.
+	\item $\sigma$: Standart sapma.
+	\item $\sigma^2$: Varyans.
+\end{itemize}
+
+Bazı özel olasılık değerleri:
+
+\[P(\mu - \sigma < X < \mu + \sigma = \%68.2\]
+\[P(\mu - 2 * \sigma < X < \mu + 2 * \sigma  = \%95.4\]
+\[P(\mu - 3 * \sigma < X < \mu + 3 * \sigma  = \%99.7\]
+
+\begin{lstlisting}[language=Python]
+import numpy as np
+import matplotlib.pyplot as plt
+from scipy.stats import norm
+
+# Normal dagilim parametreleri
+mu = 0  # Ortalama
+sigma = 1  # Standart sapma
+
+# Normal dagilimi olustur
+normal_dist = norm(loc=mu, scale=sigma)
+
+# X araligini belirle
+x = np.linspace(-5, 5, 1000)
+
+# Olasilik yogunluk fonksiyonunu hesapla
+pdf = normal_dist.pdf(x)
+
+# Grafik cizimi
+plt.figure(figsize=(12, 5))
+plt.plot(x, pdf, label='Normal Dagilim (mu=0, sigma=1)')
+plt.title('Normal Dagilim')
+plt.xlabel('Degerler')
+plt.ylabel('Olasilik Yogunlugu')
+plt.legend()
+plt.grid(True)
+plt.savefig('normal_distribution')
+plt.show()
+\end{lstlisting}
+
+\begin{figure}[h]
+    \centering
+    \includegraphics[width=1\textwidth]{images/normal_distribution.png}
+    \caption{Normal dağılım örneği.}
+    \label{fig:enter-label}
+\end{figure}
+
+\subsection{t-Dağılım}
+Student t-dağılımı (t-distribution), örneklem büyüklüğü küçük olduğunda ve populasyon standart sapması bilinmediğinde, örneklem ortalamasının dağılımını modellemek için kullanılan bir olasılık dağılımıdır. Özellikle küçük örneklem büyüklüklerinde ve normal dağılım varsayımı sağlanmadığında sıklıkla kullanılır. Student t-dağılımı, William Sealy Gosset tarafından geliştirilmiştir.
+
+\[f(t|n) = \frac{\Gamma\left(\frac{n+1}{2}\right)}{\sqrt{n\pi}\Gamma\left(\frac{n}{2}\right)\left(1+\frac{t^2}{n}\right)^{\frac{n+1}{2}}}\]
+\begin{itemize}
+	\item $t$: Değer.
+	\item $n$: Serbestlik derecesi (örneklem büyüklüğü - 1).
+	\item $\Gamma$ Gama fonksiyonu.
+\end{itemize}
+
+\begin{lstlisting}[language=Python]
+import numpy as np
+import matplotlib.pyplot as plt
+from scipy.stats import t
+
+# Serbestlik derecesi (orneklem buyuklugu - 1)
+n = 10
+
+# Student t-dagilimini olustur
+t_dist = t(df=n)
+
+# X araligini belirle
+x = np.linspace(-4, 4, 1000)
+
+# Olasilik yogunluk fonksiyonunu hesapla
+pdf = t_dist.pdf(x)
+
+# Grafik cizimi
+plt.figure(figsize=(12, 5))
+plt.plot(x, pdf, label='Student t-Dagilimi (n=10)')
+plt.title('Student t-Dagilimi')
+plt.xlabel('Degerler')
+plt.ylabel('Olasilik Yogunlugu')
+plt.legend()
+plt.grid(True)
+plt.savefig('t_distribution')
+plt.show()
+\end{lstlisting}
+
+\newpage
+
+\begin{figure}[h]
+    \centering
+    \includegraphics[width=1\textwidth]{images/t_distribution.png}
+    \caption{t-dağılım örneği.}
+    \label{fig:enter-label}
+\end{figure}
+
+\subsection{Ki-kare (Chi-square) Dağılımı}
+Ki-kare dağılımı, bağımsız olarak ve aynı standart normal dağılıma sahip olan rastgele değişkenlerin karelerinin toplamı olarak tanımlanan bir olasılık dağılımıdır. Genellikle hipotez testlerinde ve dağılım karşılaştırmalarında kullanılır.
+
+\[f(x|k) = \frac{1}{2^{\frac{k}{2}} \Gamma\left(\frac{k}{2}\right)} x^{\frac{k}{2} - 1} e^{-\frac{x}{2}}\]
+\begin{itemize}
+	\item $x$: Değer.
+	\item $k$: Serbestlik derecesi.
+	\item $\Gamma$: Gama fonksiyonu.
+\end{itemize}
+
+\begin{lstlisting}[language=Python]
+import numpy as np
+import matplotlib.pyplot as plt
+from scipy.stats import chi2
+
+# Serbestlik derecesi
+k = 3
+
+# Ki-kare dagilimini olustur
+chi2_dist = chi2(df=k)
+
+# X araligini belirle
+x = np.linspace(0, 20, 1000)
+
+# Olasilik yogunluk fonksiyonunu hesapla
+pdf = chi2_dist.pdf(x)
+
+# Grafik cizimi
+plt.figure(figsize=(12, 5))
+plt.plot(x, pdf, label='Ki-kare Dagilimi (k=3)')
+plt.title('Ki-kare Dagilimi')
+plt.xlabel('Degerler')
+plt.ylabel('Olasilik Yogunlugu')
+plt.legend()
+plt.grid(True)
+plt.savefig('chi_square_distribution')
+plt.show()
+\end{lstlisting}
+
+\begin{figure}[h]
+    \centering
+    \includegraphics[width=1\textwidth]{images/chi_square_distribution.png}
+    \caption{Ki-kare (Chi-square) dağılım örneği.}
+    \label{fig:enter-label}
+\end{figure}
+
+\subsection{Üstel (Exponential) Dağılım}
+Üstel dağılım (exponential distribution), belirli bir olayın gerçekleşmesi arasındaki zaman aralığını modellemek için kullanılan bir olasılık dağılımıdır. Özellikle rastgele değişkenin pozitif değerler alması gerektiğinde kullanılır ve genellikle sürekli zaman aralıklarını modellemek için tercih edilir. Üstel dağılım, özellikle rastgele olayların aralıklarının dağılımını modellemek için sıkça kullanılır.
+
+\[f(x | \lambda) = \lambda * \epsilon ^{-\lambda * \epsilon}\]
+\begin{itemize}
+	\item $x$: Değer
+	\item $\lambda$: Pozitif olan oran parametresi.
+\end{itemize}
+
+\begin{lstlisting}[language=Python]
+import numpy as np
+import matplotlib.pyplot as plt
+from scipy.stats import expon
+
+# Ustel dagilim parametresi
+rate = 0.5  # Oran parametresi (lambda)
+
+# Ustel dagilimi olustur
+exponential_dist = expon(scale=1/rate)
+
+# X araligini belirle
+x = np.linspace(0, 10, 1000)
+
+# Olasilik yogunluk fonksiyonunu hesapla
+pdf = exponential_dist.pdf(x)
+
+# Grafik cizimi
+plt.figure(figsize=(12, 5))
+plt.plot(x, pdf, label='Ustel Dagilim (rate=0.5)')
+plt.title('Ustel Dagilim')
+plt.xlabel('Degerler')
+plt.ylabel('Olasilik Yogunlugu')
+plt.legend()
+plt.grid(True)
+plt.savefig('exponential_distribution')
+plt.show()
+\end{lstlisting}
+
+\begin{figure}[h]
+    \centering
+    \includegraphics[width=1\textwidth]{images/exponential_distribution.png}
+    \caption{Üstel (Exponential) dağılım örneği.}
+    \label{fig:enter-label}
+\end{figure}
+
+\newpage
+
+\subsection{Bernoulli Dağılımı}
+Bernoulli dağılımı, sadece iki olası sonuçtan birini (başarı veya başarısızlık) modellemek için kullanılan bir olasılık dağılımıdır. Özellikle bir denemenin başarılı olma olasılığını (genellikle p ile gösterilir) modellemek için kullanılır.
+
+\[f(k|p) = \begin{cases} p & \text{if } k = 1 \\ 1 - p & \text{if } k = 0 \end{cases}\]
+\begin{itemize}
+	\item $k$: Sonuç (1 başarı, 0 başarısızlık).
+	\item $p$: Başarı olasılığı.
+\end{itemize}
+
+\begin{lstlisting}[language=Python]
+import numpy as np
+import matplotlib.pyplot as plt
+from scipy.stats import bernoulli
+
+# Basari olasiligi
+p = 0.6
+
+# Bernoulli dagilimini olustur
+bernoulli_dist = bernoulli(p)
+
+# Degerler
+x = [0, 1]
+
+# Olasilik kutle fonksiyonunu hesapla
+pmf = bernoulli_dist.pmf(x)
+
+# Grafik cizimi
+plt.figure(figsize=(12, 5))
+plt.bar(x, pmf, align='center', alpha=0.5)
+plt.xticks(x, ['0 (Basarisiz)', '1 (Basarili)'])
+plt.title('Bernoulli Dagilimi (p=0.6)')
+plt.xlabel('Sonuc')
+plt.ylabel('Olasilik')
+plt.grid(True)
+plt.savefig('bernoulli_distribution')
+plt.show()
+\end{lstlisting}
+
+\newpage
+
+\begin{figure}[h]
+    \centering
+    \includegraphics[width=1\textwidth]{images/bernoulli_distribution.png}
+    \caption{Bernoulli dağılım örneği.}
+    \label{fig:enter-label}
+\end{figure}
+
+\subsection{Binom (Binomial) Dağılım}
+Binom dağılımı, bir denemede başarı veya başarısızlık gibi iki olası sonuç bulunan bağımsız ve aynı dairelerin ardışık olarak tekrarlanması sonucu oluşan bir olasılık dağılımıdır. Her bir denemenin sonucu bağımsızdır ve aynı başarı olasılığına sahiptir. Binom dağılımı, belirli bir sayıda başarı sayısını (başarıların sayısı) modellemek için kullanılır.
+
+\[f(k|n,p) = \binom{n}{k} p^k (1-p)^{n-k}\]
+\begin{itemize}
+	\item $k$: Başarı sayısı.
+	\item $n$: Deneme sayısı.
+	\item $p$: Her bir denemenin başarı olasılığı.
+	\item $\binom{n}{k}$: n deneme içinden k başarılı deneme seçmek için kombinasyon sayısı.
+\end{itemize}
+
+\begin{lstlisting}[language=Python]
+import numpy as np
+import matplotlib.pyplot as plt
+from scipy.stats import binom
+
+# Deneme sayisi
+n = 10
+
+# Basari olasiligi
+p = 0.5
+
+# Binom dagilimini olustur
+binom_dist = binom(n, p)
+
+# Degerler
+k = np.arange(0, n+1)
+
+# Olasilik kutle fonksiyonunu hesapla
+pmf = binom_dist.pmf(k)
+
+# Grafik cizimi
+plt.figure(figsize=(12, 5))
+plt.bar(k, pmf, align='center', alpha=0.5)
+plt.title('Binom Dagilimi (n=10, p=0.5)')
+plt.xlabel('Basari Sayisi')
+plt.ylabel('Olasilik')
+plt.grid(True)
+plt.savefig('binomial_distribution')
+plt.show()
+\end{lstlisting}
+
+\begin{figure}[h]
+    \centering
+    \includegraphics[width=1\textwidth]{images/binomial_distribution.png}
+    \caption{Binomial dağılım örneği.}
+    \label{fig:enter-label}
+\end{figure}
+
+\subsection{Tekdüze (Uniform) Dağılım}
+Uniform (düzgün) dağılım, belirli bir aralıktaki tüm değerlerin eşit olasılıkla ortaya çıkma durumunu modelleyen bir olasılık dağılımıdır. Bu dağılım, belirli bir aralıktaki rastgele değişkenlerin dağılımını ifade etmek için kullanılır.
+
+\[f(x|a,b) = \frac{1}{b-a}\]
+\begin{itemize}
+	\item $x$: Değer.
+	\item $a$: Dağılımın başlangıç noktası (alt sınır).
+	\item $b$: Dağılımın bitiş noktası (üst sınır).
+\end{itemize}
+
+\begin{lstlisting}[language=Python]
+import numpy as np
+import matplotlib.pyplot as plt
+
+# Uniform dagilimin parametreleri (0 ile 10 arasi)
+a = 0  # Alt sinir
+b = 10  # Ust sinir
+
+# Ornek veri seti olustur
+uniform_data = np.random.uniform(a, b, 1000)
+
+# Grafik cizimi
+plt.figure(figsize=(12, 5))
+plt.hist(uniform_data, bins=20, density=True, alpha=0.6, color='g')
+plt.title('Uniform Dagilim (0 ile 10 arasi)')
+plt.xlabel('Degerler')
+plt.ylabel('Yogunluk')
+plt.grid(True)
+plt.savefig('uniform_distribution')
+plt.show()
+\end{lstlisting}
+
+\begin{figure}[h]
+    \centering
+    \includegraphics[width=0.8\textwidth]{images/uniform_distribution.png}
+    \caption{Tekdüze (uniform) dağılım örneği.}
+    \label{fig:enter-label}
+\end{figure}
+
+
+\subsection{Poisson Dağılımı}
+Poisson dağılımı, sabit bir zaman biriminde belirli bir alanda veya hacimde nadir rastgele olayların (örneğin, trafik kazaları, doğal afetler, müşteri hizmet çağrıları vb.) sayısını modellemek için kullanılan bir olasılık dağılımıdır. Poisson dağılımı, belirli bir zaman veya alanda olayların ortalamasını (örneğin, ortalama bir saatteki trafik kazaları sayısı) ve olayların beklenen nadirliğini temel alır.
+
+\[f(k|\lambda) = \frac{e^{-\lambda} \lambda^k}{k!}\]
+\begin{itemize}
+	\item $k$: Olay sırası.
+	\item $\lambda$: Olayların ortalama sayısı.
+	\item $\epsilon$: Euler sayısı.
+\end{itemize}
+
+\begin{lstlisting}[language=Python]
+import numpy as np
+import matplotlib.pyplot as plt
+from scipy.stats import poisson
+
+# Olaylarin ortalama sayisi (lambda)
+lam = 3
+
+# Poisson dagilimini olustur
+poisson_dist = poisson(mu=lam)
+
+# Degerler
+k = np.arange(0, 10)
+
+# Olasilik kutle fonksiyonunu hesapla
+pmf = poisson_dist.pmf(k)
+
+# Grafik cizimi
+plt.figure(figsize=(12, 5))
+plt.bar(k, pmf, align='center', alpha=0.5)
+plt.title('Poisson Dagilimi (lambda=3)')
+plt.xlabel('Olay Sayisi')
+plt.ylabel('Olasilik')
+plt.grid(True)
+plt.savefig('poisson_distribution')
+plt.show()
+\end{lstlisting}
+
+\begin{figure}[h]
+    \centering
+    \includegraphics[width=0.8\textwidth]{images/poisson_distribution.png}
+    \caption{Poisson dağılım örneği.}
+    \label{fig:enter-label}
+\end{figure}
+
+\newpage 

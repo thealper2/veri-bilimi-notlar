@@ -1,0 +1,13 @@
+\section{Generative Pretrained Transformers}
+Generative Pretrained Transformers (GPT), OpenAI tarafından geliştirilen ve büyük miktarda metin verisi üzerinde önceden eğitilmiş bir dil modeli ailesidir. GPT modelleri, dil anlama, metin oluşturma, metin sınıflandırma gibi çeşitli görevlerde kullanılabilir.  GPT, daha küçük bir veri kümesi üzerinde tekrar eğitilerek belirli bir göreve uyarlanabilir. Bu, modelin belirlenen görevde daha iyi performans vermesini sağlar. GPT bir dizi transformer bloğundan oluşur.
+
+\subsection{Çalışma Adımları}
+\begin{enumerate}
+	\item Kelimeler kelime gömümlerine dönüştürülür. Pozisyon kodlayıcı, kelimelerin konum bilgilerini ekler.
+	\item Her transformer bloğu, kendine dikkat (self-attention) katmanı ve ileri beslemeli ağ katmanlarından oluşur.  Self-attention katmanı, multi head attention mekanizması ile çalışır ve her kelimenin diğer kelimelerle olan bağımlılıklarını öğrenir.
+	\item İleri beslemeli ağ katmanı öğrenilen bağımlılıkları işler ve hesaplama yapar.
+	\item Transformer bloklarından geçen veriler son bir doğrusal katman ve softmax fonksiyonu ile işlenir.
+	\item Nihai sonuç üretilir.
+\end{enumerate}
+
+\newpage

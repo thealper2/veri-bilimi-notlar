@@ -1,0 +1,30 @@
+\section{SGD}
+Stochastic Gradient Descent (SGD), her bir veri noktası için gradyan iniş algoritmasını kullanarak ağırlıklarını günceller ve böylece regresyon yoluyla öğrenir.
+
+\subsection{Çalışma Adımları}
+\begin{enumerate}
+    \item Eğitim verilerindeki örneklerden rastgele başlangıç parametreleriyle başlar.
+    \item Rastgele seçilen örnekler üzerinden gradyan (türev) hesaplar. Bu gradyan, kayıp fonksiyonunun optimuma doğru yönelik bir tahmini sağlar.
+    \item Hesaplanan gradyan kullanılarak parametreler güncellenir. SGD, her adımda gradyanın ters yönünde bir adım atarak parametrelerin güncellenmesini sağlar. Bu adım öğrenme oranıdır.
+    \item Parametreler güncellendikçe kayıp fonksiyonunun değeri azalır.
+    \item SGD belirli bir iterasyon sayısına uğraşana kadar adımları tekrarlar.
+\end{enumerate}
+
+\subsection{Hiperparametreler}
+\begin{table}[h]
+\centering
+{\scriptsize\renewcommand{\arraystretch}{0.4}
+{\resizebox*{\linewidth}{0.4\textwidth}{
+\begin{tabular}{|p{2cm}|p{2cm}|p{2cm}|p{4cm}|}
+\hline
+Parametre & Type & Default & Açıklama \\ \hline
+alpha & float & 0.0001 & Düzenlemeyi kontrol eder. \\ \hline
+loss & str, "squared\_error", "huber", "epsilon" & "squared\_error" & Kayıp fonksiyonu. \\ \hline
+penalty & "l1", "l2", "elasticnet", None & "l2" & Düzenleme fonksiyonu. \\ \hline
+learning\_rate & str, "constant", "optimal", "invscaling" & "invscaling" & Öğrenme oranı. \\ \hline
+
+\end{tabular}
+}}}
+\end{table}
+
+\newpage

@@ -1,0 +1,21 @@
+\section{XLNET}
+Google Brain ve Carnegie Mellon University tarafından geliştirilmiştir. Transformer-XL mimarisine dayanır. Autoregressive (kendi kendine geriye doğru tahmin yapma) modelleme ve MLM (masked language modelling) tekniklerini birleştirerek kullanır. Uzun metin bağımlılıklarını etkili bir şekilde modelleyebilmek için geliştirilmiştir. İçerisinde;
+
+\begin{itemize}
+	\item \textbf{Positional Encoding}: Girdi dizisinin pozisyon bilgilerini ekler.
+	\item \textbf{Segment Embeddings}: Metni parçalarına ayırarak her parçaya bir segment kimliği atar.
+	\item \textbf{Self-Attention Mechanism}: Her kelimenin diğer kelimeler ile ilişkisini öğrenir.
+	\item \textbf{Autoregressive Factorization}: Girdi dizisini çeşitli sıralamalara göre modelleyerek daha fazla bilgi öğrenir.
+	\item \textbf{Two-Stream Self-Attentions}: Her pozisyonda hem içerik hem de pozisyon bilgilerini öğrenir. 
+\end{itemize}
+
+\subsection{Çalışma Adımları}
+\begin{enumerate}
+	\item Girdi dizisi, kelime gömmeleri ve pozisyon bilgileri eklenir.
+	\item Girdi dizisi, çeşitli sıralamalara göre ayrıştırılır ve her sıralama üzerinden model eğitilir.
+	\item Content Stream, her pozisyondaki kelimenin içerik bilgilerini işler. Query Stream, her pozisyondeki kelimenin hem içerik hem de pozisyon bilgilerini işler.
+	\item Girdi dizisinin farklı permütasyonları üzerinden dil modelleme yapılır, bu da modeilln daha geniş bir bilgi havuzundan öğrenmesini sağlar.
+	\item Model, farklı permütasyonlar üzerinden eğitilerek dil modelleme görevinde daha güçlü hale getirilir.
+\end{enumerate}
+
+\newpage

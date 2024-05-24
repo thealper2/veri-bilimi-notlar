@@ -1,0 +1,26 @@
+\section{Lasso}
+Lasso (Least Absolute Shrinkage and Selection Operator), model karmaşıklığını kontrol etmek için L1 düzenlemesini kullanır. Lineer regresyonun bir türevidir ve L1 düzenlemesi (penalty) ekleyerek modeldeki katsayıları sıfıra yaklaştırarak özellik seçimi yapar. Model, katsayıların sıfıra yaklaşmasını sağlayarak önemsiz özellikleri elemeye çalışır. İlgiz değişkenlerin katsayılarını sıfıra eşitler.
+
+\subsection{Hiperparametreler}
+\begin{table}[h]
+\centering
+{\scriptsize\renewcommand{\arraystretch}{0.4}
+{\resizebox*{\linewidth}{0.6\textwidth}{
+\begin{tabular}{|p{2cm}|p{1cm}|p{1cm}|p{6cm}|}
+\hline
+Parametre & Type & Default & Açıklama \\ \hline
+alpha & float & 1.0 & L1 düzenlemesi katsayısıdır. Negatif olmamalıdır. alpha 0 olduğunda doğrusal regresyon gibi sonuç döner. \\ \hline
+fit\_intercept & bool & True & Kesişimin (intercept) uydurulup uydurulmayacağı. \\ \hline
+copy\_X & bool & True & Eğer True ise modeli eğitirken X değeri fonksiyonda kullanılacak ve eğitimden sonra da aynı olacaktır. False olduğunda ise X fonksiyona girdikten sonra ilk hali ile aynı olmayabilir. \\ \hline
+precompute & bool & False & Hesaplamaları hızlandırmak için önceden hesaplanmış bir Gram matrisi olup olmayacağı. \\ \hline
+max\_iter & int & 1000 & Maksimum iterasyon sayısı. \\ \hline
+tol & float & 1e-4 & Optimizasyon toleransı. \\ \hline
+warm\_start & bool & False & True ise önceki fit çözümünü başlangıç olarak kullanır. \\ \hline
+positive & bool & False & True ise katsayıları pozitif olmaya zorlar. \\ \hline
+selection & string & "cyclic" & "random" olduğu zaman her iterasyonda rastgele bir katsayı güncellenir. Tol 1e-4'den yüksek olduğunda daha hızlı yakınsamaya yol açar. \\ \hline
+
+\end{tabular}
+}}}
+\end{table}
+
+\newpage

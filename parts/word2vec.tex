@@ -1,0 +1,40 @@
+\section{Word2Vec}
+Bir kelimeyi vektörlerle temsil etmek için kullanılır. İki farklı yöntemi içerir:
+
+\subsection{Skip-gram}
+Orta kelimeyi alarak çevresindeki kelimeleri tahmin etme. Belirli bir kelimenin etrafındaki bağlamı tahmin etmek için kullanılır. Bu yöntemde, bir kelimenin bağlamındaki diğer kelimeler, o kelimenin vektörlerinin güncellenmesinde kullanılır. Pencere büyüklüğü çevreden kaç kelime alınacağını gösterir. Örneğin 2 ise ortadaki kelimenin sağından 2 solundan 2 kelime alınır. CBOW'a göre daha fazla hesaplama gücü gerektirir. 
+
+\[\max \prod_{t=1}^{T} P(w_{t+j} | w_t)\]
+\begin{itemize}
+    \item $T$, eğitim setindeki toplam kelime çifti sayısı
+    \item $j$, kelimenin etrafındaki bağlamın boyutu
+    \item $P(w_{t+j} | w_{t})$, $w_{t}$ kelimesinin bağlamındaki $w_{t+j}$ kelimesinin olasılığı
+\end{itemize}
+
+\subsection{Continuous Bag of Words (CBOW)}
+Çevredeki kelimelerden ortadaki kelimeyi tahmin etme. Belirli bir kelimenin verilen bir bağlamdaki olasılığını tahmin etmek için kullanılır. Bu yöntemde bir kelimenin vektörü o kelimenin bağlamındaki diğer kelimelerin vektörleri kullanılarak tahmin edilir. Skip-gram'a göre daha az hesaplama gücü gerektirir. Küçük veri setleri için uygundur.
+
+\[\max \prod_{w \in C} P(w | w_i)\]
+\begin{itemize}
+    \item $C$, bağlamdaki kelime kümesi
+    \item $P(w | w_{i}$, $w_{i}$ kelimesinin bağlamındaki diğer kelimelerden w kelimesinin olasığı
+\end{itemize}
+
+\begin{lstlisting}[language=Python]
+from gensim.models import Word2Vec
+
+# Ornek bir metin corpus
+corpus = [["bu", "bir", "ornek", "cumle"], ["baska", "bir", "ornek"]]
+
+# GloVe modelini olustur
+model = Word2Vec(corpus, vector_size=100, window=5, min_count=1, sg=1)
+
+# Kelime vektorlerini al
+word_vectors = model.wv
+
+# Ornek bir kelimenin vektorunu al
+vector = word_vectors['ornek']
+print("Kelime vektoru:", vector)
+\end{lstlisting}
+
+\newpage

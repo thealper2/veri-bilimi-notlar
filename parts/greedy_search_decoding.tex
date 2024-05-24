@@ -1,0 +1,27 @@
+\section{Greedy Search Decoding}
+Greedy Search Decoding, her adımda en yüksek olasılığa sahip olan bir sonraki sembolü seçerek ilerleyen bir stratejidir. Her adımda tek bir seçim yapıldığı için çok hızlıdır. Her adımda en iyi seçim yapıldığından, global maksimumdan uzaklaşma riski yüksektir. Daha iyi olasılık taşıyan diğer yolları göz ardı ettiği için daha düşük kalitede çıktılar üretir. 
+
+\subsection{Çalışma Adımları}
+\begin{enumerate}
+	\item Başlangıç sembolü ile başlar.
+	\item Her adımda mevcut durumda en yüksek olasılığa sahip bir sonraki sembol seçilir.
+	\item Durdurma sembolüne ulaşılana kadar işlem tekrarlanır.
+\end{enumerate}
+
+\begin{lstlisting}[language=Python]
+def greedy_search_predictions(text, model, tokenizer, max_length):
+    in_text = "startseq " + text
+    for _ in range(max_length):
+        sequence = pad_sequences([tokenizer.texts_to_sequences([in_text])[0]], max_length)
+        y_pred = np.argmax(model.predict(sequence, verbose=0), axis=1)[0]
+        
+        word = tokenizer.index_word.get(y_pred, None)
+        if not word or word == 'endseq':
+            break
+    
+        in_text += " " + word
+
+    return " ".join([word for word in in_text.split() if word not in ["startseq", "endseq", "<OOV>"]])
+\end{lstlisting}
+
+\newpage

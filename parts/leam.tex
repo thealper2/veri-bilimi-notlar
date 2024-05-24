@@ -1,0 +1,13 @@
+\section{LEAM (Label Embedding Attentive Model)}
+Metin sınıflandırma problemlerinde kullanılır. Etiketlerin ve metinlerin gömme temsillerini kullanarak, metinlerin hangi etiketlere ait olduğunu belirlemeyi amaçlar. Bu model, kelime göömeleri ile etiket gömmelerini aynı uzayda öğrenir ve dikkat mekanizması ile bu gömmeler arasındaki ilişkiyi keşfeder. 
+
+\subsection{Çalışma Adımları}
+
+\begin{enumerate}
+	\item Metin içindeki her kelime ve etiket için gömme vektörleri elde edilir.
+	\item Bu vektörler, dikkat mekanizması kullanılarak işlenir. Kelime ve etiket gömmeleri arasında etkileşim kurulur ve bu etkileşimler sonucunda ağırlıklar hesaplanır.
+	\item Dikkat ağı ile elde edilen ağırlıklar kullanılarak, metinlerin etiketlerler ilişkili temsilleri oluşturulur.
+	\item Bu temsiller bir sınıflandırma katmanı ile işlenerek tahmin yapılır.
+\end{enumerate}
+
+\newpage

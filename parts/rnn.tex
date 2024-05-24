@@ -1,0 +1,26 @@
+\section{RNN}
+Tekrarlayan sinir ağı (RNN) veri dizilerini işlemek için tasarlanmış bir yapay sinir ağı türüdür. Geleneksel ileri beslemeli sinir ağlarının aksine, RNN'lerin yönlendirilmiş döngüler oluşturan bağlantıları vardır, bu da dizideki önceki girdiler hakkında bilgi yakalayan gizli bir durumu korumalarına izin verir. Bu, RNN'leri sıralı veya zamana bağlı verileri içeren görevler için çok uygun hale getirir. Geçmiş girdilerden gelen bilgileri ezberleme yeteneği. RNN hafızaya yapısına sahip bir yapıdır. Girdiler birbirleri ile ilişkilidir. Uzun girdileri işlemekte zorlanır, başarılı sonuçlar veremeyebilir. Kaybolan gradyanlar ve patlayan gradyanlar sorununa sahiptir. Temel bileşenleri;
+\begin{itemize}
+	\item \textbf{Sıralı İşleme:} RNN'ler, öğelerin sırasının önemli olduğu veri dizilerini işlemek için tasarlanmıştır. Bu, bir cümledeki sözcük dizisi, zaman serisi verileri veya başka herhangi bir sıralı bilgi biçimi olabilir.
+	\item \textbf{Gizli Durum:} RNN'ler, geçmiş girdilerin bir hafızası veya temsili olarak hizmet eden gizli bir durum vektörü tutar. Gizli durum her zaman adımında mevcut girdiye ve önceki gizli duruma göre güncellenir.
+	\item \textbf{Zaman Adımları:} Represent individual steps in the sequential data. RNNs process inputs one time step at a time, allowing them to model dependencies over sequences.
+	\item \textbf{Kaybolan Gradyanlar:} RNN'lerin eğitiminde bir zorluk teşkil eder. Zaman içinde geriye yayılma sırasında gradyanlar çok küçük hale gelebilir ve bu da uzun vadeli bağımlılıkların öğrenilmesini engeller. Bu sorunu çözmek için Uzun Kısa Süreli Bellek (LSTM) ve Geçitli Tekrarlayan Birim (GRU) gibi teknikler tanıtılmıştır.
+\end{itemize}
+
+RNN'lerin avantajları;
+\begin{itemize}
+	\item Sıralı veri işleme
+	\item Bellek ve bağlam
+	\item Giriş/Çıkış Uzunluğunda Esneklik
+	\item Zamansal Dinamik Modelleme
+\end{itemize}
+
+RNN'lerin dezavantajları;
+\begin{itemize}
+	\item Kaybolan ve patlayan gradyan problemleri
+	\item Sınırlı kısa süreli hafıza
+	\item Hesaplama açısından yoğun
+	\item Uzun vadeli bağımlılıkları yakalamanın zorluğu
+\end{itemize}
+
+\newpage

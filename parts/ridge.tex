@@ -1,0 +1,24 @@
+\section{Ridge}
+Çok değişkenli regresyon verilerini analiz etmek için kullanılır. Lineer regresyonun bir türevidir ve genellikle aşırı uydurma (overfitting) problemini çözmek için kullanılır. Model, lineer regresyonun temel yapısını korurken, katsayıları sınırlamak için L2 düzenlemesi (penalty) ekler. Bu düzenleme, kaysayıların büyüklüğünü sınırlayarak modeli daha da genelleştirilmiş hale getirir. Tüm değişkenler ile modeli oluşturur, ilgisiz değişkenleri çıkarmaz fakat katsayılarını sıfıra yaklaştırır.
+
+\subsection{Hiperparametreler}
+\begin{table}[h]
+\centering
+{\scriptsize\renewcommand{\arraystretch}{0.4}
+{\resizebox*{\linewidth}{0.4\textwidth}{
+\begin{tabular}{|p{3cm}|p{1cm}|p{1cm}|p{6cm}|}
+\hline
+Parametre & Type & Default & Açıklama \\ \hline
+alpha & float & 1.0 & L2 düzenlemesi katsayısıdır. Bu parametre arttıkça katsayıların büyüklüğüne daha fazla düzenleme uygulanır. \\ \hline
+fit\_intercept & bool & True & Kesişimin (intercept) uydurulup uydurulmayacağı. \\ \hline
+copy\_X & bool & True & Eğer True ise modeli eğitirken X değeri fonksiyonda kullanılacak ve eğitimden sonra da aynı olacaktır. False olduğunda ise X fonksiyona girdikten sonra ilk hali ile aynı olmayabilir. \\ \hline
+max\_iter & int & None & Gradyan çözücüsü için maximum iterasyon sayısı. \\ \hline
+tol & float & 1e-4 & Katsayı hassasiyeti (coef) \\ \hline
+solver & tol & 1e-4 & Hesaplamada kullanılacak çözücü. \\ \hline
+positive & string & "auto" & True ise katsayıları pozitif olmaya zorlar. \\ \hline
+random\_state & bool & False & Seed \\ \hline
+\end{tabular}
+}}}
+\end{table}
+
+\newpage

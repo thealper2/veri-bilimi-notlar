@@ -1,0 +1,19 @@
+\section{Nested LSTM}
+Standart LSTM mimarisini genişleten ve hiyerarşik bir yapı ekleyerek daha karmaşık ve çok katmanlı zaman bağımlılıklarını öğrenebilen bir LSTM türüdür.  Her hücresinde dış LSTM hücresi ve iç LSTM hücresi olmak üzere iki seviyeli bir bellek yapısı kullanır.
+
+\begin{itemize}
+	\item \textbf{Dış LSTM}: Ana zaman bağımlılıklarını modelleyen bir LSTM katmanı.
+	\item \textbf{İç LSTM}: Her dış LSTM hücresinin içinde bulunan ve daha ince zaman bağımlılıklarını öğrenen ikinci bir LSTM katmanı.
+\end{itemize}
+
+\subsection{Çalışma Adımları}
+
+\begin{enumerate}
+	\item Girdi dizisi alınır.
+	\item Dış LSTM girdi dizisini alır ve her zaman adımında gizli durumu ve hücre durumunu günceller.
+	\item Her dış LSTM hücresinde, iç LSTM hücresi kullanılarak daha ince zaman bağımlılıkları güncellenir.
+	\item İç LSTM'in çıktısı dış LSTM'in gizli durumu olarak kullanılır.
+	\item Her iki LSTM'in çıktıları birleştirilerek nihai çıktı üretilir.
+\end{enumerate}
+
+\newpage

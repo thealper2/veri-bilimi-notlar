@@ -1,0 +1,13 @@
+\section{Tacotron}
+Google tarafından geliştirilmiştir. Metinden konuşma üretiminde kullanılır. Encoder ve decoder yapısından oluşur.
+
+\subsection{Çalışma Adımları}
+\begin{enumerate}
+	\item Girdi metni alınır.
+	\item Metin gömme katmanları, cnn katmanları ve bi-lstm katmanları ile gizli bir temsil haline getirilir.
+	\item Encoder'dan gelen gizli durular üzerinde dikkat mekanizması uygulanır ve decoder'in hangi kısımlara odaklanması gerektiği belirlenir.
+	\item LSTM katmanları ve fully connected katmanları kullanılarak, metin temsilinden ses spektrumu üretilir.
+	\item Üretilen ses spektrumu bir vocoder (örneğin WaveNet) kullanılarak ham ses dalgasına dönüştürülür.
+\end{enumerate}
+
+\newpage

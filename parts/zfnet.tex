@@ -1,0 +1,22 @@
+\section{ZFNet}
+2013'de ImageNet ILSVRC (Büyük Ölçekli Görsel Tanıma Yarışması)'de sunuldu. Matthew Zeiler ve Rob Fergus tarafından geliştirilmiştir. ZF Net'te, AlexNet'e göre ilk katmandaki filtre boyutu ve adım sayısı küçültülmüş ve orta evrişim katmanları büyütülmüştür. ZF Net'te, öğrenilen bilgiyi görselleştiren ağın her katmanındaki görüntü piksellerine geri beslenen zıt evrişim işlemi (deconvnet) eklenmiştir. Böylece zengin özellikler gözetimsiz olarak çıkarılabilmektedir.
+
+\begin{lstlisting}[language=Python]
+model = Sequential()
+model.add(Conv2D(96, (7, 7), strides=(2, 2), input_shape=(224, 224, 3), activation='relu'))
+model.add(MaxPooling2D((3, 3), strides=(2, 2)))
+model.add(Conv2D(256, (5, 5), activation='relu'))
+model.add(MaxPooling2D((3, 3), strides=(2, 2)))
+model.add(Conv2D(384, (3, 3), activation='relu'))
+model.add(Conv2D(384, (3, 3), activation='relu'))
+model.add(Conv2D(256, (3, 3), activation='relu'))
+model.add(MaxPooling2D((3, 3), strides=(2, 2))
+model.add(Flatten())
+model.add(Dense(4096, activation='relu'))
+model.add(Dropout(0.5))
+model.add(Dense(4096, activation='relu'))
+model.add(Dropout(0.5))
+model.add(Dense(1000, activation='softmax'))
+\end{lstlisting}
+
+\newpage

@@ -1,0 +1,29 @@
+\section{Prompt Engineering}
+Prompt, "istemde bulunmak" anlamına gelir. Belirli bir amaç için bir dil modeline gönderilen komut dizisini ifade eder. Prompt Engineering, Dil modelini belirli bir görev için optimize ederken özel bir komut dizisi kullanma sürecidir.
+
+\subsection{Teknikler}
+\begin{itemize}
+    \item \textbf{Role Prompting:} Belirli bir rol veya işlevi yerine getirmesi için yönlendirmek için kullanılan bir tekniktir. Modelin belirli bir görevi yerine getirirken belirli bir rolü veya karakteri taklit etmesini sağlar. Çözülmek istenen problem için bir rol veya gerçek veya kurgusal bir karakter tanımlayın. Çözülmek istenen problem ile ilgili bir senaryo kurun. Modelin rolünü tarif e din.
+    \item \textbf{Few Shot Prompting:} Modelin daha önceden verilmemiş veya belirli bir görev için eğitilmemiş metinleri hızlı bir şekilde öğrenmesini sağlamak için kullanılan bir tekniktir. Modelin sınırlı sayıda örnekten öğrenme yeteneğini kullanarak yeni görevleri hızla öğrenmesini sağlar. Verilen örnekler görev ile alakalı olmalıdır. Genelde 2-10 arasında örnek verilir.
+    \item \textbf{Chain-of-Thought Prompting:} Modelin bir metindeki fikirleri veya düşünceleri izleyerek o metindeki bağlamsal akışı anlamasını sağlamak için kullanılan bir tekniktir. 
+    \item \textbf{Zero Shot Prompting:} Modelin daha önceden verilmemiş bir konuyu ele almasını sağlamak için kullanılan bir tekniktir. Modelin konunun doğası hakkında önceden bir eğitim almadan yeni konulara hızlı bir şekilde uyum sağlamasını sağlar.
+    \item \textbf{Least to Most Prompting:} Modelin başlangıçta daha az karmaşık veya genel promptlarla eğitilerek, daha sonra karmaşık veya özel promptlar ile eğitilmesini sağlayan bir tekniktir. Bu teknik, modelin temel yeteneklerini geliştirmek için basit promptlarla başlayarak, daha sonra daha karmaşık veya spesifik görevler için eğitilmesini sağlar.
+    \item \textbf{Dual Prompting:} İki veya daha fazla promptu birleştirerek kullanılan bir tekniktir. 
+    \item \textbf{Self-Consistency:} Modelin verilen bir görev doğrultusunda ürettiği çıktıların tutarlı olmasını sağlamak için kullanılan bir tekniktir. Modelin ürettiği metinlerin içerik ve mantık açısından tutarlı olmasını sağlayarak daha kaliteli sonuçlar elde etmeyi amaçlar.
+    \item \textbf{Generated Knowledge Prompting:} Modelin daha geniş bir bilgi havuzundan yararlanarak daha kaliteli ve çeşitli çıktılar üretmesini sağlamak için kullanılan bir  tekniktir. Bu teknik, modelin daha önce öğrenilmiş bilgileri kullanarak yeni ve çeşitli çıktılar oluşturmasını sağlar.
+    \item \textbf{Tree of Thoughts:} Modelin bir metindeki fikirleri, konuları ve alt konuları takip ederek derinlemesine anlamasını sağlamak için kullanılan bir tekniktir. Bu teknik, modelin bir metindeki fikirler arasındaki ilişkileri ve hiyerarşiyi anlamasına yardımcı olur.
+    \item \textbf{Intentional Summarization:} Modelin bir metni özetlemesi için belirli bir amaca yönelik olarak yönlendirilmesini sağlayan bir tekniktir. Bu teknik, modelin bir metni belirli bir amaca göre özetlemesini sağlar ve özgünlüğünü korur.
+    \item \textbf{Extractive Summarization:} Modelin bir metni özetlemesi için metinden doğrudan alıntılar yapmasını sağlayan bir tekniktir. Bu teknik, modelin metindeki önemli cümleleri veya paragrafları belirleyerek özet oluşturmasını sağlar.
+    \item \textbf{Sentiment Analysis:} Metinden duygu analizi yapmasını sağlar.
+    \item \textbf{Entity and Keyword Detection:} Metinden öğe çıkarımı yapmasını sağlar.
+    \item \textbf{Inferring Specifications:} Unsur belirleme.
+    \item \textbf{Intent Detection:} Niyet tespiti.
+\end{itemize}
+
+\subsection{Prompt Güvenliği}
+\begin{itemize}
+    \item \textbf{Constitutional Prompting:} Modelin belirli bir konu veya metin türüne uygun olarak anlamlı ve uygun çıktılar üretmesi için önceden tanımlanmış bir kurallar kümesi veya çerçeve kullanma yaklaşımıdır. Bu teknik, modelin verilen görevi yerine getirirken belirli kuralları takip etmesini sağlar ve istenmeyen çıktıları önlemeye yardımcı olur.
+    \item \textbf{Prompt Jailbreaking:} Modellerin daha geniş bir kullanım alanına sahip olması için geleneksel sınırlamaları aşmak veya kısıtlamaları ortadan kaldırmak için kullanılan bir terimdir. Genellikle, yapay zeka modelleri belirli bir amaca yönelik olarak eğitilir ve belirli bir kullanım durumu veya görev için optimize edilirler. Ancak, bazı durumlarda bu sınırlamalar kullanıcıların veya araştırmacıların istedikleri sonuçları elde etmelerini engelleyebilir veya kısıtlayabilir. Bu nedenle, "prompt jailbreaking" terimi, bu sınırlamaları aşmak veya modelin daha geniş bir kullanım alanına sahip olmasını sağlamak için kullanılan stratejileri ifade etmek için kullanılır.
+\end{itemize}
+
+\newpage

@@ -1,0 +1,17 @@
+\section{Fast-Slow LSTM}
+Uzun süreli bağımlılıkları daha etkili bir şekilde öğrenmek için tasarlanmış bir LSTM türüdür. Uzun sekanslarda bilgi aktarımın iyileştirmek ve daha kısa ve uzun vadeli bağımlılıkları yakalamak için iki farklı zaman ölçeğinde (hızlı ve yavaş) çalışan iki LSTM katmanı kullanır.
+
+\begin{itemize}
+	\item \textbf{Fast LSTM}: Daha sık güncellenir ve kısa vadeli bağımlılıkları öğrenir. Hızlı değişen bilgileri yakalamak için tasarlanmıştır.
+	\item \textbf{Slow LSTM}: Daha az sıklıkla güncellenir ve uzun vadeli bağımlılıkları öğrenir. Daha kalıcı bilgileri yakalamak için tasarlanmıştır.
+\end{itemize}
+
+\subsection{Çalışma Adımları}
+\begin{enumerate}
+	\item Girdi dizisi alınır.
+	\item Girdi dizisi Fast LSTM ve Slow LSTM katmanına beslenir. Fast LSTM, her zaman adımında kısa vadeli bağımlılıkları öğrenir. Slow LSTM, uzun vadeli bağımlılıkları öğrenir. Slow LSTM'in güncellenme frekansı, genellikle belirli bir adım sayısına göre ayarlanır.
+	\item Fast LSTM ve Slow LSTM katmanları, her adımda kendi gizli durumlarını günceller ve bilgileri birbirleri ile paylaşır. 
+	\item Her iki LSTM katmanının çıktıları birleştirilir ve nihai çıktı üretilir.
+\end{enumerate}
+
+\newpage

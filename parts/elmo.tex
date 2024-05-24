@@ -1,0 +1,12 @@
+\section{ELMo (Embedding from Language Models)}
+AllenNLP ekibi tarafından geliştirilmiştir. Kelimeleri cümlenin bağlanıma göre dinamik olarak değişen vektörler olarak temsil eder. İki yönlü katmanlardan oluşur. 
+
+\subsection{Çalışma Adımları}
+\begin{enumerate}
+	\item Girdi cümleleri, gömme katmanında sabit vektörlere dönüştürülür.
+	\item Girdi vektörleri, iki yönlü LSTM katmanlarından geçer. Forward LSTM, cümlenin başından sonuna kadar bilgi taşır. Backward LSTM, cümlenin sonundan başına doğru bilgi taşır.
+	\item BiLSTM katmanından gelen temsiller, sabit gömümler ile birleştirilir.
+	\item Nihai sonuç üretilir.
+\end{enumerate}
+
+\newpage

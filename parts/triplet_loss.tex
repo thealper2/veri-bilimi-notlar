@@ -1,0 +1,31 @@
+\section{Triplet Loss}
+Triplet loss, gözetimli öğrenme problemlerinde kullanılan bir kayıp fonksiyonudur. Amacı, verilerin birbirine olan ilişkilerini düzenlemektir. Triplet Loss, verilerin anlamlı bir şekilde gruplanmasını sağlayarak, benzer veri noktalarını birbirine yakın, farklı veri noktalarını ise birbirinden uzak tutar. Üç farklı veri noktasını kullanarak hesaplanır:
+\begin{itemize}
+	\item \textbf{Anchor (A)}: Referans veri noktası.
+	\item \textbf{Positive (P)}: Anchor'a benzer, aynı sınıfa ait veri noktası.
+	\item \textbf{Negative (N)}: Anchor'dan farklı, farklı sınıfa ait veri noktası.
+\end{itemize}
+
+\[ L(A, P, N) = max(0, || f(A) - f(P) ||^2 - ||f(A) - f(N)||^2 + \alpha \]
+\begin{itemize}
+	\item $f$: Sinir ağı.
+	\item $|| * ||^2$: Öklidyen (L2) mesafesi.
+	\item $\alpha$: Marjin değeri, pozitif ve negatif arasındaki minimum mesafe farkını belirler. 
+\end{itemize}
+
+\begin{lstlisting}[language=Python]
+triplets = []
+for csv in train_csv:
+    df = pd.read_csv(csv)
+    real_images = df[df["label"] == "real"]["image_name"].tolist()
+    forged_images = df[df["label"] == "forged"]["image_name"].tolist()
+
+    for anchor in real_images:
+        for image in real_images:
+            anchor_image = os.path.join(root_dir, image[:7], "Train", image)
+            positive_image = os.path.join(root_dir, image[:7], "Train", random.choice(real_images))
+            negative_image = os.path.join(root_dir, image[:7], "Train", random.choice(forged_images))
+            triplets.append((anchor_image, positive_image, negative_image))
+\end{lstlisting}
+
+\newpage

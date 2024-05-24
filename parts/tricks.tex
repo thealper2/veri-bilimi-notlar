@@ -1,0 +1,38 @@
+\section{Tips \& Tricks}
+
+\subsection{Daha Hızlı KMeans}
+\begin{lstlisting}[language=Python]
+# Slow
+clf = KMeans(n_clusters=7).fit(X)
+
+# Fast
+from sklearn.random_projection import SparseRandomProjection
+srp = SparseRandomProjection(n_components=6)
+X_srp = srp(X)
+clf = KMeans(n_clusters=7).fit(X_srp)
+\end{lstlisting}
+
+\subsection{join vs iteration}
+Join fonksiyonu iterasyonla eklemeden (sentence += word) daha hızlı çalışır.
+
+\subsection{Activation Function Layer vs Parameter}
+Aktivasyon fonksiyonunu katman olarak eklemek parametre olarak eklemekten daha hızlı çalışır.
+
+\subsection{Matplotlib - Subplot Mosaic}
+subplots() fonksiyonu eşit boyutlarda grafikler oluştururken, subplot\_mosaic() fonksiyonu farklı ölçeklerde grafikleri tek bir figürde göstermeyi sağlar.
+
+\begin{lstlisting}[language=Python]
+ax = fig.subplot_mosaic("""AAB
+                           CCC
+                           DEF""")
+
+ax["A"].plot()
+ax["B"].scatter()
+ax["C"].bar()
+ax["D"].pie()
+ax["E].bar()
+ax["F"].plot()
+\end{lstlisting}
+
+\subsection{Dont use time.time()}
+Model süresini hesaplarken time.time() kullanma. Time.time() güncel zamanı hesaplar. Bunun yerine time.perf\_counter() kullan.

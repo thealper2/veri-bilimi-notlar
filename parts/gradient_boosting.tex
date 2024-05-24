@@ -1,0 +1,35 @@
+\section{Gradient Boosting}
+Toplu öğrenme yöntemidir. Modelin performansını geliştirmek için hatalara odaklanır.
+
+\subsection{Çalışma Adımları}
+\begin{enumerate}
+    \item Temel bir model seçilir.
+    \item Tüm veri seti için bir başlangıç tahmini yapılır. Regresyon için veri setinin ortalaması olabilir. Sınıflandırma için veri setindeki sınıfların oranı olabilir.
+    \item Başlangıç tahmininden sonra, gerçek değerler ile başlangıç tahmin arasındaki hatalar hesaplanır. Bu hatalar, modelin daha fazla odaklanması gereken alanları gösterir.
+    \item Hataların eğimi (gradient) hesaplanır. Eğim, her bir örnek için hata fonksiyonunun, tahmin edilen değerlere göre ne kadar değiştiğini gösterir.
+    \item Bu hataları tahmin etmek için temel bir model oluşturur.
+    \item Temel model, bir öğrenme oranı ile ağırlanır ve hata tahminine katılır. Öğrenme oranı, her temel modelin katkısını düzenler ve modelin aşırı uyumunu kontrol eder.
+    \item Yeni temel modelin tahminleri, önceki tahminlere eklenir ve güncellenmiş bir tahmin elde edilir.
+    \item İterasyon sayısına kadar 3 ve 7 arası tekrarlanır.
+\end{enumerate}
+
+\subsection{Hiperparametreler}
+\begin{table}[h]
+\centering
+{\scriptsize\renewcommand{\arraystretch}{0.4}
+{\resizebox*{\linewidth}{0.4\textwidth}{
+\begin{tabular}{|p{3cm}|p{1cm}|p{1cm}|p{6cm}|}
+\hline
+Parametre & Type & Default & Açıklama \\ \hline
+n\_estimators & int & 100 & Oluşturulacak temel modellerin sayısı. \\ \hline
+learning\_rate & float & 0.1 & Her bir temel modelin katkısının ölçeği. \\ \hline
+max\_depth & int & 3 & Oluşturulacak karar ağaçlarının maksimum derinliği. \\ \hline
+min\_samples\_split & int & 2 & Bir iç düğümün ikiye bölünmeden önce kaç örneğe sahip olması gerektiği. \\ \hline
+min\_samples\_leaf & int & 1 & Bir yaprak düğümünün en az kaç örneğe sahip olması gerektiği. \\ \hline
+subsample & float & 1 & Her bir temel modelin eğitiminde kullanılacak örneklerin oranı. SGD'ye benzer bir etkiye sahiptir. \\ \hline
+
+\end{tabular}
+}}}
+\end{table}
+
+\newpage

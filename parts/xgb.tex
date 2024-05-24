@@ -1,0 +1,79 @@
+\section{XGB}
+
+2016 yılında Tianqi Chen ve Carlos Guestrin'in yayınladığı ``XGBoost: A Scalable Tree Boosting System'' adlı makalede tanıtılmıştır. Extreme Gradient Boosting, ağaç tabanlı bir algoritmadır. Gradient Boosting yöntemini kullanır. XGBoost, gradient boosting'in bazı düzenlileştirme terimleri ile optimize edilmiş yüksek performans gösterebilen bir halidir. XGBoost boş değerle çalışabilir. Modeli eğitirken bu boş değerleri farklı dallara yerleştirerek en yüksek kazanç skorunu bulmaya amaçlar. Böylece boş değerlerin etkisini en aza indirir. XGBoost, histogram yöntemini de kullanılır. Fakat histogram yöntemindeki sıralama işleminden dolayı oluşan yavaşlığı çözmek için ''Sketches'' adlı yöntemi kullanır. Ağırlıkları hesaplayarak veri setini parçalara böler.
+
+\subsection{Çalışma Adımları}
+\begin{enumerate}
+	\item İlk olarak başlangıç tahminleri (initial prediction) yapılır. İlk tahminler, hedef değişkenin ortalaması veya bir sabit değerle yapılır. 	Bu tahminler varsayılan olarak 0.5'tir.  Bu, daha sonra modelin hatalarını azaltmak için kullanılır.
+	\item Belirli bir kayıp fonksiyonuna göre gradyanlar ve Hess matrisleri hesaplanarak her bir gözlem içi kayıp belirlenir.
+	\item Yapılan tahminlere dayanarak bir karar ağacı oluşturulur. Bu ağaç, belirli bir hedef değişkenin tahminini iyileştirmek için özellikleri bölerek veri kümesini böler.
+	\item Ağaçların kayıp fonksiyonunu minimize etmek için ağaçların yapısı ve düğümlerindeki bölünmeleri ayarlanarak ağaçlar optimize edilir.
+	\item Her ağaç eklemesinden önce, regülarizasyon teknikleri uygulanır ve tahminlerin bir kısmı alınarak (shrinkage) modelin dengesi sağlanır.
+	\item Önceki tahminlerden yola çıkarak yeni bir ağaç oluşturulur.
+	\item Belirli bir iterasyon veya tolerans değerine kadar bu işlemler tekrarlanır.
+	\item En iyi model seçilir.
+\end{enumerate}
+
+\newpage
+
+\subsection{General Parameters}
+\begin{table}[h]
+\centering
+{\scriptsize\renewcommand{\arraystretch}{0.4}
+{\resizebox*{\linewidth}{0.4\textwidth}{
+\begin{tabular}{|p{3cm}|p{1cm}|p{1cm}|p{6cm}|}
+\hline
+Parametre & Type & Default & Açıklama \\ \hline
+booster & gbtree - dart - gblinear & gbtree & Her iterasyonda çalışıtırılcak model türü. Gbtree ve dart tree-based, gblinear linear yapıdadır. \\ \hline
+verbosity & 0 (silent), 1 (warning), 2 (info), 3 (debug) & 1 & Çıktı \\ \hline
+nthread & integer & mevcut maksimum iş parçacığı sayısı & Kullanılan iş parçacığı sayısıdır. Bu paralel işleme için kullanılır ve sistemdeki çekirdek sayısı girilmelidir. Eğer tüm çekirdeklerde çalıılmak istenirse değer girilmez, algoritma otomatik olarak ayarlar. \\ \hline
+
+\end{tabular}
+}}}
+\end{table}
+
+\newpage
+
+\subsection{Booster Parameters}
+\begin{table}[h]
+\centering
+{\scriptsize\renewcommand{\arraystretch}{0.4}
+{\resizebox*{\linewidth}{1\textwidth}{
+\begin{tabular}{|p{3cm}|p{1cm}|p{1cm}|p{6cm}|}
+\hline
+Parametre & Type & Default & Açıklama \\ \hline
+eta / learning\_rate & {[}0-1{]} & 0.3 & Overfittingi önlemek için kullanılan adım boyutu küçültmesidir. Genelde 0.01-0.2 arasında bir değer verilir. \\ \hline
+gamma / min\_split\_loss & {[}0, inf{]} & 1 & Kayıp fonksiyonunda pozitif bir azaltma sağlandığında bölünür. \\ \hline
+max\_depth & {[}0, inf{]} & mevcut maksimum iş parçacığı sayısı & Overfittingi önlemek için kullanılır. Yüksek derinlik, modeli daha karmaşık hale getirerek overfittingi arttıracaktır. Derinlik arttıkça bellek kullanımı artar. CV kullanarak ayarlanmalıdır. Genelde 3-10 arasında değer verilir. \\ \hline
+min\_child\_weight & {[}0, inf{]} & 3 & Overfittingi önlemek için kullanılır. Yüksek değerler, modelin örneğe özgü olabilecek belirli özellikleri öğrenmesini engelleyebilir. Çok yüksek değerler underfittinge yol açabilir. CV kullanarak ayarlanmalıdır. \\ \hline
+max\_delta\_step & {[}0, inf{]} & 1e-4 & Rastgele örneklenecek gözlemlerin oranını belirtir. 0.5 olarak ayarlanırsa, eğitim verilerinin yarısını örnekleyeceği anlamına gelir, bu da overfittingi önler. Düşük olması overfittingi önler, çok küçük olması underfittinge yol açabilir. Gnenelde 0.5-1 arasında değer verilir. \\ \hline
+colsample\_bytree, colsample\_by\_level, colsample\_by\_node & (0, 1{]} & 1e-4 & Sütunların alt örnekleme oranı. \\ \hline
+lambda / reg\_lambda & (0, 1{]} & "auto" & L2 regülasyon düzenlemesi. \\ \hline
+alpha / reg\_alpha & int & 1 & L1 regülasyon düzenlemesi \\ \hline
+tree\_method & auto, exact, approx, hist, gpu\_hist & auto, exact, approx, hist, gpu\_hist & Ağaç oluşturma algoritması. auto'da kullanılması önerilir. Küçük-orta veri setlerinde "exact", büyük veri setlerinde "approx". hist, optimize edilmiş algoritma. \\ \hline
+scale\_pos\_weight & int & 1 & Pozitif-negatif ağırlık dengesi. Dengesiz sınıflarda kullanışlıdır. toplam(negatif) / toplam(pozitif) kullanılmalı. \\ \hline
+max\_leaves & int & 0 & Eklenecek maksimum düğüm sayısı. \\ \hline
+
+\end{tabular}
+}}}
+\end{table}
+
+\newpage
+
+\subsection{Learning Task Parameters}
+\begin{table}[h]
+\centering
+{\scriptsize\renewcommand{\arraystretch}{0.4}
+{\resizebox*{\linewidth}{0.4\textwidth}{
+\begin{tabular}{|p{2cm}|p{4cm}|p{2cm}|p{3cm}|}
+\hline
+Parametre & Type & Default & Açıklama \\ \hline
+objective & reg:squarederror, reg:squaredlogerror, reg:logistic, binary:logistic, binary:hinge, multi:softmax, multi:softprob & reg:squarederror & Minimize edilecek kayıp fonksiyonu \\ \hline
+eval\_metric & rmse, mae, logloss, error, merror, mlogloss, auc, aucpr & regression için rmse, classification için error, ranking için mae & Doğrulama verileri için kullanılacak metrik. \\ \hline
+seed & int & 0 & Random seed \\ \hline
+
+\end{tabular}
+}}}
+\end{table}
+
+\newpage

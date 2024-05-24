@@ -1,0 +1,13 @@
+\section{Gated Convolutional Network (GCN)}
+GCN, klasik CNN'lere bazı kapı (gating) mekanizmaları ekleyerek, bilgi akışını kontrol etmek ve uzun vadeli bağımlılıkları yakalamak amacıyla tasarlanmıştır. 
+
+\subsection{Çalışma Adımları}
+\begin{enumerate}
+	\item Girdi verisi alınır.
+	\item Standart evrişim uygulanır.
+	\item Her evrişim sonucuna bir kapı değeri (gate value) uygulanır. Bu değer, genellikle sigmoid fonksiyonu ile elde edilir.
+	\item Evrişim sonucunun kapı değeri ile çarpılması, hangi bilgilerin önemli olduğunu belirler ve bilgi akışını kontrol eder.
+	\item Aktivasyon fonksiyonu uygulanarak nihai sonuc elde edilir.
+\end{enumerate}
+
+\newpage

@@ -1,0 +1,15 @@
+\section{Pointer Networks}
+Sıralı veri ve kombinasyonel optimizasyon problemlerini çözmek için geliştirilmiş özel bir neural network mimarisidir. Standart sinir ağlarının sabit boyutlu çıktılar üretme kısıtlarını aşarak, değişken uzunluklu çıktı dizileri üretir. Pointer Networks, özellikle sıralı verilerdeki belirli pozisyonları işaret ederek çalışır ve bu nedenle ``pointer'' terimi kullanılır. PointerNet mimarisi encoder-decoder mimarisine dayanır ve dikkat mekanizmasını kullanır.
+
+\subsection{Çalışma Adımları}
+\begin{enumerate}
+	\item Girdi verileri alınır.
+	\item Encoder, her bir girdiyi gizli bir vektöre dönüştürür.
+	\item Decoder bir başlangıç durumu ile başlar.
+	\item Decoder, her adımda dikkat mekanizmasını kullanarak girdi dizisindeki pozisyonlar için dikkat skorları hesaplar.
+	\item En yüksek skora sahip pozisyon seçilir ve işaretlenir.
+	\item Seçilen pozisyon, bir sonraki adımda Decoder'a girdi olarak verilir ve Decoder durumu güncellenir.
+	\item Tüm pozisyonlar işaretlenene kadar Adım 4-6 tekrarlanır.
+\end{enumerate}
+
+\newpage

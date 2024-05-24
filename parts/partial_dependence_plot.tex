@@ -1,0 +1,33 @@
+\section{Partial Dependence Plot (PDP)}
+Değişkenlerin öngörüler üzerindeki etkilerini görselleştirmektir. Belirli bir bağımsız değişkenin diğer değişkenlere göre bağımlığını gösterir. PDP tüm değişkenleri bağımsız sayar. Bir değişkenin diğer değişkenlerle etkileşimlerini gösterir.
+
+\subsection{Adımlar}
+\begin{itemize}
+    \item Değişken Seçimi: İlgilenilen bağımsız değişken seçilir.
+    \item Değişkenin Değer Aralığının Belirlenmesi: Seçilen değişkenin olası değer aralığı belirlenir.
+    \item Diğer Değişkenlerin Değerleri Sabit Tutma: Diğer bağımsız değişkenlerin değerleri sabit tutularak, seçilen değişkenin etkisi incelenir.
+    \item Modelin Tahminlerinin Alınması: Değişkenin değeri değiştirilerek, model üzerinden tahminler alınır.
+    \item Sonuçların Görselleştirilmesi
+\end{itemize}
+
+\begin{lstlisting}[language=Python]
+import numpy as np
+import matplotlib.pyplot as plt
+from sklearn.datasets import load_boston
+from sklearn.inspection import plot_partial_dependence
+from sklearn.ensemble import GradientBoostingRegressor
+
+boston = load_boston()
+X, y = boston.data, boston.target
+
+model = GradientBoostingRegressor(n_estimators=50, max_depth=6, learning_rate=0.1, loss='huber', random_state=4242)
+
+model.fit(X, y)
+
+features = [5]
+plot_partial_dependence(model, X, features, grid_resolution=50, feature_names=boston.feature_names)
+
+plt.show()
+\end{lstlisting}
+
+\newpage

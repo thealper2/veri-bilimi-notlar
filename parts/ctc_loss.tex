@@ -1,0 +1,24 @@
+\section{CTC (Connectionist Temporal Classification) Loss}
+CTC loss, zaman serisi verilerinde sıralı etiketleme problemlerinde kullanılan bir kayıp fonksiyonudur. Özellikle girdilerin uzunluklarının değişken olduğu ve etiketlerin sıralı olduğu durumlarda etkilidir. Girdi ve etiket arasındaki zaman hizalamasını öğrenir ve bu hizalamayı kaybı minimize ederek gerçekleştirir. Genellikle konuşma tanıma, el yazısı tanıma, OCR gibi problemlerde kullanılır.
+
+\begin{lstlisting}[language=Python]
+class CTCLayer(layers.Layer):
+    def __init__(self, name=None):
+        super().__init__(name=name)
+        self.loss_fn = ctc_batch_cost
+
+    def call(self, y_true, y_pred):
+        batch_length = tf.cast(tf.shape(y_true)[0], dtype="int64")
+        input_length = tf.cast(tf.shape(y_pred)[1], dtype="int64")
+        label_length = tf.cast(tf.shape(y_true)[1], dtype="int64")
+
+        input_length = input_length * tf.ones(shape=(batch_length, 1), dtype="int64")
+        label_length = label_length * tf.ones(shape=(batch_length, 1), dtype="int64")
+
+        loss = self.loss_fn(y_true, y_pred, input_length, label_length)
+        self.add_loss(loss)
+
+        return y_pred
+\end{lstlisting}
+
+\newpage

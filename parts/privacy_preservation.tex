@@ -1,0 +1,26 @@
+\section{Privacy Preservation}
+\subsection{k-Anonymity}
+Latanya Seeney tarafından 1998 yılında önerilmiştir. Temel amaç, bir bireyin kimlik bilgilerinin başka bireylerin kimlik bilgileriyle birleştirildiğinde ayrıştırılamayacak hale getirilmesidir. Veri setindeki her bir kaydın en k-1 diğer kayıtla aynı olacak şekilde gruplandırılmasını sağlar. Bu sayede verinin tanımlanabilirlik riski azalır. Kırmak için;
+
+\begin{itemize}
+    \item Köşe noktaları tanımlama
+    \item İstatistiksel saldırılar: Örneğin grupların ortalama değerlerini kullanarak tahmin etme.
+    \item Yeniden tanımlama: Diğer kaynaklardan elde edilen verileri kullanarak anonimliği çözmek.
+\end{itemize}
+
+\subsection{L-Diversity}
+Veri setindeki verilerin tek tipleştirilmesini sağlar. Her grup içindeki hassas veri örnekleri farklılık göstererek tanımlanabilirliği azaltır. L-diversity, çeşitliliği arttırmak için gürültü ekleme, yapay veri oluşturma gibi yöntemler kullanır. K-anonymity'de tek bir sütun kullanılarak çeşitlilik yapılırken l-diversity'de birden fazla sütunda çeşitlilik yapılır. Kırmak için;
+
+\begin{itemize}
+    \item Kombinasyon saldırıları
+    \item Köşe noktaları belirleme
+    \item İstatistiksel saldırılar
+\end{itemize}
+
+\subsection{t-Closeness}
+Veri setindeki her bir grup içindeki kayıtların hassas özellikler bakımından yeterli bir yakınlık kriteri sağlatır. Bu kriter, grup içindeki verilerin dağılımı ile bir referans dağılım arasındaki farkın 't' eşik değerine yakın olmasını gerektirir. Bu sayede verilerin tanımlanabilirliği azalır.
+
+\subsection{Differential Privacy}
+Veri kümesinin herhangi iki benzer veri kümesi arasında, farklı bir sonuç elde etme olasılığını sınırlayarak çalışır. Veri kümesine gürültü eklenir. Modelin doğruluğunu etkileyebilir.
+
+\newpage

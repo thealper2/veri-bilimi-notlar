@@ -1,0 +1,23 @@
+\section{File Formats}
+\subsection{Veri Seti Dosya Uzantıları}
+\begin{itemize}
+    \item \textbf{.npy}: Numpy kütüphanesi ile oluşturulan numpy dizilerini depolamak için kullanılır. Bu dosya formatı, dizinin tamamen dizilebilir bir biçimde serileştirilmesini sağlar. Böylece NumPy dizilerini daha hızlı bir şekilde ve yükleme imkanı sağlar. 
+    \item \textbf{.parquet:} Büyük veri setlerini sıkıştırılmış ve sütun tabanlı şekilde depolamak için kullanılır. Apache Parquet projesi tarafından geliştirilmiştir.
+    \item \textbf{.csv:} Verilerin tablo biçiminde metin dosyaları olarak depolanması için kullanılır. Her satırda bir veri kaydı ve her sütunda bir veri özelliği bulunur.
+    \item \textbf{.json:} Verilerin anahtar-değer çiftleri olarak depolanması için kullanılır. Metin tabanlıdır. Verilerin dizilebilir bir biçimde depolanmasını sağlar.
+    \item \textbf{.xlsx:} Microsoft Excel tarafından kullanılan elektronik tablo dosya biçimidir. Bu dosya biçimi, elektronik tabloları, grafikleri, formülleri ve diğer veri öğelerini depolamak için kullanılır. .xlsx dosyaları, birden çok çalışma sayfasını ve çalışma sayfasındaki birden çok hücreyi içerebilir.
+    \item \textbf{.avro:} Apache Avro tarafından kullanılan veri serileştirme formatıdır. Bu dosya formatı, JSON tabanlı bir veri biçimine benzer, ancak daha sıkıştırılmış bir yapıya sahiptir.
+\end{itemize}
+
+\subsection{Model Dosya Uzantıları}
+\begin{itemize}
+    \item \textbf{HDF5 (Hierarchical Data Format Version 5):} Modellerin eğitim verileri, model mimarisi ve diğer önemli bilgiler HDF5 dosya formatında saklanır. Bu format, verileri hiyerarşik bir yapıda depolar.
+    \item \textbf{ONNX (Open Neural Network Exchange):} ONNX, farklı derin öğrenme frameworkleri arasında eğitilmiş modellerin paylaşılmasını ve taşınmasını sağlar. ONNX, eğitilmiş modelin mimarisini, ağırlıklarını ve diğer ilgili bilgileri içerir.
+    \item \textbf{TensorFlow SavedModel:} TensorFlow modellerini TensorFlow SavedModel formatında kaydederek ve yükleyerek kullanılmasını sağlar.
+    \item \textbf{TensorFlow Lite:} TensorFlow modellerini mobil cihazlarda ve diğer yerleşik sistemlerde çalıştırmak için kullanılır.
+    \item \textbf{PyTorch TorchScript:} PyTorch, eğitilmiş derin öğrenme modellerini TorchScript formatında kaydederek ve paylaşarak kullanılmasını sağlar. Bu format, PyTorch modellerini C++ veya diğer desteklenen dillerde çalıştırmak için kullanılır. 
+    \item \textbf{Pickle:}Python'un standart kütüphanelerinden biridir. Python nesnelerini bir dosyaya dönüştürmek ve dosyadan nesneleri dönüştürmek için kullanılır. 
+    \item \textbf{Joblib:} Python'un iş akışlarını ve veri işleme görevlerini hızlandırmak için kullanılan bir kütüphanedir. Python nesnelerini sıkıştırarak depolamayı sağlar.
+\end{itemize}
+
+\newpage 

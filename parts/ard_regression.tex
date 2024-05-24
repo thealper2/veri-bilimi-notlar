@@ -1,0 +1,26 @@
+\section{ARD Regression}
+ARDRegression (Automatic Relevance Determination Regression), L1 ve L2 regularizasyon yöntemlerini birleştirerek çalışır.
+
+\subsection{Hiperparametreler}
+
+\begin{table}[h]
+\centering
+{\scriptsize\renewcommand{\arraystretch}{0.1}
+{\resizebox*{\linewidth}{0.8\textwidth}{
+\begin{tabular}{|p{2cm}|p{1cm}|p{1cm}|p{6cm}|}
+\hline
+Parametre & Type & Default & Açıklama  \\ \hline
+tol & float & 1e-3 & w yakınsadıysa algoritmayı durdurur.  \\ \hline
+alpha\_1 & float & 1e-6 & L1 düzenlemesi katsayısıdır. Bu parametre arttıkça L1 düzenlemesi etkisi artar.  \\ \hline
+alpha\_2 & float & 1e-6 & L2 düzenlemesi katsayısıdır. Bu parametre arttıkça L2 düzenlemesi etkisi artar.  \\ \hline
+lambda\_2 & float & 1e-6    & Intercept (kesme noktası) için L2 düzenlemesi katsayısıdır. \\ \hline
+compute\_score & bool & False & True ise modelin her adımında amaç fonksiyonunu hesaplar.  \\ \hline
+threshold\_lamda & float & 10000 & Yüksek hassasiyete sahip ağırlıkların hesaplamadan çıkarılması (budanması) için eşik.  \\ \hline
+fit\_intercept & bool  & True & Kesişimin (intercept) uydurulup uydurulmayacağı.  \\ \hline
+copy\_X & bool & True & Eğer True ise modeli eğitirken X değeri fonksiyonda kullanılacak ve eğitimden sonra da aynı olacaktır. False olduğunda ise X fonksiyona girdikten sonra ilk hali ile aynı olmayabilir. \\ \hline
+verbose & bool  & False   & True ise çıktı gösterir.  \\ \hline
+\end{tabular}
+}}}
+\end{table}
+
+\newpage

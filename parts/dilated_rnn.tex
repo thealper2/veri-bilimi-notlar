@@ -1,0 +1,14 @@
+\section{Dilated RNN}
+Dilated (Aralıklı) RNN, aralıklı evrişim (dilated convolution) konseptini RNN mimarisine uygulayarak uzun dönem bağımlılıklarını daha verimli bir şekilde öğrenmeyi hedefler. Zaman adımları arasındaki bağlantıları aralıklı hale getirir. RNN'lerde her zaman adımında bir önceki zaman adımına doğrudan bağlıyken, Dilated RNN'lerde bağlantılar belirli bir adım atlama (dilation rate) ile yapılır. Bu, daha uzun zaman dilimlerine bakmayı ve uzun dönem bağımlılıkları daha iyi bir şekilde öğrenmeyi sağlar.
+
+RNN'lerde uzun dönem bağımlıklarını öğrenmede zorlanır çünkü her adım bir önceki adıma doğrudan bağlı olduğundan, bilgi birkaç adım sonra kaybolabilir. Dilated RNN, bağlantılar arasına boşluklar koyarak bu bilgiyi daha uzun süre taşımayı hedefler. Belirli bir zaman adımlarını atlayarak daha az güncelleme gerektirir.
+
+\subsection{Çalışma Adımları}
+\begin{enumerate}
+	\item Girdi dizisi ve başlangıç dizli durumu h0 ile başlar.
+	\item Aralık (dilation) oranı d belirlenir. Bu, kaç adımda atlama yapacağını belirler.
+	\item Her zaman adımında, mevcut gizli durum h0, aralık oranına bağlı olarak bir önceki gizli durum ile güncellenir.
+	\item 3. Adım, tüm zaman adımları için tekrarlanır.
+\end{enumerate}
+
+\newpage

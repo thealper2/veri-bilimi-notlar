@@ -1,0 +1,79 @@
+\section{Düzenli İfadeler (Regex)}
+Karakter dizileri içinde belirli örüntüleri aramayı sağlayan bir dildir. 1956 yılında Stephen C. Kleene tarafından formel bir model olarak sunulmuştur. Herhangi bir düzenli ifade doğrudan NFSA'ya buradan da DFSA'ya dönüştürlebilir.
+
+En basit düzenli ifadeler karakterlerin sıralı biçimde dizilmesiyle oluşur. Düzenli ifadeler büyük-küçük harfe duyarlıdır.
+
+\verb|^| işareti satır başlarını \verb|$| işareti satır sonlarını gösterir. \verb|^$| Satır başından hemen sonra gelen satır sonlarını bulur yani boş satırları bulur.
+
+Örnekler
+\begin{itemize}
+    \item \verb|^Cansu|: Satır başlarındaki "Cansu"ları bulur.
+    \item \verb|Cansu$|: Satır sonlarındaki "Cansu"ları bulur.
+    \item \verb|^Cansu$|: Hem satır sonunda hem satır başında hem de sadece "Cansu" olanları bulur.
+\end{itemize}
+
+\verb|[...]| ifadesi REGEX'te karakter sınıfı olarak bilinir. \verb|[-]| eğer içerisinde tire işareti varsa bu iki karakter arasında aralık belirtir. \verb|[^...]| ifadesi ise uymayan kriterleri bulur.
+
+Örnekler
+\begin{itemize}
+    \item \verb|makin[ae]|: makine ve makina geçenleri bulur.
+    \item \verb|ke[dl]i|: keli, kedi geçenleri bulur.
+    \item \verb|[Cc]ansu|: Cansu ve cansu geçenleri bulur.
+    \item \verb|<h[1-6]>|: HTML'deki tüm h etiketlerini bulur.
+    \item \verb|[^3-8]|: 3 ve 8 arasında olmayanları bulur.
+\end{itemize}
+
+\verb|.| ifadesi joker olarak düşünülebilir. Herhangi bir karakterle eşleşebilir. Yazı içerisindeki noktaları bulmak için noktanin önüne \\ işareti koyulur. \verb|?| karakteri kendinden önce gelen karakterin seçimlik olduğunu belirtir.
+
+Örnekler
+\begin{itemize}
+    \item \verb|s.cak|: sicak, sıcak gibi kelimeleri bulur.
+    \item \verb|193\.168\.1\.1.|: 193.168.1.1, 193.168.1.1a gibi kelimeleri bulur.
+    \item \verb|kedileri?|: kediler veya kedileri.
+    \item \verb|colou?r|: color veya colour.
+\end{itemize}
+
+\verb|*| karakteri kendinden önce gelen karakterlerin 0 veya daha fazla kere ardışık olarak tekrarlandığını belirtir. \verb|+| karakteri kendinden önce gelen karakterlerin 1 veya daha fazla kere ardışık olarak tekrarlandığını belirtir.
+
+Örnekler
+\begin{itemize}
+    \item \verb|ab*c|: ac, abc, abbc, abbbc ...
+    \item \verb|[0-9][0-9]*|: bir veya daha fazla sayıda ardışık rakam.
+    \item \verb|[0-9]+|: bir veya daha fazla sayıda ardışık rakam.
+\end{itemize}
+
+\verb|\b| aranan ifadenin önünde veya arkasında sınırlayıcı (boşluk gibi) karakterleri sınır olarak kabul eder. \verb|\B| karakteri sınırlandırma olmayan durumu belirtir. | veya anlamına gelir. Birden fazla düzenli ifadeyi birleştirip tek bir düzenli ifade oluşturmak için kullanılır.
+
+Örnekler
+\begin{itemize}
+    \item \verb|\beli\b|: Önünde ve arkasında boşluk olan 'eli' ifadesini bulur.
+\end{itemize}
+
+Sayaçlar, herhangi bir karakterin ne miktarda tekrarlanabileceğini belirten ifadelerdir. \verb|{n}| kendinden nceki karakter n defa ardışık olmalıdır. \verb|{n,m}| kendinden önceki karakter n ile m aralığında ardışık olmalıdır. \verb|{n,}| kendinden önceki karakter en az n kadar ardışık olmalıdır.
+
+Kendinden önce 4 karakter ve 3 rakam gelen "Ateşoğlu" kelimesini bulalım: \verb|[a-z]{4}[0-9]{3}Ateşoğlu|
+
+İşlem öncelikleri (yüksekten düşüğe doğru):
+\begin{enumerate}
+    \item Parantez \verb|()|
+    \item Sayaçlar \verb|* + ? {}|
+    \item Seriler veya bağlayıcılar \verb|evler^Yarın gelecek$|
+    \item Veya | (pipe)
+\end{enumerate}
+
+Özel operatörler
+\begin{itemize}
+    \item \verb|\d|: herhangi bir rakam
+    \item \verb|\D|: rakam olmayan bir karakter
+    \item \verb|\w|: alfanümerik veya boşluk karakteri
+    \item \verb|\W|: alfanümerik olmayan karakter
+    \item \verb|\s|: boşluk
+    \item \verb|\S|: boşluk olmayan karakter
+    \item \verb|\.|: nokta karakteri
+    \item \verb|\*|: * (asterisk) karakteri
+    \item \verb|\?|: ? karakteri
+    \item \verb|\n|: newline karakteri
+    \item \verb|\t|: tab karakteri
+\end{itemize}
+
+\newpage

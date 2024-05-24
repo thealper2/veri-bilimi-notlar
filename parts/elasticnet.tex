@@ -1,0 +1,20 @@
+\section{ElasticNet}
+L1 (Lasso) ve L2 (Ridge) düzenlemesinin bir kombinasyonunu kullanır. L1 ve L2 düzenleme terimlerini kontrol etmek için "alpha" parametresini kullanır. Alpha = 0 ise L2 uygulanır, böylece ElasticNet, Ridge regresyonuna dönüşür. Alpha = 1 ise L1 uygulanır, böylece ElasticNet, Lasso regresyonuna dönüşür.
+
+\begin{table}[h]
+\centering
+{\scriptsize\renewcommand{\arraystretch}{0.1}
+{\resizebox*{\linewidth}{0.2\textwidth}{
+\begin{tabular}{|p{3cm}|p{1cm}|p{1cm}|p{6cm}|}
+\hline
+Parametre & Type & Default & Açıklama \\ \hline
+alpha & float & 1.0 & L1 ve L2 regularizasyon birleşimini kontrol eder. \\ \hline
+l1\_ratio & float & 0.5 & L1'in dağılımı. \\ \hline
+max\_iter & int & 1000 & Optimizasyon algoritmasının maksimum iterasyon sayısı. \\ \hline
+tol & float & 1e-4 & Optimizasyon algoritmasının toleransı. \\ \hline
+
+\end{tabular}
+}}}
+\end{table}
+
+\newpage

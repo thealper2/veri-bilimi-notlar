@@ -1,0 +1,9 @@
+\section{ELECTRA (Efficiently Learning and Encoder that Classifies Token Replacements Accurately)}
+Google tarafından geliştirilmiştir. Metinlerin belirli bir kısımlarını yeniden yapılandırmak yerine, token değiştirme üzerine odaklanır. Generator ve Discriminator olmak üzere 2 bileşenden oluşur:
+
+\begin{itemize}
+	\item \textbf{Generator (Üretici)}: Transformer tabanlı, genellikle küçük boyutlu bir BERT modeli kullanır. MLM'e benzer şekilde, giriş metnindeki bazı tokenleri maskeleyip bu tokenleri tahmin eder.
+	\item \textbf{Discriminator (Ayrıştırıcı)}: Üretici tarafından üretilen tokenlerin orijinal metinden mi yoksa üretici tarafından mı geldiğini belirlemeye çalışır.
+\end{itemize}
+
+\newpage

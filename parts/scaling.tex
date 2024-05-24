@@ -1,0 +1,50 @@
+\section{Scaling}
+
+\subsection{Standardization}
+Veri kümesindeki değerleri belirli bir ölçüde dönüştürerek ortalamayı 0 yapma ve standart sapmayı 1 yapma işlemidir. Veri setindeki her özellik veya değişken için,o özellik için ortalama değeri çıkararak ve standart sapmaya bölerek dönüştürür. Böylece her özellik aynı ölçekte ve aynı varyansa sahip olur.
+
+\[\text{z} = \frac{\text{x} - \text{x\_mean}}{\text{std}}\]
+
+\subsection{Normalization}
+Veri değerlerini belirli bir aralık veya dağılım içinde ölçeklendirir ve farklı özellikler arasındaki büyüklük farklarını azaltır. Veri dağılımı değişmez yalnızca ölçeklendirir.
+
+\subsection{Mean Normalization}
+
+\[\text{X\_normalized} = \frac{\text{x} - \text{x\_mean}}{\text{x\_max} - \text{x\_min}}\]
+
+\begin{lstlisting}[language=Python]
+# scikit
+ss = StandardScaler(with_mean=True, with_std=False)
+\end{lstlisting}
+
+\subsection{Min Max Normalization}
+
+\[\text{X\_scaled} = \frac{\text{x} - \text{x\_min}}{\text{x\_max} - \text{x\_min}}\]
+
+\begin{lstlisting}[language=Python]
+# scikit
+scaler = MinMaxScaler()
+scaler.fit(X_train)
+\end{lstlisting}
+
+\subsection{Maximum Absolute Scaling}
+
+\[\text{X\_scaled} = \frac{\text{x}}{\text{x\_max}}\]
+
+\begin{lstlisting}[language=Python]
+# scikit
+scaler = MaxAbsScaler()
+scaler.fit(X_train)
+\end{lstlisting}
+
+\subsection{Robust Scaling}
+
+\[\text{X\_scaled} = \frac{\text{x} - \text{x\_median}}{\text{x.quantile(0.75)} - \text{x.quantile(0.25)}}\]
+
+\begin{lstlisting}[language=Python]
+# scikit
+scaler = RobustScaler()
+scaler.fit(X_train)
+\end{lstlisting}
+
+\newpage

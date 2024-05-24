@@ -1,0 +1,20 @@
+\section{Dummy}
+Bir benchmark olarak veya başlangıç noktası olarak karmaşık modellerle karşılaştırma yapmak için bir referans olarak kullanılır. Girdi özelliklerini göz ardı ederek tahminler yapar.
+
+\subsection{Hiperparametreler}
+\begin{table}[h]
+\centering
+{\scriptsize\renewcommand{\arraystretch}{0.4}
+{\resizebox*{\linewidth}{0.25\textwidth}{
+\begin{tabular}{|p{3cm}|p{1cm}|p{1cm}|p{6cm}|}
+\hline
+Parametre & Type & Default & Açıklama \\ \hline
+strategy & "gini", "entropy", "log\_loss" & "prior" & "most\_frequent": Her zaman en sık görülen sınıf etiketini döndürür. \\ \hline
+random\_state & int & None & "uniform" her sınıf için eşit olarak tahminler üretir. \\ \hline
+constant & int & None & "constant" sabit bit etiket tahmin eder. \\ \hline
+
+\end{tabular}
+}}}
+\end{table}
+
+\newpage

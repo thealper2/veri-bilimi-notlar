@@ -1,0 +1,32 @@
+\section{Extra Trees}
+Extremely Randomized Trees, ağaçların oluşturulması sırasında rastgelelik kullanarak bir dizi karar ağacı oluşturur ve bu ağaçların tahminlerini bir araya getirerek sonuçları üretir. Diğer ağaç tabanlı yöntemlerden farkı, ağaçların oluşturulması ve eğitim sürecindeki rastgelelik derecesinin daha yüksek olmasıdır.
+
+\subsection{Çalışma Adımları}
+\begin{itemize}
+    \item Her bir ağaç oluşturulurken, özelliklerden rastgele bir alt küme seçilir.
+    \item Her özellik için rastgele bir eşik değeri seçilir.
+    \item Rastgele özellik ve eşik değerleri kullanılarak karar ağaçları oluşturulur. Maksimum derinliğe ulaşana kadar büyütülür.
+    \item Bootstrap ile her ağacın farklı bir eğitim veri setiyle eğitilmesi sağlanır.
+    \item Tüm ağaçlar üzerinde tahminler yapılır ve bu tahminler bir araya getirilerek modelin tahminleri üretilir. Sınıflandırma için en sık görülen tahmin alınır. Regresyon için tahminlerin ortalaması alınır.
+\end{itemize}
+
+\subsection{Hiperparametreler}
+\begin{table}[h]
+\centering
+{\scriptsize\renewcommand{\arraystretch}{0.4}
+{\resizebox*{\linewidth}{0.4\textwidth}{
+\begin{tabular}{|p{3cm}|p{1cm}|p{1cm}|p{6cm}|}
+\hline
+Parametre & Type & Default & Açıklama \\ \hline
+n\_estimators & int & 100 & Oluşturulacak ağaç sayısı. \\ \hline
+max\_depth & int & None & Oluşturulacak ağaçların maksimum derinliği. Fazla olması modelin karmaşıklığını ve aşırı uyumu artırabilir. \\ \hline
+min\_samples\_split & int & 2 & Bir iç düğümün ikiye bölünmeden önce kaç örneğe sahip olması gerektiği. \\ \hline
+min\_samples\_leaf & int & 1 & Bir yaprak düğümünün en az kaç örneğe sahip olması gerektiği. \\ \hline
+max\_features & "sqrt", "log2", float & "sqrt" & Her bir ağaçta kullanılacak maksimum özellik sayısı.  sqrt, len(n\_features). log2, log2(n\_features) \\ \hline
+bootstrap & bool & None & Bootstrap örneklemlerinin kullanılıp kullanılmayacağını belirler. \\ \hline
+
+\end{tabular}
+}}}
+\end{table}
+
+\newpage

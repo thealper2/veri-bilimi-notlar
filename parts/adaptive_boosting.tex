@@ -1,0 +1,33 @@
+\section{Adaptive Boosting}
+Zayıf öğrenicileri bir araya getirerek güçlü bir öğrenici oluşturmak için kullanılan bir toplu öğrenme yöntemidir.
+
+\subsection{Çalışma Adımları}
+\begin{enumerate}
+    \item Her bit örnek başlangıçta 1/N ağırlığına sahiptir. N, toplam örnek sayısı.
+    \item Bir zayıf öğrenici eğitilir.
+    \item Zayıf öğrenicinin doğruluğu hesaplanır.
+    \item Doğruluğu düşük olan örneklerin ağırlığı arttırılır. Bu, yanlış sınıflandırılan örneklerin daha fazla dikkate alınmasını sağlar. Modelin bu örnekleri daha iyi sınıflandırması beklenir.
+    \item Ağırlıklandırılmış eğitim veri seti, bir sonraki zayıf öğreniciyi eğitmek için kullanılır. Bu süreç, belli bir iterasyon (boosting round) için tekrarlanır.
+    \item Her bir zayıf öğrenici, tahminlerin gücüne göre bir ağırlıkla birleştirilir. Bu ağırlıklandırma işlemi, her bir öğreticinin doğruluğuna göre belirlenir. Daha doğru tahminler, daha büyük ağırlığa sahip olur.
+    \item Zayıf öğrenicilerin bir araya getirilmesiyle güçlü bir öğrenici elde edilir.
+\end{enumerate}
+
+\subsection{Hiperparametreler}
+
+\begin{table}[h]
+\centering
+{\scriptsize\renewcommand{\arraystretch}{0.4}
+{\resizebox*{\linewidth}{0.3\textwidth}{
+\begin{tabular}{|p{2cm}|p{1cm}|p{1cm}|p{6cm}|}
+\hline
+Parametre & Type & Default & Açıklama \\ \hline
+estimator & object & None & Kullanılacak zayıf öğrenici türü. \\ \hline
+n\_estimators & float & 1e-6 & Kullanılacak zayıf öğrenici sayısı. Fazla olması karmaşıklığı ve overfit'i artırabilir.  \\ \hline
+learning\_rate & float & 1e-6 & Her bir zayıf öğrenicinin katkısını artırmak veya azaltmak için kullanılan parametre.  \\ \hline
+loss & float & 1e-6 & Kayıp fonksiyonu.  \\ \hline
+random\_state & bool & False & Rastgelelik kontrolü. \\ \hline
+\end{tabular}
+}}}
+\end{table}
+
+\newpage

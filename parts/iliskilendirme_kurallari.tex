@@ -1,0 +1,26 @@
+\section{İlişkilendirme Kuralları}
+\textbf{İlişkilendirme kuralları}; bir niteliğin varlığını harekette bulunan başka niteliklerin varlıklarına dayanarak öngörme. Temel amaç, D hareket kümesinden kurallar oluşturmaktır. Kuralların destek değeri, belirlenen en küçük destek (minsup) değerinden büyük yada eşit olmalıdır. Kuralların güven değeri, belirlenen en küçük güven (minconf) değerinden büyük yada eşit olmalıdır. \textbf{Nitelikler kümesi}; bir veya daha çok nitelikten oluşan küme. \textbf{Destek sayısı}; Bir nitelikler kümesinin veri kümesinde görülme sıklığı. \textbf{Destek}; Bir nitelikler kümesinin içinde bulunduğu hareketlerin toplam hareketlere oranı. \textbf{Yaygın nitelikler}; Destek değeri minsup eşik değerinden daha büyük yada eşit olan nitelikler kümesi. d adet nitelik için $2^d-1$ adet yaygın nitelik oluşabilir. Kural içinse $2^k-2$ adet ilişkilendirme kuralı oluşturulabilir. Yaygın nitelik oluşturma yöntemleri; Yaygın nitelik aday sayısını azaltma (apriori), hareket sayısını azaltma ve veri kümesini tarama sayısını azaltma (hash tree).
+
+\begin{itemize}
+    \item \textbf{Destek (support - s)}: XUY nitelikler kümesinin bulunduğu hareket sayısının toplam hareket sayısına oranı. \\ \[support(X \rightarrow Y) = \frac{X \cup Y}{N} \]
+    \item \textbf{Güven (confidence - c)}: XUY nitelikler kümesinin bulunduğu hareket sayısının X nitelikler kümesi bulunan hareket sayısına oranı. \\ \[confidence(X \rightarrow Y) = \frac{X \cup Y}{X} \]
+\end{itemize}
+
+\subsubsection{Apriori Algoritması}
+Bir nitelikler kümesinin destek değeri altkümesinin destek değerinden büyük olamaz. Bu özelliğe anti-monoton özellik denilmektedir. \textbf{minsup} değeri büyük belirlenirse veri kümesinde az bulunan veya önemli bilgi taşıyan örüntüler elde edilmeyebilir. \textbf{minsup} değeri küçük belirlenirse yöntem karmaşıklaşır veya çok fazla sayıda nitelikler kümesi elde edilir. \\ \\
+\textbf{Tarafsız Ölçüt}: Örüntüler veri kümesinden elde edilen istatistiklere göre sıralanır. \\
+\textbf{Taraflı Ölçüt}: Örüntüler kullanıcının değerlendirmesine göre sıralanır. \\
+
+\subsubsection{Hash Ağacı}
+Her yaygın nitelik adayının destek değerinin belirlenmesi için veri kümesi taranır. Yaygın nitelik sayısı çok büyük olabilir. Karşılaştırma sayısını azaltmak için yayın nitelik adayları hash ağacında saklanır. Her hareket bütün yaygın niteliklerle karşılaştırılmak yerine hash ağacının ilgili bölümündeki yaygın nitelikler adayları ile karşılaştırılır. Karmaşıklığı etkileyen faktörler;
+\begin{itemize}
+    \item Veri kümesindeki boyut sayısı
+    \item Veri kümesinin büyüklüğü
+    \item Hareketlerin ortalama büyüklüğü
+    \item En küçük destek değerini belirleme
+\end{itemize}
+
+\subsubsection{FP-Tree Algoritması}
+Hareketlerden oluşan bir veri kümesinden destek değeri, kullanıcının belirlediği destek değerine eşit ya da daha büyük olan tüm yaygın örüntülerin bulunması. En büyük avantajı veritabanını sadece 2 kez taraması. Yaygın nitelikleri bulmak için gerekli tüm bilgiyi barındırır. Yaygın olmayan nitelikler ağaçta bulunmaz. Destek sayısı büyük olan nitelikler köke daha yakındır.
+
+\newpage

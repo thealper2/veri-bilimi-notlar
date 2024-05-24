@@ -1,0 +1,30 @@
+\section{Bayesian Ridge}
+Bayes teoremini ve bayes istatistik prensiplerine dayanarak lineer regresyon temelli bir modeldir. Bayes teoremi kullanarak olasılık dağılmını güncelleyerek parametreleri belirler.
+
+\subsection{Çalışma Adımları}
+\begin{enumerate}
+    \item Bir önceki dağılım (prior distribution) belirlenir. Bu, parametrelerin olası değerleri hakkında bir öngörü sağlar.
+    \item Problemi bir olasılık dağılımı olarak ele alır.
+    \item Veri dağılımına bağlı olarak bir olasılık fonksiyonu (likelihood function) belirlenir. Bu fonksiyon, modelin parametrelerinin belirli bir değere sahip olma olasılığını tanımlar.
+    \item Model, veriye dayalı olarak bayes teoremini kullanarak önceki dağılımları günceller.
+    \item Güncellenmiş dağılımlar modelin parametreleri için bir sonraki dağılımı (posterior distribution) oluşturur.
+    \item Model bu dağılımı kullanarak tahmin yapar.
+\end{enumerate}
+
+\begin{table}[ht]
+\centering
+{\scriptsize\renewcommand{\arraystretch}{0.4}
+{\resizebox*{\linewidth}{0.4\textwidth}{
+\begin{tabular}{|p{2cm}|p{1cm}|p{1cm}|p{6cm}|}
+\hline
+Parametre & Type & Default & Açıklama \\ \hline
+alpha\_1 & float & 1e-6 & Prior distribution için L2 regularizasyon hassasiyeti.  \\ \hline
+alpha\_2 & float & 1e-6 & Likelihood function için L2 regularizasyon hassasiyeti.  \\ \hline
+lambda\_1 & float & 1e-6 & Prior distribution için L1 regularizasyon hassasiyeti.  \\ \hline
+lambda\_2 & float & 1e-6 & Likelihood function için L1 regularizasyon hassasiyeti. \\ \hline
+tol & float & 1e-3 & Optimizasyon algoritmasının toleransı. \\ \hline
+\end{tabular}
+}}}
+\end{table}
+
+\newpage

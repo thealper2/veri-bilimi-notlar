@@ -1,0 +1,12 @@
+\section{TreeLSTM}
+LSTM mimarisinin ağaç yapıları üzerindeki verilerle çalıştırılacak şekilde geliştirilmiş versiyonudur. Dil yapıları gibi ağaç yapısındaki verileri modellemek için kullanılır. LSTM hücreleri ağaç yapısındaki düğümlerde yer alacak şekilde genişletilmiştir. Geleneksel LSTM'de her hücre bir önceki ve bir sonraki hücreye bağlı iken TreeLSTM'de her düğüm, birden fazla çocuk düğümün bilgisini birleştirir ve üst düğüme bilgi gönderir.
+
+\subsection{Çalışma Adımları}
+\begin{enumerate}
+	\item Girdi verileri alınır.
+	\item Her LSTM hücresi gizli durum (hidden state) ve hücre durumu (cell state) oluşur. Bir düğümün gizli ve hücre durumları, çocuk düğümlerin durumlarının birleştirilmesiyle oluşturulur. Ağaç yapısındaki en alt düğümlerden başlanarak yukarıya doğru LSTM hücreleri çalıştırılır. Her düğüm kendi gizli ve hücre durumlarını hesaplar ve üst düğümlere iletir.
+	\item Girdi bilgisi ve çocuk düğümlerin durumları ile birlikte birleştirilir.
+	\item Nihai sonuç oluşturulur.
+\end{enumerate}
+
+\newpage

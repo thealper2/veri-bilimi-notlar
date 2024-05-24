@@ -1,0 +1,34 @@
+\section{CatBoost}
+Yandex tarafından geliştirilmiştir. 2017 yılında Prokhorenkova ve diğerleri tarafından 'CatBoost: unbiased boosting with categorical features' isimli makalede tanılmıştır. Adını 'Category' ve 'Boosting' kelimelerinin birleşiminden alır. CatBoost, ağaç tabanlı bir modeldir ve gradient boosting yöntemini kullanır. Kategorik değerleri otomatik olarak kodlayabilir, boş değerler ve aykırı değerler ile başa çıkarak ön işleme adımını hızlandırır. GPU desteği bulunur. CatBoost, simetrik ağaçlar kurarak çok derin ağaçlar oluşturmadan başarılı sonuçlar elde eder ve aşırı öğrenme sorununun üstesinden gelir.
+
+\subsection{Çalışma Adımları}
+\begin{enumerate}
+	\item İlk olarak başlangıç tahminleri (initial prediction) yapılır. İlk tahminler, hedef değişkenin ortalaması veya bir sabit değerle yapılır.  Bu, daha sonra modelin hatalarını azaltmak için kullanılır.
+	\item Ardışık ağaçlar oluşturarak boosting süreci uygulanır. Her ağaç, hedef değişkenin tahminini iyileştirmek için oluşturulur.
+	\item Her ağacı oluştururken rastgele özellik seçimi yaparak her ağacın farklı bir alt kümeyi kullanmasını sağlar.
+	\item Ağaçlar oluşturulduktan sonra, hata fonksiyonunu minimize etmek için optimize edilir.
+	\item Her iterasyonda mevcut modelin hatalarını azaltacak yeni bir ağaç ekler.
+\end{enumerate}
+
+\subsection{Hiperparametreler}
+\begin{table}[h]
+\centering
+{\scriptsize\renewcommand{\arraystretch}{0.4}
+{\resizebox*{\linewidth}{0.4\textwidth}{
+\begin{tabular}{|p{3cm}|p{1cm}|p{1cm}|p{6cm}|}
+\hline
+Parametre & Type & Default & Açıklama \\ \hline
+learning\_rate & float & 1e-3 & Öğrenme oranı. \\ \hline
+iterations & float & 1e-6 & Boosting aşamasındaki ağaç sayısı. \\ \hline
+depth & float & 1e-6 & Her bir ağacın derinliği. \\ \hline
+l2\_leaf\_reg & float & 1e-6 & L2 düzenleme. \\ \hline
+bagging\_temperature & bool & False & Seed. Boosting örneklemesi sırasında kullanılır. \\ \hline
+border\_count & float & 10000 & Sayısal özelliklerin kuantize edilmesi. \\ \hline
+random\_strength & bool & True & Rastgele örneklemleme sırasında özelliklerin güçlendirilmesi için kullanılan güçlendirme katsayısı. \\ \hline
+leaf\_estimation\_method & bool & True & Ağaç yapraklarının tahmin yöntemi. \\ \hline
+grow\_policy & bool & False & Ağaç büyüme stratejisi. \\ \hline
+\end{tabular}
+}}}
+\end{table}
+
+\newpage

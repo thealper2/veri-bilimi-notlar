@@ -1,0 +1,4 @@
+\section{ResNet}
+2015'de ImageNet ILSVRC (Büyük Ölçekli Görsel Tanıma Yarışması)'de sunuldu. Microsoft YZ biriminden Kaiming He ve ekibi tarafından geliştirilmiştir. Ağda, özel atlama bağlantıları ve toplu normalleştirme işlemi yapılmıştır. Derinlik arttırılıp, parametreler azaltılarak başarısı artırılmıştır. Bu ağda Skip Connection tekniği kullanılmıştır. Bu teknik, bazı katmanları atlar ve doğrudan çıktıya bağlanarak gradyan patlaması ve gradyan kaybolması sorununun önüne geçmiştir. Artık değerlerin (residual value) sonraki katmanlara besleyen blokların (residual block) modele eklenmesiyle oluşmaktadır. Residual Block, girdi verisinin orijinal sinyalini (identity mapping) ve katmanın öğrenilen çıktısını toplar. Bu yapı, bir "artık bağlantı" veya "artık" olarak adlandırılır. Katmanın öğrenilmesi gereken işlevi sadece orijinal girdi ile giriş verilerini karşılaştırmak ve farkı almak olduğu için, ağın eğitimi daha istikrarlı hale gelir.
+
+\newpage

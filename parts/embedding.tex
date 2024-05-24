@@ -1,0 +1,20 @@
+\section{Embedding}
+Bir sözcüğü veya bir kategorik değişkeni vektör temsilinde kodlar. Önceden belirlenmiş bir boyuta sahip bir vektörü, giriş olarak alınan değerlerin gömülmesi için kullanılır. Bu işlem, girdi olarak alınan değişkeni bir vektör uzayında temsil eder.
+
+\subsection{Hiperparametreler}
+\begin{table}[h]
+\centering
+{\scriptsize\renewcommand{\arraystretch}{0.4}
+{\resizebox*{\linewidth}{0.3\textwidth}{
+\begin{tabular}{|p{3cm}|p{6cm}|}
+\hline
+Parametre & Açıklama \\ \hline
+units & Kelime dağarcığının boyutu. \\ \hline
+output\_dim & Embedding vektörlerinin boyutu. Genellikle 50-300 (glove.6B.300d, glove.6B.100d gibi) boyutları arasında tercih edilir. Daha büyük boyutlar daha fazla bilgi taşıyabilir fakat hesaplama maaliyetini artırır. \\ \hline
+input\_length & Girdi dizileri sabit bir uzunluğa sahipse kullanılır. \\ \hline
+
+\end{tabular}
+}}}
+\end{table}
+
+\newpage

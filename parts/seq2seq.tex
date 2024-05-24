@@ -1,0 +1,29 @@
+\section{Sequence-to-Sequence (Seq2Seq)}
+Seq2Seq (Sequence to Sequence) ifadesinin kısaltmasıdır. İki temel bileşenden oluşur:
+\begin{itemize}
+    \item \textbf{Encoder (Kodlayıcı):} Giriş dizisini temsil eden bir vektör üretir. Bir cümlenin her bir kelimesini embedding vektörlerine dönüştürür ve bu vektörleri bir RNN'e besler.
+    \item \textbf{Decoder (Kod Çözücü):} Kodlayıcıdan gelen vektörleri alır ve çıkış dizisini oluşturur. Genellikle bir başlangıç belirteci (\#START\#) ile başlayarak, bir sonraki kelimeyi tahmin etmek için bir RNN'e beslenir. Bu tahmin, bir sonraki kelimenin olasılık dağılımını bir yoğun katmana gönderir. En yüksek olasılığa sahip kelime çıkış olarak kabul edilir ve kod çözücüye geri beslenir. Bu işlem, bir sonraki kelimeyi tahmin etmek için tekrarlanır ve çıkış dizisi tamamlanana kadar devam eder.
+\end{itemize}
+
+\subsection{Çalışma Adımları}
+\begin{enumerate}
+    \item Her giriş metni ve çıkış metni, belirli bir maksimum uzunluğa (maxlen) kırpılır veya doldurulur. Metinler, belirli bir kelime dağarcığı ile sınırlandırılır ve kelimeler belirli bir sayıda benzersiz tokenlere dönüştürülür.
+    \item  Kodlayıcı, giriş metnini temsil eden "context (bağlam)" adı verilen bir vektör üretir. Bu vektör, giriş metninin anlamını sıkıştırılmış bir biçimde kodlar.
+    \item Kod çözücü, kodlayıcıdan gelen vektörü alır ve çıkış metnini oluşturur.
+    \item Kodlayıcı ve kod çözücü ağları birleştirilir ve bir Seq2Seq modeli oluşturulur. Model, eğitim verisi üzerinde eğitilir. Bu, giriş metinlerinin kodlayıcının girişine beslenmesi ve çıkış metinlerinin kod çözücünün çıkışından tahmin edilmesiyle yapılır. Modelin çıkışları, gerçek çıkış metinlerine göre değerlendirilir ve bir kayıp fonksiyonu kullanılarak gerçek ve tahmin edilen çıkış arasındaki fark hesaplanır. Model, geriye doğru yayılım algoritması (backpropagation) kullanılarak bu kayıp fonksiyonunu minimize etmek için güncellenir.
+\end{enumerate}
+
+\subsection{Attention (Dikkat) Tekniği}
+Seq2seq modelinde, kodlayıcı çıktısının uzun cümleleri zorlaştırdığı ve darboğaz yaptığı ortaya çıktı. Bunun için 2014 yılında Bahdanau ve diğerleri tarafından, 2015 yılında Luong ve diğerleri tarafından "Attention (Dikkat)" tekniği önerildi. Attention mekanizması, kod çözücü ağının her adımında, her bir giriş kelimesine odaklanmasına izin vererek çalışır. Yani kod çözücü ağı çıkışın her bir kelimesini oluştururken, giriş dizisindeki her bir kelimenin önemini değerlendirir ve çıkışın o kelimeyi üretirken girişin hangi kısımlarına odaklanması gerektiğin karar verir.
+
+\subsubsection{Çalışma Adımları}
+\begin{enumerate}
+    \item Kodlayıcı, giriş dizisini temsil eden bir vektörler dizisi üretir. 
+    \item Her kod çözücü adımında, kod çözücü, bir hedef kelime üretmek için giriş dizisinin hangi kısımlarına odaklanması gerektiğini belirlemek için "attention skorları" hesaplar. Attention skorları, kod çözücünün mevcut gizli durumu ve kodlayıcı çıktıları arasındaki benzerlikleri ölçer.
+    \item Attention skorları, kodlayıcı çıktılarına ağırlık vermek için kullanılır. Yani, kod çözücü, önemli bulduğu giriş kelimesine daha fazla dikkat gösterir. Bu ağırlıklı kodlayıcı çıktıları, kod çözücünün mevcut durumuna (hidden state) eklenir.
+    \item Ağırlıklı kodlayıcı çıktıları, kod çözücü ağında bir sonraki gizli durumu hesaplamak için kullanılır. Bu gizli durum, bir sonraki çıkış kelimesini tahmin etmek için yoğun bir katmana (dense layer) beslenir.
+\end{enumerate}
+
+Bu şekilde, attention mekanizması, kod çözücünün her adımında giriş dizisinin farklı kısımlarına odaklanmasını sağlar. Bu da Seq2Seq modelinin uzun cümleler gibi zorlu durumlarda daha iyi performans göstermesini sağlar.
+
+\newpage
