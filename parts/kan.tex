@@ -1,0 +1,14 @@
+\section{Kolmogorv-Arnold Networks (KAN)}
+
+Kolmogorov-Arnold Teoremi'nden yola çıkarak MLP'ye alternatif olarak sunulmuştur. MLP'lerde aktivasyon fonksiyonu düğümlerde (nöronlar) bulunurken, KAN'larda aktivasyon fonksiyonları kenarlarda (ağırlıklar) bulunur. Bu sayede, her düğümden gelen bilgileri ayrı ayrı işleyebilir, bu da karmaşık problemlerde daha iyi modelleyebilmesin olanak sağlar. Her kenar, bir giriş düğümünden bir çıkış düğümüne uzanır ve her kenara bir aktivasyon fonksiyonu ve bir ağırlık atanır. Her düğüm, birden çok kenardan gelen giriş bilgilerini toplar ve toplayıcı bir aktivasyon fonksiyonu ile işler. KAN'larda aktivasyon fonksiyonları kenarda olduğu için, her düğümde sadece bir adet toplayıcı aktivasyon fonksiyonu bulunur. Bu da parametre sayısının MLP'den daha az olmasına neden olur. Aktivasyon fonksiyonun kenarlarda olması overfitting problemini de azaltmaya yardımcı olur. MLP'lerde her düğümde bir aktivasyon fonksiyonu olduğu için parametre sayısı hızlı bir şekilde artar. Düğümler katmanlar halinde düzenlenir. Son katmandaki düğümler, çıkışları üretir. MLP'ye kıyasla daha az hesaplama kaynağına ihtiyaç duyarlar. 
+
+\subsection{Kolmogorov Süperpozisyon Teoremi}
+Herhangi bir sürekli \( f: [0,1]^n \rightarrow \mathbb{R} \) fonksiyonu için, sürekli tek değişkenli fonksiyonlar \( \phi_i \) ve \( \psi_i \) olmak üzere,
+
+\[
+f(x_1, x_2, \ldots, x_n) = \sum_{i=1}^{2n+1} \psi_i \left( \sum_{j=1}^{n} \phi_{ij}(x_j) \right)
+\]
+
+şeklinde ifade edilebilir.
+
+\newpage

@@ -1,0 +1,10 @@
+\section{Extended Long Short-Term Memory (xLSTM)}
+LSTM'deki kapılarda kullanılan sigmoid fonksiyonu yerine üstel fonksiyonlar kullanır. Bu daha duyarlı bir bellek kontrolü sağlar. Paralel işleme ve bilgi depolama için mLSTM ve sLSTM adı verilen iki yaklaşımı kullanır. Residual (artık) bağlantılar içerir.
+
+\subsection{sLSTM (Scalar LSTM)}
+Skaler bir güncelleme mekanizması kullanarak, bellek birimi üzerindeki geçit mekanizmasını optimize ederek, kısa girdili bilgiler üzerinde daha iyi işlemler yapmayı sağlar. 
+
+\subsection{mLSTM (Matrix LSTM)}
+Vektörleri matris haline getirerek bellek kapasitesini ve paralel işleme yeteneğini artırır. Durumlar, vektör değil matris şeklindedir. Bu da tek bir zaman adımında daha karmaşık ve çok boyutlu verileri daha etkili işlemeyi sağlar. Bu matris işlemi görüntü ve video işleme gibi problemlerde oldukça önemli bir yere sahiptir.
+
+\newpage

@@ -36,3 +36,150 @@ ax["F"].plot()
 
 \subsection{Dont use time.time()}
 Model süresini hesaplarken time.time() kullanma. Time.time() güncel zamanı hesaplar. Bunun yerine time.perf\_counter() kullan.
+
+\subsection{DeOldify - Video/Resim Renklendirme}
+Siyah-beyaz görüntü/videoları renkli hale getirmek için kullanılan önceden eğitilmiş bir modeldir. Modeli websitesinden indirip proje içerisindeki models klasörüne koymak gerekiyor.
+
+\subsubsection{Resim Renklendirme}
+\begin{lstlisting}[language=Python]
+from deoldify import device
+from deoldify.device_id import DeviceId
+from deoldify.visualize import get_image_colorizer, show_image_in_notebook
+import warnings
+warnings.filterwarnings("ignore")
+device.set(device=DeviceId.GPU0)
+
+colorizer = get_image_colorizer(artistic=True)
+render_factor = 35
+image_path = colorizer.get_platformed_image(path="/path/to/image", render_factor=render_factor, compare=False)
+show_image_in_notebook(image_path)
+\end{lstlisting}
+
+\subsubsection{Video Renklendirme}
+\begin{lstlisting}[language=Python]
+from deoldify import device
+from deoldify.device_id import DeviceId
+from deoldify.visualize import get_video_colorizer, show_video_in_notebook
+import warnings
+warnings.filterwarnings("ignore")
+device.set(device=DeviceId.GPU0)
+
+colorizer = get_video_colorizer()
+render_factor = 35
+video_path = colorizer.colorizer.colorize_from_file_name(path="/path/to/video", render_factor=render_factor)
+show_video_in_notebook(video_path)
+\end{lstlisting}
+
+\subsection{Transformer Benchmark}
+\begin{lstlisting}[language=Python]
+from transformers import PyTorchBenchmark, PyTorchBenchmarkArguments
+
+models = ["bert-base-turkish-uncased", "roberta-base", "albert-base-v2"]
+
+batch_sizes = [4]
+sequence_lengths = [64, 128, 256]
+
+args = PyTorchBenchmarkArguments(models=models,
+                                 batch_sizes=batch_sizes,
+                                 sequence_lengths=sequence_lengths)
+
+benchmark = PyTorchBenchmark(args)
+results = benchmark.run()
+\end{lstlisting}
+
+\subsection{Stable Diffusion}
+
+\subsubsection{Default Image Generation}
+\begin{lstlisting}[language=Python]
+import torch
+from diffusers import StableDiffusionPipeline
+
+pipeline = StableDiffusionPipeline.from_pretrained(
+        "runwayml/stable-diffusion-v1-5",
+        torch_dtype = torch.float16
+).to("cuda:0")
+
+prompt = ""
+image = pipeline(prompt=prompt).images[0]
+image
+\end{lstlisting}
+
+\subsubsection{Image Generation with Scheduler}
+\begin{lstlisting}[language=Python]
+import torch
+from diffusers import StableDiffusionPipeline, EulerDiscreteScheduler
+
+generator = torch.Generator("cuda:0").manual_seed(42)
+pipeline = StableDiffusionPipeline.from_pretrained(
+        "runwayml/stable-diffusion-v1-5",
+        torch_dtype = torch.float16
+)
+
+pipeline.scheduler = EulerDiscreteScheduler.from_config(pipeline.scheduler.config)
+
+prompt = ""
+image = pipeline(prompt=prompt,
+                 generator=generator,
+                 num_inference_steps=30,
+                 guidance_scale=10,
+                 width=1920,
+                 height=1080).images[0]
+image
+\end{lstlisting}
+
+\subsubsection{Image Generation with Mask}
+\begin{lstlisting}[language=Python]
+import torch
+import cv2
+from PIL import Image
+from diffusers import StableDiffusionPipeline, EulerDiscreteScheduler
+
+mask_image_path = "mask.png"
+mask_data = cv2.imread(mask_file_path)
+gray_image = cv2.cvtColor(mask_data, cv2.COLOR_BGR2GRAY)
+thresh, mask_image = cv2.threshold(gray_image, 100, 255, cv2.THRESH_BINARY)
+mask_image = Image.fromarray(mask_image)
+
+generator = torch.Generator("cuda:0").manual_seed(42)
+pipeline = StableDiffusionPipeline.from_pretrained(
+        "runwayml/stable-diffusion-v1-5",
+        torch_dtype = torch.float16
+)
+
+pipeline.scheduler = EulerDiscreteScheduler.from_config(pipeline.scheduler.config)
+
+prompt = ""
+image = pipeline(prompt=prompt,
+                 generator=generator,
+                 num_inference_steps=30,
+                 guidance_scale=10,
+                 mask_image=mask_image
+                 width=1920,
+                 height=1080).images[0]
+image
+\end{lstlisting}
+
+\subsubsection{Super Resolution}
+\begin{lstlisting}
+import torch
+from diffusers import StableDiffusionImg2ImgPipeline
+
+pipeline = StableDiffusionImg2ImgPipeline.from_pretrained(
+        "stablediffusionapi/deliberate-v2",
+        torch_dtype = torch.float16
+).to("cuda:0")
+
+prompt = ""
+negative_prompt = ""
+
+image = pipeline(
+        image = "path/to/image",
+        prompt = prompt,
+        negative_prompt = negative_prompt,
+        strength = 3,
+        num_inference_steps = 100,
+        guidance_scale = 7,
+        generator = torch.Generator("cuda").manual_seed(42)
+).images[0]
+image
+\end{lstlisting}
