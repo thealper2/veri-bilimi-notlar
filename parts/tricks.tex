@@ -183,3 +183,136 @@ image = pipeline(
 ).images[0]
 image
 \end{lstlisting}
+
+\subsection{Prettymaps - Harita Olusturma}
+\begin{lstlisting}[language=Python]
+import prettymaps
+plot = prettymaps.plot(
+    'Istanbul Sabahattin Zaim University',
+    preset = 'heerhugowaard',
+    figsize=(10, 10),
+    save_as='image.png'
+)
+\end{lstlisting}
+
+\begin{figure}[ht]
+    \centering
+    \includegraphics[width=0.5\textwidth]{images/izu.png}
+    \caption{Prettymaps IZU.}
+    \label{fig:enter-label}
+\end{figure}
+
+\newpage
+
+\subsection{Scikeras - Keras HP Tuning}
+\begin{lstlisting}[language=Python]
+import tensorflow as tf
+from scikeras.wrappers import KerasClassifier
+from sklearn.model_selection import GridSearchCV
+
+def create_model(units=16, lr_rate=0.1):
+    model = tf.keras.Sequential()
+    model.add(tf.keras.layers.Dense(units, activation='relu'))
+    model.add(tf.keras.layers.Dense(num_classes, activation='softmax'))
+    model.compile(optimizer=tf.keras.optimizers.Adam(learning_rate=lr_rate),
+                  loss='categorical_crossentropy',
+                  metrics=['accuracy'])
+    return model
+
+units = [16, 32]
+lr_rate = [0.1,0.001]
+batch_size = [128, 64]
+
+keras_model = KerasClassifier(build_fn=create_model, 
+                              units=units, 
+                              lr_rate=lr_rate, 
+                              epochs=10, 
+                              batch_size=batch_size, 
+                              callbacks=[EarlyStopping(monitor='val_loss', patience=3)], 
+                              verbose=0)
+
+param_grid = dict(units = units, lr_rate = lr_rate, batch_size = batch_size)
+grid = GridSearchCV(estimator = keras_model, param_grid = param_grid, cv = 3)
+grid_result = grid.fit(train_data, train_labels)
+print("The best parameters are:",grid_result.best_params_)
+best_params = grid_result.best_params_
+\end{lstlisting}
+
+\subsection{pyLDAvis - Topic Modeling with LDA}
+\begin{lstlisting}[language=Python]
+import gensim
+import pyLDAvis.gensim
+
+tokenized = df["Lemmatization"]
+tokenized = [token.split(" ") for token in tokenized]
+dictionary = corpora.Dictionary(tokenized)
+dictionary.filter_extremes(no_below=1, no_above=0.8)
+corpus = [dictionary.doc2bow(tokens) for tokens in tokenized]
+
+ldamodel = gensim.models.ldamodel.LdaModel(corpus, num_topics = 8, id2word=dictionary, passes=15)
+lda_display = pyLDAvis.gensim.prepare(ldamodel, corpus, dictionary, sort_topics=True)
+pyLDAvis.display(lda_display)
+\end{lstlisting}
+
+\subsection{visualkeras - 3D Model Visualization}
+\begin{lstlisting}[language=Python]
+import tensorflow as tf
+import visualkeras
+
+model = tf.keras.Sequential()
+model.add(tf.keras.layers.Conv2D(32, (3, 3), activation='relu', input_shape=(224, 224, 3)))
+model.add(tf.keras.layers.MaxPooling2D((2, 2)))
+model.add(tf.keras.layers.Conv2D(64, (3, 3), activation='relu'))
+model.add(tf.keras.layers.MaxPooling2D((2, 2)))
+model.add(tf.keras.layers.Conv2D(64, (3, 3), activation='relu'))
+model.add(tf.keras.layers.Flatten())
+model.add(tf.keras.layers.Dense(32, activation='relu'))
+model.add(tf.keras.layers.Dense(10, activation='softmax'))
+model.compile(optimizer=tf.keras.optimizers.Adam(),
+              loss='categorical_crossentropy',
+              metrics=['accuracy'])
+
+visualkeras.layered_view(model, to_file="visualkeras.png").show()
+\end{lstlisting}
+
+\begin{figure}[ht]
+    \centering
+    \includegraphics[width=0.25\textwidth]{images/visualkeras.png}
+    \caption{visualkeras .}
+    \label{fig:enter-label}
+\end{figure}
+
+\newpage
+
+\subsection{Plotting N-Grams}
+\begin{lstlisting}[language=Python]
+def count_ngrams(corpus, ngram, n):
+    vec = CountVectorizer(ngram_range=(ngram,ngram)).fit(corpus)
+    bag_of_words = vec.transform(corpus)
+    sum_words = bag_of_words.sum(axis=0)
+    words_freq = [(word, sum_words[0, idx]) for word, idx in vec.vocabulary_.items()]
+    words_freq =sorted(words_freq, key = lambda x: x[1], reverse=True)
+    return words_freq[:n]
+    
+def plot_ngrams(ngram_df, ngram_name):
+    plt.figure(figsize=(12, 6))
+    plt.bar(data=ngram_df, x="Tweets", height="Count")
+    plt.xticks(rotation=90)
+    plt.xlabel(ngram_name)
+    plt.ylabel("Count")
+    plt.title(ngram_name)
+    plt.show()
+    
+unigrams = count_ngrams(corpus=df["Lemmatization"], ngram=1, n=30)
+top_unigram = pd.DataFrame(unigrams, columns=['Tweets', "Count"])
+plot_ngrams(top_unigram, "Unigrams")
+\end{lstlisting}
+
+\begin{figure}[ht]
+    \centering
+    \includegraphics[width=1.0\textwidth]{images/nlp_unigram.png}
+    \caption{Unigrams .}
+    \label{fig:enter-label}
+\end{figure}
+
+\newpage
