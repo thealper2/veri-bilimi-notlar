@@ -316,3 +316,329 @@ plot_ngrams(top_unigram, "Unigrams")
 \end{figure}
 
 \newpage
+
+\subsection{Matplotlib Styles}
+\subsubsection{XKCD Style}
+\begin{lstlisting}[language=Python]
+import matplotlib.pyplot as plt
+import pandas as pd
+
+df = pd.DataFrame({
+    'x': [1, 2, 2.5, 3, 3.5, 4, 5],
+    'y': [5, 10, 12.5, 15, 17.5, 20, 25],
+})
+ 
+with plt.xkcd():
+    plt.rcParams['figure.figsize'] = [12, 8]
+    fig1 = plt.figure()
+    ax = df.plot.bar()
+
+plt.show()
+\end{lstlisting}
+
+\begin{figure}[ht]
+    \centering
+    \includegraphics[width=1.0\textwidth]{images/style_xkcd.png}
+    \caption{XKCD Style .}
+    \label{fig:enter-label}
+\end{figure}
+
+\newpage
+
+\subsection{Scikit-Learn-Intelex: Intel sistemlerde Sklearn hızlandırma}
+\subsubsection{Intel CPU'lar için}
+\begin{lstlisting}[language=Python]
+from sklearnex import patch_sklearn
+patch_sklearn()
+
+from sklearn.cluster import DBSCAN
+\end{lstlisting}
+
+\subsubsection{Intel GPU'lar için}
+\begin{lstlisting}[language=Python]
+import dpctl
+from sklearnex import patch_sklearn, config_context
+patch_sklearn()
+
+from sklearn.cluster import DBSCAN
+
+with config_context(target_offload='gpu:0'):
+	model = DBSCAN()
+\end{lstlisting}
+
+\subsection{Deepchecks - Model Validation}
+\subsubsection{Model Evaluation}
+\begin{lstlisting}[language=Python]
+import pandas as pd
+import numpy as np
+from sklearn import datasets
+from sklearn.model_selection import train_test_split
+from sklearn.ensemble import RandomForestClassifier
+
+from deepchecks.tabular import Dataset
+from deepchecks.suites import model_evaluation
+
+df  = datasets.load_breast_cancer(as_frame=True).frame
+label = 'target'
+train_df, test_df = train_test_split(df, test_size=0.2, random_state=123)
+
+train = Dataset(train_df, label=label)
+test = Dataset(test_df, label=label)
+
+x_train = train_df.drop(label, axis = 1)
+y_train = train_df[label]
+x_test = test_df.drop(label, axis = 1)
+y_test = test_df[label]
+
+model = RandomForestClassifier()
+model.fit(x_train, y_train)
+
+suite = model_evaluation()
+suite_result = suite.run(train_dataset=train, test_dataset=test, model=model)
+suite_result.save_as_html()
+\end{lstlisting}
+
+\subsubsection{Data Consistency Check}
+\begin{lstlisting}[language=Python]
+from deepchecks.suites import  train_test_validation
+
+data_consistency_check = train_test_validation()
+data_consistency_check.run(model=model, train_dataset=train, test_dataset=test)
+\end{lstlisting}
+
+\subsubsection{Data Purity Check}
+\begin{lstlisting}[language=Python]
+from deepchecks.suites import data_integrity
+
+purity_check = data_integrity()
+purity_check.run(train_dataset = train)
+\end{lstlisting}
+
+\subsection{Pandas Profiling}
+\begin{lstlisting}[language=Python]
+from pandas_profiling import ProfileReport
+
+profile = ProfileReport(
+    df, title="", html={"style": {"full_width": True}}, sort=None
+)
+profile
+\end{lstlisting}
+
+\newpage
+
+\subsection{PDPBOX - Partial Dependence Plot}
+\begin{lstlisting}[language=Python]
+from pdpbox import pdp, get_example, info_plots
+
+target_radius = info_plots.TargetPlot(
+    df=df,
+    feature="mean radius",
+    feature_name="mean radius",
+    target='target',
+)
+fig, axes, summary_df = target_radius.plot(
+    figsize=None,
+    ncols=2,
+    plot_params=None,
+    engine='plotly',
+    template='plotly_white',
+)
+fig.update_layout()
+\end{lstlisting}
+
+\begin{figure}[ht]
+    \centering
+    \includegraphics[width=1.0\textwidth]{images/pdpbox_demo.png}
+    \caption{pdpbox demo}
+    \label{fig:enter-label}
+\end{figure}
+
+\newpage
+
+\subsection{dtreeviz  vs plot\_tree - Tree Visualization}
+\subsubsection{dtreeviz}
+\begin{lstlisting}[language=Python]
+import dtreeviz
+
+viz = dtreeviz.model(
+    model,
+    x_train,
+    y_train,
+    target_name="target",
+    feature_names=list(x_train.columns)
+)
+viz.view(scale=1.3)
+\end{lstlisting}
+
+\begin{figure}[ht]
+    \centering
+    \includegraphics[width=1.0\textwidth]{images/dtreeviz.png}
+    \caption{pdpbox demo}
+    \label{fig:enter-label}
+\end{figure}
+
+\newpage
+
+\subsubsection{tree.plot\_tree}
+\begin{lstlisting}[language=Python]
+from sklearn.tree import plot_tree
+
+fig, axes = plt.subplots(figsize=(25,22))
+plot_tree(model, filled = True)
+plt.savefig("plot_tree.png")
+plt.show()
+\end{lstlisting}
+
+\begin{figure}[ht]
+    \centering
+    \includegraphics[width=1.0\textwidth]{images/plot_tree.png}
+    \caption{pdpbox demo}
+    \label{fig:enter-label}
+\end{figure}
+
+\newpage
+
+\subsection{SKompiler - Model Algoritması Dönüşümü}
+\begin{lstlisting}[language=Python]
+import numpy as np
+from sklearn.datasets import load_iris
+from sklearn.tree import DecisionTreeClassifier
+from skompiler import skompile
+
+iris = load_iris()
+model = DecisionTreeClassifier(max_depth=3)
+model.fit(iris.data, iris.target)
+js_code = skompile(model.predict).to('sympy/js')
+# if (x[2] <= 2.44999998807907) {
+#    y = 0;
+# }
+# else {
+#    if (x[3] <= 1.75) {
+#       if (x[2] <= 4.95000004768372) {
+#          y = 1;
+#       }
+#       else {
+#          y = 2;
+#       }
+#    }
+#    else {
+#       y = 2;
+#    }
+# }
+\end{lstlisting}
+
+\subsection{dtype\_diet - Veri Tipi Optimizasyonu}
+dtype\_diet veri tipi optimizasyonu yaparak veri tiplerinin bellek kullanımını azaltmayı hedefler.
+
+\begin{lstlisting}[language=Python]
+import pandas as pd
+from dtype_diet import report_on_dataframe, optimize_dtypes
+
+df = pd.read_csv("/mnt/d/Datasets/kddcup/kddcup.data.corrected")
+m1 = df.memory_usage(deep=True).sum() / 1024 / 1024
+print(f"Original df memory: {m1} MB")
+# Original df memory: 2567.740376472473 MB
+
+proposed_df = report_on_dataframe(df, unit="MB")
+new_df = optimize_dtypes(df, proposed_df)
+m2 = new_df.memory_usage(deep=True).sum() / 1024 / 1024
+print(f"Optimized df memory: {m2} MB")
+# Optimized df memory: 756.7935743331909 MB
+\end{lstlisting}
+
+\newpage
+
+\subsection{SWMat - Grafik İşlemleri}
+\begin{lstlisting}[language=Python]
+import matplotlib.pyplot as plt
+from SWMat.SWMat import SWMat
+
+data = [1, 1, 2, 3, 5, 1, 2, 
+        4, 4, 4, 3, 5, 6, 3, 
+        5, 5, 3, 3, 1, 2, 3, 
+        4, 5, 6, 6, 5, 4, 3, 4, 5]
+swm = SWMat(plt) 
+swm.violinplot(data, highlight={"0":[(0.5, 2.5), (4.5, 6)]});
+swm.text("Some text");
+plt.savefig("swmat.png")
+\end{lstlisting}
+
+\begin{figure}[ht]
+    \centering
+    \includegraphics[width=1.0\textwidth]{images/swmat.png}
+    \caption{swmat demo}
+    \label{fig:enter-label}
+\end{figure}
+
+\newpage
+
+\subsection{scattertext - NLP Scatter Text Graph}
+\begin{lstlisting}[language=Python]
+import pandas as pd
+import scattertext as st
+
+df = pd.read_csv("/mnt/d/Datasets/data.csv")
+df = df.assign(
+    parse=lambda df: df.text.apply(st.whitespace_nlp_with_sentences)
+)
+corpus = st.CorpusFromParsedDocuments(
+    df, 
+    category_col='category', 
+    parsed_col='parse'
+).build().get_unigram_corpus().compact(st.AssociationCompactor(2000))
+html = st.produce_scattertext_explorer(
+    corpus,
+    category='siyaset ',
+    category_name='Siyaset',
+    not_category_name='Dunya',
+    minimum_term_frequency=0, 
+    pmi_threshold_coefficient=0,
+    width_in_pixels=1000, 
+    metadata=corpus.get_df()['category'],
+    transform=st.Scalers.dense_rank,
+)
+open('./scattertext.html', 'w').write(html)
+\end{lstlisting}
+
+\begin{figure}[ht]
+    \centering
+    \includegraphics[width=1.0\textwidth]{images/scattertext.png}
+    \caption{scattertext demo}
+    \label{fig:enter-label}
+\end{figure}
+
+\newpage
+
+\subsection{albumentations - Image Augmentation}
+\begin{lstlisting}[language=Python]
+import os
+import cv2
+import numpy as np
+from albumentations import Compose, HorizontalFlip, RandomBrightnessContrast, Rotate
+from albumentations.augmentations.transforms import Resize
+
+input_dir = ''
+output_dir = ''
+
+augmentation_pipeline = Compose([
+    HorizontalFlip(p=0.5),
+    RandomBrightnessContrast(p=0.5),
+    Rotate(limit=45, p=0.5),
+    Resize(height=256, width=256, p=1)
+])
+
+for filename in os.listdir(input_dir):
+    if filename.endswith(".jpg") or filename.endswith(".png"):
+        image_path = os.path.join(input_dir, filename)
+        image = cv2.imread(image_path)
+        if image is None:
+            continue
+
+        augmented = augmentation_pipeline(image=image)
+        augmented_image = augmented['image']
+
+        base_filename, ext = os.path.splitext(filename)
+        new_filename = f"{base_filename}_augmented{ext}"
+        output_path = os.path.join(output_dir, new_filename)
+        cv2.imwrite(output_path, augmented_image)
+\end{lstlisting}
