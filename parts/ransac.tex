@@ -1,0 +1,14 @@
+\section{RANSAC (Random Sample Consensus)}
+Bir robust regresyon tekniğidir. 1981 yılında Fischler ve Bolles tarafından geliştirilmiştir. RANSAC, hatalı veri noktalarını tespit edip bu hatalı noktaların etkisini minimize ederek doğru veri noktaları üzerinden bir model oluşturur. 
+
+\subsection{Çalışma Adımları}
+\begin{enumerate}
+	\item Veri kümesinden rastgele bir alt küme seçilir. Bu alt küme, model parametrelerini tahmin etmek için kullanılır.
+	\item Tahmin edilen model, geri kalan veri noktaları üzerinde test edilir. Bir hata metriği ile her bir noktanın tahmini arasındaki hata oranı hesaplanır.
+	\item Hata metriği belirli blir eşik değerinden küçük olan noktalar 'inliner' olarak kabul edilir.
+	\item Bu süreç belirli bir iterasyon boyunca tekrarlanır. Her iterasyonda yeni bir rastgele alt küme seçilir. En çok inliner içeren model, en iyi model olarak seçilir.
+\end{enumerate}
+
+
+
+\newpage

@@ -1,0 +1,27 @@
+\section{LESK Algoritması}
+Kelime anlamı çözümleme (Word Sense Disambiguation - WSD) algoritmasıdır. Michael Lesk tarafından 1986 yılında önerilmiştir.  Bir kelimenin metindeki doğru anlamını belirlemek için kullanılır. Bunun için kelimenin etrafındaki bağlam kelimelerini kullanır. Algoritma her bir anlamın (synset'in) tanımını ve örnek cümlelerini içeren sözlük girişlerini karşılaştırarak en fazla kelime bağlamı örtüşen cümle ile anlamı bulur.
+
+\subsection{Çalışma Adımları}
+\begin{enumerate}
+	\item Verilen metin içerisinde anlamı bulunacak sözcük seçilir.
+	\item Sözcüğün, sözlükteki açıklaması ve örnek cümleleri bulunur.
+	\item Eşleşen sözcükler bulunur.
+	\item En çok örtüşme hangisindeyse o anlam atanır.
+\end{enumerate}
+
+\subsection{NTLK - LESK}
+\begin{lstlisting}[language=Python]
+import nltk
+from nltk import wsd
+
+X = 'Roll the die to get a 6.'
+Y = 'Legends never die.'
+target = 'die'
+
+print(X, ':', wsd.lesk(X.split(), target).definition())
+print(Y, ':', wsd.lesk(Y.split(), target).definition())
+# Roll the die to get a 6. : to be on base at the end of an inning, of a player
+# Legends never die. : stop operating or functioning
+\end{lstlisting}
+
+\newpage

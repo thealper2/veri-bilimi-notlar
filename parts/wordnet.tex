@@ -1,0 +1,134 @@
+\section{WordNet}
+
+WordNet (Kelime Ağı), bir dildeki tüm kelimeleri, bu kelimelerin tanımlarını ve aralarındaki anlamsal ilişkileri içeren sözlüksel bir veri tabanıdır. 1985 yılında Princeton Universitesinde İngilizce için el ile 10 yılda oluşturulmuştur. Günümüzde 200'den fazla dili kapsar.  Bu veri tabanında kelimeler anlamsal olarak gruplandırılmış ve bu gruplar "synsets" (synonym sets)  olarak adlandırılmıştır. Her synset, eş anlamlı kelimeleri kümesidir. Anlamsal ilişkiler;
+
+\begin{itemize}
+	\item \textbf{Synonymy (Eş anlamlılık)}: Aynı synset içindeki kelimeler eş anlamlıdır. 
+	\item \textbf{Antonymy (Zıt anlamlılık)}: Zıt anlamlı kelimeler arasındaki ilişkiyi belirtir.
+	\item \textbf{Hyponymy (Alt anlamlılık)}: Bir kelimenin daha genel bir kavramın alt türü olduğu ilişkidir.
+	\item \textbf{Meronymy (Parça-bütün ilişkisi)}: Bir kelimenin bir bütünün parçası olduğunu gösterir.
+	\item \textbf{Homophony (Eş seslilik)}: Kelimelerin aynı ses ve yazı biçimde olmasına rağmen farklı anlamlarda kullanılması.
+	\item \textbf{Metaphor (Eğretileme)}: Bir kelimenin cümle için başka bir kelimenin anlamını temsil etmesi.
+\end{itemize}
+
+WordNet, kelimeler arasındaki ilişkileri grafik yapılar şeklinde temsil eder. Bu yapı, bir kelimenin anlamını ve diğer kelimelerle olan ilişkilerini görselleştirir. Türkçe için Starlang Yazılım tarafından geliştirilmiş 80 binden fazla synset içeren KeNet isimli çalışma yapılmıştır.
+
+\subsection{Synonymy (Eş anlamlılık)}
+Üç tür eş anlamlılık vardır:
+
+\begin{enumerate}
+	\item \textbf{Tam eş anlamlılık}: Sözcükler arasındaki anlamlar tam benzerdir. Birbirlerinin yerine kullanılabilirler.
+	\item \textbf{Önermesel eş anlamlılık}: Gerektirme ile anlamları tanımlanır. Her zaman birbirlerinin yerine kullanılamazlar.
+	\item \textbf{Yarı eş anlamlılık}: Anlamları tamamen aynı değildir.
+\end{enumerate}
+
+\subsection{Antonymy (Zıt anlamlılık)}
+İki tür karşıtlık vardır:
+
+\begin{enumerate}
+	\item \textbf{Derecelendirilebilen karşıtlık}: İki sözcüğün belirli bir ölçütün uç noktası olması. Örneğin uzun-kısa.
+	\item \textbf{Derecelendirilemeyen karşıtlık}: İki sözcüğün bölgesel bir sınırın noktası olması. Örneğin bekar-evli.
+	\item \textbf{Ters karşıtlık (yön gösteren)}: İki sözcüğün birbirinin karşıt yönünü göstermesi. Örneğin sağ-sol.
+	\item \textbf{Bakışımlı karşıtlık}: İki sözcüğün birbirinin karşıtını içermesi. Örneğin öğrenci-öğretmen.
+\end{enumerate}
+
+\subsection{NLTK - WordNet}
+\subsubsection{Synsets}
+\begin{lstlisting}[language=Python]
+import nltk
+from nltk.corpus import wordnet
+
+apple = wordnet.synsets('apple')
+for synset in apple:
+    print(synset, ':', synset.definition())
+# Noun tipinde iki synset
+# Synset('apple.n.01') : fruit with red or yellow or green skin and sweet to tart crisp whitish flesh
+# Synset('apple.n.02') : native Eurasian tree widely cultivated in many varieties for its firm rounded edible fruits
+\end{lstlisting}
+
+\subsubsection{Synonyms ve Antonyms}
+\begin{lstlisting}[language=Python]
+import nltk
+from nltk.corpus import wordnet
+
+synonyms = list()
+antonyms = list()
+for synset in wordnet.synsets("good"):
+    for lemma in synset.lemmas():
+        syn = lemma.name()
+        if lemma.antonyms():
+            ant = lemma.antonyms()[0].name()
+        
+        if syn not in synonyms:
+            synonyms.append(syn)
+
+        if lemma.antonyms():
+            if ant not in antonyms:
+                antonyms.append(ant)
+
+print('Synonyms:', synonyms)
+print('Antonyms:', antonyms)
+# Synonyms: ['good', 'goodness', 'commodity', 'trade_good', ... ]
+# Antonyms: ['evil', 'evilness', 'bad', 'badness', 'ill']
+\end{lstlisting}
+
+\subsubsection{Hypernyms}
+\begin{lstlisting}[language=Python]
+import nltk
+from nltk.corpus import wordnet
+
+apple = wordnet.synset('apple.n.01')
+for hypernym in apple.hypernyms():
+    print(hypernym, ':', hypernym.definition())
+
+# Synset('edible_fruit.n.01') : edible reproductive body of a seed plant especially one having sweet flesh
+# Synset('pome.n.01') : a fleshy fruit (apple or pear or related fruits) having seed chambers and an outer fleshy part
+\end{lstlisting}
+
+\subsubsection{Holonyms}
+\begin{lstlisting}[language=Python]
+import nltk
+from nltk.corpus import wordnet
+
+apple = wordnet.synset('apple.n.01')
+apple.part_holonyms()
+# [Synset('apple.n.02')]
+\end{lstlisting}
+
+\subsubsection{Meronyms}
+\begin{lstlisting}[language=Python]
+import nltk
+from nltk.corpus import wordnet
+
+wheeled_vehicle = wordnet.synset('wheeled_vehicle.n.01')
+wheeled_vehicle.part_meronyms
+#[Synset('axle.n.01'),
+# Synset('brake.n.01'),
+# Synset('splasher.n.01'),
+# Synset('wheel.n.01')]
+\end{lstlisting}
+
+\subsubsection{Hyponyms}
+\begin{lstlisting}[language=Python]
+wheeled_vehicle = wordnet.synset('wheeled_vehicle.n.01')
+wheeled_vehicle.hyponyms()
+#[Synset('baby_buggy.n.01'),
+# Synset('bicycle.n.01'),
+# Synset('boneshaker.n.01'),
+# Synset('car.n.02'),
+# Synset('handcart.n.01'),
+# Synset('horse-drawn_vehicle.n.01'),
+# Synset('motor_scooter.n.01'),
+# Synset('rolling_stock.n.01'),
+# Synset('scooter.n.02'),
+# Synset('self-propelled_vehicle.n.01'),
+# Synset('skateboard.n.01'),
+# Synset('trailer.n.04'),
+# Synset('tricycle.n.01'),
+# Synset('unicycle.n.01'),
+# Synset('wagon.n.01'),
+# Synset('wagon.n.04'),
+# Synset('welcome_wagon.n.01')]
+\end{lstlisting}
+
+\newpage

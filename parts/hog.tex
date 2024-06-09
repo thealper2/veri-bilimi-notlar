@@ -1,0 +1,29 @@
+\section{Histogram of Oriented Gradients (HOG)}
+
+Görüntüdeki şekilleri ve kenarları bulmak için gradyan yönelimlerini ve büyüklüklerini kullanır. Bir görüntünün yerel bölgelerinde gradyan yönelimlerinin histogramını hesaplayarak çalışır. Bu histogramlar daha sonra bloklar halinde normalize edilir ve birleştirilir. HOG, aydınlatma değişikliklerine ve küçük dönüşümlerine karşı dayanıklıdır. Ayırt edici özellikler çıkartır. 
+
+\subsection{Çalışma Adımları}
+\begin{enumerate}
+	\item Görüntünün x ve y yönlerindeki gradyanları hesaplanır.
+	\item Görüntü küçük hücrelere bölünür.
+	\item Her hücre için gradyan yönelimlerinin histogramı hesaplanır. Yönelimler genellikle 0-180 derece arasında 9 kutu (bin) ile temsil edilir.
+	\item Hücreler gruplandırılarak normalize edilir. Böylece aydınlatma değişikliklerinden ve kontrasttan etkilenme minimize edilir.
+	\item Normalize edilmiş histogramlar düzleştirilerek birleştirilir.
+\end{enumerate}
+
+\subsection{OpenCV - HOG}
+\begin{lstlisting}[language=Python]
+import cv2
+import matplotlib.pyplot as plt
+
+image = cv2.imread('image.jpeg', cv2.IMREAD_GRAYSCALE)
+hog = cv2.HOGDescriptor()
+hog_features = hog.compute(image)
+plt.subplot(121), plt.imshow(image, cmap='gray')
+plt.title('Original Image'), plt.xticks([]), plt.yticks([])
+plt.subplot(122), plt.plot(hog_features)
+plt.title('HOG'), plt.xticks([]), plt.yticks([])
+plt.show()
+\end{lstlisting}
+
+\newpage

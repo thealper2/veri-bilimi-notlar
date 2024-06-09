@@ -1,0 +1,15 @@
+\section{SIFT Algoritması}
+
+SIFT (Scale-Invariant Feature Transform) algoritması, köşe ve öznitelik tespiti için kullanılır. 1999 yılında David Low tarafından geliştirilmiştir. Bir görüntüdeki belirgin ve ayırt edici noktaları (anahtar noktalar) tespit etmek ve bu noktaların özellik vektörlerini oluşturmak için kullanılır. Küçük nesneler için bile birçok özellik oluşturabilir. Gerçek zamanlı performans deneyimi sunar. Özellikler yereldir bu yüzden bozulmaya ve gürültüye dayanıklıdır. SIFT, ölçek ve dönüşüme karşı dayanıklıdır, bu nedenle farklı ölçeklerde ve açılarda aynı nesneyi tanımlayabilir.
+
+\subsection{Çalışma Adımları}
+\begin{enumerate}
+	\item Görüntü, gauss filtresi ile bulanıklaştırılır ve DoG (Difference of Gaussians) ile farkları alınır.
+	\item DoG görüntülerinde lokal minimum ve lokal maksimum noktalar tespit edilir ve potansiyel anahtar noktalar olarak işaretlenir.
+	\item Her anahtar noktaya, çevresindeki gradyanların yönelimleri kullanılarak bir yönelim atanır.
+	\item Her anahtar nokta için 16x16 piksellik bir bölge etrafında gradyan ytönelimleri hesaplanır ve bu bölge 4x4'lük alt bloklara ayrılır. Her alt blok için 8 yönelim histogramı hesaplanır. Böylece toplam 128 boyutlu bir özellik vektörü elde edilir.
+	\item Farklı görüntülerdeki anahtar noktaların özellik vektörleri, öklidyen mesafesi kulanılarak karşılaştırılır ve en yakın komşu algoritması ile eşleştirilir.
+\end{enumerate}
+
+
+\newpage

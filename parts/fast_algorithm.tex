@@ -1,0 +1,35 @@
+\section{FAST Algoritması}
+
+Görüntüdeki köşe (corner) tespiti için kullanılır. 2006 yılında Edward Rosten ve Tom Drummond tarafından geliştirilmiştir. FAST Algoritması, belirli bir pikseller grubunun parlaklıklarını karşılaştırarak çalışır. Bir pikselin köşe olup olmadığını belirlemek için çevresindeki piksellerin parlaklılarını, merkezi pikselin parlaklığıyla karşılaştırır.
+
+\subsection{Çalışma Adımları}
+\begin{enumerate}
+	\item Bir merkezi piksel seçilir. Bu pikselin etrafındaki 16 piksellik bir halka incelenir.
+	\item Merkezi pikselin parlaklığı ile çevresindeki 16 pikselin parlaklıkları karşılaştırılır.
+	\item Eğer çevresindeki en az 12 ardışık piksel, merkezi piksel ile karşılaştırıldığında belirli bir eşik değerinden daha parlak veya daha karanlık ise bu piksel köşe olarak kabul edilir.
+	\item Performansı artırmak için önce belirli pikseller kontrol edilir. Bu pikseller eşik değerinden  farklı değilse, diğer pikseller kontrol edilmez ve merkezi piksel köşe olarak kabul edilmez. Bu yöntem ile gereksiz karşılaştırmaları azaltılarak algoritma hızlandırılır.
+\end{enumerate}
+
+\subsection{OpenCV - FAST Algoritması}
+\begin{lstlisting} [language=Python]
+import cv2
+import numpy as np
+import matplotlib.pyplot as plt
+
+image = cv2.imread('image.jpeg', cv2.IMREAD_GRAYSCALE)
+fast = cv2.FastFeatureDetector_create()
+keypoints = fast.detect(image, None)
+image_with_keypoints = cv2.drawKeypoints(image, keypoints, None, color=(255, 0, 0))
+
+plt.imshow(image_with_keypoints)
+plt.title('FAST Keypoints')
+plt.axis('off')
+plt.show()
+
+print("Threshold: ", fast.getThreshold())
+print("Non-max Suppression: ", fast.getNonmaxSuppression())
+print("Neighborhood: ", fast.getType())
+print("Total Keypoints with Non-max Suppression: ", len(keypoints))
+\end{lstlisting}
+
+\newpage

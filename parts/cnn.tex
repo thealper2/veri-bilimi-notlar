@@ -35,6 +35,27 @@ CNN'in dezavantajları;
 	\item Hiperparametre Ayarlama
 \end{itemize}
 
+\subsection{Python Kodu}
+
+\begin{lstlisting}[language=Python]
+inputs = torch.FloatTensor([[0, 1, 2, 4],
+    [4, 5, 6, 7],
+    [8, 9, 10, 11]])
+kernel = torch.FloatTensor([[0, 1],
+    [2, 3]])
+
+height, width = kernel.shape
+output = torch.zeros((inputs.shape[0] - height + 1, inputs.shape[1] - width + 1))
+
+for row in range(output.shape[0]):
+for col in range(output.shape[1]):
+output[row, col] = (inputs[row:row+height, col:col+width]).sum()
+
+print(output)
+# tensor([[10., 14., 19.],
+#         [26., 30., 34.]])
+\end{lstlisting}
+
 \subsection{R-CNN}
 Region-Based CNN, görüntü nesnelerinin algılanması ve sınıflandırılması için kullanılan bir tekniktir. R-CNN, Convolutional Neural Networks (CNN) ve nesne algılama tekniklerini bir araya getirerek nesneleri tanımak ve çerçevelemek için kullanılır. R-CNN, aşağıdaki temel adımları içerir:
 

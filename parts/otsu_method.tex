@@ -1,0 +1,35 @@
+\section{OTSU Method}
+1979 yılında Nobuyuki Otsu tarafından geliştirilmiştir. Bir görüntüyü ikili hale getirmek içi kullanılır. Görüntüyü iki sınıfa ayırarak bu sınıflar arasındaki piksel yoğunluk dağılımını maksimize eden eşik değerini otomatik olarak belirler. 
+
+\subsection{Çalışma Adımları}
+\begin{enumerate}
+	\item Görüntünün piksel yoğunluk histogramı hesaplanır.
+	\item Her eşik değeri için sınıf olasılıkları ve ortalama yoğunluklar hesaplanır.
+	\item Her olası eşik değeri için sınıflar arası varyans hesaplanır.
+	\item Sınıflar arası varyansı maksimize eden eşik değeri belirlenir.
+	\item Görüntü bu eşik değerine göre ikili hale getirilir.
+\end{enumerate}
+
+\subsection{OpenCV - OTSU Method}
+\begin{lstlisting}[language=Python]
+import cv2
+import numpy as np
+import matplotlib.pyplot as plt
+
+image = cv2.imread('image.jpg', 0)
+blur = cv2.GaussianBlur(image, (5, 5), 0)
+_, otsu_threshold = cv2.threshold(blur, 0, 255, cv2.THRESH_BINARY + cv2.THRESH_OTSU)
+
+plt.figure(figsize=(10, 5))
+plt.subplot(1, 2, 1)
+plt.imshow(image, cmap='gray')
+plt.title('Orijinal Gornntu')
+plt.axis('off')
+plt.subplot(1, 2, 2)
+plt.imshow(otsu_threshold, cmap='gray')
+plt.title('Otsu Esikleme Sonucu')
+plt.axis('off')
+plt.show()
+\end{lstlisting}
+
+\newpage

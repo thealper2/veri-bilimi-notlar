@@ -1,0 +1,43 @@
+\section{Hough Line Transform}
+
+Görüntülerdeki düz çizgileri tespit etmek için kullanılır. Görüntüdeki her bir kenar pikselinin bir doğruluk uzayında (parametrik uzayda) olası tüm doğruları temsil edecek şekilde dönüştürülmesi prensibine dayanır. Bu dönüşüm, belirli bir doğru parametrizasyonu kullanılarak gerçekleştirilir. Gürültüye ve parçalanmış kenarlara karşı dayanıklıdır.
+
+\subsection{Çalışma Adımları}
+\[ \rho = x * cos(\theta) + y * sin(\theta) \]
+\begin{enumerate}
+	\item Görüntüdeki kenarlar belirlenir.
+	\item Kenar piksel koordinatları (x, y), $\rho$-$\theta$ parametrik uzayına dönüştürülür. Bu uzayda her bir kenar pikseli, olası tüm doğruları temsil eder. $\rho$ doğruya olan dik uzaklığı, $\theta$ ise doğru ile x ekseni arasındaki açıdır.
+	\item Parametrik uzayda bir akümülator matrisi kullanılır. Her bir kenar pikseli, olası doğru parametreleri için bu matriste oy verir.
+	\item Akümülator matirsinde belirli bir eşik değerin üzerindeki çizgiler, potansiyel doğrular (line) olarak kabul edilir.
+\end{enumerate}
+
+\subsection{OpenCV - Hough Line Transform}
+\begin{lstlisting}
+import cv2
+import numpy as np
+import matplotlib.pyplot as plt
+
+image = cv2.imread('traffic.jpg')
+gray = cv2.cvtColor(image, cv2.COLOR_BGR2GRAY)
+edges = cv2.Canny(gray, 50, 150, apertureSize=3)
+lines = cv2.HoughLines(edges, 1, np.pi / 180, 200)
+
+for line in lines:
+    rho, theta = line[0]
+    a = np.cos(theta)
+    b = np.sin(theta)
+    x0 = a * rho
+    y0 = b * rho
+    x1 = int(x0 + 1000 * (-b))
+    y1 = int(y0 + 1000 * (a))
+    x2 = int(x0 - 1000 * (-b))
+    y2 = int(y0 - 1000 * (a))
+    cv2.line(image, (x1, y1), (x2, y2), (0, 0, 255), 2)
+
+plt.imshow(cv2.cvtColor(image, cv2.COLOR_BGR2RGB))
+plt.title('Detected Lines')
+plt.axis('off')
+plt.show()
+\end{lstlisting}
+
+\newpage

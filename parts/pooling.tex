@@ -11,4 +11,40 @@
     \label{fig:enter-label}
 \end{figure}
 
+\subsection{Python Max Pooling}
+\begin{lstlisting}[language=Python]
+inputs = torch.FloatTensor([[0, 1, 2, 4],
+    [4, 5, 6, 7],
+    [8, 9, 10, 11]])
+kernel = (2, 2)
+
+height, width = kernel
+output = torch.zeros((inputs.shape[0] - height + 1, inputs.shape[1] - width + 1))
+for row in range(output.shape[0]):
+for col in range(output.shape[1]):
+output[row, col] = inputs[row:row+height, col:col+width].max()
+
+print(output)
+#tensor([[ 5.,  6.,  7.],
+#        [ 9., 10., 11.]])
+\end{lstlisting}
+
+\subsection{Python Average Pooling}
+\begin{lstlisting}[language=Python]
+inputs = torch.FloatTensor([[0, 1, 2, 4],
+    [4, 5, 6, 7],
+    [8, 9, 10, 11]])
+kernel = (2, 2)
+
+height, width = kernel
+output = torch.zeros((inputs.shape[0] - height + 1, inputs.shape[1] - width + 1))
+for row in range(output.shape[0]):
+for col in range(output.shape[1]):
+output[row, col] = inputs[row:row+height, col:col+width].mean()
+
+print(output)
+#tensor([[ 5.,  6.,  7.],
+#        [ 9., 10., 11.]])
+\end{lstlisting}
+
 \newpage

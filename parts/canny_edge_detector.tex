@@ -1,0 +1,30 @@
+\section{Canny Edge Detector}
+1986 yılında John F. Canny tarafından geliştirilmiştir. Görüntülerdeki keskin kenarları ve hatları tespit etmek için kullanılır. Kenar algılama, görüntüdeki yoğunluk değişikliklerini tespit ederek yapılır. 
+
+\subsection{Çalışma Adımları}
+\begin{enumerate}
+	\item Görüntüdeki gürültüyü azaltmak için Gaussian Filter kullanılır. 
+	\item Görüntünün x ve y yönlerindeki gradyanlar Sobel Filter ile hesaplanır.
+	\item Her pikselin gradyan büyüklüğü, gradyanın yönüne göre yerel maksimumlarla (non-maximum suppression) karşılaştırılır.
+	\item Düşük ve yüksek olmak üzere iki eşik değeri belirlenir. Yüksek eşik değerinin üzerindeki pikseller kesin kenar olarak kabul edilirken, düşük eşik değerinin altındaki pikseller kesinlikle kenar değildir. İki eşik arasındaki pikseller ise komşuluk ilişkilerine göre kenar olup olmadıkları belirlenir.
+	\item Düşük eşik değerinin üzerindeki piksellerden başlayarak komşu pikseller takip edilir. Bu sayede, gerçek kenarlar korunurken, yanlış pozitifler temizlenir.
+\end{enumerate}
+
+\subsection{OpenCV - Canny Edge Detector}
+\begin{lstlisting}[language=Python]
+import cv2
+import numpy as np
+from matplotlib import pyplot as plt
+
+image = cv2.imread('image.png', cv2.IMREAD_GRAYSCALE)
+blurred_image = cv2.GaussianBlur(image, (5, 5), 1.2)
+edges = cv2.Canny(blurred_image, 50, 150)
+plt.subplot(121), plt.imshow(image, cmap='gray')
+plt.title('Original Image'), plt.xticks([]), plt.yticks([])
+plt.subplot(122), plt.imshow(edges, cmap='gray')
+plt.title('Canny Edge Image'), plt.xticks([]), plt.yticks([])
+plt.show()
+\end{lstlisting}
+
+
+\newpage

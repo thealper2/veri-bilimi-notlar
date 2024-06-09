@@ -1,0 +1,48 @@
+\section{ZipF Yasası}
+Zipf Yasası, bir metindeki sözcüklerin frekanslarının, bu sözcüklerin sıralaması ile ters orantılı olduğunu belirtir. Metindeki sözcükler en sık kullanılandan en seyrek kullanılana kadar sıralandığında, elde edilen sıralamadaki her bir sözcüğün sıra numarası ile o sözcüğün metin içerisinde geçme sıklığı çarpımı her zaman sabit bir sayıyı verir. Zipf'in bulgularıne göre bir metindeki en sık kullanılan kelime, en sık kullanılan ikinci kelimenin iki katı kadar kullanılmıştır.  Yani
+
+\begin{enumerate}
+	\item Birinci sözcük: 100 / 1 = 100
+	\item İkinci sözcük: 100 / 2 = 50
+	\item Üçüncü sözcük: 100 / 3 = 33,3
+	\item Dördüncü sözcük: 100 / 4 = 25
+	\item Beşinci sözcük: 100 / 5 = 20
+	\item Altıncı sözcük: 100 / 6 = 16,6
+	\item Yedinci sözcük: 100 / 7 = 14,3
+	\item Sekizinci sözcük: 100 / 8 = 12,5
+	\item Dokuzuncu sözcük: 100 / 9 = 11,1
+	\item Onuncu sözcük: 100 / 10 = 10
+\end{enumerate}
+
+\[
+f \propto \frac{1}{r}
+f = \frac{C}{r^a}
+\]
+
+Burada \( C \) bir sabit ve \( a \) genellikle yaklaşık 1'dir. Bir kelimenin frekansı f ve sıralamadaki yeri r'dir.
+
+\begin{lstlisting}[language=Python]
+import re
+import numpy as np
+import matplotlib.pyplot as plt
+from collections import Counter
+
+text = """..."""
+words = re.findall(r'\b\w+\b', text.lower())
+word_counts = Counter(words)
+sorted_word_counts = sorted(word_counts.values(), reverse=True)
+ranks = np.arange(1, len(sorted_word_counts) + 1)
+frequencies = np.array(sorted_word_counts)
+
+plt.figure(figsize=(10, 6))
+plt.plot(ranks, frequencies, marker='o', linestyle='none')
+plt.xscale('log')
+plt.yscale('log')
+plt.xlabel('Rank')
+plt.ylabel('Frequency')
+plt.title('Zipf\'s Law')
+plt.show()
+\end{lstlisting}
+
+
+\newpage

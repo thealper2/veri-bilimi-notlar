@@ -1,0 +1,16 @@
+\section{LoRA (Low-Rank Adaptation)}
+
+LLM gibi geniş parametrik modellerin adaptasyonunu daha verimli ve daha az hesaplama maliyeti ile uygun hale getirmek için kullanılan bir tekniktir. Modelin tamamını yeniden eğitmek yerine, belirli katmanlarda düşük dereceli (low-rank) matriks güncellemeleri ekler. Bu sayede, modelin parametre sayısını artırmadan, belirli katmanlarda küçük ve etkili değişiklikler yaparak modelin adaptasyonun sağlar.
+
+\subsection{Çalışma Adımları}
+
+\[
+W' = W + A * B
+\]
+
+Modelin belirli katmanlarına düşük dereceli matrisler (A ve B) eklenir. Bu formülde W orijinal ağırlık matrisin, A ve B düşük dereceli matrisleri temsil eder. Düşük dereceli matrisler, hedef görev için optimize edilir. Bu süreç, modelin tamamını yeniden eğitmekten çok daha verimlidir.
+
+
+
+
+\newpage
