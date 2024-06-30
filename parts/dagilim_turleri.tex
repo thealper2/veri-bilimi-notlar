@@ -55,6 +55,23 @@ plt.savefig('normal_distribution')
 plt.show()
 \end{lstlisting}
 
+\begin{lstlisting}[language=R]
+dnorm(x = 15 , mean = 34 , sd = 3)
+
+# Bir sinitaki erkeklerin boylarinin ortalamasi 173 cm dir.
+# Standart sapma degeri 15 cm ise, secilen bir erkek ogrencinin
+# lower.tail FALSE, boyunun 170 cm'den fazla olma olasiligi;
+# lower.tail TRUE, boyunun 170 cm'den fazla olmama olasiligi;
+pnorm(q = 170, mean = 173, sd = 15, lower.tail = FALSE) # 0.5792
+pnorm(q = 170, mean = 173, sd = 15, lower.tail = TRUE) # 0.4207
+
+qnorm(p = 0.90 , mean = 173 , sd = 15 , lower.tail = TRUE) # 192.22
+
+rnorm(n = 50 , mean =  25 , sd = 10)
+\end{lstlisting}
+
+\newpage
+
 \begin{figure}[h]
     \centering
     \includegraphics[width=1\textwidth]{images/normal_distribution.png}
@@ -100,8 +117,6 @@ plt.grid(True)
 plt.savefig('t_distribution')
 plt.show()
 \end{lstlisting}
-
-\newpage
 
 \begin{figure}[h]
     \centering
@@ -157,7 +172,7 @@ plt.show()
 \end{figure}
 
 \subsection{Üstel (Exponential) Dağılım}
-Üstel dağılım (exponential distribution), belirli bir olayın gerçekleşmesi arasındaki zaman aralığını modellemek için kullanılan bir olasılık dağılımıdır. Özellikle rastgele değişkenin pozitif değerler alması gerektiğinde kullanılır ve genellikle sürekli zaman aralıklarını modellemek için tercih edilir. Üstel dağılım, özellikle rastgele olayların aralıklarının dağılımını modellemek için sıkça kullanılır.
+Üstel dağılım (exponential distribution), belirli bir olayın gerçekleşmesi arasındaki zaman aralığını modellemek için kullanılan bir olasılık dağılımıdır. Özellikle rastgele değişkenin pozitif değerler alması gerektiğinde kullanılır ve genellikle sürekli zaman aralıklarını modellemek için tercih edilir. Üstel dağılım, özellikle rastgele olayların aralıklarının dağılımını modellemek için sıkça kullanılır. Belirli bir olay meydana gelene kadar geçen süre ile ilgilenir. Poisson dağılımı ile aynı parametre olan lambda'yı kullanırlar. Fakat poisson sabit bir zaman aralığına göre bir olayın belirli sayıda meydana gelme olasılığını hesaplarken, üstel dağılım sabit zaman aralığında gerçekleşen olaylarda bir sonraki olayın ne zaman ve ne kadar olasılıkla meydana gelmesiyle ilgilenir.
 
 \[f(x | \lambda) = \lambda * \epsilon ^{-\lambda * \epsilon}\]
 \begin{itemize}
@@ -194,6 +209,17 @@ plt.savefig('exponential_distribution')
 plt.show()
 \end{lstlisting}
 
+\begin{lstlisting}[language=R]
+dexp(x = 2 , rate = 1/10)
+
+pexp(5  , rate = 1/10 , lower.tail = TRUE)
+pexp(5  , rate = 1/10 , lower.tail = FALSE)
+
+qexp( p = 0.2 , rate = 1/20 , lower.tail = TRUE)
+
+rexp(n = 50 , rate = 1/10)
+\end{lstlisting}
+
 \begin{figure}[h]
     \centering
     \includegraphics[width=1\textwidth]{images/exponential_distribution.png}
@@ -201,15 +227,23 @@ plt.show()
     \label{fig:enter-label}
 \end{figure}
 
-\newpage
-
 \subsection{Bernoulli Dağılımı}
-Bernoulli dağılımı, sadece iki olası sonuçtan birini (başarı veya başarısızlık) modellemek için kullanılan bir olasılık dağılımıdır. Özellikle bir denemenin başarılı olma olasılığını (genellikle p ile gösterilir) modellemek için kullanılır.
+İsveçli Bilim adamı Jacop Bernoulli tarafından bulunmuştur. Bernoulli dağılımı, sadece iki olası sonuçtan birini (başarı veya başarısızlık) modellemek için kullanılan bir olasılık dağılımıdır. Özellikle bir denemenin başarılı olma olasılığını (genellikle p ile gösterilir) modellemek için kullanılır. Tek denemede gerçekleşen olayların olasılığının hesaplanmasında kullanılır.
 
 \[f(k|p) = \begin{cases} p & \text{if } k = 1 \\ 1 - p & \text{if } k = 0 \end{cases}\]
 \begin{itemize}
 	\item $k$: Sonuç (1 başarı, 0 başarısızlık).
 	\item $p$: Başarı olasılığı.
+\end{itemize}
+
+\[
+p(x) = p^x (1 - p)^(1- x)
+\]
+
+\begin{itemize}
+	\item $p$: Başarılı olma olasılığı.
+	\item $q$: Başarısız olma olasılığı.
+	\item $x$: Denemeler.
 \end{itemize}
 
 \begin{lstlisting}[language=Python]
@@ -241,7 +275,31 @@ plt.savefig('bernoulli_distribution')
 plt.show()
 \end{lstlisting}
 
-\newpage
+\begin{lstlisting}[language=R]
+library('Rlab')
+
+# dbern, verilen x degerine bu x olasiginin gerceklesme ihtimali bulur.
+# x sadece 0 ve 1 olabilir.
+dbern(x = 0, prob = 0.7) # 1 - 0.7 = 0.3
+dbern(x = 1, prob = 0.7) # 0.7
+
+# lower.tail TRUE, q ve q'dan daha az olma olasiligi.
+# lower.tail FALSE, q'dan daha fazla olma olasigi.
+# Bernoulli sadece 0 ve 1 girdi aldigi 0-1 arasi.
+# pbern, dbern'den cikan sonuclarin toplami.
+pbern(q  = 1, prob = 0.7, lower.tail = TRUE) # 1
+pbern(q  = 1, prob = 0.7, lower.tail = FALSE) # 0
+pbern(q  = 0, prob = 0.7, lower.tail = TRUE) # 0.3
+pbern(q  = 0, prob = 0.7, lower.tail = FALSE) # 0.7
+
+# qbern, p degerine gore elde edilecek sonucu bulur.
+qbern(p = 0.5, prob = 0.7, lower.tail = TRUE) # 1
+qbern(p = 0.2, prob = 0.7, lower.tail = TRUE) # 0
+qbern(p = 0.2, prob = 0.7, lower.tail = FALSE) # 1
+
+# rbern, r rastgele bernoulli dagilimi olusturur.
+rbern(n = 10, prob = 0.7)
+\end{lstlisting}
 
 \begin{figure}[h]
     \centering
@@ -251,7 +309,12 @@ plt.show()
 \end{figure}
 
 \subsection{Binom (Binomial) Dağılım}
-Binom dağılımı, bir denemede başarı veya başarısızlık gibi iki olası sonuç bulunan bağımsız ve aynı dairelerin ardışık olarak tekrarlanması sonucu oluşan bir olasılık dağılımıdır. Her bir denemenin sonucu bağımsızdır ve aynı başarı olasılığına sahiptir. Binom dağılımı, belirli bir sayıda başarı sayısını (başarıların sayısı) modellemek için kullanılır.
+Binom dağılımı, bir denemede başarı veya başarısızlık gibi iki olası sonuç bulunan bağımsız ve aynı dairelerin ardışık olarak tekrarlanması sonucu oluşan bir olasılık dağılımıdır. Her bir denemenin sonucu bağımsızdır ve aynı başarı olasılığına sahiptir. Binom dağılımı, belirli bir sayıda başarı sayısını (başarıların sayısı) modellemek için kullanılır. Bir Bernoulli denemesinin aynı şartlar alında n kez tekrarlanması ile oluşan deneye binom deneyi denir. Binom deneyinin özellikleri;
+\begin{itemize}
+	\item Deney süresince örneklemdeki deneme sayısı veya denek sayısı değişmez olmalıdır.
+	\item Denemeler birbirinden bağımsızdır ve her denemedeki iki olası sonuç vardır.
+	\item Her denemede istenilen olay olasığı değişmezdir. Dolayısıyla istenmeyen olay olasılığı $q = 1 - p$ de değişmezdir.
+\end{itemize}
 
 \[f(k|n,p) = \binom{n}{k} p^k (1-p)^{n-k}\]
 \begin{itemize}
@@ -260,6 +323,10 @@ Binom dağılımı, bir denemede başarı veya başarısızlık gibi iki olası 
 	\item $p$: Her bir denemenin başarı olasılığı.
 	\item $\binom{n}{k}$: n deneme içinden k başarılı deneme seçmek için kombinasyon sayısı.
 \end{itemize}
+
+\[
+f(x) = p(X = x) = \binom{n}{k} p^x q^(n - x), x = 1,2,3...n
+\]
 
 \begin{lstlisting}[language=Python]
 import numpy as np
@@ -292,6 +359,28 @@ plt.savefig('binomial_distribution')
 plt.show()
 \end{lstlisting}
 
+\begin{lstlisting}[language=R]
+# Basarili olma olasiligi 0.7,
+# Basarisiz olma olasiligi 0.3
+# 5 kere basarili olma olasiligi;
+# dbinom, tekil olasiliklari bulur.
+dbinom(x = 5, size = 10, prob = 0.7) # 0.1029
+
+# lower.tail TRUE ise, 5 ve 5'ten daha az basarili olma olasiligi.
+# lower.tail FALSE ise, 5'ten daha fazla olma olasiligi.
+pbinom(q = 5, size = 30, prob = 0.7, lower.tail = TRUE) # 2.20e-09
+pbinom(q = 5, size = 30, prob = 0.7, lower.tail = FALSE) # 0.99
+
+# Bir e-ticaret sitesine gelen 5 musteriden 1'i
+# siparis veriyor. Birgunde 50 musterinin
+# siteye girmesi bekleniyorsa en az 10 siparis
+# alma olasiligi kactir ?
+pbinom(q = 10 - 1, size = 50, prob = 1/5, lower.tail = FALSE) # 0.55
+
+# rastgele binom dagilimi
+rbinom(n = 50 , size = 30 , prob = 1/4)
+\end{lstlisting}
+
 \begin{figure}[h]
     \centering
     \includegraphics[width=1\textwidth]{images/binomial_distribution.png}
@@ -300,7 +389,7 @@ plt.show()
 \end{figure}
 
 \subsection{Tekdüze (Uniform) Dağılım}
-Uniform (düzgün) dağılım, belirli bir aralıktaki tüm değerlerin eşit olasılıkla ortaya çıkma durumunu modelleyen bir olasılık dağılımıdır. Bu dağılım, belirli bir aralıktaki rastgele değişkenlerin dağılımını ifade etmek için kullanılır.
+Uniform (düzgün) dağılım, belirli bir aralıktaki tüm değerlerin eşit olasılıkla ortaya çıkma durumunu modelleyen bir olasılık dağılımıdır. Bu dağılım, belirli bir aralıktaki rastgele değişkenlerin dağılımını ifade etmek için kullanılır. Uniform dağılım hem kesikli hem de sürekli olabilir.
 
 \[f(x|a,b) = \frac{1}{b-a}\]
 \begin{itemize}
@@ -331,6 +420,18 @@ plt.savefig('uniform_distribution')
 plt.show()
 \end{lstlisting}
 
+\begin{lstlisting}[language=R]
+dunif(x = 5, min = 0, max = 10)
+
+punif(q = 4, min = 0, max = 10, lower.tail = TRUE)
+punif(q = 4, min = 0, max = 10, lower.tail = TRUE)
+
+qunif(p = 0.80, min = 0, max = 20, lower.tail = TRUE)
+qunif(p = 0.80, min = 0, max = 20, lower.tail = FALSE)
+
+runif(n = 5, min = 1, max = 10)
+\end{lstlisting}
+
 \begin{figure}[h]
     \centering
     \includegraphics[width=0.8\textwidth]{images/uniform_distribution.png}
@@ -340,7 +441,13 @@ plt.show()
 
 
 \subsection{Poisson Dağılımı}
-Poisson dağılımı, sabit bir zaman biriminde belirli bir alanda veya hacimde nadir rastgele olayların (örneğin, trafik kazaları, doğal afetler, müşteri hizmet çağrıları vb.) sayısını modellemek için kullanılan bir olasılık dağılımıdır. Poisson dağılımı, belirli bir zaman veya alanda olayların ortalamasını (örneğin, ortalama bir saatteki trafik kazaları sayısı) ve olayların beklenen nadirliğini temel alır.
+Poisson dağılımı, sabit bir zaman biriminde belirli bir alanda veya hacimde nadir rastgele olayların (örneğin, trafik kazaları, doğal afetler, müşteri hizmet çağrıları vb.) sayısını modellemek için kullanılan bir olasılık dağılımıdır. Poisson dağılımı, belirli bir zaman veya alanda olayların ortalamasını (örneğin, ortalama bir saatteki trafik kazaları sayısı) ve olayların beklenen nadirliğini temel alır. Poisson deneyinde;
+
+\begin{enumerate}
+	\item Bütün eylemler birbirinden bağımsız olmalıdır.
+	\item Her olay için bir zaman aralığı sabit olmalıdır.
+	\item İki olay aynı anda gerçekleşemez.
+\end{enumerate}
 
 \[f(k|\lambda) = \frac{e^{-\lambda} \lambda^k}{k!}\]
 \begin{itemize}
@@ -377,11 +484,53 @@ plt.savefig('poisson_distribution')
 plt.show()
 \end{lstlisting}
 
+\begin{lstlisting}[language=R]
+# 1 saatte 5 araba gecme olasiligi:
+dpois(x = 5, lambda = 15) # 0.0019
+
+# 1 dakikada 2 araba gecme olasiligi;
+# 60 dakikada 20 ise
+# 1 dakikada 20/60 = lambda = 1/3.
+ppois(q = 2, lambda = 1/3, lower.tail = TRUE) # 0.995
+ppois(q = 2, lambda = 1/3, lower.tail = FALSE) # 0.004
+\end{lstlisting}
+
 \begin{figure}[h]
     \centering
     \includegraphics[width=0.8\textwidth]{images/poisson_distribution.png}
     \caption{Poisson dağılım örneği.}
     \label{fig:enter-label}
 \end{figure}
+
+\subsection{Hipergeometrik  Dağılım}
+Hipergeometrik dağılım bir sonlu popülasyon içerisinden rastgele ve geri koymadan seçilen örneklemler arasındaki başarı sayısını hesaplamak için kulllanılır. 
+
+\[
+P(X = k) = \frac{\binom{K}{k} \binom{N-K}{n-k}}{\binom{N}{n}}
+\]
+
+\begin{itemize}
+	\item $N$: Öğe sayısı.
+	\item $K$: Başarı.
+	\item $n$: Örneklem büyüklüğü.
+	\item $k$: Başarı olasılığı.
+	\item $\binom{K}{k}$: K başarıdan k tanesini seçmenin kombinasyon sayısı.
+	\item $\binom{N-K}{n-k}$: N - K başarısızlıktan n - k tanesini seçmenin kombinasyon sayısı.
+	\item $\binom{N}{n}$: N öğeden n tanesini seçmenin toplam kombinasyon sayısı.
+\end{itemize}
+
+\begin{lstlisting}[language=R]
+# 26 kirmizi ve 24 sari kart olmak uzere
+# Secilen 10 tanesinden 4'u kirmizi kart olma olasiligi;
+dhyper(x = 4, m = 26, n = 24, k = 10) # 0.1958
+
+# lower.tail TRUE, en fazla 4 kirmizi kart,
+# lower.tail FALSE, en az 4 kirmizi kart.
+phyper(q = 4, m = 26, n = 24, k = 10, lower.tail = TRUE) # 0.31
+phyper(q = 4, m = 26, n = 24, k = 10, lower.tail = FALSE) # 0.68
+
+# rastgele hipergeometrik dagilim
+rhyper(nn = 50 , m = 20 , n = 12, k = 10)
+\end{lstlisting}
 
 \newpage 

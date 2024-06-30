@@ -1,0 +1,18 @@
+\section{Merkezi Limit Teoremi}
+Örneklem dağılımının şekli ne olursa olsun, bir popülasyondan alınan bağımsız ve özdeş dağılımlı örneklemlerin ortalamalarının dağılımının, örneklem büyüklüğü yeterince büyük olduğunda, yaklaşık olarak normal dağılıma yakınsadığını ifade eder. 
+
+Bir popülasyondan çekilen $n$ büyüklüğündeki bağımsız ve özdeş dağılımlı rastgele değişkenlerin $X_1, X_2, ..., X_n$ ortalaması $\bar{X}$ şu şekildedir;
+
+\[ \bar{X} = \frac{1}{n} \sum_{i=1}^{n} X_i \]
+
+Bu rastgele değişkenlerin beklenen değeri $\mu$ ve varyansı $\sigma^2$ olsun. Merkezi Limit Teoremi'ne göre $n$ yeterince büyük olduğunda $\bar{X}$'in dağılımı yaklaşık olarak şu şekilde normal dağılıma yaklaşır;
+
+\[ \bar{X} \sim \mathcal{N}\left(\mu, \frac{\sigma^2}{n}\right) \]
+
+Daha genel bir ifade ile, normalize edilmiş toplamların dağılımı;
+
+\[ \frac{\sum_{i=1}^{n} X_i - n\mu}{\sigma\sqrt{n}} \xrightarrow{d} \mathcal{N}(0, 1) \]
+
+Burada $\xrightarrow{d}$ ifadesi dağılımsal olarak yakınsar anlamına gelir ve $\mathcal{N}(0, 1)$ standart normal dağılımı ifade eder.
+
+\newpage
