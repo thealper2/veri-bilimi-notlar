@@ -13,6 +13,9 @@ Hipotez testlerinin genel işlevleri;
     \item Anlamlılığı değerlendirme
 \end{enumerate}
 
+\subsection{Homojen Varyanslılık (Homoscedasticity)}
+Homojen varyanslılık, bir dizi değişkenin varyanslarının eşit olduğu varsayımıdır. Varyansın sabit olduğu anlamına gelir ve ANOVA, regresyon analizlerinde bu varsayımın geçerli olması önemlidir. 
+
 \subsection{Hipotez Testi Türleri}
 \begin{enumerate}
     \item \textbf{Z-Testi ve T-Testi:} Bir örneklem verisi ile bir örneklem ortalama arasındaki farkın anlamlı olup olmadığını belirlemek için kullanılır. Eğer popülasyon standart sapması biliniyorsa Z-testi kullanır; bilinmiyorsa ve örneklem büyüklüğü küçükse T-testi kullanır.
@@ -145,6 +148,37 @@ else:
 
 # Output:
 # Null hipotez kabul edildi: Iki grup arasinda istatistiksel olarak anlamli bir fark yoktur.
+\end{lstlisting}
+
+\begin{lstlisting}[language=R]
+# H0: Iki grup ortalamasi birbirine esittir.
+# H1: Iki grup ortalamasi esit degildir.
+t.test(df$Sepal.Width ~ df$Species, mu = 0.7, var.equal = TRUE)
+
+# H0: Iki grubun arasindaki fark 0.7'den buyuk veya esittir.
+# H1: Iki grubun arasindaki fark 0.7'den kucuktur.
+t.test(df$Sepal.Width ~ df$Species, mu = 0.7 , var.equal = TRUE, alternative = "less")
+
+# H0: Iki grubun arasindaki fark 0.7'den kucuk veya esittir.
+# H1: Iki grubun arasindaki fark 0.7'den buyuktur.
+t.test(df$Sepal.Width ~ df$Species, mu = 0.7 , var.equal = TRUE, alternative = "greater")
+\end{lstlisting}
+
+\subsubsection{Tek Örneklem t-Testi}
+Tek örneklem t testinde, örneklem ortalamasının belirli bir değerden farklılığı test edilir. Eğer ortalama eşit değilse H0 reddedilir.
+
+\begin{lstlisting}[language=R]
+# H0: Ortalama degeri 5'e esittir.
+# H1: Ortalama degeri 5'e esit degildir.
+t.test(x = iris$Sepal.Length  mu = 5, alternative = "two.sided", conf.level = 0.95)
+
+# H0: Ortalama degeri 5'ten kucuk veya esittir.
+# H1: Ortalama degeri 5'ten buyuktur.
+t.test(x = iris$Sepal.Length, mu = 5, alternative = "less", conf.level = 0.95)
+
+# H0: Ortalama degeri 5'ten buyuk veya esittir.
+# H1: Ortalama degeri 5'ten kucuktur.
+t.test(x = iris$Sepal.Length, mu = 5, alternative = "greater", conf.level = 0.95)
 \end{lstlisting}
 
 \subsection{Tek Yön Testi (One-Tailed Test)}
@@ -334,6 +368,10 @@ else:
 # Null hipotez kabul edildi: Gruplar arasinda anlamli bir medyan farki yoktur.
 \end{lstlisting}
 
+\begin{lstlisting}[language=R]
+wilcox.test(x = warpbreaks$breaks, mu = 40)
+\end{lstlisting}
+
 \subsection{Pearsons Korelasyon Testi}
 Pearson Korelasyon Testi, iki sürekli değişken arasındaki ilişkiyi değerlendirmek için kullanılan bir parametrik istatistiksel testtir. Pearson Korelasyonu, bu iki değişken arasındaki lineer ilişkiyi ölçer ve bu ilişkinin ne kadar güçlü olduğunu ifade eder. Korelasyon, iki değişkenin nasıl birlikte değiştiğini incelemek için kullanılır. Pearson korelasyonunun iki ana formülü vardır:
 
@@ -363,6 +401,106 @@ else:
 
 # Output
 # Korelasyon anlamlidir: Iki degisken arasinda anlamli bir lineer iliski vardir.
+\end{lstlisting}
+
+\subsection{Shapiro-Wilk Testi}
+Shapiro-Wilk testi, bir veri kümesinin normal dağılıma uyup uymadıpını test etmek için kullanılan bir normallik testidir. Parametrik testlerin ön koşulu olan normal dağılım varsayımının geçerli olup olmadığını anlamak için kullanılır. Shapiro-Wilk testi, bir veri kümesinin normal dağılıma ne kadar iyi uyduğunu değerlendirir. Veri boyutu 30'dan fazla ise Shapiro-Wilk, 30'dan az ise Kolmogorov-Smirnov testi uygulanması tavsiye edilir. p değeri 0.05'den küçükse, veri kümesinin normal dağılıma uymadığı (H1) sonucuna varılır.
+
+\[
+W = \frac{\left( \sum_{i=1}^{n} a_i x_{(i)} \right)^2}{\sum_{i=1}^{n} (x_i - \bar{x})^2}
+\]
+
+\begin{itemize}
+	\item $x_(i)$: Sıralanmış veri noktaları.
+	\item $\bar{x}$: Veri kümesinin ortalaması.
+	\item $a_i$: Normal dağılımın ortalama ve varyansı kullanılarak hesaplanan sabitler.
+\end{itemize}
+
+\begin{lstlisting}[language=R]
+shapiro.test(x = iris$Sepal.Length) # p-value = 0.01018, H1
+shapiro.test(x = iris$Sepal.Width) # p-value = 0.1012, H0
+\end{lstlisting}
+
+\subsection{Levene Testi}
+Levene testi, gruplar arasındaki varyansların eşit olup olmadığını test eder.
+
+\[
+W = \frac{(N - k)}{(k - 1)} \cdot \frac{\sum_{i=1}^{k} N_i (Z_{i \cdot} - Z_{\cdot \cdot})^2}{\sum_{i=1}^{k} \sum_{j=1}^{N_i} (Z_{ij} - Z_{i \cdot})^2}
+\]
+
+\begin{itemize}
+	\item $N$: Toplam gözlem sayısı.
+	\item $k$: Grup sayısı.
+	\item $N_i$: i'inci gruptaki gözlem sayısı.
+	\item $Z_{ij}$: i'inci gruptaki j'inci gözlemden ortalamanın çıkarılmasıyla elde edilen değer.
+	\item $Z_{i.}$: i'inci gruptaki gözlemlerin ortalaması.
+	\item $Z_{..}$: Tüm gözlemlerin ortalaması.
+\end{itemize}
+
+\begin{lstlisting}[language=R]
+# H0: Varyanslar homojendir.
+# H1: Varyanslar homojen degildir.
+leveneTest(df$Sepal.Width ~ as.character(df$Species))
+\end{lstlisting}
+
+
+\subsection{Bartlett Testi}
+Bartlett testi, varyansların normal dağıldığını varsayarak eşitliğini test eder. Verilerin normal dağıldığını varsayar ve varyansların eşitliği hipotezini reddetmek için bir test istatistiği kullanır.
+
+\[
+\chi^2 = \frac{(N - k) \ln(s_p^2) - \sum_{i=1}^{k} (N_i - 1) \ln(s_i^2)}{1 + \frac{1}{3(k-1)} \left( \sum_{i=1}^{k} \frac{1}{N_i - 1} - \frac{1}{N - k} \right)}
+\]
+
+\begin{itemize}
+	\item $N$: Toplam gözlem sayısı.
+	\item $k$: Grup sayısı.
+	\item $N_i$: i'inci gruptaki gözlem sayısı.
+	\item $s_i^2$: i'inci grubun varyansı.
+	\item $s_p^2$: Ağırlıklı ortalama varyans.
+\end{itemize}
+
+\begin{lstlisting}[language=R]
+# H0, varyanslar homojendir.
+# H1, varyanslar homojen degildir.
+bartlett.test(df$Sepal.Width ~ as.character(df$Species))
+\end{lstlisting}
+
+\subsection{Brown-Forsythe Testi}
+Levene testine benzerdir. Farklı olarak ortalamadan ziyade medyan kullanır. Böylece uç değerlerden daha az etkilenir.
+
+\[
+W = \frac{(N - k)}{(k - 1)} \cdot \frac{\sum_{i=1}^{k} N_i (Z_{i \cdot} - Z_{\cdot \cdot})^2}{\sum_{i=1}^{k} \sum_{j=1}^{N_i} (Z_{ij} - Z_{i \cdot})^2}
+\]
+
+\begin{itemize}
+	\item $N$: Toplam gözlem sayısı.
+	\item $k$: Grup sayısı.
+	\item $N_i$: i'inci gruptaki gözlem sayısı.
+	\item $Z_{ij}$: i'inci gruptaki j'inci medyandan mutlak sapması.
+	\item $Z_{i.}$: i'inci gruptaki gözlemlerin medyanının mutlak sapmalarının ortalaması.
+	\item $Z_{..}$: Tüm gruplardaki gözlemlerin medyanının mutlak sapmalarının ortalaması.
+\end{itemize}
+
+\subsection{Fligner-Killeen Testi}
+Birden fazla grubun varyanslarının eşit olup olmadığını test etmek için kullanılır. Normal dağılım varsayımı gerektirmez. 
+
+\[
+H = \frac{(N - 1) \sum_{i=1}^{k} N_i (\bar{Z}_{i \cdot} - \bar{Z}_{\cdot \cdot})^2}{\sum_{i=1}^{k} \sum_{j=1}^{N_i} (Z_{ij} - \bar{Z}_{i \cdot})^2}
+\]
+
+\begin{itemize}
+	\item $N$: Toplam gözlem sayısı.
+	\item $k$: Grup sayısı.
+	\item $N_i$: i'inci gruptaki gözlem sayısı.
+	\item $Z_{ij}$: i'inci gruptaki j'inci medyandan mutlak sapması.
+	\item $Z_{i.}$: i'inci gruptaki gözlemlerin medyanının mutlak sapmalarının ortalaması.
+	\item $Z_{..}$: Tüm gruplardaki gözlemlerin medyanının mutlak sapmalarının ortalaması.
+\end{itemize}
+
+\begin{lstlisting}[language=R]
+# H0, varyanslar homojendir.
+# H1, varyanslar homojen degildir.
+fligner.test(warpbreaks$breaks ~ warpbreaks$wool)
 \end{lstlisting}
 
 \newpage
