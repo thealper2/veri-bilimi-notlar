@@ -16,6 +16,9 @@ Hipotez testlerinin genel işlevleri;
 \subsection{Homojen Varyanslılık (Homoscedasticity)}
 Homojen varyanslılık, bir dizi değişkenin varyanslarının eşit olduğu varsayımıdır. Varyansın sabit olduğu anlamına gelir ve ANOVA, regresyon analizlerinde bu varsayımın geçerli olması önemlidir. 
 
+\subsection{Post hoc Testleri}
+ANOVA testleri, birden fazla grubun ortalamalarını karşılaştırmak için kullanılır ve gruplar arasında en az birinin farklı olup olmadığını belirler. Ancak, hangi grupların birbirinden farklı olduğunu göstermez. Bu yüzden post hoc testleri kullanılır. Post hoc testleri, gruplar arasındaki spesifik farkları belirlemek için kullanılır.
+
 \subsection{Hipotez Testi Türleri}
 \begin{enumerate}
     \item \textbf{Z-Testi ve T-Testi:} Bir örneklem verisi ile bir örneklem ortalama arasındaki farkın anlamlı olup olmadığını belirlemek için kullanılır. Eğer popülasyon standart sapması biliniyorsa Z-testi kullanır; bilinmiyorsa ve örneklem büyüklüğü küçükse T-testi kullanır.
@@ -27,6 +30,8 @@ Homojen varyanslılık, bir dizi değişkenin varyanslarının eşit olduğu var
     \item \textbf{Wilcoxon İşaretli Sıralar Testi:} İki bağımlı grup arasındaki farklılığı değerlendirmek için kullanılır. İki grup arasındaki medyan farklılığına odaklanır.
     \item \textbf{Pearson Korelasyon Katsayısı Testi:} İki sürekli değişken arasındaki ilişkiyi ölçer. Korelasyon katsayısı, değişkenler arasındaki ilişkinin yönünü ve gücünü belirler.
 \end{enumerate}
+
+\newpage
 
 \subsection{A/B Testi}
 A/B Testi, iki veya daha fazla farklı sürümün karşılaştırılması amacıyla kullanılan bir istatistiksel deney tasarımıdır. A/B Testi, işletmelerin, web sitelerinin, uygulamaların veya pazarlama stratejilerinin etkisini değerlendirmek ve karşılaştırmak için yaygın olarak kullanılır. A/B test, hangi sürümün daha etkili veya kullanıcılar için daha çekici olduğunu belirlemek için kullanılır.\\
@@ -81,6 +86,8 @@ else:
 # Deneme grubu istatistiksel olarak anlamli bir fark yaratmadi.
 \end{lstlisting}
 
+\newpage
+
 \subsection{Z-Testi}
 Z testi, bir örneklem verisinin popülasyon parametreleri hakkında istatistiksel bir hipotez testi yapmak için kullanılan bir istatistiksel testtir. Z testi, özellikle popülasyonun standart sapması bilindiğinde veya örneklem büyüklüğü büyük olduğunda kullanılır. İki türü vardır:
 
@@ -118,6 +125,8 @@ else:
 # Output:
 # Null hipotez reddedildi: Orneklem populasyon ortalamasindan farklidir.
 \end{lstlisting}
+
+\newpage
 
 \subsection{T-Testi}
 T testi (Student's t-test), iki grup arasındaki ortalamaların istatistiksel olarak anlamlı bir farklılık gösterip göstermediğini değerlendirmek için kullanılan bir istatistiksel test türüdür. T testi, örneklem verilerinin popülasyon parametreleri hakkında istatistiksel bir hipotez testi yapmak için kullanılır. T testi, özellikle popülasyon standart sapması bilinmediğinde veya örneklem büyüklüğü küçük olduğunda kullanışlıdır. İki türü vardır:
@@ -181,6 +190,8 @@ t.test(x = iris$Sepal.Length, mu = 5, alternative = "less", conf.level = 0.95)
 t.test(x = iris$Sepal.Length, mu = 5, alternative = "greater", conf.level = 0.95)
 \end{lstlisting}
 
+\newpage
+
 \subsection{Tek Yön Testi (One-Tailed Test)}
 Tek yönlü test (one-tailed test), hipotez testleri sırasında, anlamlılık düzeyini bir yönde değerlendirmenize olanak tanır. Yani, test edilen hipotez, sadece bir yönde anlamlılık aranmasına dayanır. Tek yönlü testler, hipotezinizin yönünü ve beklenen sonucu önceden belirlediğinizde kullanışlıdır. Tek yönlü testlerin iki temel türü vardır:
 
@@ -211,6 +222,8 @@ else:
 # Output
 # Null hipotez kabul edildi: Ortalama populasyon degeri 40'tan buyuk degildir.
 \end{lstlisting}
+
+\newpage
 
 \subsection{İki Yön Testi (Two-Tailed Test)}
 İki yönlü test (two-tailed test), hipotez testleri sırasında, anlamlılık düzeyini her iki yönde de değerlendirmenize olanak tanır. Yani, test edilen hipotez, popülasyon parametresinin belirli bir değerden farklı olduğunu test eder, ancak farkın hangi yönde olduğu önceden belirli değildir. İki yönlü testler, hipotezinizin yönünü önceden belirlemediğiniz ve iki yönde de anlamlılığı değerlendirmek istediğiniz durumlarda kullanışlıdır. İki yönlü testlerin iki temel türü vardır:
@@ -245,6 +258,8 @@ else:
 # Null hipotez kabul edildi: Iki grup arasinda istatistiksel olarak anlamli bir fark yoktur.
 \end{lstlisting}
 
+\newpage
+
 \subsection{Ki-Kare Testi (Chi-Square Test)}
 Ki-kare testi (Chi-Square test), iki veya daha fazla kategorik değişken arasındaki ilişkiyi veya bağımsızlık ilişkisini değerlendirmek için kullanılan bir istatistiksel testtir. Ki-kare testi, veri seti içindeki gözlemleri ve beklenen frekansları karşılaştırarak, değişkenler arasındaki bağlantıyı veya bağımsızlığı değerlendirir. Ki-kare testi, verilerin ayrık (kategorik) olduğu durumlar için kullanışlıdır. Ki-kare testinin iki temel türü vardır:
 
@@ -274,12 +289,31 @@ else:
 # Null hipotez reddedildi: Iki degisken arasinda bagimsizlik yoktur.
 \end{lstlisting}
 
+\newpage
+
 \subsection{ANOVA (Analysis of Variance) Test}
 ANOVA (Analysis of Variance), birden fazla grup arasındaki istatistiksel anlamlılığı değerlendirmek için kullanılan bir istatistiksel analiz tekniğidir. ANOVA, grupların ortalamaları arasındaki farklılıkları inceleyerek, gruplar arasında anlamlı bir fark olup olmadığını belirler. ANOVA, özellikle gruplar arasındaki varyansı karşılaştırır. ANOVA'nın iki temel türü vardır:
 
 \begin{itemize}
     \item \textbf{Tek Yönlü ANOVA (One-Way ANOVA):} Tek bir bağımsız değişkenin (grup) birden fazla düzeyi arasındaki farkı test etmek için kullanılır. Örneğin, farklı dozaj seviyelerine sahip üç farklı ilaç grubu arasındaki etkileri karşılaştırmak için tek yönlü ANOVA kullanabilirsiniz.
     \item \textbf{İki Yönlü ANOVA (Two-Way ANOVA):} İki bağımsız değişkenin (grup ve faktör) etkilerini incelemek için kullanılır. İki yönlü ANOVA, gruplar arası ve faktörler arası etkileri ayrı ayrı ve etkileşim etkisini de değerlendirir.
+\end{itemize}
+
+\[ F = \frac{MS_{between}}{MS_{within}} \]
+\[ MS_{between} = \frac{SS_{between}}{df_{between}} \]
+\[ MS_{within} = \frac{SS_{within}}{df_{within}} \]
+\[ df_{between} = k - 1 \]
+\[ df_{within} = N - k \]
+
+\begin{itemize}
+	\item $k$: Grup sayısı.
+	\item $N$: Toplam gözlem sayısı.
+	\item $SS_{between}$: Grup arası toplam kareler.
+	\item $SS_{within}$: Grup içi toplam kareler.
+	\item $MS_{between}$: Grup arası ortalama kareler.
+	\item $MS_{within}$: Grup içi ortalama kareler.
+	\item $df_{between}$: Grup arası serbestlik derecesi.
+	\item $df_{within}$: Grup içi serbestlik derecesi.
 \end{itemize}
 
 \begin{lstlisting}[language=Python]
@@ -305,6 +339,12 @@ else:
 # Output
 # Null hipotez kabul edildi: Gruplar arasinda anlamli bir fark yoktur.
 \end{lstlisting}
+
+\begin{lstlisting}[language=R]
+aov(df$chol ~ df$age_groups)
+\end{lstlisting}
+
+\newpage
 
 \subsection{Mann-Whitney U Testi}
 Mann-Whitney U testi, iki bağımsız örneklem grubunun medyan değerleri arasındaki istatistiksel anlamlılığı değerlendirmek için kullanılan bir non-parametrik hipotez testidir. Mann-Whitney U testi, verilerin dağılımının normalliğini karşılamadığında veya sıralı verilerle çalışıldığında kullanışlıdır. Bu test, grupların merkezi eğilimlerini karşılaştırır ve gruplar arasındaki farkı test eder. Mann-Whitney U testinin iki ana türü vardır:
@@ -336,6 +376,8 @@ else:
 # Output
 # Null hipotez kabul edildi: Gruplar arasinda anlamli bir medyan farki yoktur.
 \end{lstlisting}
+
+\newpage
 
 \subsection{Wilcoxon İşaretli Sıralar Testi}
 Wilcoxon İşaretli Sıralar Testi (Wilcoxon Signed-Rank Test), bir grup içindeki iki bağımlı örneklem arasındaki medyan farkını değerlendirmek için kullanılan bir non-parametrik hipotez testidir. Bu test, gruplar arasındaki merkezi eğilimin farklı olup olmadığını belirlemek amacıyla kullanılır. Wilcoxon İşaretli Sıralar Testi, verilerin normallik varsayımını karşılayamadığında veya sıralı verilerle çalışıldığında tercih edilir. Wilcoxon İşaretli Sıralar Testi'nin iki temel türü vardır:
@@ -372,6 +414,8 @@ else:
 wilcox.test(x = warpbreaks$breaks, mu = 40)
 \end{lstlisting}
 
+\newpage
+
 \subsection{Pearsons Korelasyon Testi}
 Pearson Korelasyon Testi, iki sürekli değişken arasındaki ilişkiyi değerlendirmek için kullanılan bir parametrik istatistiksel testtir. Pearson Korelasyonu, bu iki değişken arasındaki lineer ilişkiyi ölçer ve bu ilişkinin ne kadar güçlü olduğunu ifade eder. Korelasyon, iki değişkenin nasıl birlikte değiştiğini incelemek için kullanılır. Pearson korelasyonunun iki ana formülü vardır:
 
@@ -403,6 +447,14 @@ else:
 # Korelasyon anlamlidir: Iki degisken arasinda anlamli bir lineer iliski vardir.
 \end{lstlisting}
 
+\begin{lstlisting}[language=R]
+cor.test(iris$Sepal.Width , iris$Sepal.Length , method = "pearson")
+cor.test(iris$Sepal.Width , iris$Sepal.Length , method = "pearson" , alternative = "less")
+cor.test(iris$Sepal.Width , iris$Sepal.Length , method = "pearson" , alternative = "greater")
+\end{lstlisting}
+
+\newpage
+
 \subsection{Shapiro-Wilk Testi}
 Shapiro-Wilk testi, bir veri kümesinin normal dağılıma uyup uymadıpını test etmek için kullanılan bir normallik testidir. Parametrik testlerin ön koşulu olan normal dağılım varsayımının geçerli olup olmadığını anlamak için kullanılır. Shapiro-Wilk testi, bir veri kümesinin normal dağılıma ne kadar iyi uyduğunu değerlendirir. Veri boyutu 30'dan fazla ise Shapiro-Wilk, 30'dan az ise Kolmogorov-Smirnov testi uygulanması tavsiye edilir. p değeri 0.05'den küçükse, veri kümesinin normal dağılıma uymadığı (H1) sonucuna varılır.
 
@@ -420,6 +472,8 @@ W = \frac{\left( \sum_{i=1}^{n} a_i x_{(i)} \right)^2}{\sum_{i=1}^{n} (x_i - \ba
 shapiro.test(x = iris$Sepal.Length) # p-value = 0.01018, H1
 shapiro.test(x = iris$Sepal.Width) # p-value = 0.1012, H0
 \end{lstlisting}
+
+\newpage
 
 \subsection{Levene Testi}
 Levene testi, gruplar arasındaki varyansların eşit olup olmadığını test eder.
@@ -443,6 +497,7 @@ W = \frac{(N - k)}{(k - 1)} \cdot \frac{\sum_{i=1}^{k} N_i (Z_{i \cdot} - Z_{\cd
 leveneTest(df$Sepal.Width ~ as.character(df$Species))
 \end{lstlisting}
 
+\newpage
 
 \subsection{Bartlett Testi}
 Bartlett testi, varyansların normal dağıldığını varsayarak eşitliğini test eder. Verilerin normal dağıldığını varsayar ve varyansların eşitliği hipotezini reddetmek için bir test istatistiği kullanır.
@@ -465,6 +520,8 @@ Bartlett testi, varyansların normal dağıldığını varsayarak eşitliğini t
 bartlett.test(df$Sepal.Width ~ as.character(df$Species))
 \end{lstlisting}
 
+\newpage
+
 \subsection{Brown-Forsythe Testi}
 Levene testine benzerdir. Farklı olarak ortalamadan ziyade medyan kullanır. Böylece uç değerlerden daha az etkilenir.
 
@@ -480,6 +537,8 @@ W = \frac{(N - k)}{(k - 1)} \cdot \frac{\sum_{i=1}^{k} N_i (Z_{i \cdot} - Z_{\cd
 	\item $Z_{i.}$: i'inci gruptaki gözlemlerin medyanının mutlak sapmalarının ortalaması.
 	\item $Z_{..}$: Tüm gruplardaki gözlemlerin medyanının mutlak sapmalarının ortalaması.
 \end{itemize}
+
+\newpage
 
 \subsection{Fligner-Killeen Testi}
 Birden fazla grubun varyanslarının eşit olup olmadığını test etmek için kullanılır. Normal dağılım varsayımı gerektirmez. 
@@ -502,5 +561,222 @@ H = \frac{(N - 1) \sum_{i=1}^{k} N_i (\bar{Z}_{i \cdot} - \bar{Z}_{\cdot \cdot})
 # H1, varyanslar homojen degildir.
 fligner.test(warpbreaks$breaks ~ warpbreaks$wool)
 \end{lstlisting}
+
+\newpage
+
+\subsection{Tukey's HSD (Honestly Significant Difference) Testi}
+ANOVA'dan sonra yapılan ve her çift grup arasındaki farkı test eden post hoc testidir. Gruplar arasındaki farkların hangi kombinasyonlarının istatistiksel olarak anlamlı olduğunu belirler.
+
+\[  \text{HSD} = q \times \sqrt{\frac{MS_{within}}{n}} \]
+
+\begin{itemize}
+	\item $q$: Studentized range distribution value.
+	\item $MS_{within}$: Grup içi ortalama kareler.
+	\item $n$: Her bir grubun örneklem sayısı.
+\end{itemize}
+
+\begin{lstlisting}[language=R]
+TukeyHSD(anova_1)
+tukey_hsd(df, chol ~ age_groups)
+\end{lstlisting}
+
+\newpage
+
+\subsection{Bonferroni Testi}
+Birden fazla karşılaştırma yapıldığında toplam hata oranını kontrol etmek için kullanılan bir post hoc testidir. Her bir karşılaştırmanın anlamlılık düzeyini azaltarak toplam hata oranını kontrol eder.
+
+\[ \alpha_{adj} = \frac{\alpha}{m} \]
+
+\begin{itemize}
+	\item $\alpha_{adj}$: Düzeltilmiş anlamlılık düzeyi.
+	\item $\alpha$: Orijinal anlamlılık düzeyi.
+	\item $m$: Yapılan karşılaştırma sayısı.
+\end{itemize}
+
+\newpage
+
+\subsection{Scheffe Testi}
+Gruplar arasındaki farkları belirlemek için kullanılan konservatif bir post hoc testidir. 
+
+\[ F_{Scheffe} = (k - 1) \times F \]
+
+\begin{itemize}
+	\item $F_{Scheffe}$: Scheffe testi için F değeri.
+	\item $k$: Grup sayısı.
+	\item $F$: ANOVA F değeri.
+\end{itemize}
+
+\newpage
+
+\subsection{Dunn's Test}
+Dunn's testi, bağımsız gruplar arasındaki medyan farklılıklarını karşılaştırmak için kullanılan bir post hoc testidir. Kruskal-Wallis testi gibi non-parametrik testlerin ardından kullanılır.
+
+\[ Z = \frac{R_j - R_i}{\sqrt{\frac{N(N+1)}{12} \left(\frac{1}{n_j} + \frac{1}{n_i}\right)}} \]
+
+\begin{itemize}
+	\item $Z$: Z skoru.
+	\item $R_j$ ve $R_i$: Grupların sıra ortalamaları.
+	\item $N$: Toplam gözlem sayısı.
+	\item $n_j$ ve $n_i$: İlgili grupların gözlem sayıları.
+\end{itemize}
+
+\newpage
+
+\subsection{Kruskal-Wallis Testi}
+Bağımsız örneklem gruplarının medyanları arasında fark olup olmadığını belirlemek için kullanılan non-parametrik bir testtir. Bu test ANOVA'nın parametrik olmadığı durumlarda (yani verilerin normal dağılım göstermediği veya varyansların homojen olmadığı durumlarda) kullanılır.
+
+\[ H = \left( \frac{12}{N(N+1)} \sum_{i=1}^{k} \frac{R_i^2}{n_i} \right) - 3(N+1) \]
+
+\begin{itemize}
+	\item $N$: Tüm gruplardaki toplam gözlem sayısı.
+	\item $k$: Grup sayısı.
+	\item $R_i$: i'inci grubun sıra toplamı.
+	\item $n_i$: i'inci gruptaki gözlem sayısı.
+\end{itemize}
+
+\newpage
+
+\subsection{Kolmogorov-Smirnov Testi}
+Bir örneklem grubunun belirli bir dağılıma uyup uymadığını veya iki örneklem grubunun aynı dağılımdan gelip gelmediğini test etmek için kullanılan non-parametrik bir testtir. Dağılımların şekillerini karşılaştırır.
+
+\begin{itemize}
+	\item \textbf{Tek Örneklem Durumu}: Bir örneklem grubunun belirli bir teorik dağılıma uyup uymadığını test etmek.
+	\item \textbf{İki Örneklem Durumu}: İki bağımsız örneklem grubunun aynı dağılımdan gelip gelmediğini test etmek.
+\end{itemize}
+
+Tek örneklem için;
+
+\[ D = \sup_x | F_n(x) - F(x) | \]
+
+\begin{itemize}
+	\item $\sup_x$: Tüm x değerleri üzerindeki en büyük farkı temsil eder.
+	\item $F_n(x)$: Örneklem kümülatif dağılım fonksiyonu.
+	\item $F(x)$: Teorik kümülatif dağılım fonksiyonu.
+\end{itemize}
+
+İki örneklem için;
+
+\[ D = \sup_x | F_{1,n}(x) - F_{2,m}(x) | \]
+
+\begin{itemize}
+	\item $F_{1,n}$: İlk örneklemin empirik kümülatif dağılım fonksiyonu.
+	\item $F_{2,m}$: İkinci örneklemin empirik kümülatif dağılım fonksiyonu.
+\end{itemize}
+
+\newpage
+
+\subsection{MANOVA (Multivariate Analysis of Variance)}
+Birden fazla bağımlı değişkenin bir veya daha fazla bağımsız değişken tarafından aynı anda etkilenip etkilenmediğini belirtmek için kullanılır. MANOVA, ANOVA'nın geliştirilmiş bir versiyonudur ve bağımlı değişkenler arasındaki korelasyonları da dikkate alır. MANOVA testi, bağımlı değişkenlerin ortak varyansını analiz ederek, gruplar arasındaki çoklu değişken kombinasyonları açısından fark olup olmadığını belirler. MANOVA, genellikle Wilks Lambda istatistiği kullanılarak değerlendirilir. Wilks Lambda istatistiği modelin genel uyumunu değerlendirir ve küçük değerler bağımsız değişkenlerin bağımlı değişkenler üzerinde önemli bir etkiye sahip olduğunu gösterir.
+
+\[ \Lambda = \frac{\det(E)}{\det(H + E)} \]
+
+\begin{itemize}
+	\item $E$: Hata matrisi (error matrix).
+	\item $H$: Hipotez matrisi.
+	\item $\det$: Determinant imleci.
+\end{itemize}
+
+\begin{lstlisting}[language=R]
+manova(cbind(chol , thalch) ~ cp , data = heart )
+Manova(model2 , test.statistic = "Pillai")
+\end{lstlisting}
+
+\subsubsection{Wilks Lambda İstatistiği}
+
+\[ V = -\left( N - \frac{1}{2}(p + k + 1) \right) \ln(\Lambda) \]
+
+\begin{itemize}
+	\item $N$: Gözlem sayısı.
+	\item $p$: Bağımlı değişken sayısı.
+	\item $k$: Grupların sayısı.
+\end{itemize}
+
+
+\newpage
+
+\subsection{Hotelling's $T^2$ Testi}
+MANOVA sonrası her bir bağımlı değişken için bağımsız değişken düzeylerinin farklarını belirlemek amacıyla kullanılan bir testtir.
+
+\[ T^2 = n (\bar{X}_1 - \bar{X}_2)' S^{-1} (\bar{X}_1 - \bar{X}_2) \]
+
+\begin{itemize}
+	\item $\bar(X)_1$ ve $\bar(X)_2$: İki grup ortalaması.
+	\item $S$: Pooled covariance matrix.
+	\item $n$: Örneklem büyüklüğü.
+\end{itemize}
+
+\newpage
+
+\subsection{Binom Testi}
+Binom testi, belirli bir başarı oranına sahip olup olmadığını test etmek için kullanılan non-parametrik bir testtir. Tek bir örneklemden elde edilen başarı sayısını, belirli bir teorik başarı oranı ile karşılaştırarak hipotez testi yapar. Verilerin ikili (binary) durumda olması gerekir. Başarıların Bernoulli dağılımına sahip olduğunu varsayar.
+
+\[ P(X = k) = \binom{n}{k} p^k (1 - p)^{n - k} \]
+
+\begin{itemize}
+	\item $n$: Toplam deneme sayısı.
+	\item $k$: Gözlenen başarı sayısı.
+	\item $p$: Teorik başarı sayısı.
+	\item $\binom{n}{k}$: Binom katsayısı.
+\end{itemize}
+
+\begin{lstlisting}[language=R]
+# H0: X orani 0.5'e esittir.
+# H1: X orani 0.5'e esit degildir.
+binom.test(x = 35 , n = 50, p = 0.5)
+
+# H0: X orani 0.5'e esittir ve kucuktur.
+# H1: X orani 0.5'ten buyuktur.
+binom.test(x = 35 , n = 50, p = 0.5, alternative='greater')
+\end{lstlisting}
+
+\newpage
+
+\subsection{Fisher's Exact Testi}
+İki kategorik değişkenin bağımsız olup olmadığını test etmek için kullanılan non-parametrik bir testtir. Küçük örneklemlerde kullanılır. 2x2 kontingensi tablosu için uygulanır ve iki nominal değişken arasındaki ilişkiyi değerlendirir.
+
+\[ p = \frac{(a+b)!(c+d)!(a+c)!(b+d)!}{n!a!b!c!d!} \]
+
+\begin{itemize}
+	\item $a,b,c,d$: 2x2 kontingensi tablosundaki gözlenen frekanslar.
+	\item $n$: Toplam gözlem sayısı $n = a + b + c + d$
+\end{itemize}
+
+\begin{lstlisting}[language=R]
+# 2 x 2 odds ratio
+fisher.test(table(df))
+fisher.test(table(df) , alternative = 'less')
+fisher.test(table(df) , alternative = 'greater')
+\end{lstlisting}
+
+\newpage
+
+\subsection{McNemar Testi}
+Bir grup içindeki eşleştirilmiş (bağımlı) verilerin karşılaştırılması için kullanılan non-parametrik bir testtir. 2x2 kontingensi tablosu oluşturulur ve bu tablodaki hücre frekansları karşılaştırılarak hipotez testi yapılır. Eşleştirilmiş iki grup arasında değişiklik olup olmadığını belirlemek için kullanılır.
+
+\[ \chi^2 = \frac{(b - c)^2}{b + c} \]
+
+\begin{itemize}
+	\item $b$: Hem ilk durumda $X = 1$ ve ikinci durumda $Y = 0$ olanların sayısı.
+	\item $c$: Hem ilk durumda $X = 0$ ve ikinci durumda $Y = 1$ olanların sayısı.
+\end{itemize}
+
+\begin{lstlisting}[language=R]
+mcnemar.test(df)
+\end{lstlisting}
+
+\newpage
+
+\subsection{Kendall Rank Korelasyon Testi}
+İki değişken arasındaki ilişkiyi değerlendirmek için kullanılan non-parametrik bir testtir. Sıralı verilerin ilişkisini incelemek için kullanılır. Verilerin normal dağılım göstermediği durumlarda terchil edilir. -1 ile 1 arasında bir değer alır. $\tau_b = 1$ ise tamamen pozitif bir sıralama ilişkisi, $\tau_b = -1$ ise tamamen negatif bir sıralama ilişkisi, $\tau_b = 0$ ise ilişki yok demektir.
+
+\[ \tau_b = \frac{n_c - n_d}{\sqrt{(n_0 - n_1)(n_0 - n_2)}} \]
+
+\begin{itemize}
+	\item $n_c$: Concordant çiftlerin sayısı.
+	\item $n_d$: Discordant çiftlerin sayısı.
+	\item $n_0$: Toplam çift sayısı.
+	\item $n_1$: İlk değişkenin tüm çiftlerdeki sıralı çiftlerin sayısı.
+	\item $n_2$: İkinci değişkenin tüm çiftlerdeki sıralı çiftlerin sayısı.
+\end{itemize}
 
 \newpage
