@@ -66,6 +66,14 @@
 
 \subsection{Regresyon Metrikleri}
 
+\textbf{AIC (Akaike Information Criterion)}: bir modelin uyum kalitesini ve karmaşıklığının dikkate alarak model seçimi yapar. AIC değeri ne kadar düşükse model o kadar iyidir.
+
+\[ \text{AIC} = 2k - 2\ln(L) \]
+
+\textbf{BIC (Bayesian Information Criterion)}: modelin uyumunu ve karmaşıklığını değerlendirir. Model karmaşıklığını cezalandırmada daha güçlüdür. BIC değeri ne kadar düşükse model o kadar iyidir.
+
+\[ \text{BIC} = k \ln(n) - 2\ln(L) \]
+
 \textbf{R-Squared (R-Kare)}: R2, bağımlı değişkenin varyansının bağımsız değişkenler tarafından ne kadar açıklandığını gösterir. 0 ile 1 arasında değer alır. En iyi R2 değeri 1'dir. Daha yüksek R2 değerleri modelin veriyi daha iyi açıkladığını gösterir. R2 eksi değer alırsa, modelin underfit edildiğini gösterir. Multivariate Regression'da R2 yerine adjusted-r2 değerine bakılır.
 
 \[R^2 = 1 - \frac{\sum_{i=1}^{n} (y_i - \hat{y}_i)^2}{\sum_{i=1}^{n} (y_i - \bar{y})^2}\]
