@@ -1,0 +1,14 @@
+\section{Thompson Sampling}
+
+Thompson Sampling, multi-armed bandit problemlerinde kullanılır. Bayesian olasılık teorisini kullanarak her bir seçeneğin olası ödülllerini tahmin eder ve bu tahminlere göre seçim yapar. Her seçeneğin ödül dağılımını modelleyerek çalışır. Her adımda, her bir seçeneğin olası ödül dağılımından rastgele bir örnek çeker ve en yüksek örneğe sahip seçeneği seçer.
+
+\subsection{Çalışma Adımları}
+
+\begin{enumerate}
+	\item Her seçenek için başarı ve başarısızlık sayıları sıfırlanır.
+	\item Her seçenek için Beta dağılımından rastgele bir örnek çekilir. En yüksek örneğe sahip seçenek seçilir.
+	\item Seçilen seçenek için elde edilen ödül kaydedilir. Başarı veya başarısızlık sayıları güncellenir.
+	\item Adımlar belirli bir iterasyon boyunca tekrarlanır.
+\end{enumerate}
+
+\newpage

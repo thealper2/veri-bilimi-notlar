@@ -1,0 +1,28 @@
+\section{Upper Confidence Bound}
+
+Upper Confidence Bound (UCB) online learning ve multi-armed bandit problemlerinde kullanılır. Keşif (exploration) ve kullanma (exploitation) arasında denge kurarak en iyi seçeneği bulmayı amaçlar. Her bir seçeneğin güven aralığının üst sınırını hesaplayarak hangi seçeneğin denenmesi gerektiğini belirler. Her bir seçeneğin beklenen ödülünü ve belirsizliğini dikkata alarak seçim yapar. Temel fikir, daha az denenen seçenekleri keşfetmek ve iyi performans gösteren seçenekleri kullanmak arasında bir denge kurmaktır.
+
+\begin{itemize}
+	\item \textbf{Beklenen Ödül (Expected Reward)}: Bir seçeneğin  geçmiş performansına dayalı olarak beklenen ödülü.
+	\item \textbf{Belirsizlik (Uncertainly)}: Bir seçeneğin ne kadar keşfedilmesi gerektiğini belirten bir ölçüt.
+\end{itemize}
+
+\[ UCB_i = \bar{x} + \sqrt{\frac{2\ln(n)}{n_i}} \]
+
+\begin{itemize}
+	\item $\bar{x}$: Seçenek i'nin şimdiye kadar elde edilen ortalama ödülü.
+	\item $n$: Toplam seçim sayısı.
+	\item $n_i$: Seçenek i'nin şimdiye kadar seçilme sayısı.
+\end{itemize}
+
+\subsection{Çalışma Adımları}
+
+\begin{enumerate}
+	\item Tüm seçeneklerin başlangıçta en az bir kez denenmesi sağlanır.
+	\item Her bir seçeneğin UCB değeri hesaplanır. UCB değeri en yüksek olan seçilir.
+	\item Seçilen seçenek için elde edilen ödül kaydedilir. Beklenen ödül ve belirsizlik terimleri güncellenir.
+	\item Adımlar belirli bir iterasyon boyunca tekrarlanır.
+\end{enumerate}
+
+
+\newpage

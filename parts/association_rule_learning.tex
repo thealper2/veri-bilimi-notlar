@@ -1,0 +1,94 @@
+\section{Association Rule Learning}
+
+Association Rule Learning (Bağlantı Kuralı Öğrenme), büüyk veri kümeleri içerisindeki ilginç ilişki ve bağlantıları bulmak için kullanılır. Belirli eşik değerleri  (support, confidence ve lift) kullanarak veri kümesinde sıkça rastlanan örüntüleri ve kuralları keşfeder.
+
+\[ Support(A) = \frac{A'nin gectigi islem sayisi}{Toplam islem sayisi} \]
+\[ Confidence(A \rightarrow B) = \frac{Support(A \cup B)}{Support(A)} \]
+\[ Lift(A \rightarrow B) = \frac{Confidence(A \rightarrow B}{Support(B)} \]
+
+\begin{itemize}
+	\item \textbf{Support (Destek)}: Bir öğe kümesinin veri kümesinde ne kadar sık geçtiğini gösterir.
+	\item \textbf{Confidence (Güven)}: Bir kuralın ne kadar güvenilir olduğunu gösterir. Bir öğe kümesi var olduğunda diğer öğe kümesinin de var olma olasılığıdır.
+	\item \textbf{Lift}: İki öğrenin birlikte Meydana gelmesinin bağımsız olmaya göre ne kadar arttığını ölçer. Lift değeri 1'den büyükse, öğeler arasında pozitif bir ilişki vardır.
+\end{itemize}
+
+Veriler genellikle işlemler şeklinde organize edilir. Her işlem, birlikte meydana gelen öğe kümelerini içerir. Apriori, Eclat gibi algoritmalar kullanılarak belirli bir destek eşiğinin üzerinde olan öğe kümeleri bulunur. Sık öğe kümeleri kullanılarak, belirli bir güven eşiğinin üzerinde olan kurallar oluşturulur. Kurallar, lift veya başka bir metriğe göre değerlendirilir ve anlamlı olanlar seçilir.
+
+\subsection{Apriori Algoritması}
+Özellikle market sepeti analizinde kullanılır. Apriori algoritması, tekrarlayan öğe kümelerini bulmak ve bu kümelerden anlamlı bağlantı kuralları oluşturmak için iki temel prensibe dayanır:
+
+\begin{itemize}
+	\item \textbf{Sık Öğe Kümeleri (Frequent Itemsets)}: Algoritma, belirli bir destek eşiğinin üzerinde olan öğe kümelerini bulur.
+	\item \textbf {Apriori İlkesi (Apriori Principle)}: Eğer bir öğe kümesi sık ise, onun alt kümeleri de sıktır. Aynı şekilde, eğer bir öğe kümesi nadir ise, onun üst kümeleri de nadirdir.
+\end{itemize}
+
+\subsubsection{Çalışma Adımları}
+
+\begin{enumerate}
+	\item Veri, işlemler şeklinde organize edilir.
+	\item Her bir öğe kümesi için destek değeri hesaplanır.
+	\item Belirli bir destek eşiğinin üzerinde olan öğe kümeleri belirlenir. Önce tek öğelerle başlanır, ardından bu öğeler birleştirilerek daha büyük kümeler oluşturulur. Bu adım, kademeli olarak (1 öğe, 2 öğe, 3 öğe vb.) tekrar edilir.
+	\item $K+1$ öğeli aday kümeler, $k$ öğeli sık kümelerden türetilir. Apriori ilkesi kullanılarak, alt kümeleri sık olmayan aday kümeler elenir.
+	\item Sık öğe kümelerinden anlamlı bağlantı kuralları oluşturulur. Bu kurallar, belirli bir güven eşiğine göre değerlendirilir.
+	\item Kurallar, lift veya başka metriğe göre değerlendirilir ve anlamlı olanlar seçilir.
+\end{enumerate}
+
+\begin{lstlisting}[language=Python]
+import pandas as pd
+from mlxtend.frequent_patterns import apriori, association_rules
+
+data = {
+    'milk': [1, 0, 1, 0, 1],
+    'bread': [1, 1, 0, 1, 1],
+    'butter': [0, 1, 0, 0, 1],
+    'beer': [0, 1, 1, 0, 0]
+}
+df = pd.DataFrame(data)
+
+frequent_itemsets = apriori(df, min_support=0.6, use_colnames=True)
+
+rules = association_rules(frequent_itemsets, metric="confidence", min_threshold=0.7)
+print(rules)
+\end{lstlisting}
+
+\subsection{Eclat Algoritması}
+Eclat, "Equivalence Class Clustering and bottom-up Lattice Traversal" (Eşdeğer Sınıf Kümeleme ve Aşağıdan Yukarıya Kafes Geçişi) anlamına gelir. Eclat algoritması, dikey veri formatı kullanarak sık öğe kümelerini bulur. Bu formatta, her öğe kümesi, bu kümenin bulunduğu işlemlerin listesiyle temsil edilir. Öğe kümelerini genişletmek için rekürsif bir yöntem kullanır ve destek değerlerini hesaplar.
+
+
+\[ Support(A) = \frac{\text{A'nin gectigi islem sayisi}}{\text{Toplam islem sayisi}} \]
+
+\begin{itemize}
+	\item \textbf{Support (Destek)}: Bir öğe kümesinin veri kümesinde ne kadar sık geçtiğini gösterir.
+	\item \textbf{Dikey Veri Formatı}: Her öğe kümesi, bu kümenin bulunduğu işlemlerin bir listesiyle temsil edilir.
+\end{itemize}
+
+\subsubsection{Çalışma Adımları}
+
+\begin{enumerate}
+	\item Veri, işlemler şeklinde organize edilir.
+	\item Her öğe, bulunduğu işlemlerin listesiyle temsil edilir.
+	\item Destek değerleri hesaplanır. Eğer bir öğe kümesinin destek değeri belirli bir eşik değerinin üzerindeyse, bu küme sık öğe kümesi olarak kabul edilir.
+	\item $k$ öğeli sık kümelerden $k+1$ öğeli aday kümeler oluşturulur. İşlemlerin kesişimi alınarak destek değerleri hesaplanır.
+	\item Rekürsif olarak kümeler genişletilir ve her sık öğe kümesi için adımlar tekrarlanır.
+\end{enumerate}
+
+\begin{lstlisting}[language=Python]
+import pandas as pd
+from pyECLAT import ECLAT
+
+data = {
+    'milk': [1, 0, 1, 0, 1],
+    'bread': [1, 1, 0, 1, 1],
+    'butter': [0, 1, 0, 0, 1],
+    'beer': [0, 1, 1, 0, 0]
+}
+
+df = pd.DataFrame(data)
+eclat_instance = ECLAT(data=df, verbose=True)
+
+rule_indices, rule_supports = eclat_instance.fit(min_support=0.6, min_combination=1, max_combination=3)
+print(rule_indices)
+print(rule_supports)
+\end{lstlisting}
+
+\newpage
