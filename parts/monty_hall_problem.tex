@@ -1,0 +1,29 @@
+\section{Monty Hall Problemi}
+
+İsmini Amerikalı televizyon sunucusu Monty Hall'den alır. Problem şu şekildedir;
+
+\begin{enumerate}
+	\item Bir yarışma programında yarışmacının önünde üç kapı vardır. Bu kapılardan birinin ardında araba, diğer ikisinin ardında ise keçiler vardır.
+	\item Yarışmacı bir kapı seçer.
+	\item Sunucu (Monty Hall), yarışmacının seçmediği kapılardan arkasında keçi olan birini açar.
+	\item Sunucu, yarışmacıya seçimi değiştirme fırsatı sunar.
+\end{enumerate}
+
+\subsection{Problem Analizi}
+Başlangıçta yarışmacının bir kapıyı seçmesiyle, üç kapı arasında bir seçim yapmış olur;
+
+\begin{itemize}
+	\item Yarışmacının başlangıçta araba olan kapıyı seçme olasılığı: $\frac{1}{3}$
+	\item Yarışmacının başlangıçta keçi olan kapıyı seçme olasılığı: $\frac{2}{3}$
+\end{itemize}
+
+Sunucu, her zaman keçinin arkasında olduğu bilinen bir kapıyı açacağı için, yarışmacının ilk seçimi;
+
+\begin{enumerate}
+	\item \textbf{Yarışmacı arabanın olduğu kapıyı seçtiyse}, diğer iki kapıda keçi var. Yarışmacı kapıyı değiştirse keçi alır. \textbf{Olasılık}: $\frac{1}{3}$
+	\item \textbf{Yarışmacı keçinin olduğu kapıyı seçtiyse}, diğer iki kapıdan birinde keçi var. Sunucu, kalan keçili kapıyı açar. Yarışmacı kapıyı değiştirirse arabayı kazanır. \textbf{Olasılık}: $\frac{2}{3}$
+\end{enumerate}
+
+Bu nedenle yarışmacı kapısını değiştirdiğinde kazanma olasılığı $\frac{2}{3}$ iken, değiştirmediğinde kazanma olasılığı $\frac{1}{3}$'tür.
+
+\newpage
