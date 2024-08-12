@@ -1,0 +1,24 @@
+\section{Aspect-based Sentiment Analysis (ABSA)}
+
+Bir metin içerisindeki belirli unsurların (aspect) üzerine odaklanarak bu unsurlar hakkında duygu analizi yapmayı amaçlar. ABSA, genel duygu analizi yöntemlerinden farklı olarak, metin içindeki belirli unsurları ayırır ve her birine yönelik ayrı ayrı bir duygu analizi gerçekleştirir.
+Örneğin:
+
+\begin{lstlisting}[language=Python]
+# Entity X'in programi cok iyidir, Entity Y'nin programi cok kotudur.
+
+{
+    "aspect_list": ["Entity X", "Entity Y"],
+    "results": [
+        {
+            "aspect": "Entity X",
+            "sentiment": "Positive"
+        },
+        {
+            "aspect": "Entity Y",
+            "sentiment": "Negative"
+        }
+    ]
+}
+\end{lstlisting}
+
+\newpage

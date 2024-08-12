@@ -1,0 +1,30 @@
+\section{Kalman Filter}
+
+İsmini matematikçi Rudolf E. Kalman'dan alır. Zaman serisi verilerindeki gürültü ve belirsizliklerle başa çıkmak için kullanılan bir matematiksel algoritmadır. Dinamik sistemlerin durumunu tahmin etmek ve ölçüm hatalarını düzeltmek için kullanılır. Kalman filtresi, tahmin adımı ve güncelleme adımı olmak üzere 2 adımdan oluşur.
+
+\begin{enumerate}
+    \item \textbf{Tahmin Adımı}:
+    \begin{itemize}
+        \item $\hat{x}_{k|k-1} = A \hat{x}_{k-1|k-1} + B u_k$
+        \item $P_{k|k-1} = A P_{k-1|k-1} A^T + Q$
+    \end{itemize}
+
+    \item \textbf{Güncelleme Adımı}:
+    \begin{itemize}
+        \item $K_k = P_{k|k-1} H^T (H P_{k|k-1} H^T + R)^{-1}$
+        \item $\hat{x}_{k|k} = \hat{x}_{k|k-1} + K_k (z_k - H \hat{x}_{k|k-1})$
+        \item $P_{k|k} = (I - K_k H) P_{k|k-1}$
+    \end{itemize}
+\end{enumerate}
+
+\begin{itemize}
+    \item $\hat{x}_{k|k-1}$ ve $\hat{x}_{k|k}$, sırasıyla, tahmin ve güncellenmiş durum vektörleri.
+    \item $A$ ve $B$, sistemin durum geçiş ve kontrol matrisleri.
+    \item $P_{k|k-1}$ ve $P_{k|k}$, sırasıyla, tahmin ve güncellenmiş kovaryans matrisleri.
+    \item $K_k$, Kalman kazanç matrisi.
+    \item $H$, gözlem matrisi.
+    \item $Q$ ve $R$, sırasıyla, süreç ve ölçüm gürültü kovaryans matrisleri.
+    \item $u_k$ ve $u_z$, sırasıyla, kontrol girişi ve ölçüm verisi.
+\end{itemize}
+
+\newpage

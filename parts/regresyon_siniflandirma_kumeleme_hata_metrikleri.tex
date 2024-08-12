@@ -64,6 +64,10 @@
 
 \[\text{Jaccard Score} = \frac{\text{TP}}{\text{TP + FP + FN}}\]
 
+\textbf{Spherical Payoff}: İki vektör arasındaki açısal farkı ölçerek, bu vektörlerin birbirine ne kadar yakın olduğunu değerlendirir. Bu metrik, genellikle doğruluk veya benzerlik ölçüsü olarak kullanılır ve bu sayede modelin performansını değerlendirir. İki vektör arasındaki kosinüs benzerliği hesaplanır. Değer 1'e yaklaştıkça tahmin edilen vektör ile gerçek vektör arasında yüksek bir benzerlik vardır.
+
+\[ \text{Spherical Payoff} = \frac{\mathbf{y} \cdot \mathbf{\hat{y}}}{\|\mathbf{y}\| \|\mathbf{\hat{y}}\|} \]
+
 \subsection{Regresyon Metrikleri}
 
 \textbf{AIC (Akaike Information Criterion)}: bir modelin uyum kalitesini ve karmaşıklığının dikkate alarak model seçimi yapar. AIC değeri ne kadar düşükse model o kadar iyidir.

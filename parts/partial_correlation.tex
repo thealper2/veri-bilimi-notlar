@@ -1,0 +1,19 @@
+\section{Partial Correlation (Kısmi Korelasyon)}
+
+Kısmi korelasyon, iki değişken arasındaki ilişkinin, diğer bir veya daha fazla değişkenin etkisinden arındırıldığında nasıl değiştiğini ölçer. Yani iki değişken arasındaki ilişki hesaplanırken üçüncü bir değişkenin etkisi incelenir. Bu üçüncü değişken, kontrol edilen iki değişkene bir etkisi olduğu düşünülen kontrol aracı olarak sabit tutulan bir bileşendir. Bu, bir değişkenin diğer değişkenlerle olan ilişkisini net bir şekilde anlamak için kullanılır. 
+
+\begin{itemize}
+    \item $X -> Z -> Y$: Serial. X Z'ye, Z Y'ye neden olur.
+    \item $X <- Z -> Y$: Diverging. Z hem X hem Y neden olur.
+    \item $X -> Z <- Y$: Converging. X ve Y, Z'ye neden olur.
+\end{itemize}
+
+\[ r_{ij|k} = \frac{r_{ij} - r_{ik}r_{jk}}{\sqrt{(1 - r_{ik}^2)(1 - r_{jk}^2)}} \]
+
+\begin{itemize}
+    \item $r_{ij|k}$: i ve j arasındaki Pearson korelasyon katsayısı.
+    \item $r_{ik}$: i ile kontrol değişkeni k arasındaki korelasyon katsayısı.
+    \item $r_{jk}$: j ile kontrol değişkeni k arasındaki korelasyon katsayısı.
+\end{itemize}
+
+\newpage
