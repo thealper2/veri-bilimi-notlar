@@ -46,7 +46,7 @@
 
 \textbf{ROC-AUC Eğrisi (ROC-AUC Curve):} ROC modelin TPR ile FPR cinsinden ne kadar iyi ayrım yapabildiğini açıklar. AUC, ROC eğrisinin altında kalan alanı verir, 0-1 arasındadır. 0'ise bütün tahminler yanlıştır. 1'e yaklaştıkça modelin performansı iyileşir. ROC-AUC 0.5 ise, modelin performansı rastgele tahmin etmekle (yazı-tura tahmini \%50-\%50) aynıdır. \\
 
-\textbf{Balanced Accuracy Score):} Dengesiz veri kümelerinde kullanılır. Her sınıfın doğruluk oranını dengeler ve ardından tüm sınıfların doğruluk oranlarının ortalamasını alır. Her bir sınıfın veri dağılımındaki etkisini eşit şekilde değerlendirir.
+\textbf{Balanced Accuracy Score:} Dengesiz veri kümelerinde kullanılır. Her sınıfın doğruluk oranını dengeler ve ardından tüm sınıfların doğruluk oranlarının ortalamasını alır. Her bir sınıfın veri dağılımındaki etkisini eşit şekilde değerlendirir.
 
 \[\text{Balanced Accuracy} = \frac{1}{\text{N}} * \sum{\frac{\text{TP}}{\text{P}}}\]
 
@@ -67,6 +67,10 @@
 \textbf{Spherical Payoff}: İki vektör arasındaki açısal farkı ölçerek, bu vektörlerin birbirine ne kadar yakın olduğunu değerlendirir. Bu metrik, genellikle doğruluk veya benzerlik ölçüsü olarak kullanılır ve bu sayede modelin performansını değerlendirir. İki vektör arasındaki kosinüs benzerliği hesaplanır. Değer 1'e yaklaştıkça tahmin edilen vektör ile gerçek vektör arasında yüksek bir benzerlik vardır.
 
 \[ \text{Spherical Payoff} = \frac{\mathbf{y} \cdot \mathbf{\hat{y}}}{\|\mathbf{y}\| \|\mathbf{\hat{y}}\|} \]
+
+\textbf{McFadden's Pseudo R2}: MacFadden's Pseudo R2, maksimum olasılık tahmini (maximum likelihood estimation, MLE) yöntemine dayalı bir uyum metriğidir. Klasik R2, toplam varyansın ne kadarının model tarafından açıklandığını ölçerken, McFadden's Pseudo R2, lojistik regresyon gibi olasılık modellerinde, bağımsız değişkenlerin modelin açıklama gücüne ne kadar katkıda bulunduğunu değerlendirmeyi amaçlar. LL(0), sadece sabit terim içeren modelin log-loss değeri. LL(M), bağımsız değişkenlerinde dahil edildiği tam modelin log-loss değeri.
+
+\[ \text{McFadden's Pseudo R2} = 1 - \frac{\text{LL}(M)}{\text{LL}(0)} \]
 
 \subsection{Regresyon Metrikleri}
 
