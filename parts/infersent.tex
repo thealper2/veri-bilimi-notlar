@@ -1,0 +1,33 @@
+\section{InferSent}
+
+InferSent, cümleler arasındaki benzerliği ölçmek ve cümleleri anlamlı bir şekilde temsil etmek için kullanılan bir cümle gömme (sentence embedding) modelidir. Facebook AI Research (FAIR) tarafından geliştirilmiştir. InferSent, evrensel cümle temsilleri oluşturarak çeşitli NLP görevlerinde kullanılmak üzere cümlelerin semantik anlamlarını yakalamaya çalışır. 
+
+\subsection{Örnek Kod}
+
+\begin{lstlisting}[language=Python]
+import torch
+from models import InferSent
+
+params_model = {
+    'bsize': 64,
+    'word_emb_dim': 300,
+    'enc_lstm_dim': 2048,
+    'pool_type': 'max',
+    'dpout_model': 0.0,
+    'version': 2
+}
+
+model = InferSent(params_model)
+model.load_state_dict(torch.load('infersent2.pkl'))
+
+model.set_w2v_path('glove.840B.300d.txt')
+model.build_vocab_k_words(K=100000)
+
+sentences = ["kitap okudum", "roman okudum", "film izledim"]
+
+sentence_embeddings = model.encode(sentences, bsize=128, tokenize=False)
+
+print("InferSent Sentence Vectors:\n", sentence_embeddings)
+\end{lstlisting}
+
+\newpage

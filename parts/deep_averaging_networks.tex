@@ -1,0 +1,14 @@
+\section{Deep Averaging Networks}
+
+DAN, cümleleri sabit boyutlu vektörler olarak temsil eden bir modeldir ve derin öğrenme yöntemleri kullanarak cümlelerin anlamını yakalamayı amaçlar. DAN, oldukça hızlı bir şekilde çalışır çünkü ortalama alma işlemi ve tam bağlantılı katmanlar genellikle hesaplama açısından etkindir. Ortalama alma işlemi, cümledeki kelimelerin sırasını ve bağlamını göz ardı eder. Bu, bazı anlam derinliklerini kaçırabilir.
+
+\subsection{Çalışma Adımları}
+
+\begin{enumerate}
+    \item İlk adımda, model cümledeki her kelimeyi bir gömme (embedding) vektörüne dönüştürür. Bu gömme vektörleri, genellikle bir önceden eğitilmiş kelime gömme modeli kullanılarak elde edilir.
+    \item Cümledeki tüm kelime gömmeleri, bir ortalama işlemi ile birleştirilir. Bu, cümledeki kelimelerin gömme vektörlerinin ortalamasını alarak cümle vektörünü oluşturur. Bu adım, cümledeki kelimelerin genel anlamını yakalamaya çalışır.
+    \item Ortalama alınmış cümle vektörü, tam bağlantılı (fully connected) katmandan geçirilir. Bu katmanlar, cümle vektörünün daha anlamlı ve ayrıştırıcı bir temsilini öğrenir. 
+    \item Model cümleyi belirli bir boyutta sabit uzunlukta bir vektör olarak temsil eder. Bu vektör, cümlenin anlamını yakalayan bir temsildir.
+\end{enumerate}
+
+\newpage

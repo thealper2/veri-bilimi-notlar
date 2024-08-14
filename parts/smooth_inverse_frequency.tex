@@ -1,0 +1,52 @@
+\section{Smooth Inverse Frequency}
+
+Smooth Inverse Frequency (SIF), cümle temsilini iyileştirmek için yaygın olarak kullanılan bir yöntemdir. Kelime gömmeleri, tek tek kelimelerin anlamını yakalamada başarılıdır; ancak, bu gömmeleri basitçe toplayarak cümle vektörleri oluşturmak, genellikle istenmeyen kelimelerin (örneğin çok sık kullanılan kelimeler) cümle anlamını aşırı derecede etkilemesine neden olabilir. SIF, bu problemi çözmek için kelime vektörlerini ağırlıklandırarak cümle vektörleri oluşturur ve bu sayede cümleler arasındaki semantik benzerliği daha doğru bir şekilde yakalar.
+
+\subsection{Çalışma Adımları}
+
+\begin{enumerate}
+    \item Her kelime için bir ağırlık hesaplanır. Bu ağırlık, kelimenin frekansına bağlıdır ve genellikle kelimenin frekansı ile ters orantılıdır. Yani, çok sık kullanılan kelimeler daha düşük ağırlık alır.
+    \item Cümledeki kelimelerin kelime gömmeleri, hesaplanan ağırlıklarla çarpılır ve ardından bu vektörler toplanarak cümle vektörü elde edilir.
+    \item PCA uygulanarak en büyük varyansı temsil eden bileşen çıkarılır. Böylece, cümle vektörlerinin en yaygın yönü azaltılır.
+\end{enumerate}
+
+\subsection{Örnek Kod}
+
+\begin{lstlisting}[language=Python]
+import numpy as np
+from sklearn.decomposition import PCA
+from gensim.models import Word2Vec
+from collections import Counter
+
+sentences = [
+    "kitap okudum",
+    "roman okudum",
+    "film izledim"
+]
+
+tokenized_sentences = [sentence.split() for sentence in sentences]
+
+model = Word2Vec(tokenized_sentences, min_count=1)
+
+word_freq = Counter([word for sentence in tokenized_sentences for word in sentence])
+
+a = 0.001
+total_words = sum(word_freq.values())
+word_weights = {word: a / (a + (word_freq[word] / total_words)) for word in word_freq}
+
+def sif_sentence_vector(sentence, model, word_weights):
+    vectors = [model.wv[word] * word_weights[word] for word in sentence if word in model.wv]
+    return np.mean(vectors, axis=0)
+
+sentence_vectors = np.array([sif_sentence_vector(sentence, model, word_weights) for sentence in tokenized_sentences])
+
+pca = PCA(n_components=1)
+pca.fit(sentence_vectors)
+u = pca.components_
+
+sentence_vectors = sentence_vectors - sentence_vectors.dot(u.T) * u
+
+print("SIF Sentence Vectors:\n", sentence_vectors)
+\end{lstlisting}
+
+\newpage

@@ -1,0 +1,30 @@
+\section{Google Universal Sentence Encoder}
+
+Google Universal Sentence Encoder, cümle benzerliği, metin sınıflandırma, duygu analizi, bilgi çıkarımı gibi görevlerde kullanılır. Model, giriş olarak aldığı cümleleri düşük boyutlu, yoğun vektörler olarak temsil eder ve bu vektörler, cümlelerin anlamını yakalamak için kullanılır. Modelin arkasında iki ana yaklaşım vardır:
+
+\begin{itemize}
+    \item \textbf{Transformer Modeli}: Kelime ve cümle ilişkilerini dikkate alarak bağlamlı vektörler üretir. Transformer, çok katmanlı dikkat mekanizmaları kullanarak metindeki her kelimenin diğer kelimelerle olan ilişkisini öğrenir.
+    \item \textbf{Deep Averaging Network (DAN)}: Cümledeki kelimelerin ve n-gram'lerin ortalamalarını alır ve ardından birkaç tam bağlantılı katmandan geçer.
+\end{itemize}
+
+\subsection{Örnek Kod}
+
+\begin{lstlisting}[language=Python]
+import tensorflow as tf
+import tensorflow_hub as hub
+
+model_url = "https://tfhub.dev/google/universal-sentence-encoder/4"
+embed = hub.load(model_url)
+
+sentences = [
+    "kitap okudum",
+    "roman okudum",
+    "film izledim"
+]
+
+sentence_embeddings = embed(sentences)
+
+print("Universal Sentence Encoder Sentence Vectors:\n", sentence_embeddings.numpy())
+\end{lstlisting}
+
+\newpage

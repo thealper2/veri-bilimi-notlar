@@ -1,0 +1,32 @@
+\section{Word Mover's Distance (WMD)}
+
+WMD, iki metin arasındaki benzerliği ölçmek için kullanılır. İki belge arasındaki kelime gömme vektörlerini (word embeddings) kullanarak, bir belgeyi diğerine dönüştürmek için gereken en küçük maliyeti hesaplar. Bu maliyet, kelimelerin yer değiştirmesi için gereken mesafeye ve kelimelerin birbirine olan benzerliğine bağlıdır. Bu maliyet, kelimelerin semantik olarak ne kadar yakın olduğunu gösterir. Daha düşük bir değer, daha yüksek bir benzerlik anlamına gelir.
+
+\subsection{Çalışma Adımları}
+
+\begin{enumerate}
+    \item Her iki belge kelime gömme modelleri ile vektörlere dönüştürülür.
+    \item Her kelime çifti arasındaki taşıma maliyeti, iki kelime vektörü arasındaki öklid mesafesi ile hesaplanır.
+    \item Taşıma maliyetini minimize eden optimal taşıma planını bulmak için Lineer Programlama (LP) kullanılır. Bu optimizasyon, kelimeleri bir belgeden diğerine taşımanın minimum maliyetini verir.
+\end{enumerate}
+
+\subsection{Örnek Kod}
+
+\begin{lstlisting}[language=Python]
+from gensim.models import Word2Vec
+from gensim.similarities import WmdSimilarity
+
+sentence1 = "kitap okudum"
+sentence2 = "roman okudum"
+
+sentence1_tokens = sentence1.lower().split()
+sentence2_tokens = sentence2.lower().split()
+
+model = Word2Vec([sentence1_tokens, sentence2_tokens], min_count=1)
+
+distance = model.wv.wmdistance(sentence1_tokens, sentence2_tokens)
+print(f"Word Mover's Distance: {distance}")
+# Word Mover's Distance: 0.7154270211173962
+\end{lstlisting}
+
+\newpage
