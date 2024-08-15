@@ -1,0 +1,23 @@
+\section{Reversible Residual Networks (RevNet)}
+
+RevNet'in amacı, derin öğrenme modellerinde bellek kullanımını azaltmaktır. Ağdaki belirli katmanların çıktılarının hesaplanabilirliğini ve bellekte depolanabilirliğini optimize etmek amacıyla geri dönüşümlü (reversible) yapılar kullanır. Derin sinir ağlarında, ileri ve geri yayılım sırasında katmanların çıktıları bellekte tutulur. Ancak RevNet, geri dönüşümlü yapısı sayesinde, ileri yayılım sırasında ara katmanları bellekte saklamadan, bu katmanların çıktılarının ters hesaplamalarla yeniden oluşturulmasını sağlar. Bu da bellek verimliliğini arttırır. Büyük veri kümeleri üzerinde, sınırlı bellek kapasitesine sahip GPU'larda eğitim sürecini kolaylaştırır.
+
+\subsection{Çalışma Adımları}
+
+RevNet'in çalışma prensibi, katmanların çıktılarının tam tersini hesaplayarak geri alabilmesidir. Bu işlem, ileri yayılımda yapılan hesaplamaların sadece tersine çevrilmesiyle gerçekleşir. Böylece, ileri yayılımda hesaplanan her şey geri yayılımda yeniden hesaplanabilir ve bu işlem, bellek tüketimini azaltır. RevNet, bir ResNet bloğunun modifikasyonudur. ResNet'te her bir blok aşağıdaki gibi bir yapıya sahiptir:
+
+\[ y = x + f(x) \]
+
+Burada, $f(x)$, blok içerisindeki bir işlevi temsil eder. Ancak, RevNet'te bu işlev $x$ ve $f(x)$ ayrı ayrı ele alınır ve bu şekilde ileri yayılım işlemleri tersine çevrilebilir hale gelir. Bir RevNet bloğunda, giriş vektörü $x$ iki alt vektöre bölünür ve her bir alt vektör bir işleme tabi tutulur:
+
+\[ y_1 = x_1 + f(x_2) \]
+
+\[ y_2 = x_2 + g(y_1)\]
+
+Bu iki işlem sonucunda elde edilen vektörler, tersine çevrilerek ileri yayılım sırasında ara değerler saklanmadan geri yayılım yapılabilir. Yani, ters hesaplama şu şekilde gerçekleşir:
+
+\[ x_2 = y_2 - g(y_1) \]
+
+\[ x_1 = y_1 - f(x_2) \]
+
+\newpage

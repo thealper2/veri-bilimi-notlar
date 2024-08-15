@@ -1,0 +1,58 @@
+\section{Byte Pair Encoding (BPE)}
+
+Byte Pair Encoding, bir veri sıkıştırma ve alt kelime parçacıkları öğrenme tekniğidir. Aslen bir sıkıştırma algoritması olarak ortaya çıksa da dil modellerinde daha iyi kelime temsilleri oluşturmak amacıyla da yaygın olarak kullanılmaktadır. Özellikle dillerin morfolojik yapıları çok karmaşık olduğunda veya dil modellerinin öğrenmesi gereken büyük kelime dağarcığıyla başa çıkmak gerektiğinde BPE devreye girer. Bu yöntem sayesinde, dil modellleri çok nadir kelimelerle bile başa çıkabilir çünkü kelimeleri küçük alt birimlerine ayırır ve bu alt birimlerle daha iyi genelleme sağlar. 
+
+\subsection{Çalışma Adımları}
+
+BPE algoritması, en sık görülen bitişik sembol çiftlerini tekrar tekrar birleştirerek çalışır. İlk başta, her kelimeyi veya cümleyi karakterlerine ayırır. Ardından, belirli bir sayıda tekrarlanan sembol çiftlerini birleştirir ve bu işlem istenilen birleştirme sayısına ulaşana kadar devam eder. Bu süreç, kelimeleri daha küçük birimleri kullanarak temsil etmeyi sağlar.
+
+\begin{enumerate}
+    \item Metindeki her kelime veya sembol, bir liste olarak başlar.
+    \item Semboller arasındaki en sık görülen çift bulunur.
+    \item Bu sembol çifti tek bir sembol olarak birleştirilir.
+    \item Bu adımlar belirli sayıda birleştirme gerçekleşene kadar tekrarlanır.
+\end{enumerate}
+
+\subsection{Örnek Kod}
+
+\begin{lstlisting}[language=Python]
+from collections import defaultdict, Counter
+
+def get_stats(vocab):
+    pairs = defaultdict(int)
+    for word, freq in vocab.items():
+        symbols = word.split()
+        for i in range(len(symbols) - 1):
+            pairs[symbols[i], symbols[i+1]] += freq
+    return pairs
+
+def merge_vocab(pair, vocab):
+    new_vocab = {}
+    bigram = ' '.join(pair)
+    replacement = ''.join(pair)
+    
+    for word in vocab:
+        new_word = word.replace(bigram, replacement)
+        new_vocab[new_word] = vocab[word]
+    
+    return new_vocab
+
+vocab = {
+    'l o w </w>': 5,
+    'l o w e r </w>': 2,
+    'n e w e s t </w>': 6,
+    'w i d e s t </w>': 3
+}
+
+num_merges = 10
+for i in range(num_merges):
+    pairs = get_stats(vocab)
+    if not pairs:
+        break
+    best = max(pairs, key=pairs.get)
+    vocab = merge_vocab(best, vocab)
+    print(f"Merge {i + 1}: {best}")
+    print(vocab)    
+\end{lstlisting}
+
+\newpage

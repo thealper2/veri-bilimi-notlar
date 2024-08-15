@@ -1,0 +1,14 @@
+\section{Unigram Tokenization}
+
+Unigram Tokenization, olasılıklı bir dil modeli kullanarak kelimeleri en olası alt birimlerine ayırır. Bu yöntem, kelimeleri önce bir alt kelime listesine böler ve ardından her bir parçanın dil modeline göre olasılığını hesaplar. Amaç, en düşük olasılıklı alt birimleri ortadan kaldırarak daha verimli bir alt kelime listesi elde etmektir.
+
+\subsection{Çalışma Adımları}
+
+\begin{enumerate}
+    \item Öncelikle bir başlangıç alt kelime listesi oluşturulur. Bu liste, kelimelerin tamamı ve alt birimleri içerir.
+    \item Bu listeye dayalı olarak her bir alt kelimenin olasılığı hesaplanır. Kelimeler, bu olasılıklar kullanılarak alt birimlerine ayrılır.
+    \item En düşük olasılıklı alt birimler listeden çıkarılır. Bu işlem, belirli sayıda iterasyon boyunca devam eder.
+    \item En olası alt birimler listede kalır ve kelimeler bu alt birimler kullanılarak tokenize edilir.
+\end{enumerate}
+
+\newpage

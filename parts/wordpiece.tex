@@ -1,0 +1,6 @@
+\section{WordPiece}
+
+BERT gibi transformer tabanlı modellerde kullanılan bir tokenizasyon algoritmasıdır. Kelimeleri alt birimlerine ayırırken istatistiksel yaklaşımlar kullanır. Amaç, dildeki en sık kullanılan alt birimlerin bir listesini oluşturmaktır. Bu, modelin her bir kelimeyi tümüyle öğrenmesi yerine, bu alt birimlerle kelimeleri anlamasını sağlar. WordPiece, BPE’den farklı olarak olasılık hesaplarına dayalı bir model kurar. Bu model, hangi alt birimlerin bir arada bulunmasının daha olası olduğunu hesaplar. Kelimeler, ilk başta karakterlerine ayrılır.  Karakter dizileri arasındaki olasılıklar hesaplanır. Hangi alt birimlerin bir arada daha sık kullanıldığına dair bir dil modeli oluşturulur. Kelimelerin en iyi temsil edilmesi için hangi alt birimlerin birleştirileceği belirlenir. Bu seçim yapılırken, birleştirilen alt birimlerin olasılıkları da dikkate alınır. Eğitim sürecinde oluşturulan alt birimler listesi (vocabulary) kullanılarak kelimeler tokenize edilir. Nadir kelimeler bulunursa, bu kelimeler önceden belirlenmiş alt birimlere bölünür.
+
+
+\newpage
