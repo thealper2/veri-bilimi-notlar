@@ -1,0 +1,22 @@
+\section{Embedding Lookup}
+
+Embedding Lookup, bir kelimenin veya bir öğenin belirli bir vektör uzayında temsili olan embedding'ine hızlı erişim sağlar. Bu vektörler, daha önce eğitim verisinden öğrenilmiş, yoğun ve sürekli olan vektörlerdir. Embedding lookup, bir anahtar ile eşleşen embedding vektörünü doğrudan bulmayı ve işlemleri hızlandırmayı sağlar. Embedding lookup, embedding matrisleri ile gerçekleştirilir. Bu matris, her satırı bir öğeyği temsil eden, büüyk boyutlu bir tablodur. Bu matrisin her satırı bir kelime, öğe veya kategori için öğrenilmiş bir vektör temsili içerir. Örneğin 10000 kelimeden oluşan bir kelime dağarcığı için 100 boyutlu embedding'ler kullanılırsa, embedding matrisi boyutu (10000, 100) olacaktır. Embedding lookup işlemi, bir öğenin indeksine göre bu tablodan ilgili satırı (vektörü) seçer. 
+
+\subsection{Python Kodu}
+
+\begin{lstlisting}[language=Python]
+import torch
+import torch.nn as nn
+
+vocab_size = 10000
+embedding_dim = 100
+
+embedding_layer = nn.Embedding(num_embeddings=vocab_size, embedding_dim=embedding_dim)
+
+input_indices = torch.tensor([1, 5, 7])
+
+embedding_vectors = embedding_layer(input_indices)
+print(embedding_vectors)
+\end{lstlisting}
+
+\newpage

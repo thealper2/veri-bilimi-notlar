@@ -1,0 +1,24 @@
+\section{Sinusoidal Embedding}
+
+Transformer mimarilerinde kullanılır. Dizilerdeki pozisyon bilgisini modele geri kazandırmak için kullanılır. Bir dizideki her pozisyon için bir sinüs ve kosinüs fonksiyonuyla pozisyon bilgisini kodlar. Her pozisyonun kodlaması iki temel bileşenden oluşur:
+
+\begin{itemize}
+    \item \textbf{Sinüs Fonksiyonu (Sinusoidal Function)}: Pozison bilgisi, belirli bir frekansta sinüs eğrisi kullanılarak kodlanır.
+    \item \textbf{Kosinüs Fonksiyonu (Cosine Function)}: Aynı pozisyon bilgisi, yine belirli bir frekansta kosinüs eğrisiyle kodlanır.
+\end{itemize}
+
+Bu iki fonksiyon ile, pozisyon bilgisi sürekli bir değerler uzayında ifade etmeye yarar. Model her pozisyon için farklı ancak düzenli bir embedding oluşturur. Bu embedding, bir defa belirlendiğinde sabit kalır. Eğitim sürecinde model bu embedding'i değiştiremez.
+
+\[ PE_(pos, 2i) = sin(\frac{pos}{10000^(\frac{2i}{d_{model}})}) \]
+\[ PE_(pos, 2i+1) = cos(\frac{pos}{10000^(\frac{2i}{d_{model}})}) \]
+
+Burada;
+
+\begin{itemize}
+    \item $pos$: Pozisyonu temsil eder.
+    \item $i$: Embedding boyutundaki indisi gösterir.
+    \item $d_{model}$: Embedding'in boyutunu (dimension) temsil eder.
+\end{itemize}
+
+
+\newpage

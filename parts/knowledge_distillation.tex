@@ -1,0 +1,24 @@
+\section{Knowledge Distillation}
+
+Knowledge Distillation, bir model eğitilirken, büyük ve güçlü bir modelin (öğretmen model) bilgisini daha küçük ve hafif bir modele (öğrenci model) aktarma sürecidir. Bu teknik, büyük modellerin sahip olduğu yüksek performansı daha küçük ve daha hızlı modellere taşımayı amaçlar. Knowledge Distillation'da öğretmen model, öğrenci modeline bilgi sağlar ve öğrenci model, öğretmen modelinin ürettiği "soft labels" (yumuşak etiketler) kullanılarak eğitilir. Bu süreçte öğrenci model, öğretmen modelinin yaptığı gibi veriyi daha iyi öğrenir, ancak daha küçük boyutta ve daha hızlı bir şekilde çalışabilir. 
+
+\subsection{Çalışma Adımları}
+
+\begin{enumerate}
+    \item İlk adımda, karmaşık bir görev için büyük ve güçlü bir öğretmen modeli eğitilir. Bu model, görevde yüksek doğruluk elde eder ve bu doğruluk öğrenci modele aktarılacaktır.
+    \item Daha küçük bir öğrenci modeli tanımlanır. Bu model, öğretmen modeline kıyasla daha az parametreye ve daha hafif bir mimariye sahiptir. Öğrenci modelin amacı, öğretmen modelinin bilgi ve performansını mümkün olduğunca yakından taklit etmektir.
+    \item Öğretmen modeli, eğitim verisine göre çıktı üretir. Ancak bu çıktılar, sadece doğru sınıfı değil, her sınıf için olasılık dağılımını da içeren soft labels (yumuşak etiketler) olarak alınır. Öğrenci modeli, bu yumuşak etiketler kullanılarak eğitilir. Böylece model sadece doğru sınıfı öğrenmekle kalmaz, aynı zamanda diğer sınıflar arasındaki ince farkları da öğrenir.
+    \item Eğitim sırasında, öğrenci modelinin çıktıları ile öğretmen modelin soft labels çıktıları arasındaki farkı minimize eden bir kayıp fonksiyonu (distillation loss) kullanılır.
+    \item Eğitimin sonunda, öğrenci model yeni veriler üzerinde tahmin yapabilir. Öğrenci model, öğretmen modeline benzer sonuçlar verebilecek şekilde optimize edilmiş olur, ancak daha hızlı ve hafif bir şekilde çalışır.
+\end{enumerate}
+
+\[ \text{Distillation Loss} = \alpha (\text{soft loss}) + (1 - \alpha) * (\text{hard loss})\]
+
+\begin{itemize}
+    \item $\text{Soft Loss}$: Öğrenci modelin soft labels ile öğretmen modelin soft labels çıktıları arasındaki fark hesaplanır.
+    \item $\text{Hard Loss}$: Öğrenci modelin gerçek etiketler ile olan tahmin farkı ölçülür.
+    \item $\alpha$: Bu iki kayıp arasında bir denge sağlar.
+\end{itemize}
+
+
+\newpage

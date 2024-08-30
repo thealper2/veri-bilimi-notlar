@@ -1,0 +1,15 @@
+\section{Forward Forward Algorithm (FFA)}
+
+Geoffrey Hinton tarafından geliştirilmiştir. Derin öğrenme ağlarının eğitim süreçlerinde kullanılan bir yöntemdir. İleri geri yayılım (backpropagation) algoritmasının yerine önerilmiştir. FFA, geri yayılım ve türev hesaplamaları gibi karmaşık süreçlerden kaçınarır. Geleneksel sinir ağlarında, verileri ileri doğru ağ boyunca yayılır ardından geri yayılım kullanılarak ağırlıklar güncellenir. FFA'da ise sadece ileri yönde bir geçiş vardır ve her katman kendi başına optimize edilir. FFA, her katmanı ayrı ayrı öğrenir. FFA'da her katman kendine ait bir hata fonksiyonuna sahiptir ve sadece kendi çıktısını optimize eder. Yani, tüm ağın hata fonksiyonunu minimize etmek yerine, her katman kendi alt problemine odaklanır ve en iyi şekilde kendini optimize eder. Bu, katman bazlı öğrenme yaklaşımı olarak da adlandırılır. Geri yayılımın karmaşıklığını ve hesaplama yükünü ortadan kaldırır. Her katmanın kendi başşına optimize edilmesi, hem öğrenme sürecini basitleştirir hem de hesaplama sürecini hızlandırır. FFA, her katmanı ayrı ayrı optimize ettiği için, ağın genel olarak küresel bir minimuma yakınsaması zordur. Her katmanın ayrı optimize edilmesi, ağın yerel minimumlara takılma olasığını artırır.
+
+\subsection{Çalışma Adımları}
+\begin{enumerate}
+    \item Eğitim verileri ağın girişine verilir. Ağ, veriler üzerinde ileri yönde işlem yapar.
+    \item Her katman, kendisine gelen girdilere göre bir çıktı üretir. Bu çıktı, bir sonraki katmana aktarılır. Her katman, kendi hedef fonksiyonunu optimize eder.
+    \item Her bir katman, kendi hata fonksiyonunu minimize edecek şekilde ağırlıklarını günceller. Bu işlem, ileri doğru yayılım sırasında gerçekleşir.
+    \item Son katman, nihai çıktıyı üretir. Herhangi bir geri yayılım yapılmaz.
+\end{enumerate}
+
+
+
+\newpage

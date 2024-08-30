@@ -1,0 +1,17 @@
+\section{PixelCNN}
+
+Klasik CNN mimarisinin, piksellerin sıralı tahminini yapmaya yarayacak şekilde değiştirilmiş bir versiyonudur. Görüntü verileri ile olasılıksal modelleme yapmak için kullanılır. Her bir pikseli koşullu bir olasılık dağılımı altında tahmin ederek yeni görüntüler oluşturur. Her pikselin değeri daha önceki piksellere dayalı olarak hesaplanır. Pikselleri soldan sağa ve yukarıdan aşağıya olacak şekilde ardışık olarak işler.
+
+PxielCNN, CNN'lerin aksine pikselleri ardışık olarak işler. CNN'ler, tüm görüntüyü bir kerede işlerken, PixelCNN her bir pikseli, kendinden önceki piksellere bağlı olarak tahmin eder. Bu ardışıklık, PixelCNN'in bir generate model olarak çalışmasını sağlar. Klasik CNN'lerde, her piksel çevresindeki tüm piksellere bakarken, PixelCNN'de pikseller Masked Convolution katmanı ile maskelenir, yani her piksel yalnızca kendinden önce gelen piksellere bakar. Bu sayede model, gelecekteki bilgilere erişmeden doğru bir ardışık tahmin yapabilir.
+
+\subsection{Çalışma Adımları}
+
+\begin{enumerate}
+    \item İlk adımda, her pikselin yalnızca kendisinden önce gelne piksellere bakmasını sağlamak için "Masked Convolution" uygulanır. Masked Convolution, modelin belirli piksellere (geçmiş) bakacak şekilde maskelenmesidir. Bu, bir pikselin gelecekteki piksellere bakmasını engeller ve ardışık bir yapı sağlar. Model, bir pikselin tahminini yaparken sadece önceki piksellerden bilgi alabilir.
+    \item Her piksel, softmax fonksiyonu ile önceki piksellere dayalı bir olasılık dağılımı olarak hesaplanır. Bu dağılım, pikselin RGB veya grayscale değerleri için tahmin edilen olasılıkları gösterir.
+    \item Piksel değerleri ardışık olarak, soldan sağa ve yukarıdan aşağıya olacak şekilde hesaplanır. İlk piksel tamamen rastgele seçilirken, her bir sonraki piksel daha önce hesaplanan piksellere bağlı olarak tahmin edilir.
+    \item Model, her pikselin tahmininde yaptığı hatalar üzerinden geri yayılım (backpropagation) yoluyla eğitim alır. Model, her pikselin tahminindeki hatayı en aza indirmek için parametrelerini günceller
+    \item Eğitim tamamlandığında, model sıfırdan başlayarak yeni bir görüntü üretebilir.
+\end{enumerate}
+
+\newpage

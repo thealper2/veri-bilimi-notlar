@@ -104,6 +104,8 @@ Standart GAN mimarisine ek olarak 1 adet sınıflandırıcı eklenmiştir. Bu s�
 
 BEGAN, bir denge noktası (equilibrium point) ile generator ve discriminator arasındaki dengeyi kurar. Böylece, modelin overfitting ve mode collapse gibi sorunlarla karşılaşma olasılığı azalır. 
 
+\subsubsection{Çalışma Adımları}
+
 \begin{enumerate}
     \item Eğitime başlarken, denge parametresi küçük bir değere ayarlanır. 
     \item Ayırıcının yaptığı hata kullanılarak, denge parametresi güncellenir. Eğer ayırt edici çok fazla hata yapıyorsa, denge parametresi artıralarak üreticiye daha fazla özgürlük verir. Eğer ayırt edici çok az hata yapıyorsa, denge parametresi azaltılarak üretici daha kısıtlanır.
@@ -111,7 +113,9 @@ BEGAN, bir denge noktası (equilibrium point) ile generator ve discriminator ara
 
 \subsection{Boundary-Seeking GAN (BSGAN)}
 
-BSGAN'ın temel farkı, ayrımcının kararlarının olasılık dağılımının sınırlarında toplanmasını sağlamasıdır. Bu, eğitim sırasında üretilen verinin kalitesini artırmakta ve daha stabil bir eğitim süreci sunmaktadır.
+BSGAN'ın temel farkı, Discriminator'un kararlarının olasılık dağılımının sınırlarında toplanmasını sağlamasıdır. Bu, eğitim sırasında üretilen verinin kalitesini artırmakta ve daha stabil bir eğitim süreci sunmaktadır.
+
+\subsubsection{Çalışma Adımları}
 
 \begin{enumerate}
     \item Rastgele gürültüden görüntüler üretilir.
@@ -123,6 +127,8 @@ BSGAN'ın temel farkı, ayrımcının kararlarının olasılık dağılımının
 \subsection{Cluster GAN (Clustering-aware GAN)}
 
 Kümeleme ve jeneratif modellemeyi birleştirir. Cluster GAN, hem gerçek verilerin dağılımını öğrenmek hem de veriyi kümelere ayırmak amacıyla tasarlanmıştır. Gerçek verilerin altında yatan gizli yapıları öğrenirken, üretilen veriyi bu yapılara göre kategorize ederek yüksek kalitede örnekler oluşturmayı hedefler. İçerisinde Generator ve Discriminator'a ek olarka bir adet Encoder bulunur. Bu encoder, gerçek veriyi gizli uzaya kodlayarak, bu verilerin nasıl dağıldığını öğrenir.
+
+\subsubsection{Çalışma Adımları}
 
 \begin{enumerate}
     \item Rastgele gürültüden görüntüler üretilir.
@@ -140,7 +146,7 @@ Eksik veya kısmı verileri tamamlama (inpainting) problemlerinde kullanılan bi
 
 \subsection{Coupled GAN (CoGAN)}
 
-İki farklı ama ilgili veri dağılımını öğrenmek ve bu iki dağılımı eşleştirmek amacıyla kullanılan bir GAN türüdür. CoGAN, iki farklı veri kümesinden benzer yapılsal özelliklere sahip veriler üretmek için tasarlanmıştır. Bu yöntem, iki GAN'ın ağırlık paylaşımı yoluyla birbirleriyle senkronize çalışmasıyla, çiftler halinde uyumlu veri üretimi sağlar. Bu GAN'lar birbirinden bağımsız çalışsa da, belirli katmanlar arasında ağırlık paylaşımı yaparak iki veri kümesi arasındaki ortak özellikleri öğrenirler. Bu mimaride, her iki GAN'ın üretici ve ayrımcıları bulunur, ancak belirli katmanlar ortak kullanılır. 
+İki farklı ama ilgili veri dağılımını öğrenmek ve bu iki dağılımı eşleştirmek amacıyla kullanılan bir GAN türüdür. CoGAN, iki farklı veri kümesinden benzer yapılsal özelliklere sahip veriler üretmek için tasarlanmıştır. Bu yöntem, iki GAN'ın ağırlık paylaşımı yoluyla birbirleriyle senkronize çalışmasıyla, çiftler halinde uyumlu veri üretimi sağlar. Bu GAN'lar birbirinden bağımsız çalışsa da, belirli katmanlar arasında ağırlık paylaşımı yaparak iki veri kümesi arasındaki ortak özellikleri öğrenirler. Bu mimaride, her iki GAN'ın Generator ve Discriminator'ları bulunur, ancak belirli katmanlar ortak kullanılır. 
 
 \subsection{Disco GAN}
 
@@ -164,7 +170,7 @@ Denetimsiz öğrenme ile anlamlı ve yorumlanabilir veri temsilleri elde etmeye 
 
 \subsection{Least Squares GAN (LSGAN)}
 
-LSGAN'da ayrıştırıcıda kullanılan kayıp fonksiyonu binary cross entropy yerine ortalama kare hata (mean squared error) olarak değiştirilmiştir. Gerçek veriler için yüksek değerler, sahte veriler için düşük değerler üretir. LSGAN'da ayrımcının çıktısı gerçeklik ve sahtelik arasındaki farkı ifade eder ve bu fark ortalama kare ile hesaplanır. Gerçek veriler için hedef değer 1, sahte veriler için hedef değer 0'dır. Ayrıştırıcının kaybı, gerçek ve sahte verilerin tahmin edilen değerleri ile bu hedef değerler arasındaki ortalama kare hatadır. Üreticinin amacı sahte veriler için tahmin ettiği değerlerin 1'e ne kadar yakın olduğunu sağlamak için kaybını minimize eder. Bu, üreticinin ayrıştırıcıyı daha iyi yanıltmasını sağlar.
+LSGAN'da ayrıştırıcıda kullanılan kayıp fonksiyonu binary cross entropy yerine ortalama kare hata (mean squared error) olarak değiştirilmiştir. Gerçek veriler için yüksek değerler, sahte veriler için düşük değerler üretir. LSGAN'da Discriminator'un çıktısı gerçeklik ve sahtelik arasındaki farkı ifade eder ve bu fark ortalama kare ile hesaplanır. Gerçek veriler için hedef değer 1, sahte veriler için hedef değer 0'dır. Ayrıştırıcının kaybı, gerçek ve sahte verilerin tahmin edilen değerleri ile bu hedef değerler arasındaki ortalama kare hatadır. Üreticinin amacı sahte veriler için tahmin ettiği değerlerin 1'e ne kadar yakın olduğunu sağlamak için kaybını minimize eder. Bu, üreticinin ayrıştırıcıyı daha iyi yanıltmasını sağlar.
 
 \subsection{Unified GAN for Image-to-Image Translation (UNIT)}
 
@@ -173,6 +179,8 @@ Birden fazla görüntü dönüşüm görevini tek bir modelle gerçekleştirebil
 \subsection{Multimodal Unsupervised Image-to-Image Translation (MUNIT)}
 
 Çok modlu ve denetimsiz görüntü şekil çevirisi için geliştirilmiş bir generatif modeldir. MUNIT, bir görüntünün stilini ve içeriğini ayırarak, çeşitli stiller arasında dönüşüm yapabilen ve çeşitli içeriklerle uyumlu olan bir model sunar. İçerik kodlayıcı (content encoder), girdi görüntüsünün içeriğini çıkarır ve içerik özelliklerini temsil eden bir vektör üretir. Stil kodlayıcı (style encoder), girdi görüntüsünün stil özelliklerini çıkarır ve stil özelliklerini temsil eden bir vektör üretir.
+
+\subsubsection{Çalışma Adımları}
 
 \begin{enumerate}
     \item Girdi görüntüsü, içerik ve stil kodlayıcıları tarafından işlenir. İçerik kodlayıcı görüntünün içeriğini temsil eden bir vektör oluştururken, stil kodlayıcı, stil özelliklerini temsil eden bir vektör oluşturur.
@@ -185,6 +193,8 @@ Birden fazla görüntü dönüşüm görevini tek bir modelle gerçekleştirebil
 \subsection{Pixel-wise Domain Adaption (PixelDA)}
 
 Bir görüntü setinin başka bir kaynaktan başka bir kaynağa dönüştürülmesi gereken durumlarda kullanılır. Özellik çıkarıcı (feature extractor) ve uyum ağı (adaptation) networkten oluşur. Özellik çıkarıcı (feature extractor), görüntüleri işleyerek anlamlı özellikler çıkarır. Her iki alanda da (kaynak ve hedef) ortak bir temsil öğrenir. Uyum ağı (adaptation network), özellikleri her iki alan arasında uyumlu hale getirmek için çalışır. Bu ağ, kaynak ve hedef alanlardaki özelliklerin uyumlu olmasını sağlar. Bu iki alan arasındaki farklılıkları minimize etmeye çalışır.  Reconstruction Loss (Geri Dönüşüm Kaybı), özelliklerin doğru bir şekilde uyum sağladığını kontrol etmek için kullanılır. Bu kayıp, dönüştürülmüş görüntülerin kaynaktan hedef alana doğru bir şekilde haritalanıp haritalanmadığını kontrol eder. 
+
+\subsubsection{Çalışma Adımları}
 
 \begin{enumerate}
     \item Kaynak ve hedef görüntüler, özellik çıkarıcı tarafından işlenir. Bu, her iki alanda da ortak bir özellik temsilinin elde edilmesini sağlar.
@@ -200,14 +210,147 @@ Relativistic GAN, gerçek ve sahte görüntüleri tek tek değerlendirmek yerine
 
 \subsection{Semi-Supervised GAN}
 
-GAN içinde yarı denetimli öğrenmeyi kullanan bir modeldir. Bu model, etiketlenmiş ve etiketlenmemiş verilerle öğrenme sürecini destekler. SSGAN'de ayrımcı ağı ayrıca sınıflandırma görevini de yerine getirir. Bu, ayrımcının her görüntüyü hem gerçek/sahte hem de sınıf bilgisi açısından değerlendirmesini sağlar.
+GAN içinde yarı denetimli öğrenmeyi kullanan bir modeldir. Bu model, etiketlenmiş ve etiketlenmemiş verilerle öğrenme sürecini destekler. SSGAN'de Discriminator ağı ayrıca sınıflandırma görevini de yerine getirir. Bu, Discriminator'un her görüntüyü hem gerçek/sahte hem de sınıf bilgisi açısından değerlendirmesini sağlar.
 
 \subsection{Softmax GAN}
 
-GAN içinde Softmax fonksiyonunu kullanarak, özellikle sınıflandırma problemlerini çözme ve yüksek kaliteli veri üretme konusunda geliştirilmiş bir modeldir. Softmax GAN, klasik GAN mimarisine ek olarak Softmax fonksiyonunu kullanarak sınıflandırma işlevselliği ekler. Softmax Katmanı, Ayrımcı ağına entegre edilir ve verilerin farklı sınıflara ait olma olasılıklarını hesaplar. Softmax fonksiyonu, bir dizi olasılığı normalize ederek, her bir sınıf için olasılıkları toplar ve bu olasılıkların toplamı 1 olur. Ayrımcı ağı, gerçek ve sahte verilerden özellikler çıkarır. Bu özellikler, Softmax katmanı tarafından sınıflandırma yapılacak şekilde işlenir. Generator ve ayrımcı ağları, Softmax fonksiyonunun hesapladığı sınıf kaybı ve gerçek/sahte kayıplarına göre güncellenir.
+GAN içinde Softmax fonksiyonunu kullanarak, özellikle sınıflandırma problemlerini çözme ve yüksek kaliteli veri üretme konusunda geliştirilmiş bir modeldir. Softmax GAN, klasik GAN mimarisine ek olarak Softmax fonksiyonunu kullanarak sınıflandırma işlevselliği ekler. Softmax Katmanı, Discriminator ağına entegre edilir ve verilerin farklı sınıflara ait olma olasılıklarını hesaplar. Softmax fonksiyonu, bir dizi olasılığı normalize ederek, her bir sınıf için olasılıkları toplar ve bu olasılıkların toplamı 1 olur. Discriminator ağı, gerçek ve sahte verilerden özellikler çıkarır. Bu özellikler, Softmax katmanı tarafından sınıflandırma yapılacak şekilde işlenir. Generator ve Discriminator ağları, Softmax fonksiyonunun hesapladığı sınıf kaybı ve gerçek/sahte kayıplarına göre güncellenir.
 
 \subsection{Star GAN}
 
-Çeşitli veri kümeleri üzerinde çoklu alanlarda (domain) verileri dönüştürmek için kullanılan bir modelidir. StarGAN, tek bir model kullanarak farklı alanlarda veri dönüştürme işlemlerini gerçekleştirebilir. Domain Classifier (Alan Sınıflayıcı), üretici ve ayrımcıdan bağımsız olarak çalışır ve verilerin hangi alana ait olduğunu tahmin eder. 
+Çeşitli veri kümeleri üzerinde çoklu alanlarda (domain) verileri dönüştürmek için kullanılan bir modelidir. StarGAN, tek bir model kullanarak farklı alanlarda veri dönüştürme işlemlerini gerçekleştirebilir. Domain Classifier (Alan Sınıflayıcı), üretici ve Discriminator'den bağımsız olarak çalışır ve verilerin hangi alana ait olduğunu tahmin eder. 
+
+\subsection{Adaptive Boosting GAN (AdaGAN)}
+
+Boosting yöntemini kullanan bir GAN türüdür. Temel olarak zayıf generatorlerin ardışık olarak eğitildiği ve bu generatorlerin oluşturduğu zayıf modellerin sonunda güçlü bir model oluşturmak için birleştirildiği bir yapıyı benimser. Ardışık olarak eğitilen birden fazla generator modeli vardır. Her generator, veri kümesinin bir kısmını daha iyi modellemeye odaklanır. Her generatorün oluşturduğu örnekleri değerlendiren ve bu değerlendirmelere göre generatorlerin ağırlıklarını güncelleyen bir ayrıştırıcı ağ bulunur. Generatorler arasındaki adaptif ağırlıklandırma (adaptive weighting) sistemi, her generatorun başarı oranına göre güncellenir. Bu sayede daha kötü performans gösteren generatorler, diğer generatorler tarafından telafi edilir. 
+
+\subsubsection{Çalışma Adımları}
+
+\begin{enumerate}
+    \item İlk generator, gerçek veri ve rastgele gürültüden türetilen sahte veri arasında ayrım yapmaya çalışan bir discriminator yardımıyla eğitilir.
+    \item İlk generator eğitildikten sonra, generatorün başarısız olduğu örnekler tespit edilir ve bu örneklere daha yüksek ağırlıklar verilir. Bu süreç, boosting'in ana fikri olan hatalı örneklerin ağırlıklarının artırılmasına dayanır.
+    \item Yüksek ağırlıklandırılmış örnekler üzerinde daha iyi performans gösterecek şekilde sonraki generatorler eğitilir. Her generator, bir önceki generatorün başarısız olduğu bölgeleri hedef alır.
+    \item Eğitilen tüm generatörler, ağırlıklarına göre birleştirilir ve güçlü generator model oluşturulur.
+\end{enumerate}
+
+\subsection{Balanced Consistency Regularization (bCR)}
+
+GAN için geliştirilmiş bir tutarlılık düzenleme (consistency regularization) tekniğidir. Discriminator'un daha dengeli ve tutarlı geri bildirimler sağlamasını hedefler, böylece Generator'un daha doğru ve gerçekçi örnekler üretmesini teşvik eder. Consistency Regularization Term, Discriminator'un benzer girişler için tutarlı çıktılar üretmesini sağlamak amacıyla kayıp fonksiyonuna eklenir. Bu sayede, Discriminator, aynı veya benzer görüntüler için tutarlı kararlar verir.  
+
+\[ \text{BCR} = \lambda \cdot \mathbb{E}\left[\|f(x) - f(\hat{x})\|_2^2\right] \]
+
+\begin{itemize}
+    \item $f(x)$: Modelin x girdi vektörüne verdiği çıkış vektörü.
+    \item $f(\hat{x})$: Modelin değiştirilmiş x girdi vektörüne verdiği çıkış vektörü.
+    \item $\mathbb{E}\left[\|f(x) - f(\hat{x})\|_2^2\right]$: İki vektör arasındaki L2 normunun, yani Euclidean mesafesinin, karesi.
+\end{itemize}
+
+\subsection{BigGAN}
+
+Yüksek kaliteli doğal görüntülerin üretilmesi için geliştirilmiş bir modeldir. Sınıf koşullu generator kullanır. Yani, üretilen görüntüler belirli bir sınıfa ait olacak şekilde kontrol edilebilir. Spectral Normalization tekniğini kullanarak ağırlıkları kontrol eder. Spectral Normalizatoin, Discriminator'un spektral normlarını sınırlayarak, ağın kararlılığını sağlar. Böylece overfitting'in görülmesini azaltmaya çalışır.
+
+\subsection{ConSinGAN}
+
+Tek bir görüntüden çeşitli ve yüksek çözünürlükte görüntüler üreten bir modeldir. ConSinGAN, yalnızca tek bir örnek görüntüden öğrenme kapasitesine sahiptir. ConSinGAN’in mimarisi, ölçekler arasında ilerleyerek görüntü üretimini sağlayan çok katmanlı bir yapıyı içerir. Bu mimaride, Generator ve Discriminator ağları, farklı çözünürlüklerde görüntüler üretmek ve değerlendirmek için kademeli olarak eğitilir. Bu süreç, çeşitli çözünürlüklerde daha küçük ölçeklerde başlayan ve en sonunda tam çözünürlüklü görüntüler üreten bir yapı ile gerçekleştirilir. Koşullu Yürütme (Conditional Execution) ile Generator, önceki çözünürlükte üretilen görüntüyü giriş olarak alır ve bunu bir sonraki çözünürlüğe genişletir. Bu, Generator'un her aşamada daha karmaşık ve yüksek çözünürlüklü görüntüler üretebilmesini sağlar. Her çözünürlük katmanında eklenen rastgele gürültü, çeşitliliğin artırılmasını ve Generator'un farklı çıktılar üretebilmesini sağlar.
+
+\begin{itemize}
+    \item \textbf{Multi-Scale Generator (Çok Ölçekli Generator)}: ConSinGAN, görüntüleri farklı çözünürlüklerde oluşturmak için çok ölçekli bir Generator ağına sahiptir. Her bir ölçek, önceki ölçekten elde edilen çıktıyı kullanarak bir sonraki ölçekli görüntüyü üretir.
+    \item \textbf{Multi-Scale Discriminator (Çok Ölçekli Discriminator)}: Discriminator ağı da benzer şekilde çok ölçekli çalışır. Her bir ölçek, o çözünürlükte üretilen görüntüyü gerçek veya sahte olarak değerlendirir.
+\end{itemize}
+
+\subsubsection{Çalışma Adımları}
+
+\begin{enumerate}
+    \item Tek bir giriş görüntüsü, en küçük çözünürlükten en büyük çözünürlüğe kadar olan bir dizi ölçeğe bölünür. Bir görüntü önce çok küçük bir çözünürlükte işlenir, ardından daha yüksek çözünürlüklere doğru kademeli olarak genişletilir
+    \item Eğitim süreci, en küçük çözünürlükteki Generator ve Discriminator çiftini eğitmekle başlar. Bu çift, görüntünün düşük çözünürlüklü bir versiyonunu üretir ve discriminator bu görüntüyü gerçek veya sahte olarak değerlendirir. Bu süreç, her bir ölçek için tekrarlanır ve her adımda Generator bir önceki çözünürlükte üretilen görüntüyü genişleterek daha büyük bir görüntü üretir.
+    \item Her bir ölçek için Generator, ek rastgele gürültü alır. Bu gürültü, Generator'un daha çeşitli ve benzersiz görüntüler üretmesini sağlar.
+    \item Generator her bir çözünürlükte önceki çözünürlükte üretilen görüntüyü giriş olarak alır. Bu nihai yüksek çözünürlüklü görüntünün oluşturulmasını sağlar.
+\end{enumerate}
+
+\subsection{EqGAN-SA}
+
+Mekansal farkındalık (spatial awareness) kullanarak GAN'lardaki dengesizlik sorunlarını gidermeyi amaçlamaktadır. Generator, mekansal bilgiyi de dikkata alarak görüntü üretir. Discriminator ise mekansal farkındalığa sahiptir ve bu sayede sadece genel farkları değil, aynı zamanda mekansal özellikleri de değerlendirebilir. Generator ve Discriminator mekansal farkındalık kaybı (spatial awareness loss) kayıp fonksiyonunu optimize ederken mekansal bilgiyi dikkate alır.
+
+\subsubsection{Çalışma Adımları}
+
+\begin{enumerate}
+    \item Generator, rastgele gürültüden başlar ve mekansal farkındalık katmanı kullanarak görüntüleri üretir. Aynı zamanda, bu katman, mekansal özellikleri daha iyi yakalayabilmek için Generator'un çıktısını detaylandırır.
+    \item Discriminator, mekansal farkındalık katmanından gelen veriyi kullanarak, Generator tarafından üretilen görüntüleri analiz eder.
+    \item Dengeleme mekanizması, Generator ve Discriminator arasındaki dengeyi sağlamak için devreye girer. Bu mekanizma, iki ağı da eşit seviyede eğiterek birinin diğerinden çok daha hızlı veya yavaş öğrenmesini engeller.
+    \item Generator ve Discriminator, mekansal farkındalık kaybını minimize etmeye çalışır.
+    \item Generator, Discriminator'den gelen bilgiyi alır ve bu bilgilere dayanarak görüntüleri iyileştirir. Bu süreç, dengeyi koruyarak tekrarlanır.
+\end{enumerate}
+
+\subsection{f-GAN}
+
+GAN'ın temel problemlerinden olan divergence ölçümünü ele alır ve bu ölçümü minimize ederek Generator'un daha gerçekçi veriler üretmesini sağlar. f-GAN'da, Discriminator'un amacı yalnızca gerçek veya sahteyi ayırt etmek değildir; aynı zamanda belirli bir divergence minimize edecek şekilde optimize edilir. f-Divergence, iki olasılık dağılımı arasındaki farklılığı ölçen bir fonksiyondur. f-GAN, bu fonksiyonları kullanarak Genreator ve gerçek veri dağılımı arasındaki farklılığı minimize eder. 
+
+\subsection{Generative Adversarial Paralellization (GAP)}
+
+GAN'ların eğitim sürecini daha hızlı ve verimli hale getirmek amacıyla paralelleştirme tekniklerini kullanır. GAP, birden fazla paralel Generator'un aynı anda eğitilmesine izin verir. Bu Generator'ler, veri setinin farklı bölümlerinde çalışır ve aynı zamanda farklı türde veriler üretebilirler. GAP, birden fazla paralel Discriminator'ler kullanarak Generator'lerin ürettiği verilerin doğruluğunu test eder. Generator'lerin ürettiği veriler üzerinde farklı kriterler değerlendirme yapabilirler. Paralel Generator'ler ve Discriminator'ler arasındaki koordinasyonu sağlamak için bir kontrol mekanizması kullanılır. Bu mekanizma, Generator'lerin ve Discriminator'lerin senkronize çalışmasını ve verimli bilgi paylaşımını sağlar.
+
+\begin{itemize}
+    \item \textbf{Master Generator}: Generator'lerin genel yönünü ve stratejisini belirler. Ana Generator, paralel Generator'lerden gelen geri bildirime göre kendini optimize eder.
+    \item \textbf{Sub-Generators}: Veri setinin belirli bölümlerini işlerler. Alt Generator'ler, veri setini farklı perspektiflerden ele alarak daha geniş bir veri çeşitliliği sağlar.
+    \item \textbf{Master Discriminator}: Paralel Discriminator'lerden gelen bilgileri bir araya getirir ve Generator'lerin genel performansını değerlendirir.
+    \item \textbf{Sub-Discriminator}: Üretilen verileri farklı kriterler üzerinden değerlendirir. Bu Discriminator'ler, Generator'lerin sahte ve gerçek verileri ayırt etmesine yardımcı olur.
+    \item \textbf{Coordination Mechanism}: Paralel Generator'ler ve Discriminator'ler arasında veri alışverişini ve senkronizasyonu sağlar.
+\end{itemize}
+
+\subsection{Geometric GAN (GGAN)}
+
+GAN modellerinin eğitimini geometrik özelliklere dayalı olarak optimize etmeye çalışan bir GAN türüdür. Discriminator'un karar sınırlarını optimize eden geometrik bir düzenleme (geometric measure) kullanır. 
+
+\subsection{Laplacian Pyramid GAN (LAPGAN)}
+
+LAPGAN, düşük çözünürlüklü bir görüntüyü kademeli olarak yüksek çözünürlüklü hale getirir. Bu süreç, Laplace piramidi olarak bilinen çok seviyeli bir görüntü temsil yöntemine dayalıdır. Bir görüntü, Laplace piramidi yöntemiyle farklı çözünürlük seviyelerine ayrılır. Her seviye, bir önceki seviyedeki düşük çözünürlüklü görüntüden türetilir ve bu seviyeye ait detayları içerir. LAPGAN, her çözünürlük seviyesinde bir Generator kullanır. Bu Generator'ler, bir önceki seviyede üretilen görüntüyü alır ve bu görüntüyü daha yüksek bir çözünürlükte yeniden üretir. Her Generator, bir önceki çözünürlük seviyesinin detaylarını ekler. Her çözünürlük seviyesi için ayrı bir Discriminator modeli bulunur. Bu Discriminator'ler, Generator'lerin ürettiği görüntülerin gerçek mi yoksa sahte mi olduğunu ayırt etmek için kullanılır. Discriminator'ler, her çözünürlük seviyesinde Generator'leri zorlayarak daha gerçekçi görüntüler üretilmesine yardımcı olur. 
+
+\subsection{Margin Adaptation for GAN (MAGAN)}
+
+Generator ve Discriminator arasındaki yarışmayı daha stabil hale getirmek için "marjin adaptasyonu (margin adaptation)" yöntemini kullanır. Marjin adaptasyonu, Discriminator'un karar sınırını (yani marjini), dinamik olarak ayarlayarak Generator'un daha iyi öğrenmesini sağlar. Discriminator, sahte veriler üzerinde eğitildikçe, belirli bir marjin (sınır) içinde bu verileri sınıflandırmaya çalışır. Eğer Generator'un ürettiği veriler Discriminator tarafından kolayca ayırt ediliyorsa, bu marjin daraltılır; eğer Discriminator zorlanıyorsa, marjin genişletilir.
+
+\subsection{Mode Regularized GAN (MRGAN)}
+
+MRGAN (Mode Regularized Generative Adversarial Networks), GAN’ların (Generative Adversarial Networks) mod çöküşü (mode collapse) sorununu çözmek için tasarlanmış bir modeldir. Mod çöküşü, Generator'un sınırlı sayıda veri modunu (örneğin, görüntü varyasyonlarını) öğrenmesi ve bu nedenle sadece belirli türde veriler üretmesi durumudur. MRGAN, Generator'un daha geniş bir veri dağılımını öğrenmesini sağlamak amacıyla mod düzenlemesi (mode regularization) mekanizmasını kullanır. Mod Düzenleyici Terim (Mode Regularization Term), Generator'un veri modlarını daha geniş bir şekilde kapsamasını sağlamak amacıyla Generator'un kayıp fonksiyonuna eklenir. 
+
+\subsection{Multi-Scale Gradients for GAN (MSGGAN)}
+
+Eğitim sırasında çok ölçekli gradyanlar kullanır. Çok ölçekli gradyanlar, Generator'un her çözünürlük seviyesinde nasıl performans gösterdiğini değerlendiren gradyanlar üretir.
+
+\subsection{Relativistic Average GAN (RaGAN)}
+
+Relativistic Discriminator adı verilen bir mekanizmayı kullanır. Relativistic Discriminator, sahte verilerin ne kadar gerçek olduklarını değerlendirmek yerine, gerçek verilerin sahte verilere kıyasla ne kadar gerçek olduğunu değerlendirir.
+
+\subsection{Self-Attention GAN (SeAtGAN)}
+
+Self-Attention mekanizmasını kullanarak Generator ve Discriminator'un daha uzun menzilli bağımlılıkları öğrenmesini sağlar. Self-Attention, modelin görüntüdeki uzak pikseller arasındaki ilişkiyi anlamasına ve bu sayede daha tutarlı ve kaliteli sahte veriler üretmesini sağlar. 
+
+\subsection{SphereGAN}
+
+Mod çökmesi (mode collapse) gibi sorunları küresel (sphere) bir proje üzeirnde geometrik moment uyumlaması ile çözer. SphereGAN, veri dağılımlarını geometrik momentlerle tanımlayarak, Generator'un bu dağılımları daha doğru bir şekilde öğrenmesini ve modellemesini sağlar. Generator, verileri bir küresel yüzey üzerine projekte eder. Bu, veri dağılımlarının geometrik bir yapıya uygun hale gelmesini sağlar ve mod çökmesini engeller. Discriminator, verilerin geometrik momentlerini hesaplar ve bu momentleri kullanarak Generator'un ürettiği verileri değerlendirir.
+
+\subsection{Stacked GAN (SGAN)}
+
+SGAN, birden fazla Generator ve Discriminator katmanını ardışık olarak bir araya getirerek, düşük çözünürlüklü bir görüntüden başlayarak adım adım daha yüksek çözünürlüklü ve detaylı bir görüntü oluşturmayı hedefler. Bu mimari, özellikle karmaşık ve yüksek çözünürlüklü görüntülerin üretimi için kullanışlıdır. İlk Generator (G1) düşük çözünürlüklü bir görüntü üretir. İlk Discriminator (D1) bu görüntüyü gerçek düşük çözünürlüklü görüntülerle karşılaştırır ve gerçek ya da sahte olduğunu belirler. Her ardışık Generator, önceki Generator'un ürettiği görüntüyü alır ve bunu daha yüksek çözünürlüklü bir görüntüye dönüştürmeye çalışır. Her Generator ve Discriminator çifti, bir önceki katmanın çıktısını alır ve üzerine daha fazla detay ekler. Son Generator, en yüksek çözünürlüklü görüntüyü üretir. Bu, başlangıçtaki düşük çözünürlüklü görüntünün aşamalı olarak iyileştirilmesiyle elde edilir. 
+
+\subsection{Single-Image GAN (SinGAN)}
+
+SinGAN, herhangi bir eğitim verisi gerektirmeden, sadece bir görüntüden yola çıkarak bu görüntünün çeşitli versiyonlarını, varyasyonlarını ve hatta tamamen yeni görüntüler oluşturabilir. Her Generator, bir önceki ölçekten gelen düşük çözünürlüklü görüntüyü alır ve buna gürültü ekleyerek daha yüksek çözünürlüklü bir görüntü oluşturur. Her Discriminator, kendi Generator'unün ürettiği görüntüyü değerlendirir ve bunun gerçek olup olmadığını belirler.
+
+\subsection{StableGAN}
+
+StableGAN'ın içerisindeki Tahmin Ağı (Prediction Network) ile, Generator'un ürettiği sahte verilerin gerçek veriye ne kadar yakın olduğunu tahmin etmeye çalışır ve bu tahminler, Generator'un daha stabil bir şekilde eğitilmesine yardımcı olur. Discriminator, Generator tarafından üretilen sahte veriyi ve gerçek veriyi alır ve bunlar arasında bir ayrım yapmaya çalışır. Tahmin ağı tarafından sağlanan ek bilgiler, Discriminator'un kararlarını daha güvenilir hale getirir.
+
+\subsection{TripleGAN}
+
+TripleGAN, klasik GAN yapısına bir sınıflandırıcı ekleyerek çalışır. Bu ek bileşen, modelin hem denetimli (supervised) hem de denetimsiz (unsupervised) öğrenme görevlerinde daha başarılı olmasını sağlar. Sınıflandırıcı, hem gerçek hem de Generator tarafından üretilen verilerin hangi sınıfa ait olduğunu belirlemeye çalışır. Bu bileşen, etiketli verilerden öğrenir ve bu öğrendiklerini etiketlenmemiş veriler üzerinde de uygulayarak modelin genel performansını artırır.
+
+\subsection{Unrolled GAN (UGAN)}
+
+GAN'lardaki sorunları önlemek için "unrolling (geri açma)" adı verilen bir teknik kullanır. Bu teknik, Generator'un birkaç adım ötesinde nasıl bir optimizasyon yapacağını simüle ederek Discriminator'un eğitilmesine olanak tanır. Bu, Generator'un daha uzun vadeli bir optimizasyon süreci için nasıl performans göstereceğini daha iyi yansıtır. 
+
+\subsection{U-Net GAN}
+
+U-Net GAN, GAN’ların geleneksel mimarisini U-Net yapısını içerecek şekilde geliştirir. U-Net, hem giriş görüntüsünden detaylı özellikler çıkarır hem de bu özellikleri daha büyük ölçekli bir görüntü üretmek için kullanır. U-Net yapısının Discriminator olarak kullanılması, Generator'un ürettiği sahte görüntülerin çok daha detaylı bir şekilde analiz edilmesine olanak tanır.
 
 \newpage

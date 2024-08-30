@@ -1,0 +1,41 @@
+\section{Nucleus Sampling}
+
+Nucleus Sampling (aynı zamanda top-p sampling olarak da bilinir), olasılıksal dil modellerinde metin üretmek için kullanılan bir örnekleme tekniğidir. Bu yöntem, modelin ürettiği olasılık dağılımından yalnızca belirli bir toplam olasılığa sahip en olası adayları seçer ve bu adaylardan rastgele örnekler alır. Amaç, metin üretiminde daha çeşitli ve doğal çıktılar elde etmek için dil modeli tarafından üretilen olasılıklar arasında denge sağlamaktır. Olasılıksal dil modellerinin ürettiği olasılık dağılımının kuyruk kısmındaki düşük olasılıklı, anlamsız olan kelimelerin etkisini sınırlar. Aynı zamanda belirli bir çekirdek (nucleus) oluşturup bu çekirdek içindeki kelimeler arasından seçilmesine olanak tanır. p değeri, nucleus sampling'in en önemli parametresidir. p değeri düşükse model daha dar bir çekirdekten seçim yapar ve sonuç daha deterministik olur. p değeri arttıkça çekirdek genişler ve sonuçlar daha rastgele hale gelir. 
+
+\subsection{Çalışma Adımları}
+
+\begin{enumerate}
+    \item Model, belirli bir pozisyonda çıkacak olan her kelime için bir olasılık dağılımı üretir.
+    \item Olasılık dağılımı büyükten küçüğe sıralanır. En yüksek olasılığa sahip kelimeler başa yerleştirilir.
+    \item Olasılıklar, toplamları belirli bir eşik değerine ulaşana kadar üst üste toplanır. Bu eşik genellikle p değeri ile tanımlanır ve p değerine bağlı olarak farklı bir kesme noktası seçilir.
+    \item Olasılıkların toplandığı bu sınırlı küme, modelin çekirdeği (nucleus) olarak adlandırılır. Bu çekirdek içindeki kelimeler modelin çıkışı olarak kullanılabilecek adaylar olur.
+    \item Çekirdek içindeki kelimeler arasından rastgele bir kelime seçilir. Bu, modelin daha doğal ve çeşitli metinler üretmesini sağlar.
+\end{enumerate}
+
+\subsection{Python Kodu}
+
+\begin{lstlisting}[language=Python]
+import torch
+import torch.nn.functional as F
+
+logits = torch.tensor([0.1, 0.2, 0.05, 0.3, 0.35])
+
+probs = F.softmax(logits, dim=-1)
+
+sorted_probs, sorted_indices = torch.sort(probs, descending=True)
+
+p = 0.9
+
+cumulative_probs = torch.cumsum(sorted_probs, dim=-1)
+cutoff_index = (cumulative_probs > p).nonzero(as_tuple=True)[0][0]
+
+nucleus_probs = sorted_probs[:cutoff_index + 1]
+nucleus_indices = sorted_indices[:cutoff_index + 1]
+
+next_word_index = torch.multinomial(nucleus_probs, num_samples=1)
+chosen_word = nucleus_indices[next_word_index]
+
+print(f"Secilen kelimenin indeksi: {chosen_word.item()}")    
+\end{lstlisting}
+
+\newpage

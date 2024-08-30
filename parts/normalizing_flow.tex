@@ -1,0 +1,18 @@
+\section{Normalizing Flow}
+
+Normalizing Flow, karmaşık olasılık dağılımlarını modellemek için kullanılan bir yöntemdir. Temelde, basit bir olasılık dağılımından karmaşık bir dağılıma dönüştürmek için bir dizi invertible (tersinir) dönüşümden oluşur. Başlangıçta bilinen bir basit dağılım alınır ve bu dağılım, bir dizi parametreli dönüşüm aracılığıyla daha karmaşık bir dağılıma dönüştürülür. Normalizing Flow, karmaşık veri dağılımlarını modelleyebilmek için generative modeling (üretici modelleme) alanında kullanılır. Üretici modellerin temel amacı, verinin altta yatan dağılımını öğrenmek ve bu dağılımdan yeni veri örnekleri üretmektir. Normalizing Flow, bu tür karmaşık dağılımları öğrenmek için güçlü bir araçtır ve veri noktalarının olasılıklarını tahmin eder. Normalizing Flow, birkaç invertible dönüşümün ardışık bir şekilde uygulanmasıyla çalışır. Bu dönüşümlerden her biri, bilinen bir olasılık dağılımını alır ve yeni bir dağılıma dönüştürür. Her adımda, dönüşümün Jacobian determinantı hesaplanır ve bu, modelin olasılık yoğunluğunu günceller.
+
+\subsection{Çalışma Adımları}
+
+\[ z_0 \sim{p(z_0)} \]
+\[ \text{x} = f_K(f_{K-1}(...f_1(z_0))) \]
+\[ p(x) = p(z_0) * \text{det}\|\frac{dz_0}{dx} \]
+
+\begin{enumerate}
+    \item Model, basit bir dağılımla başlar. Bu dağılım, z olarak adlandırılan bir latent değişkeni temsil eder.
+    \item Z latent değişkeni, bir dizi invertible (tersinir) dönüşümden geçirilir. Bu dönüşümler genellikle parametrik modeller kullanılarak öğrenilir. Her dönüşüm, z'yi daha karmaşık bir dağılıma dönüştürür.
+    \item Her dönüşümde, dönüşümün Jacobian determinantı hesaplanır ve olasılık yoğunluğu güncellenir. Bu sayede, orijinal basit dağılımdan üretilen yeni dağılımın yoğunluğu doğru bir şekilde hesaplanır.
+    \item Bu dönüşümlerden geçerek karmaşık bir veri uzayına ulaşılır. Modelin öğrendiği karmaşık dağılımdan örnekleme yaparak yeni veriler oluşturulabilir.
+\end{enumerate}
+
+\newpage

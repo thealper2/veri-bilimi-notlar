@@ -1,0 +1,21 @@
+\section{Domain Adaptation}
+
+Domain Adaptation, bir modelin bir alanda (domain) eğitilip başka bir alanda performans göstermesi gerektiğinde kullanılan bir tekniktir. İki ana alan (domain) tanımlanır.
+
+\begin{itemize}
+    \item \textbf{Kaynak Alan (Source Domain)}: Modelin eğitildiği, etiketli verilerin bolca bulunduğu alan.
+    \item \textbf{Hedef Alan (Target Domain)}: Modelin uygulandığı, ancak etiketli verilerin ya çok az ya da hiç bulunmadığı alan.
+\end{itemize}
+
+Domain Adaptation’ın amacı, kaynak alanında eğitilmiş bir modelin, hedef alanında da başarılı performans göstermesini sağlamaktır. Bu süreçte, modelin iki alan arasındaki dağılım farkını öğrenmesi ve bu farkı en aza indirgemesi gerekir. Etiketli veri elde etmenin zor veya maliyetli olduğu alanlarda, daha fazla etikete sahip bir kaynaktan faydalanarak hedef alanda başarılı bir model geliştirilmesi sağlanır. Eğitim verisi ile test verisinin aynı dağılıma sahip olmadığı, örneğin, farklı kameralarla çekilmiş görüntüler, farklı bölgelerden gelen metin verileri veya farklı cihazlardan gelen sensör verileri gibi senaryolarda kullanılır. Transfer Learning ile yakından ilişkilidir; bir alanda öğrenilen bilgilerin başka bir alana transfer edilmesi hedeflenir.
+
+\subsection{Yöntemler}
+
+\begin{itemize}
+    \item \textbf{Feature-Based Domain Adaptation (Özellik Tabanlı Yaklaşım)}: Bu yöntem, kaynak ve hedef alanlar arasında ortak bir özellik uzayı oluşturmayı amaçlar. Bu özellik uzayı, her iki alandaki verileri temsil edebilecek şekilde oluşturulursa, model her iki alanda da iyi performans gösterebilir.
+    \item \textbf{Instance-Based Domain Adaptation (Örnek Tabanlı Yaklaşım)}: Bu yaklaşımda, kaynak alanındaki verilerden hedef alanına en yakın olanlar seçilir ve bu örneklerle model eğitilir. Kaynak verilerinin hedef verilerine benzeyen alt kümeleri kullanılmaya çalışılır.
+    \item \textbf{Adversarial Domain Adaptation (Rekatbetçi Öğrenme)}: Bu modern yaklaşımla, kaynak ve hedef alanlar arasındaki farkları azaltmak için rekabetçi bir eğitim süreci kullanılır. Generative Adversarial Networks (GAN)'e benzer şekilde, bir domain discriminator (alan ayırıcı) modeli ile modelin hedef alanı ayırt edemez hale gelmesi sağlanır. Bu, hedef alanında daha başarılı performans gösterilmesine yardımcı olur.
+    \item \textbf{Fine-Tuning (İnce Ayar Yapma)}: Kaynak alanında eğitilmiş bir model, hedef alanında daha küçük bir veri kümesi üzerinde yeniden eğitilir. Bu süreçte model, hedef alanındaki dağılımı daha iyi öğrenir ve uyum sağlar.
+\end{itemize}
+
+\newpage
