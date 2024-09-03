@@ -15,11 +15,15 @@ Kalibrasyon, modelin çıktılarını gerçek olasılıklara daha yakın hale ge
     \label{fig:enter-label}
 \end{figure}
 
+\newpage
+
 \subsection{Platt Scaling (Sigmoid Fitting)}
 Adını John Platt'ten alır. Genellikle sigmoid fonksiyonu ile gerçekleştirilir. İlk olarak sınıflandırıcı çıktıları log-odds'a dönüştürülür. Ardından, log-odds değerleri sigmoid fonksiyonuna geçirilir. Bu olasılıkları [0, 1] aralığına yeniden ölçekler. Temel fikir modelin tahmin edilen sınıf olasılıklarına bir lojistik regresyon modeli uydurmaktır. Lojistik regresyon modeli, tahmin edilen olasılıklara dayalı olarak gerçek sınıf etiketlerini tahmin etmek üzere eğitilir ve modelin katsayıları tahmin edilen olasılıkları kalibre edilmiş olasılıklara dönüştürmek için kullanılır.
 
 \[\text{platt\_cal} = \frac{1}{(1 + \exp(-z))}\]
 \[\text{z} = \log(\frac{p}{1 - p})\]
+
+\subsubsection{Python Kodu}
 
 \begin{lstlisting}[language=Python, caption=Scikit-learn'de Platt scaling örneği.]
 from sklearn.calibration import CalibratedClassifierCV
@@ -34,8 +38,12 @@ probabilities_before = svm.predict_proba(X_test)[:, 1]
 probabilities_after = calibrated_svm.predict_proba(X_test)[:, 1]
 \end{lstlisting}
 
+\newpage
+
 \subsection{Isotonic Regression}
 Olasılık tahminlerini düzgünleştirmek için monoton artan bir fonksiyonla uyumlu hale getirir. İlk olarak, modelin olasılık tahminleri sıralanır. Monoton artan bir fonksiyon olan isotonic regression kullanılır. Bu regresyon, sıralı tahminler arasında bir düzgünleştirme yaparak olasılık tahminlerini yeniden ölçekler. İzotonik, olasılıkların sırasını korur.
+
+\subsubsection{Python Kodu}
 
 \begin{lstlisting}[language=Python, caption=Scikit-learn'de Isotonic Regression örneği.]
 from sklearn.calibration import CalibratedClassifierCV
@@ -55,8 +63,12 @@ isotonic_regressor.fit(probabilities_after, y_test)
 probabilities_isotonic = isotonic_regressor.transform(probabilities_after)
 \end{lstlisting}
 
+\newpage
+
 \subsection{Beta Calibration}
 Olasılık tahminlerini uygun bir şekilde düzgünleştirmek için beta dağılımını kullanır. İlk olarak, modelin olasılık tahminleri log-odds'a dönüştürülür. Ardından log-odds değerleri beta dağılımına uydurulur. Beta dağılımı [0, 1] aralığındaki değerleri modellere uygulayarak olasılık tahminlerini yeniden ölçekler.
+
+\subsubsection{Python Kodu}
 
 \begin{lstlisting}[language=Python, caption=Scikit-learn'de Beta Calibration örneği.]
 from sklearn.calibration import CalibratedClassifierCV
@@ -79,8 +91,12 @@ def beta_calibration(probabilities):
 probabilities_beta = beta_calibration(probabilities_after)
 \end{lstlisting}
 
+\newpage
+
 \subsection{Platt's Method Extension}
 Sigmoid dönüşümü yerine, daha genel bir logit dönüşümünü kullanır. İlk olarak modelin olasılık tahminleri logit dönüşümüne tabi tutulur. Elde edilen değerler üzerinde doğrusal bir regresyon modeli kurulur. Bu model, olasılık tahminlerini ölçeklemek için kullanılır.
+
+\subsubsection{Python Kodu}
 
 \begin{lstlisting}[language=Python, caption=Scikit-learn'de Platt's Method örneği.]
 from sklearn.calibration import CalibratedClassifierCV
@@ -99,8 +115,12 @@ lr.fit(logit_transformed_probs.reshape(-1, 1), y_test)
 scaled_probs = lr.predict_proba(logit_transformed_probs.reshape(-1, 1))[:, 1]
 \end{lstlisting}
 
+\newpage
+
 \subsection{Venn-ABERS}
 Modelin tahminleri, modelin tahmin ettiği sınıfların gerçekte hangi oranda gerçekleştiğini gösteren bir referans dağılım ile karşılaştırılır. Karşılaştırma sonucunda, modelin tahminlerinin gerçek tahminlerden ne kadar saptığı hesaplanır. Bu sapmalar modelin tahminlerini düzeltmek için kullanılır. Dengesiz veri setlerinde etkilidir.
+
+\subsubsection{Python Kodu}
 
 \begin{lstlisting}[language=Python, caption=venn\_abers kütüphanesi ile örnek.]
 from venn_abers import VennAbersCalibrator
@@ -115,6 +135,8 @@ ivap = vac.predict_proba(p_cal=p_cal, y_cal=y_calib, p_test=p_test)[:, 1]
 vac_c = VennAbersCalibrator(estimator=xgb, inductive=False, n_splits=10).fit(X_train, y_train)
 cvap = vac_c.predict_proba(X_test)[:, 1]
 \end{lstlisting}
+
+\newpage
 
 \subsection{Metrikler}
 \begin{itemize}

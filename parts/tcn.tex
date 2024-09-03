@@ -11,4 +11,20 @@ Zaman serisi verileri işlemek için kullanılan modeldir. Tek boyutlu evrişim 
 	\item En son katmanın çıktısı nihai tahmin olarak kabul edilir.
 \end{enumerate}
 
+\subsection{Python Kodu}
+
+"keras-tcn" kütüphanesi kullanılarak TensorFlow üzerinde katman olarak eklenmiştir. "keras-tcn" kütüphanesine ulaşmak için: \url{https://pypi.org/project/keras-tcn/}
+
+\begin{lstlisting}[language=Python]
+inputs = layers.Input(shape=(None,), dtype="float32")
+layer = layers.Embedding(input_dim=input_dim, output_dim=300, weights=[embedding_matrix], input_length=maxlen, trainable=False)(inputs)
+x = layers.Bidirectional(TCN(64))(x)
+outputs = layers.Dense(3, activation="softmax")(x)
+model = Model(inputs, outputs)
+
+model.compile(loss="sparse_categorical_crossentropy",
+              optimizer="rmsprop",
+              metrics=["accuracy"])
+\end{lstlisting}
+
 \newpage

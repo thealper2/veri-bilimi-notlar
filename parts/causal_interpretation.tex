@@ -1,6 +1,8 @@
 \section{Causal Interpretation}
 Modelin verilerden neden-sonuç ifadelerini çıkarabilmesidir. Nedensel ilişkilerin anlaşılması, sadece belirli bir olayın diğerini takip ettiği zamansal sıra veya ilişkisel korelasyonlardan daha fazlasını içerir. Bu, bir değişkenin başka bir değişkeni doğrudan etkileyebileceği ve bu etkinin nedensel olduğu anlamına gelir.
 
+\newpage
+
 \subsection{CATE (Conditional Average Treatment Effect)}
 CATE, belirli bir müdahalenin veri üzerinde ortalama olarak ne tür bir etkiye sahip olduğunu gösterir. Bu etki diğer özelliklere bağlı olarak değişebilir. Nedensel etkileri incelemek için kullanılır. Teknikler:
 
@@ -11,6 +13,8 @@ CATE, belirli bir müdahalenin veri üzerinde ortalama olarak ne tür bir etkiye
     \item Orthogonal Random Forest
 \end{enumerate}
 
+\newpage
+
 \subsection{Double Machine Learning}
 Çift model yaklaşımını kullanır. İki farklı model ile tahminler yapar ve bu tahminler arasındaki farkı analiz eder. İki model genellikle bir denklem ve bir tahminci model olarak adlandırılır.
 
@@ -18,6 +22,8 @@ CATE, belirli bir müdahalenin veri üzerinde ortalama olarak ne tür bir etkiye
     \item \textbf{Denklem modeli:} Bağımsız değişkenler ve sonucun tahmin edilmesi için kullanılır.
     \item \textbf{Tahminci model:} Bağımsız değişkenlerin sonucunu tahmin etmek için kullanılır. Denklem modelininin yanıltıcı bir şekilde etkilenmemesi sağlanmalıdır.
 \end{enumerate}
+
+\subsubsection{Python Kodu}
 
 \begin{lstlisting}[language=Python, caption=ecoml'de DML örneği.]
 from econml.dml import DML
@@ -32,6 +38,8 @@ est = DML(
 est.fit(y, T, X=X, W=None)
 \end{lstlisting}
 
+\newpage
+
 \subsection{Double Robust}
 Çift model yaklaşımını kullanır. Kısmi modelden gelen tahminler kullanılarak doğrudan bir tahmin yapılır. Tahmin modelinden gelen tahminler kullanılarak müdahalenin etkisi tahmin edilir. Bu iki tahmin arasındaki fark, müdahalenin gerçek etkisini belirlemek için kullanılır.
 
@@ -40,6 +48,8 @@ est.fit(y, T, X=X, W=None)
     \item \textbf{Tahmin Modeli:} Müdahalenin etkisini tahmin etmek için kullanılır.
 \end{enumerate}
 
+\subsubsection{Python Kodu}
+
 \begin{lstlisting}[language=Python, caption=econml'de Double Robust örneği.]
 from eeconml.dr import LinearDRLearner
 
@@ -47,8 +57,12 @@ est = LinearDRLearner()
 est.fit(y, T, X=X, W=None)
 \end{lstlisting}
 
+\newpage
+
 \subsection{Meta-Learners}
 Birincil bir modelin çıktısını kullanarak ikincil bir modeli eğiten modeldir. Bu sayede birincil modelin performansını iyileştirir ve onun çıktılarını daha iyi bir şekilde kullanır.
+
+\subsubsection{Python Kodu}
 
 \begin{lstlisting}[language=Python, caption=econml'de Meta-Learner örneği.]
 from econml.metalearners import XLearner
@@ -57,6 +71,8 @@ from sklearn.linear_model import LinearRegression
 est = XLearner(models=LinearRegression())
 est.fit(y, T, X=X)
 \end{lstlisting}
+
+\newpage
 
 \subsection{Orthogonal Random Forest}
 ORF, RF algoritmasına çıkarımlar için uygun hale getirmek bir düzeltme yapar. Bu düzeltme, karar ağaçlarının gözlemlenen veriler üzerinden değil, önceki çalışmalardan elde edilen tahminler üzerinde eğitilmesini sağlar. Bu tahminler, müdahalenin etkisini doğrudan tahmin etmek için kullanılır.

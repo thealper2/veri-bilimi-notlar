@@ -15,6 +15,80 @@ REALNVP (Real-valued Non-Volume Preserving Transformation), Normalizing Flow ail
     \item Karmaşık veri uzayına dönüşüm yapıldıktan sonra, modelden yeni örnekler üretilebilir. Bu örnekleme süreci, tersinir dönüşümlerin uygulanmasıyla gerçekleştirilir.
 \end{enumerate}
 
+\subsection{Python Kodu}
 
+\begin{lstlisting}[language=Python]
+import tensorflow as tf
+import tensorflow_probability as tfp
+from tensorflow.keras import layers, regularizers, metrics
+import numpy as np
+
+input_dim = 2
+coupling_layers = 6
+coupling_dim = 128
+regularization = 0.01
+epochs = 10
+batch_size = 64
+learning_rate = 1e-3
+
+def create_dense_layers(input_layer, dims, activation, reg):
+    x = input_layer
+    for dim in dims[:-1]:
+        x = layers.Dense(dim, activation="relu", kernel_regularizer=regularizers.l2(reg))(x)
+    return layers.Dense(dims[-1], activation=activation, kernel_regularizer=regularizers.l2(reg))(x)
+
+def Coupling(input_dim, coupling_dim, reg):
+    input_layer = layers.Input(shape=input_dim)
+    s_layer = create_dense_layers(input_layer, [coupling_dim] * 4 + [input_dim], "tanh", reg)
+    t_layer = create_dense_layers(input_layer, [coupling_dim] * 4 + [input_dim], "linear", reg)
+    return models.Model(inputs=input_layer, outputs=[s_layer, t_layer])
+
+def forward_pass(x, layers_list, masks, training=True):
+    log_det_inv, direction = 0, -1 if training else 1
+    for i in range(0, len(layers_list), direction):
+        x_masked = x * masks[i]
+        reversed_mask = 1 - masks[i]
+        s, t = layers_list[i](x_masked)
+        x = reversed_mask * (x * tf.exp(direction * s) + direction * t * tf.exp(-0.5 * (1 - direction) * s)) + x_masked
+        log_det_inv += -0.5 * (1 - direction) * tf.reduce_sum(s, axis=1)
+    return x, log_det_inv
+
+def compute_log_loss(x, distribution, layers_list, masks):
+    y, logdet = forward_pass(x, layers_list, masks)
+    log_likelihood = distribution.log_prob(y) + logdet
+    return -tf.reduce_mean(log_likelihood)
+
+distribution = tfp.distributions.MultivariateNormalDiag(loc=[0.0, 0.0], scale_diag=[1.0, 1.0])
+masks = np.tile(np.array([[0, 1], [1, 0]], dtype="float32"), (coupling_layers // 2, 1))
+layers_list = [Coupling(input_dim, coupling_dim, regularization) for _ in range(coupling_layers)]
+optimizer = tf.keras.optimizers.Adam(learning_rate)
+loss_tracker = metrics.Mean(name="loss")
+
+for epoch in range(epochs):
+    np.random.shuffle(x_train)
+    for i in range(0, len(x_train), batch_size):
+        x_batch = x_train[i:i+batch_size]
+        
+        with tf.GradientTape() as tape:
+            y, logdet = forward_pass(x_batch, layers_list, masks, training=True)
+            log_likelihood = distribution.log_prob(y) + logdet
+            loss = -tf.reduce_mean(log_likelihood)
+        
+        grads = tape.gradient(loss, [var for layer in layers_list for var in layer.trainable_variables])
+        optimizer.apply_gradients(zip(grads, [var for layer in layers_list for var in layer.trainable_variables]))
+        loss_tracker.update_state(loss)
+    
+    print(f"Epoch {epoch + 1}/{epochs}, Loss: {loss_tracker.result().numpy()}")
+
+for i in range(0, len(x_test), batch_size):
+    x_batch = x_test[i:i+batch_size]
+    
+    y, logdet = forward_pass(x_batch, layers_list, masks, training=False)
+    log_likelihood = distribution.log_prob(y) + logdet
+    loss = -tf.reduce_mean(log_likelihood)
+    loss_tracker.update_state(loss)
+
+print(f"Test Loss: {loss_tracker.result().numpy()}")
+\end{lstlisting}
 
 \newpage

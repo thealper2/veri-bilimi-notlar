@@ -5,4 +5,111 @@ CRF, dizisel veri ve yapılandırılmış çıktı problemleri için kullanılan
 	\item Düğüm potansiyelleri, her bir gözlem-etiket çiftinin olasılıklarını temsil eder.
 \end{itemize}
 
+\subsection{Python Kodu}
+
+\subsubsection{Birinci Method}
+
+"TensorFlow Addons" kütüphanesi kullanılarak direkt olarak TensorFlow ile Sequential model içerisine katman olarak eklenmiştir. "TensorFlow Addons" kütüphanesine erişmek için: \url{https://github.com/tensorflow/addons}
+
+\begin{lstlisting}[language=Python]
+from tensorflow_addons.layers import CRF
+from tensorflow_addons.losses import SigmoidFocalCrossEntropy
+from tensorflow_addons.optimizers import AdamW
+
+input_layer = layers.Input(shape=(maxlen,))
+embedding_layer = layers.Embedding(input_dim=n_words, output_dim=300, input_length=maxlen)(input_layer)
+bilstm_layer = layers.Bidirectional(layers.LSTM(units=300,
+                                                return_sequences=True,
+                                                dropout=0.5,
+                                                recurrent_dropout=0.5,
+                                                kernel_initializer="he_normal"))(embedding_layer)
+lstm_layer = layers.LSTM(units=600,
+                         return_sequences=True,
+                         dropout=0.5,
+                         recurrent_dropout=0.5,
+                         kernel_initializer="he_normal")(bilstm_layer)
+time_layer = layers.TimeDistributed(layers.Dense(n_tags,
+                                                 activation="softmax"))(lstm_layer)
+
+#crf_layer = CRF(n_tags)
+#output_layer = crf_layer(time_layer)
+
+model = models.Model(input_layer, time_layer)
+\end{lstlisting}
+
+\subsubsection{İkinci Method}
+
+"sklearn-crfsuite" kütüphanesi kullanılarak yalın halde CRF algoritması kullanılmıştır. "sklearn-crfsuite" kütüphanesine erişmek için: \url{https://pypi.org/project/sklearn-crfsuite/}
+
+\begin{lstlisting}[language=Python]
+import sklearn_crfsuite
+from sklearn_crfsuite import metrics
+
+def create_sentences_and_labels(df):
+    sentences = df['sentence'].apply(lambda x: x.split())
+    labels = df['word_labels'].apply(lambda x: x.split(','))
+    return [(list(zip(sent, lab))) for sent, lab in zip(sentences, labels)]
+
+sentences_and_labels = create_sentences_and_labels(df)
+
+def word2features(sent, i):
+    word = sent[i][0]
+    
+    features = {
+        'bias': 1.0,
+        'word.lower()': word.lower(),
+        'word[-3:]': word[-3:],
+        'word[-2:]': word[-2:],
+        'word.isupper()': word.isupper(),
+        'word.istitle()': word.istitle(),
+        'word.isdigit()': word.isdigit(),
+    }
+    
+    if i > 0:
+        word1 = sent[i-1][0]
+        features.update({
+            '-1:word.lower()': word1.lower(),
+            '-1:word.istitle()': word1.istitle(),
+            '-1:word.isupper()': word1.isupper(),
+        })
+    else:
+        features['BOS'] = True  # Beginning of Sentence
+    
+    if i < len(sent)-1:
+        word1 = sent[i+1][0]
+        features.update({
+            '+1:word.lower()': word1.lower(),
+            '+1:word.istitle()': word1.istitle(),
+            '+1:word.isupper()': word1.isupper(),
+        })
+    else:
+        features['EOS'] = True  # End of Sentence
+
+    return features
+
+def sent2features(sent):
+    return [word2features(sent, i) for i in range(len(sent))]
+
+def sent2labels(sent):
+    return [label for token, label in sent]
+
+def sent2tokens(sent):
+    return [token for token, label in sent]
+
+X_train = [sent2features(s) for s in train_sents]
+y_train = [sent2labels(s) for s in train_sents]
+
+X_test = [sent2features(s) for s in test_sents]
+y_test = [sent2labels(s) for s in test_sents]
+
+crf = sklearn_crfsuite.CRF(
+    algorithm='lbfgs',
+    c1=0.1,
+    c2=0.1,
+    max_iterations=100,
+    all_possible_transitions=False
+)
+crf.fit(X_train, y_train)
+\end{lstlisting}
+
 \newpage

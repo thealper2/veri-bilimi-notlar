@@ -2,6 +2,8 @@
 \subsection{Cohort Analizi}
 Cohort analizi, bir işletmenin müşteri davranışlarını ve performansını daha iyi anlamak için kullanılan bir veri analizi yöntemidir. Bu yöntem, benzer özelliklere sahip müşteri gruplarını (cohort) oluşturarak, bu grupların zaman içindeki davranışlarını izlemeyi sağlar. Cohort analizinin temel amacı, belirli bir dönemde birlikte başlayan ve benzer özelliklere sahip müşteri gruplarını tanımlamak ve bu grupların performansını izlemek için kullanılır. Cohort analizi, özellikle müşteri sadakati, terk oranları ve gelir analizi gibi konularda işletmelere değerli bilgiler sunar.
 
+\subsubsection{Python Kodu}
+
 \begin{lstlisting}[language=Python, caption=Cohort analizi örneği]
 import pandas as pd
 
@@ -26,6 +28,8 @@ cohorts = cohorts.divide(cohort_size, axis=0)
 print(cohorts)
 \end{lstlisting}
 
+\newpage
+
 \subsection{RFM Analizi}
 RFM analizi, bir işletmenin müşterilerini segmentlere ayırmak ve müşteri davranışını daha iyi anlamak amacıyla kullanılan bir pazarlama analizi yöntemidir.
 
@@ -34,6 +38,8 @@ RFM analizi, bir işletmenin müşterilerini segmentlere ayırmak ve müşteri d
     \item \textbf{Frequency (Sıklık):} Müşterinin belirli bir zaman diliminde (örneğin, son bir yıl) yaptığı toplam işlem veya etkileşim sayısını belirtir. Bu sıklık, müşterinin işletmeye ne kadar sık geri döndüğünü yansıtır.
     \item \textbf{Monetary (Parasal Değeri):} Müşterinin toplam gelir veya harcama miktarını belirtir. Bu, müşterinin işletmeye ne kadar para harcadığıını yansıtır.
 \end{itemize}
+
+\subsubsection{Python Kodu}
 
 \begin{lstlisting}[language=Python, caption=RFM analizi örneği]
 import pandas as pd
@@ -77,10 +83,14 @@ df['RFMScore'] = df['RecencyScore'] + df['FrequencyScore'] + df['MonetaryScore']
 print(df)
 \end{lstlisting}
 
+\newpage
+
 \subsection{CRM Analizi}
 CRM Analizi (Customer Relationship Management Analysis), müşteri ilişkileri yönetimi süreçlerini incelemek, geliştirmek ve optimize etmek için kullanılan bir veri analizi yöntemidir. CRM Analizi, müşteri ilişkilerini daha iyi anlamak, müşteri memnuniyetini artırmak, satışları artırmak ve işletme karlılığını geliştirmek amacıyla kullanılır.
 
-\begin{lstlisting}
+\subsubsection{Python Kodu}
+
+\begin{lstlisting}[language=Python]
 import pandas as pd
 
 # Ornek bir musteri veri cercevesi olusturalim
@@ -105,7 +115,10 @@ df['Hizmet_Kalitesi'] = df['Sikayet_Sayisi'].apply(lambda x: 'Kotu' if x > 2 els
 print(df)
 \end{lstlisting}
 
+\newpage
+
 \subsection{CLV Analizi}
+
 CLV (Customer Lifetime Value), bir işletmenin müşterilerinin yaşam boyu gelirini tahmin etmek için kullanılan önemli bir metriktir. CLV, bir müşterinin işletmeyle ilişkisi boyunca yarattığı geliri hesaplayarak, işletmelere, müşterilerini daha iyi anlama, pazarlama stratejilerini optimize etme ve müşteri sadakatini artırma konularında yardımcı olur. CLV Formülü:
 
 \[\text{CLV} = \frac{\text{Musterinin Ortalama Satin Alma Degeri * Satin Alma Sikliği * Musterinin Omru}}{\text{İndirim Orani}}\]
@@ -117,6 +130,8 @@ Bu formülde:
     \item \textbf{Müşterinin Ömrü:} Bir müşterinin işletme ile ilişkisi boyunca geçirdiği süre (aylar veya yıllar cinsinden).
     \item \textbf{İndirim Oranı:} İşletme tarafından verilen indirimler veya kampanyaların etkisiyle düzeltilen bir faktör. Bazı müşteriler daha fazla indirim alabilir.
 \end{itemize}
+
+\subsubsection{Python Kodu}
 
 \begin{lstlisting}[language=Python, caption=CLV analizi örneği.]
 import pandas as pd

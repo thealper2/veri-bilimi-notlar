@@ -64,6 +64,8 @@ Bu örnek, iki grup arasındaki ortalama farkı t-testi kullanarak test eder ve 
 
 Yani, p değeri küçüldükçe, sonuçlar daha anlamlı hale gelir. Bu nedenle, p değerinin küçük olması, genellikle hipotez testlerinde tercih edilen bir durumdur, çünkü bu, verilerin test edilen değişkenler arasında bir ilişki olduğunu gösterdiği anlamına gelir.
 
+\subsubsection{Python Kodu}
+
 \begin{lstlisting}[language=Python]
 import numpy as np
 import scipy.stats as stats
@@ -95,6 +97,8 @@ Z testi, bir örneklem verisinin popülasyon parametreleri hakkında istatistiks
     \item Tek örneklem Z testi: Bir popülasyonun ortalama değerinin belirli bir değere eşit olup olmadığını test etmek için kullanılır. Örneklem verisi ile popülasyon parametresi arasındaki farkın anlamlı olup olmadığını değerlendirmek için kullanılır.
     \item İki örneklem Z testi: ;ki farklı örneklem grubunun ortalama değerlerinin birbirine eşit olup olmadığını test etmek için kullanılır. Örneklem verileri arasındaki farkın istatistiksel olarak anlamlı olup olmadığını değerlendirir.
 \end{itemize}
+
+\subsubsection{Python Kodu}
 
 \begin{lstlisting}[language=Python]
 import numpy as np
@@ -136,6 +140,8 @@ T testi (Student's t-test), iki grup arasındaki ortalamaların istatistiksel ol
     \item \textbf{Bağımlı Örneklem T-Testi (Eşleştirilmiş T-Test):} Aynı örneklemden alınan iki farklı örneklem grubunun ortalama değerleri arasındaki farkı test etmek için kullanılır. Örneğin, aynı kişilerin kilo kaybı ölçümleri arasındaki farkı değerlendirmek için bağımlı örneklem t-testi kullanılabilir.
 \end{itemize}
 
+\subsubsection{Python Kodu}
+
 \begin{lstlisting}[language=Python]
 import numpy as np
 from scipy import stats
@@ -159,6 +165,8 @@ else:
 # Null hipotez kabul edildi: Iki grup arasinda istatistiksel olarak anlamli bir fark yoktur.
 \end{lstlisting}
 
+\subsubsection{R Kodu}
+
 \begin{lstlisting}[language=R]
 # H0: Iki grup ortalamasi birbirine esittir.
 # H1: Iki grup ortalamasi esit degildir.
@@ -175,6 +183,8 @@ t.test(df$Sepal.Width ~ df$Species, mu = 0.7 , var.equal = TRUE, alternative = "
 
 \subsubsection{Tek Örneklem t-Testi}
 Tek örneklem t testinde, örneklem ortalamasının belirli bir değerden farklılığı test edilir. Eğer ortalama eşit değilse H0 reddedilir.
+
+\subsubsection{R Kodu}
 
 \begin{lstlisting}[language=R]
 # H0: Ortalama degeri 5'e esittir.
@@ -199,6 +209,8 @@ Tek yönlü test (one-tailed test), hipotez testleri sırasında, anlamlılık d
     \item \textbf{Sağa Tek Yönlü Test (Right-Tailed Test):} Sağa tek yönlü testlerde, hipotez, popülasyon parametresinin belirli bir değerden büyük olduğunu test eder. Örneğin, bir yeni tedavi yöntemi ile ilgili hipotez, tedavi grubunun kontrol grubundan daha iyi olduğunu iddia ediyorsa, sağa tek yönlü bir test kullanılabilir.
     \item \textbf{Sola Tek Yönlü Test (Left-Tailed Test):} Sola tek yönlü testlerde, hipotez, popülasyon parametresinin belirli bir değerden küçük olduğunu test eder. Örneğin, bir yeni ilacın yan etkileri ile ilgili hipotez, ilacın yan etkilerinin kontrol grubundan daha düşük olduğunu iddia ediyorsa, sola tek yönlü bir test kullanılabilir.
 \end{itemize}
+
+\subsubsection{Python Kodu}
 
 \begin{lstlisting}[language=Python]
 import numpy as np
@@ -235,6 +247,8 @@ else:
 
 İki yönlü testler, hipotezinizin yönünü önceden belirlemediğinizde ve hangi yönde anlamlılığı değerlendirmek istediğinizde kullanışlıdır.
 
+\subsubsection{Python Kodu}
+
 \begin{lstlisting}[language=Python]
 import numpy as np
 from scipy import stats
@@ -267,6 +281,8 @@ Ki-kare testi (Chi-Square test), iki veya daha fazla kategorik değişken arası
     \item \textbf{Ki-Kare Bağımsızlık Testi (Chi-Square Independence Test):} Bu test, iki veya daha fazla kategorik değişkenin bağımsızlık ilişkisini değerlendirir. Örneğin, bir ürünün tercih edilme durumu ile cinsiyet arasındaki ilişkiyi incelemek için bu testi kullanabilirsiniz.
     \item \textbf{Ki-Kare Uyum Testi (Chi-Square Goodness-of-Fit Test):} Bu test, bir örneklem verisinin belirli bir teorik dağılıma uyup uymadığını değerlendirir. Örneğin, bir zarın adil olup olmadığını test etmek için bu testi kullanabilirsiniz.
 \end{itemize}
+
+\subsubsection{Python Kodu}
 
 \begin{lstlisting}[language=Python]
 import numpy as np
@@ -316,6 +332,8 @@ ANOVA (Analysis of Variance), birden fazla grup arasındaki istatistiksel anlaml
 	\item $df_{within}$: Grup içi serbestlik derecesi.
 \end{itemize}
 
+\subsubsection{Python Kodu}
+
 \begin{lstlisting}[language=Python]
 import numpy as np
 from scipy import stats
@@ -340,6 +358,8 @@ else:
 # Null hipotez kabul edildi: Gruplar arasinda anlamli bir fark yoktur.
 \end{lstlisting}
 
+\subsubsection{R Kodu}
+
 \begin{lstlisting}[language=R]
 aov(df$chol ~ df$age_groups)
 \end{lstlisting}
@@ -353,6 +373,8 @@ Mann-Whitney U testi, iki bağımsız örneklem grubunun medyan değerleri aras�
     \item \textbf{Bağımsız Mann-Whitney U Testi:} İki bağımsız örneklem grubunun medyan değerleri arasındaki farkı test etmek için kullanılır. Bu test, gruplar arasındaki medyan değerlerinin farklı olup olmadığını değerlendirir.
     \item \textbf{İçiçe Mann-Whitney U Testi:} Aynı örneklem grubunun farklı koşullar altında elde edilen verilerinin medyan değerlerini karşılaştırmak için kullanılır. Bu test, aynı grup içindeki iki koşulun medyan değerleri arasındaki farkı test eder.
 \end{itemize}
+
+\subsubsection{Python Kodu}
 
 \begin{lstlisting}[language=Python]
 import numpy as np
@@ -387,6 +409,8 @@ Wilcoxon İşaretli Sıralar Testi (Wilcoxon Signed-Rank Test), bir grup içinde
     \item \textbf{Bir Örneklem Wilcoxon İşaretli Sıralar Testi:} Bir grup içindeki örneklem verilerinin medyan değeri ile bir teorik medyan değerini karşılaştırmak için kullanılır. Bu test, bir grup içindeki verilerin bir teorik dağılıma uygunluğunu değerlendirir.
 \end{itemize}
 
+\subsubsection{Python Kodu}
+
 \begin{lstlisting}[language=Python]
 import numpy as np
 from scipy import stats
@@ -410,6 +434,8 @@ else:
 # Null hipotez kabul edildi: Gruplar arasinda anlamli bir medyan farki yoktur.
 \end{lstlisting}
 
+\subsubsection{R Kodu}
+
 \begin{lstlisting}[language=R]
 wilcox.test(x = warpbreaks$breaks, mu = 40)
 \end{lstlisting}
@@ -423,6 +449,8 @@ Pearson Korelasyon Testi, iki sürekli değişken arasındaki ilişkiyi değerle
     \item \textbf{Pearson Korelasyon Katsayısı (r):} Bu, iki sürekli değişken arasındaki lineer ilişkiyi ölçer. Pearson korelasyonu, -1 ile 1 arasında bir değere sahiptir. -1, tam tersi bir ilişkiyi, 1 ise mükemmel bir pozitif ilişkiyi ifade eder. 0 ise ilişki olmadığını gösterir.
     \item \textbf{Pearson Korelasyon Katsayısı İnferansı:} Korelasyon katsayısının anlamlılığını değerlendirmek için kullanılır. Bu, korelasyonun rastgele mi yoksa gerçek bir ilişkiyi yansıttığını belirlemeye yardımcı olur.
 \end{itemize}
+
+\subsubsection{Python Kodu}
 
 \begin{lstlisting}[language=Python]
 import numpy as np
@@ -447,6 +475,8 @@ else:
 # Korelasyon anlamlidir: Iki degisken arasinda anlamli bir lineer iliski vardir.
 \end{lstlisting}
 
+\subsubsection{R Kodu}
+
 \begin{lstlisting}[language=R]
 cor.test(iris$Sepal.Width , iris$Sepal.Length , method = "pearson")
 cor.test(iris$Sepal.Width , iris$Sepal.Length , method = "pearson" , alternative = "less")
@@ -467,6 +497,8 @@ W = \frac{\left( \sum_{i=1}^{n} a_i x_{(i)} \right)^2}{\sum_{i=1}^{n} (x_i - \ba
 	\item $\bar{x}$: Veri kümesinin ortalaması.
 	\item $a_i$: Normal dağılımın ortalama ve varyansı kullanılarak hesaplanan sabitler.
 \end{itemize}
+
+\subsubsection{R Kodu}
 
 \begin{lstlisting}[language=R]
 shapiro.test(x = iris$Sepal.Length) # p-value = 0.01018, H1
@@ -491,6 +523,8 @@ W = \frac{(N - k)}{(k - 1)} \cdot \frac{\sum_{i=1}^{k} N_i (Z_{i \cdot} - Z_{\cd
 	\item $Z_{..}$: Tüm gözlemlerin ortalaması.
 \end{itemize}
 
+\subsubsection{R Kodu}
+
 \begin{lstlisting}[language=R]
 # H0: Varyanslar homojendir.
 # H1: Varyanslar homojen degildir.
@@ -513,6 +547,8 @@ Bartlett testi, varyansların normal dağıldığını varsayarak eşitliğini t
 	\item $s_i^2$: i'inci grubun varyansı.
 	\item $s_p^2$: Ağırlıklı ortalama varyans.
 \end{itemize}
+
+\subsubsection{R Kodu}
 
 \begin{lstlisting}[language=R]
 # H0, varyanslar homojendir.
@@ -556,6 +592,8 @@ H = \frac{(N - 1) \sum_{i=1}^{k} N_i (\bar{Z}_{i \cdot} - \bar{Z}_{\cdot \cdot})
 	\item $Z_{..}$: Tüm gruplardaki gözlemlerin medyanının mutlak sapmalarının ortalaması.
 \end{itemize}
 
+\subsubsection{R Kodu}
+
 \begin{lstlisting}[language=R]
 # H0, varyanslar homojendir.
 # H1, varyanslar homojen degildir.
@@ -574,6 +612,8 @@ ANOVA'dan sonra yapılan ve her çift grup arasındaki farkı test eden post hoc
 	\item $MS_{within}$: Grup içi ortalama kareler.
 	\item $n$: Her bir grubun örneklem sayısı.
 \end{itemize}
+
+\subsubsection{R Kodu}
 
 \begin{lstlisting}[language=R]
 TukeyHSD(anova_1)
@@ -676,6 +716,8 @@ Birden fazla bağımlı değişkenin bir veya daha fazla bağımsız değişken 
 	\item $\det$: Determinant imleci.
 \end{itemize}
 
+\subsubsection{R Kodu}
+
 \begin{lstlisting}[language=R]
 manova(cbind(chol , thalch) ~ cp , data = heart )
 Manova(model2 , test.statistic = "Pillai")
@@ -719,6 +761,8 @@ Binom testi, belirli bir başarı oranına sahip olup olmadığını test etmek 
 	\item $\binom{n}{k}$: Binom katsayısı.
 \end{itemize}
 
+\subsubsection{R Kodu}
+
 \begin{lstlisting}[language=R]
 # H0: X orani 0.5'e esittir.
 # H1: X orani 0.5'e esit degildir.
@@ -741,6 +785,8 @@ binom.test(x = 35 , n = 50, p = 0.5, alternative='greater')
 	\item $n$: Toplam gözlem sayısı $n = a + b + c + d$
 \end{itemize}
 
+\subsubsection{R Kodu}
+
 \begin{lstlisting}[language=R]
 # 2 x 2 odds ratio
 fisher.test(table(df))
@@ -759,6 +805,8 @@ Bir grup içindeki eşleştirilmiş (bağımlı) verilerin karşılaştırılmas
 	\item $b$: Hem ilk durumda $X = 1$ ve ikinci durumda $Y = 0$ olanların sayısı.
 	\item $c$: Hem ilk durumda $X = 0$ ve ikinci durumda $Y = 1$ olanların sayısı.
 \end{itemize}
+
+\subsubsection{R Kodu}
 
 \begin{lstlisting}[language=R]
 mcnemar.test(df)

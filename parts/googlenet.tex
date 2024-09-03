@@ -1,6 +1,10 @@
 \section{GoogleLeNet}
 2014'de ImageNet ILSVRC (Büyük Ölçekli Görsel Tanıma Yarışması)'de sunuldu. Google YZ biriminden Szegedy ve ekibi tarafından geliştirilmiştir. GoogLeNet, ağdaki parametreleri önemli derecede azaltan "inception" modülü kullanır. FC katmanları yerin "Average Pooling" kullanarak gereksiz parametrelerin ortadan kaldırılmasını sağlamıştır.
 
+\subsection{Python Kodu}
+
+TensorFlow ile implementasyonu aşağıda verilmiştir.
+
 \begin{lstlisting}[language=Python]
 def inception_module(x, filters):
     conv1x1 = Conv2D(filters[0], (1, 1), padding='same', activation='relu')(x)

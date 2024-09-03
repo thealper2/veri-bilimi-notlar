@@ -5,6 +5,8 @@ Betimsel istatistik, veri kümelerini özetlemek ve analiz etmek için kullanıl
 	\item \textbf{Yayılım Ölçüleri}: Standart Sapma, Varyans, Minimum ve Maksimum Değerler.
 \end{enumerate}
 
+\newpage
+
 \subsection{Toplam (Sum) ve Ortalama (Mean)}
 \subsubsection{Toplam (Sum)}
 
@@ -12,16 +14,22 @@ Betimsel istatistik, veri kümelerini özetlemek ve analiz etmek için kullanıl
 \sum_{i=1}^{n} x_i
 \]
 
+\subsubsection{R Kodu}
+
 \begin{lstlisting}[language=R]
 x <- c(12, 10, 14)
 sum(x) # 36
 \end{lstlisting}
+
+\newpage
 
 \subsubsection{Ortalama (Mean)}
 
 \[
 \bar{x} = \frac{1}{n} \sum_{i=1}^{n} x_i
 \]
+
+\subsubsection{R Kodu}
 
 \begin{lstlisting}[language=R]
 x <- c(12, 10, 14)
@@ -30,6 +38,8 @@ ort # 12
 mean(x) # 12
 \end{lstlisting}
 
+\newpage
+
 \subsection{Serbestlik Derecesi}
 Serbestlik derecesi (degrees of freedom), bir veri kümesinin bağımsız bilgi parçalarının sayısını ifade eder. ANOVA, ki-kare, t-testinde kullanılır. Bu testlerde testin anlamlılık düzeyini ve kritik değerlerini belirlemede kullanılır. Örneğin 7 adet şapka var ve haftanın her bir günü bu şapkalardan biri giyilecek. Pazar günü sadece 1 şapka seçimi kalır ve bu seçimde bir serbestlik olmaz.
 
@@ -37,8 +47,12 @@ Serbestlik derecesi (degrees of freedom), bir veri kümesinin bağımsız bilgi 
 \text{Serbestlik Derecesi} = \text{Gozlem Sayisi} - 1
 \]
 
+\newpage
+
 \subsection{Standart Sapma (Standard Deviation)}
 Standart sapma (Standard Deviation), bir veri kümesinin ortalama etrafındaki dağılımını ölçen bir istatistiksel değerdir. Verilerin merkezi eğilimden ne kadar saptığını gösterir. Düşük standart sapma, verilerin ortalama etrafında yoğunlaştığını; yüksek standart sapma verilerin geniş bir alana yayıldığını ve değerlerin birbirine uzak olduğunu gösterir.
+
+\subsubsection{R Kodu}
 
 \begin{lstlisting}[language=R]
 x <- c(12, 10, 14)
@@ -69,6 +83,8 @@ sd(x) # 2
     \item $\bar{x}$: Örneklem ortalaması. 
 \end{itemize}
 
+\newpage
+
 \subsection{Varyans (Variance)}
 Varyans, standart sapmanın karesidir. Standart sapmadan farkı, standart sapma veri kümesi içindeki gözlemlerin ortalamadan farklılığını tanımlar, varyans ise değişkenliğini tanımlanır. Varyans, bir veri kümesinin ortalama etrafındaki dağılımını ölçer. Yani her bir gözlemin ortalamadan farkının karesinin ortalaması olarak tanımlanır. Verilerin ne kadar geniş bir aralığa yayıldığını veya ne kadar değişken olduğunu gösterir. Düşük varyans verilerin ortalama etrafında yoğunlaştığını; yüksek varyans verilerin geniş bir alana yayıldığını gösterir. 
 
@@ -82,13 +98,19 @@ Varyans, standart sapmanın karesidir. Standart sapmadan farkı, standart sapma 
     \item $\mu$: Veri kümesinin ortalaması. 
 \end{itemize}
 
+\subsubsection{R Kodu}
+
 \begin{lstlisting}[language=R]
 x <- c(12, 10, 14)
 var(x) # 4
 \end{lstlisting}
 
+\newpage
+
 \subsection{Medyan (Median)}
 Bir veri kümesi sıralandığında ortada kalan medyan değeridir. Veri kümesi çift sayıda gözlem içeriyorsa, medyan, ortadaki iki değerin aritmedik ortalamasıdır. Medyan, veri kümesinin merkezi eğilim ölçüsü olarak kullanılır. Uç değerlerin etkisini azaltmak için yararlıdır.
+
+\subsubsection{R Kodu}
 
 \begin{lstlisting}[language=R]
 x <- c(12, 10, 14)
@@ -107,6 +129,8 @@ median(x) # 12
 \text{Median} = \frac{x_{\left(\frac{n}{2}\right)} + x_{\left(\frac{n}{2}+1\right)}}{2}
 \]
 
+\newpage
+
 \subsection{Açıklık (Range)}
 Açıklık, veri kümesindeki en yüksek ve en düşük değer arasındaki farktır. Bu, veri kümesinin yayılımını gösterir.
 
@@ -114,10 +138,14 @@ Açıklık, veri kümesindeki en yüksek ve en düşük değer arasındaki farkt
 \text{Range} = \max(x_i) - \min(x_i)
 \]
 
+\subsubsection{R Kodu}
+
 \begin{lstlisting}[language=R]
 x <- c(12, 10, 14)
 range(x) # 10 - 14
 \end{lstlisting}
+
+\newpage
 
 \subsection{Çeyreklikler (Quartiles)}
 Çeyreklikler, bir veri kümesini 4 eşit parçaya bölen değerlerdir. Üç ana çeyreklik vardır; birinci çeyreklik (Q1), ikinci çeyreklik (Q2) veya medyan (medyan ile aynıdır) ve üçüncü çeyreklik (Q3). Veri setinin dağılımını anlamak için kullanılır.
@@ -127,6 +155,8 @@ Q1 = x_{\left(\frac{n+1}{4}\right)}
 Q2 = x_{\left(\frac{n+1}{2}\right)}
 Q3 = x_{\left(\frac{3(n+1)}{4}\right)}
 \]
+
+\subsubsection{R Kodu}
 
 \begin{lstlisting}[language=R]
 x <- c(23, 53, 95, 12, 45)
@@ -138,8 +168,12 @@ quantile(x)
 # 100% = 95
 \end{lstlisting}
 
+\newpage
+
 \subsection{Mod (Mode)}
 Veri kümesi içinde en sık görülen değerdir. Tepedeğer olarak da bilinir.
+
+\newpage
 
 \subsection{Çarpıklık Katsayısı (Skewness Coefficient)}
 Çarpıklık katsayısı, bir veri kümesinin simetrisini ölçen bir değerdir. Çarpıklık, veri dağılımının ortalama etrafında nasıl şekillendiğini gösterir. Çarpıklık katsayısı genelde -1 ile 1 arasında değer alır. 0-1 arasında ise sağa çarpık, -1-0 arasında ise sola çarpıktır. 
@@ -161,6 +195,8 @@ Veri kümesi içinde en sık görülen değerdir. Tepedeğer olarak da bilinir.
 	\item $s$: Veri kümesinin standart sapması.
 \end{itemize}
 
+\subsubsection{R Kodu}
+
 \begin{lstlisting}[language=R]
 library('e1071')
 
@@ -168,8 +204,12 @@ x <- c(23, 53, 95, 12, 45)
 skewness(x) # 0.43010, pozitif (sag) carpik
 \end{lstlisting}
 
+\newpage
+
 \subsection{Frekans (Frequency)}
 Sıklık olarak da bilinir. Veri kümesindeki bir değişkenin tekrar sayısına frekans denir.
+
+\subsubsection{R Kodu}
 
 \begin{lstlisting}[language=R]
 x <- c(12, 23, 23, 23, 53, 95, 12, 45)

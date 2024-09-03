@@ -14,4 +14,125 @@ PxielCNN, CNN'lerin aksine pikselleri ardışık olarak işler. CNN'ler, tüm g�
     \item Eğitim tamamlandığında, model sıfırdan başlayarak yeni bir görüntü üretebilir.
 \end{enumerate}
 
+\subsection{Python Kodu}
+
+Orijinal kod: \url{https://github.com/keras-team/keras-io/blob/master/examples/generative/pixelcnn.py}
+
+\subsubsection{1. Method}
+
+\begin{lstlisting}[language=Python]
+# PixelCNN
+class MaskedConv2D(layers.Layer):
+    def __init__(self, mask_type, **kwargs):
+        super(MaskedConv2D, self).__init__()
+        self.mask_type = mask_type
+        self.conv = layers.Conv2D(**kwargs)
+
+    def build(self, input_shape):
+        self.conv.build(input_shape)
+        kernel_shape = self.conv.kernel.get_shape()
+        self.mask = np.zeros(shape=kernel_shape)
+        self.mask[: kernel_shape[0] // 2, ...] = 1.0
+        self.mask[kernel_shape[0] // 2, : kernel_shape[1] // 2, ...] = 1.0
+        if self.mask_type == "B":
+            self.mask[kernel_shape[0] // 2, kernel_shape[1] // 2, ...] = 1.0
+
+    def call(self, inputs):
+        self.conv.kernel.assign(self.conv.kernel * self.mask)
+        return self.conv(inputs)
+
+    def get_config(self):
+        config = super(MaskedConv2D, self).get_config()
+        config.update({'mask_type': self.mask_type})
+        return config
+
+class ResidualBlock(layers.Layer):
+    def __init__(self, filters, **kwargs):
+        super(ResidualBlock, self).__init__(**kwargs)
+        self.conv1 = layers.Conv2D(filters=filters // 2, kernel_size=1, activation="relu")
+        self.pixel_conv = MaskedConv2D(
+            mask_type="B",
+            filters=filters // 2,
+            kernel_size=3,
+            activation="relu",
+            padding="same"
+        )
+        self.conv2 = layers.Conv2D(filters=filters, kernel_size=1, activation="relu")
+
+    def call(self, inputs):
+        x = self.conv1(inputs)
+        x = self.pixel_conv(x)
+        x = self.conv2(x)
+        return layers.add([inputs, x])
+
+    def get_config(self):
+        config = super(ResidualBlock, self).get_config()
+        return config
+
+NUM_CLASSES = 10
+BATCH_SIZE = 128
+EPOCHS = 50
+LEARNING_RATE = 0.0005
+IMAGE_SIZE = 28
+
+model = models.Sequential([
+    layers.Input(shape=(IMAGE_SIZE, IMAGE_SIZE, 1)),
+    
+    MaskedConv2D(mask_type='A', filters=128, kernel_size=7, activation='relu', padding='same'),
+    
+    ResidualBlock(filters=128),
+    ResidualBlock(filters=128),
+    ResidualBlock(filters=128),
+    ResidualBlock(filters=128),
+    ResidualBlock(filters=128),
+
+    MaskedConv2D(mask_type='B', filters=128, kernel_size=1, strides=1, activation='relu', padding='valid'),
+    MaskedConv2D(mask_type='B', filters=128, kernel_size=1, strides=1, activation='relu', padding='valid'),
+
+    layers.Conv2D(filters=4, kernel_size=1, strides=1, activation='softmax', padding='valid')
+])
+
+model.compile(
+    optimizer=optimizers.Adam(learning_rate=LEARNING_RATE),
+    loss="sparse_categorical_crossentropy"
+)
+
+history = model.fit(
+    train_data, train_data,
+    batch_size=BATCH_SIZE,
+    epochs=EPOCHS,
+    validation_data=[test_data, test_data],
+    callbacks=[tensorboard_callback]
+)
+\end{lstlisting}
+
+\subsubsection{İkinci Method}
+
+"Tensorflow Probability" kütüphanesi kullanılarak yapılmıştır. Kütüphaneye ulaşmak için: \url{https://pypi.org/project/tensorflow-probability/}
+
+\begin{lstlisting}[language=Python]
+import tensorflow_probability as tfp
+
+dist = tfp.distributions.PixelCNN(
+    image_shape=(32, 32, 1),
+    num_resnet=1,
+    num_hierarchies=2,
+    num_filters=32,
+    num_logistic_mix=5,
+    dropout_p=0.3,
+)
+input_layer = layers.Input(shape=(32, 32, 1))
+log_prob = dist.log_prob(input_layer)
+pixelcnn = models.Model(inputs=input_layer, outputs=log_prob)
+pixelcnn.add_loss(-tf.reduce_mean(log_prob))
+pixelcnn.compile(optimizer=optimizers.Adam(0.001))
+
+pixelcnn.fit(
+    input_data,
+    batch_size=64,
+    epochs=10,
+    callbacks=[tensorboard_callback],
+)
+\end{lstlisting}
+
 \newpage

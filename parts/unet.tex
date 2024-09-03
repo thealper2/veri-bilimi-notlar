@@ -15,6 +15,8 @@
 
 Encoder, görüntüyü daha küçük boyutlara ve daha fazla sayıda kanala dönüştürür. Decoder, kodlayıcı tarafından üretilen küçük boyutlu görüntüyü, orijnal görüntü boyutuna geri döndürür. U-Net asimetrik bir yapıya sahiptir. Encoder aşağı örnekleme (downsampling) katmanları eklerken, decoder yukarı örnekleme (upsampling) katmanları ekler. U-Net skip connections adındaki encoder katmanlarından decoder katmanlarına direkt bağlantılar ekleyen bir mimarı kullanır. Bu, daha yüksek seviyeli özelliklerin daha düşük seviyeli özelliklerle birleştirilmesini sağlar, böylece modelin hem lokal hem de global özellikleri öğrenmesini sağlar. 
 
+\subsection{Python Kodu}
+
 \begin{lstlisting}[language=Python]
 import tensorflow as tf
 from tensorflow.keras.layers import Conv2D, MaxPooling2D, Conv2DTranspose, Concatenate

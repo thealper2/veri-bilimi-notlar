@@ -32,6 +32,8 @@ Gelecekteki durum, yalnızca mevcut duruma bağlıdır. Bir sonraki durum, yaln�
     \item $P(X_{n+1} = s_j | X_n = s_i)$, durum  $s_{i}$'den durum $s_{j}$'ye geçişin olasığıdır.
 \end{itemize}
 
+\subsubsection{Python Kodu}
+
 \begin{lstlisting}[language=Python]
 import markovify
 
@@ -55,6 +57,8 @@ print("Generated Sequence:", generated_sequence)
 Yüksek dereceden Markov zinciri, birinci derecede Markov zincirinden farklı olarak, daha önceki birden fazla durumu dikkate alarak bir sonraki durumu tahmin etmek için kullanılır. Geçmişteki birden fazla durumun etkilerini içeren daha karmaşık ilişkileri modelleyebilir. 
 
 \[P(X_{n+1} = s_j | X_n = s_i, X_{n-1} = s_k, ..., X_{n-d} = s_l) = P_{ijkl...l}\]
+
+\subsubsection{Python Kodu}
 
 \begin{lstlisting}[language=Python]
 import markovify
@@ -99,6 +103,8 @@ Zamanla değişen gizli durumların gözlemlenebilir durumlar aracılığıyla m
     \item $P(Y_{t} | X_{t})$, gözlemlenebilir durumların gizli durumlar altında koşulluk olasılıklarını
     \item $P(X_{t} | X_{t-1})$, gizli durumların birbirine geçiş olasılıklarını
 \end{itemize}
+
+\subsubsection{Python Kodu}
 
 \begin{lstlisting}[language=Python]
 from hmmlearn import hmm

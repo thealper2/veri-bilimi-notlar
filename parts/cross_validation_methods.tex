@@ -11,6 +11,8 @@
     \item Time Series Split
 \end{enumerate}
 
+\newpage
+
 \subsection{KFold}
 Veriyi rastgele parçalara böler ve modeli eğitmek ve test etmek için bu parçaları kullanır. Veri setini daha iyi kullanarak eğitim yapılmasını sağlar. Yavaş olabilir.
 
@@ -22,14 +24,14 @@ Veriyi rastgele parçalara böler ve modeli eğitmek ve test etmek için bu par�
     \item Her bir eğitim-test işlemi sonucunda elde edilen performans ölçümleri ortalanır.
 \end{enumerate}
 
-\newpage
-
 \begin{figure}[h]
     \centering
-    \includegraphics[width=1\textwidth]{images/kfold_structure.png}
+    \includegraphics[width=0.8\textwidth]{images/kfold_structure.png}
     \caption{KFold.}
     \label{fig:enter-label}
 \end{figure}
+
+\subsubsection{Python Kodu}
 
 \begin{lstlisting}[language=Python, caption=Scikit-learn'de KFold örneği.]
 from sklearn.model_selection import KFold
@@ -52,6 +54,8 @@ for train_index, test_index in kf.split(X):
     print("Test seti skoru:", score)
 \end{lstlisting}
 
+\newpage
+
 \subsection{Stratified KFold}
 KFold gibi çalışır fakat her katmanın sınıf dağılımını korumak için sınıfları dengeli bir şekilde böler. Sınıf dengesizliği durumunda daha güvenilir sonuçlar sağlar. Sınıf dağılımını koruyarak her katmanda her sınıfın temsil edilmesini sağlar. Stratifikasyon her zaman mümkün olmayabilir.
 
@@ -69,6 +73,8 @@ KFold gibi çalışır fakat her katmanın sınıf dağılımını korumak için
     \caption{Stratified KFold.}
     \label{fig:enter-label}
 \end{figure}
+
+\subsubsection{Python Kodu}
 
 \begin{lstlisting}[language=Python, caption=Scikit-learn'de Stratified KFold örneği.]
 from sklearn.model_selection import StratifiedKFold
@@ -90,6 +96,8 @@ for train_index, test_index in skf.split(X, y):
     print("Test seti skoru:", score)
 \end{lstlisting}
 
+\newpage
+
 \subsection{Repeated KFold}
 Veri kümesini KFold yöntemiyle bölmenin tekrarlanabilir bir versiyonudur. Bir KFold çapraz doğrulama işlemini belirli bir sayıda tekrarlayarak daha güvenilir bir performans tahmini elde etmeyi amaçlar. Veri kümesi dengeli ise gereksiz olabilir.
 
@@ -100,6 +108,8 @@ Veri kümesini KFold yöntemiyle bölmenin tekrarlanabilir bir versiyonudur. Bir
     \item İşlem belirli bir sayıda tekrarlanır.
     \item Her tekrarda farklı rastgele parçalar seçilir.
 \end{enumerate}
+
+\subsubsection{Python Kodu}
 
 \begin{lstlisting}[language=Python, caption=Scikit-learn'de Repeated KFold örneği.]
 from sklearn.model_selection import RepeatedKFold
@@ -121,6 +131,7 @@ for train_index, test_index in rkf.split(X):
     print("Test seti skoru:", score)
 \end{lstlisting}
 
+\newpage
 
 \subsection{Repeated Stratified KFold}
 StratifiedKFold'un tekrarlanabilir bir versiyonudur. Sınıflandırma problemlerinde kullanılan ve sınıf dengesini koruyarak veri setini tekrarlayan bir çapraz doğrulama tekniğidir.
@@ -132,6 +143,8 @@ StratifiedKFold'un tekrarlanabilir bir versiyonudur. Sınıflandırma problemler
     \item İşlem belirli bir sayıda tekrarlanır.
     \item Her tekrarda farklı rastgele parçalar seçilir.
 \end{enumerate}
+
+\subsubsection{Python Kodu}
 
 \begin{lstlisting}[language=Python, caption=Scikit-learn'de Repeated Stratified KFold örneği.]
 from sklearn.model_selection import RepeatedStratifiedKFold
@@ -153,6 +166,7 @@ for train_index, test_index in rskf.split(X, y):
     print("Test seti skoru:", score)
 \end{lstlisting}
 
+\newpage
 
 \subsection{Leave One-Out}
 Veri setinin her bir örneğini sadece bir kez test seti olarak kullanarak gerçekleştirilir. Her bir veri noktası sırasıyla test edilirken geri kalanı eğitim seti olarak kullanılır.
@@ -167,10 +181,12 @@ Veri setinin her bir örneğini sadece bir kez test seti olarak kullanarak gerç
 
 \begin{figure}[h]
     \centering
-    \includegraphics[width=1\textwidth]{images/leave_one_out_structure.png}
+    \includegraphics[width=0.8\textwidth]{images/leave_one_out_structure.png}
     \caption{Leave One-Out.}
     \label{fig:enter-label}
 \end{figure}
+
+\subsubsection{Python Kodu}
 
 \begin{lstlisting}[language=Python, caption=Scikit-learn'de Leave One-Out örneği.]
 from sklearn.model_selection import LeaveOneOut
@@ -198,6 +214,8 @@ mean_accuracy = sum(accuracies) / len(accuracies)
 print("Ortalama dogruluk:", mean_accuracy)
 \end{lstlisting}
 
+\newpage
+
 \subsection{Leave P-Out}
 Her bir iterasyonda P öğeyi test seti olarak kullanarak gerçekleştirilir. LOO (Leave One-Out) ve KFold'un genelleştirilmiş bir versiyonudur. LOO, P=1 olduğunda Leave P-Out'a eşittir.
 
@@ -208,14 +226,14 @@ Her bir iterasyonda P öğeyi test seti olarak kullanarak gerçekleştirilir. LO
     \item Bu işlem veri kümesindeki her bir P öğesi için tekrarlanır.
 \end{enumerate}
 
-\newpage
-
 \begin{figure}[h]
     \centering
-    \includegraphics[width=1\textwidth]{images/leave_p_out_structure.png}
+    \includegraphics[width=0.8\textwidth]{images/leave_p_out_structure.png}
     \caption{Leave P-Out.}
     \label{fig:enter-label}
 \end{figure}
+
+\subsubsection{Python Kodu}
 
 \begin{lstlisting}[language=Python, caption=Scikit-learn'de Leave P-Out örneği.]
 from sklearn.model_selection import LeavePOut
@@ -243,6 +261,7 @@ mean_accuracy = sum(accuracies) / len(accuracies)
 print("Ortalama dogruluk:", mean_accuracy)
 \end{lstlisting}
 
+\newpage
 
 \subsection{Time Series Split}
 Zaman serisi veri setlerinde kullanılan çapraz doğrulama yöntemlerinden biridir. Zaman serileri için veriyi bölme ve çapraz doğrulama yapma işlemidir.
@@ -255,14 +274,14 @@ Zaman serisi veri setlerinde kullanılan çapraz doğrulama yöntemlerinden biri
     \item Bu işlem bir döngü içinde tekrarlanarak farklı eğitim ve test setleri elde edilir.
 \end{enumerate}
 
-\newpage
-
 \begin{figure}[h]
     \centering
-    \includegraphics[width=1\textwidth]{images/time_series_split_structure.png}
+    \includegraphics[width=0.8\textwidth]{images/time_series_split_structure.png}
     \caption{Time Series Split.}
     \label{fig:enter-label}
 \end{figure}
+
+\subsubsection{Python Kodu}
 
 \begin{lstlisting}[language=Python, caption=Scikit-learn'de Time Series Split örneği.]
 from sklearn.model_selection import TimeSeriesSplit

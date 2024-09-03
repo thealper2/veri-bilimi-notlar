@@ -9,6 +9,8 @@ Beam Search Decoding, belirli bir genişlik (beam width) kullanarak, olası tüm
 	\item Durdurma sembolüne ulaşılana kadar işlem tekrarlanır.
 \end{enumerate}
 
+\subsection{Python Kodu}
+
 \begin{lstlisting}[language=Python]
 def beam_search_predictions(text, beam_index = 3):
     in_text = "startseq " + text

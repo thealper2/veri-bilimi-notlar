@@ -19,4 +19,113 @@ Capsule Network'ün temel bileşeni capsule olarak adlandırılan küçük nöro
 	\item En üst seviyedeki kapsüller, nihai çıktı olarak nesnelerin tamamını ve bunların yönelim ve pozisyon bilgilerini üretir.
 \end{enumerate}
 
+\subsection{Python Kodu}
+
+TensorFlow kütüphanesi ile CapsuleNet implementasyonu yapılmıştır.
+
+\begin{lstlisting}[language=Python]
+class Length(layers.Layer):
+    def call(self, inputs, **kwargs):
+        return K.sqrt(K.sum(K.square(inputs), -1))
+
+    def compute_output_shape(self, input_shape):
+        return input_shape[:-1]
+
+class Mask(layers.Layer):
+    def call(self, inputs, **kwargs):
+        if type(inputs) is list:
+            inputs, mask = inputs
+        else:
+            x = tf.sqrt(tf.reduce_sum(tf.square(inputs), -1))
+            mask = tf.one_hot(indices=tf.argmax(x, 1), depth=x.shape[1])
+        inputs_masked = K.batch_flatten(inputs * tf.expand_dims(mask, -1))
+        return inputs_masked
+
+    def compute_output_shape(self, input_shape):
+        if type(input_shape[0]) is tuple:
+            return tuple([None, input_shape[0][-1]])
+        else:
+            return tuple([None, input_shape[-1]])
+
+def squash(vectors, axis=-1):
+    s_squared_norm = K.sum(K.square(vectors), axis, keepdims=True)
+    scale = s_squared_norm / (1 + s_squared_norm) / (K.sqrt(s_squared_norm))
+    return scale * vectors
+
+class CapsuleLayer(layers.Layer):
+    def __init__(self, num_capsule, dim_vector, num_routing=3, kernel_initializer='glorot_uniform', bias_initializer="zeros", **kwargs):
+        super(CapsuleLayer, self).__init__(**kwargs)
+        self.num_capsule = num_capsule
+        self.dim_vector = dim_vector
+        self.num_routing = num_routing
+        self.kernel_initializer = kernel_initializer
+        self.bias_initializer = bias_initializer
+
+    def build(self, input_shape):
+        self.input_num_capsule = input_shape[1]
+        self.input_dim_vector = input_shape[2]
+        self.W = self.add_weight(shape=[self.num_capsule, 
+                                        self.input_num_capsule, 
+                                        self.dim_vector, 
+                                        self.input_dim_vector], 
+                                 initializer=self.kernel_initializer, name='w')
+        
+        self.bias = self.add_weight(shape=[1, self.input_num_capsule, self.num_capsule, 1, 1],
+                                    initializer=self.bias_initializer,
+                                    name='bias',
+                                    trainable=False)
+        
+        self.built = True
+
+    def call(self, inputs, training=None):
+        input_expand = tf.expand_dims(tf.expand_dims(inputs, 1), -1)
+        inputs_tiled = K.tile(input_expand, [1, self.num_capsule, 1, 1, 1])
+        input_hat = tf.squeeze(tf.map_fn(lambda x: tf.matmul(self.W, x), elems=inputs_tiled))
+        self.bias = tf.zeros(shape=[tf.shape(inputs)[0], self.num_capsule, 1, self.input_num_capsule])
+        for i in range(self.num_routing):
+            c = tf.nn.softmax(self.bias, axis=1)
+            output = squash(tf.matmul(c, input_hat))
+            if i < self.num_routing - 1:
+                self.bias += tf.matmul(output, input_hat, transpose_b=True)
+        return tf.squeeze(output)
+
+    def compute_output_shape(self, input_shape):
+        return tuple([None, self.num_capsule, self.dim_vector])
+
+def margin_loss(y_true, y_pred):
+    L = y_true * tf.square(tf.maximum(0., 0.9 - y_pred)) + 0.5 * (1 - y_true) * tf.square(tf.maximum(0., y_pred - 0.1))
+    return tf.reduce_mean(tf.reduce_sum(L, 1))
+
+def primary_capsule(input_layer, num_filters, kernel_size):
+    conv = layers.Conv2D(filters=num_filters, kernel_size=kernel_size, activation="relu", padding="valid")(input_layer)
+    batchnorm = layers.BatchNormalization()(conv)
+    maxp =  layers.MaxPooling2D(pool_size=(1, 1))(batchnorm)
+    return conv, maxp
+
+input_layer = layers.Input(shape=(28, 28, 1), batch_size=100)
+
+conv_1, max_1 = primary_capsule(input_layer, 256, (9, 9))
+
+conv_2 = layers.Conv2D(filters=256, kernel_size=(9, 9), strides=2, activation=None, padding="valid")(max_1)
+reshape_layer_1 = layers.Reshape([-1, 8])(conv_2)
+
+squash_layer = layers.Lambda(squash)(reshape_layer_1)
+
+digitcaps = CapsuleLayer(num_capsule=10, dim_vector=16, num_routing=3)(squash_layer)
+out_caps = Length(name="capsnet")(digitcaps)
+
+y = layers.Input(shape=(10,))
+masked_by_y = Mask()([digitcaps, y])
+masked = Mask()(digitcaps)
+
+x_recon = layers.Dense(512, activation="relu")(masked_by_y)
+x_recon = layers.Dropout(0.5)(x_recon)
+x_recon = layers.Dense(1024, activation="relu")(x_recon)
+x_recon = layers.Dropout(0.5)(x_recon)
+x_recon = layers.Dense(784, activation="sigmoid")(x_recon)
+reshape_layer_2 = layers.Reshape((28, 28, 1))(x_recon)
+
+model = models.Model(inputs=[input_layer, y], outputs=[out_caps, reshape_layer_2])
+\end{lstlisting}
+
 \newpage

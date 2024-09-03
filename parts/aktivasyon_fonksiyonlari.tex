@@ -7,11 +7,12 @@ Derin öğrenme modellerinin temel yapı taşlarından biri olan aktivasyon fonk
     \item Sigmoid Function
     \item Tanh Function - Hiperbolik Tanjant Fonksiyonu
     \item ReLU (Rectified Linear Unit) Function
-    \item Leaky ReLU Function - Sızıntılı ReLU Fonskiyonu
+    \item Leaky ReLU Function - Sızıntılı ReLU Fonksiyonu
     \item Parameterized ReLU Function
     \item Exponential ReLU Function
     \item Softmax Function
     \item Swish (A Self-Gated) Function - Kendinden Geçitli Fonksiyon
+    \item Exponential Linear Unit (ELU) Function
 \end{itemize}
 
 \newpage
@@ -45,6 +46,16 @@ Step fonksiyonu, basit ve kesikli bir aktivasyon fonksiyonudur. Belirli bir eşi
     \item Çoklu sınıflandırma problemlerinde kullanılamaz çünkü sadece iki çıkış sınıfı (0 ve 1) üretir.
 \end{itemize}
 
+\subsubsection{Python Kodu}
+
+\begin{lstlisting}[language=Python]
+def step(x):
+    if x < 0:
+        return 0
+    else:
+        return 1
+\end{lstlisting}
+
 \newpage
 
 \subsection{Linear Function}
@@ -70,6 +81,13 @@ Linear fonksiyon, girişin herhangi bir dönüşüm olmadan çıkışa aktarıld
     \item Sadece doğrusal ilişkileri modelleyebilirler.
     \item Sınırlı işlemsel yeteneğe (sadece girişi iletmek) sahip oldukları için karmaşık problemlerde yetersiz kalırlar.
 \end{itemize}
+
+\subsubsection{Python Kodu}
+
+\begin{lstlisting}[language=Python]
+def linear(x):
+    return x
+\end{lstlisting}
 
 \newpage
 
@@ -97,6 +115,15 @@ Sigmoid (Logistic) fonksiyonu, giriş verisini 0 ile 1 arasında bir çıkışa 
     \item Sigmoid fonksiyonu, özellikle çok büyük ağırlıklar veya girişlerle, yavaş yakınsayan bir eğime sahiptir. Bu, öğrenme sürecini yavaşlatabilir.
 \end{itemize}
 
+\subsubsection{Python Kodu}
+
+\begin{lstlisting}[language=Python]
+import math
+
+def sigmoid(x):
+    return 1 / (1 + math.exp(-x))
+\end{lstlisting}
+
 \newpage
 
 \subsection{Tanh Function}
@@ -122,6 +149,15 @@ Tanh fonksiyonu, giriş verilerini -1 ile 1 arasında bir çıkışa döndüren 
     \item Gradyan kaybolması (gradyan vanishing) sorununa sahip.
     \item 0 merkezli olmasından dolayı ağırlıkların ve çıkışların değişken işaretlerde olmasına neden olabilir. Bu da eğitim sürecini karmaşıklaştırabilir.
 \end{itemize}
+
+\subsubsection{Python Kodu}
+
+\begin{lstlisting}[language=Python]
+import math
+
+def tanh(x):
+    return (math.exp(x) - math.exp(-x)) / (math.exp(x) + math.exp(-x))
+\end{lstlisting}
 
 \newpage
 
@@ -151,6 +187,13 @@ ReLU fonksiyonu, girişin pozitif olduğu durumlarda doğrusal bir çıkış ür
     \item Bazı problemlerde doğrusal olmayanlık sınırlarını zorlayamaz ve bu nedenle tüm problemler için uygun değildir.
 \end{itemize}
 
+\subsubsection{Python Kodu}
+
+\begin{lstlisting}[language=Python]
+def relu(x):
+    return max(0, x)
+\end{lstlisting}
+
 \newpage
 
 \subsection{Parameterized ReLU Function}
@@ -175,6 +218,16 @@ x, & \text{if } x \geq 0. \\
     \item Alpha hiperparametresi belirlenmelidir ve bu, modelin performansını etkileyebilir. Alpha'nın uygun bir değerini bulmak, deneme yanılma gerektirebilir.
 \end{itemize}
 
+\subsubsection{Python Kodu}
+
+\begin{lstlisting}[language=Python]
+def parameterized_relu(x, alpha=0.01):
+    if x < 0:
+        return alpha * x
+    else:
+        return x
+\end{lstlisting}
+
 \newpage
 
 \subsection{Exponential ReLU Function}
@@ -197,6 +250,18 @@ x, & \text{if } x \geq 0. \\
     \item EReLU'nun eğimi öğrenilebilir olduğu için, hesaplama maliyeti biraz daha yüksektir.
     \item Alpha hiperparametresi belirlenmelidir ve bu, modelin performansını etkileyebilir. Alpha'nın uygun bir değerini bulmak, deneme yanılmaya ihtiyaç duyabilir.
 \end{itemize}
+
+\subsubsection{Python Kodu}
+
+\begin{lstlisting}[language=Python]
+import numpy as np
+
+def exponential_relu(x, alpha):
+    if x < 0:
+        return alpha * (np.exp(x) - 1)
+    else:
+        return x
+\end{lstlisting}
 
 \newpage
 
@@ -223,6 +288,13 @@ x, & \text{if } x \geq 0. \\
     \item Girişlerin çok büyük veya çok küçük olduğunda gradyan sorunlarına karşı daha dirençlidir.
 \end{itemize}
 
+\subsubsection{Python Kodu}
+
+\begin{lstlisting}[language=Python]
+def leaky_relu(x, alpha=0.1):
+    return max(x, alpha * x)
+\end{lstlisting}
+
 \newpage
 
 \subsection{Softmax Function}
@@ -243,10 +315,20 @@ Softmax fonksiyonu, çoklu sınıf sınıflandırma problemlerinde kullanılan b
     \item Modelin görmediği sınıf etiketlerini kabul etmeye meyilli olabilir ve bu, modelin yanıltıcı sonuçlar üretmesine yol açabilir.
 \end{itemize}
 
+\subsubsection{Python Kodu}
+
+\begin{lstlisting}[language=Python]
+import numpy as np
+
+def softmax(x):
+    e_x = np.exp(x - np.max(x))
+    return e_x / np.sum(e_x, axis=0)
+\end{lstlisting}
+
 \newpage
 
 \subsection{Swish Function}
-Swish fonksiyonu, giriş verilerini bir doğrusal fonksiyon ve sigmoid fonksiyonun birleşimi ile işler. Swish fonksiyonu, özellikle derin öğrenme modellerinde ve özyinelemeli sinir ağları (RNN) gibi bazı uygulamalarda kullanılır.
+Swish fonksiyonu, giriş verilerini bir doğrusal fonksiyon ve sigmoid fonksiyonun birleşimi ile işler. Swish fonksiyonu, özellikle derin öğrenme modellerinde ve özyinelemeli sinir ağları (RNN) gibi bazı uygulamalarda kullanılır. Swish fonksiyonu, SiLU (Sigmoid Weighted Linear Unit) olarak da bilinir.
 
 \[\text{Swish}(x) = \frac{x}{1 + e^{-x}}\]
 
@@ -268,5 +350,50 @@ Swish fonksiyonu, giriş verilerini bir doğrusal fonksiyon ve sigmoid fonksiyon
     \item Hesaplama maliyeti yüksektir.
     \item Swish fonksiyonunda bir hiperparametre olmadığı için, hiperparametre ayarıyla ilgili daha az esnekliğe sahiptir.
 \end{itemize}
+
+\subsubsection{Python Kodu}
+
+\begin{lstlisting}[language=Python]
+import math
+
+def sigmoid(x):
+    return 1 / (1 + math.exp(-x))
+
+def swish(x, b=1):
+    return x * sigmoid(b * x)
+\end{lstlisting}
+
+\newpage
+
+\subsection{Exponential Linear Unit (ELU) Function}
+
+ELU, negatif girdiler için negatif değerler üretir. Bu sayede ReLU'de görülen "Ölen ReLU (Dying ReLU)" problemine de çözüm sağlar. Ölen ReLU, aktivasyon fonksiyonunun negatif değerlerin tümü için 0 sonucu vermesidir.
+
+\[ \text{ELU}(x) = 
+\begin{cases} 
+x & \text{eğer } x > 0 \\
+\alpha \cdot (\exp(x) - 1) & \text{eğer } x \leq 0
+\end{cases}
+\]
+
+\subsubsection{Avantajları}
+\begin{itemize}
+    \item ReLU'nun dezavantajı olan "Ölen ReLU (Dying ReLU)" problemine karşı bir çözüm sunar.
+\end{itemize}
+
+\subsubsection{Dezavantajları}
+\begin{itemize}
+    \item Hesaplama maliyeti yüksektir.
+    \item $\alpha$ parametresinin doğru seçilmesi gerekir.
+\end{itemize}
+
+\subsubsection{Python Kodu}
+
+\begin{lstlisting}[language=Python]
+import numpy as np
+
+def elu(z, alpha=0.01):
+    return max(alpha * (np.exp(z) - 1), z)
+\end{lstlisting}
 
 \newpage

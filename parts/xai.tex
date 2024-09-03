@@ -21,6 +21,8 @@ LIME (Local Interpretable Model Agnostic Explanations), bir modelin belirli bir 
     \item \textbf{Model Agnostic:} Modeli black box olarak ele alır. Modelden bağımsızdır.
 \end{itemize}
 
+\subsubsection{Python Kodu}
+
 \begin{lstlisting}[language=Python]
 explainer = lime.lime_tabular.LimeTabularExplainer(
 	X_train, 
@@ -54,6 +56,8 @@ SHAP (Shapley Additive Explanations) analizi, Shapley oyun teorisindeki mantığ
     \item \textbf{Dependence Plot:} Tek bir değişkenin model tarafından yapılan tahminler üzerindeki etkisini gösterir. X ekseni değişkenin değerini Y ekseni ise değişkenin değerinin Shapley değerini gösterir.
 \end{itemize}
 
+\subsubsection{Python Kodu}
+
 \begin{lstlisting}[language=Python]
 explainer = shap.Explainer(model, X_train)
 shap_values = explainer.shap_values(X_test)
@@ -62,6 +66,8 @@ shap.summary_plot(shap_values, X_test, feature_names=feature_names)
 
 \subsection{ELI5}
 ELI5 (Explain like im 5 - 5 yaşındaymışım gibi açıkla), makine öğrenmesi modellerin açıklamaya yarıyan bir python kütüphanesidir. Modelden bağımsızdır. ELI5, her bir özelliğin bir tahmine ne kadar katkıda bulunduğunu gösteren özellik önem puanları sağlar.
+
+\subsubsection{Python Kodu}
 
 \begin{lstlisting}[language=Python]
 perm = PermutationImportance(model, random_state=42).fit(X_test, y_test)

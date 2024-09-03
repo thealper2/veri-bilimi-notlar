@@ -8,6 +8,8 @@ Bir olasılık dağılımı bir rassal olayın ortaya çıkabilmesi için değer
     \label{fig:enter-label}
 \end{figure}
 
+\newpage
+
 \subsection{Normal Dağılım}
 Gauss dağılımı olarak da bilinir. Belirli bir ortalama değer etrafında simetrik bir şekilde dağılan bir olasılık dağılımıdır. Çan eğrisi olarak adlandırılan bir görünüme sahiptir.
 
@@ -24,6 +26,15 @@ Bazı özel olasılık değerleri:
 \[P(\mu - \sigma < X < \mu + \sigma = \%68.2\]
 \[P(\mu - 2 * \sigma < X < \mu + 2 * \sigma  = \%95.4\]
 \[P(\mu - 3 * \sigma < X < \mu + 3 * \sigma  = \%99.7\]
+
+\begin{figure}[h]
+    \centering
+    \includegraphics[width=1\textwidth]{images/normal_distribution.png}
+    \caption{Normal dağılım örneği.}
+    \label{fig:enter-label}
+\end{figure}
+
+\subsubsection{Python Kodu}
 
 \begin{lstlisting}[language=Python]
 import numpy as np
@@ -55,6 +66,8 @@ plt.savefig('normal_distribution')
 plt.show()
 \end{lstlisting}
 
+\subsubsection{R Kodu}
+
 \begin{lstlisting}[language=R]
 dnorm(x = 15 , mean = 34 , sd = 3)
 
@@ -72,13 +85,6 @@ rnorm(n = 50 , mean =  25 , sd = 10)
 
 \newpage
 
-\begin{figure}[h]
-    \centering
-    \includegraphics[width=1\textwidth]{images/normal_distribution.png}
-    \caption{Normal dağılım örneği.}
-    \label{fig:enter-label}
-\end{figure}
-
 \subsection{t-Dağılım}
 Student t-dağılımı (t-distribution), örneklem büyüklüğü küçük olduğunda ve populasyon standart sapması bilinmediğinde, örneklem ortalamasının dağılımını modellemek için kullanılan bir olasılık dağılımıdır. Özellikle küçük örneklem büyüklüklerinde ve normal dağılım varsayımı sağlanmadığında sıklıkla kullanılır. Student t-dağılımı, William Sealy Gosset tarafından geliştirilmiştir.
 
@@ -88,6 +94,15 @@ Student t-dağılımı (t-distribution), örneklem büyüklüğü küçük oldu�
 	\item $n$: Serbestlik derecesi (örneklem büyüklüğü - 1).
 	\item $\Gamma$ Gama fonksiyonu.
 \end{itemize}
+
+\begin{figure}[h]
+    \centering
+    \includegraphics[width=1\textwidth]{images/t_distribution.png}
+    \caption{t-dağılım örneği.}
+    \label{fig:enter-label}
+\end{figure}
+
+\subsubsection{Python Kodu}
 
 \begin{lstlisting}[language=Python]
 import numpy as np
@@ -118,12 +133,7 @@ plt.savefig('t_distribution')
 plt.show()
 \end{lstlisting}
 
-\begin{figure}[h]
-    \centering
-    \includegraphics[width=1\textwidth]{images/t_distribution.png}
-    \caption{t-dağılım örneği.}
-    \label{fig:enter-label}
-\end{figure}
+\newpage
 
 \subsection{Ki-kare (Chi-square) Dağılımı}
 Ki-kare dağılımı, bağımsız olarak ve aynı standart normal dağılıma sahip olan rastgele değişkenlerin karelerinin toplamı olarak tanımlanan bir olasılık dağılımıdır. Genellikle hipotez testlerinde ve dağılım karşılaştırmalarında kullanılır.
@@ -134,6 +144,15 @@ Ki-kare dağılımı, bağımsız olarak ve aynı standart normal dağılıma sa
 	\item $k$: Serbestlik derecesi.
 	\item $\Gamma$: Gama fonksiyonu.
 \end{itemize}
+
+\begin{figure}[h]
+    \centering
+    \includegraphics[width=1\textwidth]{images/chi_square_distribution.png}
+    \caption{Ki-kare (Chi-square) dağılım örneği.}
+    \label{fig:enter-label}
+\end{figure}
+
+\subsubsection{Python Kodu}
 
 \begin{lstlisting}[language=Python]
 import numpy as np
@@ -164,12 +183,7 @@ plt.savefig('chi_square_distribution')
 plt.show()
 \end{lstlisting}
 
-\begin{figure}[h]
-    \centering
-    \includegraphics[width=1\textwidth]{images/chi_square_distribution.png}
-    \caption{Ki-kare (Chi-square) dağılım örneği.}
-    \label{fig:enter-label}
-\end{figure}
+\newpage
 
 \subsection{Üstel (Exponential) Dağılım}
 Üstel dağılım (exponential distribution), belirli bir olayın gerçekleşmesi arasındaki zaman aralığını modellemek için kullanılan bir olasılık dağılımıdır. Özellikle rastgele değişkenin pozitif değerler alması gerektiğinde kullanılır ve genellikle sürekli zaman aralıklarını modellemek için tercih edilir. Üstel dağılım, özellikle rastgele olayların aralıklarının dağılımını modellemek için sıkça kullanılır. Belirli bir olay meydana gelene kadar geçen süre ile ilgilenir. Poisson dağılımı ile aynı parametre olan lambda'yı kullanırlar. Fakat poisson sabit bir zaman aralığına göre bir olayın belirli sayıda meydana gelme olasılığını hesaplarken, üstel dağılım sabit zaman aralığında gerçekleşen olaylarda bir sonraki olayın ne zaman ve ne kadar olasılıkla meydana gelmesiyle ilgilenir.
@@ -179,6 +193,15 @@ plt.show()
 	\item $x$: Değer
 	\item $\lambda$: Pozitif olan oran parametresi.
 \end{itemize}
+
+\begin{figure}[h]
+    \centering
+    \includegraphics[width=1\textwidth]{images/exponential_distribution.png}
+    \caption{Üstel (Exponential) dağılım örneği.}
+    \label{fig:enter-label}
+\end{figure}
+
+\subsubsection{Python Kodu}
 
 \begin{lstlisting}[language=Python]
 import numpy as np
@@ -209,6 +232,8 @@ plt.savefig('exponential_distribution')
 plt.show()
 \end{lstlisting}
 
+\subsubsection{R Kodu}
+
 \begin{lstlisting}[language=R]
 dexp(x = 2 , rate = 1/10)
 
@@ -220,12 +245,7 @@ qexp( p = 0.2 , rate = 1/20 , lower.tail = TRUE)
 rexp(n = 50 , rate = 1/10)
 \end{lstlisting}
 
-\begin{figure}[h]
-    \centering
-    \includegraphics[width=1\textwidth]{images/exponential_distribution.png}
-    \caption{Üstel (Exponential) dağılım örneği.}
-    \label{fig:enter-label}
-\end{figure}
+\newpage
 
 \subsection{Bernoulli Dağılımı}
 İsveçli Bilim adamı Jacop Bernoulli tarafından bulunmuştur. Bernoulli dağılımı, sadece iki olası sonuçtan birini (başarı veya başarısızlık) modellemek için kullanılan bir olasılık dağılımıdır. Özellikle bir denemenin başarılı olma olasılığını (genellikle p ile gösterilir) modellemek için kullanılır. Tek denemede gerçekleşen olayların olasılığının hesaplanmasında kullanılır.
@@ -245,6 +265,15 @@ p(x) = p^x (1 - p)^(1- x)
 	\item $q$: Başarısız olma olasılığı.
 	\item $x$: Denemeler.
 \end{itemize}
+
+\begin{figure}[h]
+    \centering
+    \includegraphics[width=1\textwidth]{images/bernoulli_distribution.png}
+    \caption{Bernoulli dağılım örneği.}
+    \label{fig:enter-label}
+\end{figure}
+
+\subsubsection{Python Kodu}
 
 \begin{lstlisting}[language=Python]
 import numpy as np
@@ -275,6 +304,8 @@ plt.savefig('bernoulli_distribution')
 plt.show()
 \end{lstlisting}
 
+\subsubsection{R Kodu}
+
 \begin{lstlisting}[language=R]
 library('Rlab')
 
@@ -301,12 +332,7 @@ qbern(p = 0.2, prob = 0.7, lower.tail = FALSE) # 1
 rbern(n = 10, prob = 0.7)
 \end{lstlisting}
 
-\begin{figure}[h]
-    \centering
-    \includegraphics[width=1\textwidth]{images/bernoulli_distribution.png}
-    \caption{Bernoulli dağılım örneği.}
-    \label{fig:enter-label}
-\end{figure}
+\newpage
 
 \subsection{Binom (Binomial) Dağılım}
 Binom dağılımı, bir denemede başarı veya başarısızlık gibi iki olası sonuç bulunan bağımsız ve aynı dairelerin ardışık olarak tekrarlanması sonucu oluşan bir olasılık dağılımıdır. Her bir denemenin sonucu bağımsızdır ve aynı başarı olasılığına sahiptir. Binom dağılımı, belirli bir sayıda başarı sayısını (başarıların sayısı) modellemek için kullanılır. Bir Bernoulli denemesinin aynı şartlar alında n kez tekrarlanması ile oluşan deneye binom deneyi denir. Binom deneyinin özellikleri;
@@ -327,6 +353,15 @@ Binom dağılımı, bir denemede başarı veya başarısızlık gibi iki olası 
 \[
 f(x) = p(X = x) = \binom{n}{k} p^x q^(n - x), x = 1,2,3...n
 \]
+
+\begin{figure}[h]
+    \centering
+    \includegraphics[width=1\textwidth]{images/binomial_distribution.png}
+    \caption{Binomial dağılım örneği.}
+    \label{fig:enter-label}
+\end{figure}
+
+\subsubsection{Python Kodu}
 
 \begin{lstlisting}[language=Python]
 import numpy as np
@@ -359,6 +394,8 @@ plt.savefig('binomial_distribution')
 plt.show()
 \end{lstlisting}
 
+\subsubsection{R Kodu}
+
 \begin{lstlisting}[language=R]
 # Basarili olma olasiligi 0.7,
 # Basarisiz olma olasiligi 0.3
@@ -381,12 +418,7 @@ pbinom(q = 10 - 1, size = 50, prob = 1/5, lower.tail = FALSE) # 0.55
 rbinom(n = 50 , size = 30 , prob = 1/4)
 \end{lstlisting}
 
-\begin{figure}[h]
-    \centering
-    \includegraphics[width=1\textwidth]{images/binomial_distribution.png}
-    \caption{Binomial dağılım örneği.}
-    \label{fig:enter-label}
-\end{figure}
+\newpage
 
 \subsection{Tekdüze (Uniform) Dağılım}
 Uniform (düzgün) dağılım, belirli bir aralıktaki tüm değerlerin eşit olasılıkla ortaya çıkma durumunu modelleyen bir olasılık dağılımıdır. Bu dağılım, belirli bir aralıktaki rastgele değişkenlerin dağılımını ifade etmek için kullanılır. Uniform dağılım hem kesikli hem de sürekli olabilir.
@@ -397,6 +429,15 @@ Uniform (düzgün) dağılım, belirli bir aralıktaki tüm değerlerin eşit ol
 	\item $a$: Dağılımın başlangıç noktası (alt sınır).
 	\item $b$: Dağılımın bitiş noktası (üst sınır).
 \end{itemize}
+
+\begin{figure}[h]
+    \centering
+    \includegraphics[width=0.8\textwidth]{images/uniform_distribution.png}
+    \caption{Tekdüze (uniform) dağılım örneği.}
+    \label{fig:enter-label}
+\end{figure}
+
+\subsubsection{Python Kodu}
 
 \begin{lstlisting}[language=Python]
 import numpy as np
@@ -420,6 +461,8 @@ plt.savefig('uniform_distribution')
 plt.show()
 \end{lstlisting}
 
+\subsubsection{R Kodu}
+
 \begin{lstlisting}[language=R]
 dunif(x = 5, min = 0, max = 10)
 
@@ -432,13 +475,7 @@ qunif(p = 0.80, min = 0, max = 20, lower.tail = FALSE)
 runif(n = 5, min = 1, max = 10)
 \end{lstlisting}
 
-\begin{figure}[h]
-    \centering
-    \includegraphics[width=0.8\textwidth]{images/uniform_distribution.png}
-    \caption{Tekdüze (uniform) dağılım örneği.}
-    \label{fig:enter-label}
-\end{figure}
-
+\newpage
 
 \subsection{Poisson Dağılımı}
 Poisson dağılımı, sabit bir zaman biriminde belirli bir alanda veya hacimde nadir rastgele olayların (örneğin, trafik kazaları, doğal afetler, müşteri hizmet çağrıları vb.) sayısını modellemek için kullanılan bir olasılık dağılımıdır. Poisson dağılımı, belirli bir zaman veya alanda olayların ortalamasını (örneğin, ortalama bir saatteki trafik kazaları sayısı) ve olayların beklenen nadirliğini temel alır. Poisson deneyinde;
@@ -455,6 +492,15 @@ Poisson dağılımı, sabit bir zaman biriminde belirli bir alanda veya hacimde 
 	\item $\lambda$: Olayların ortalama sayısı.
 	\item $\epsilon$: Euler sayısı.
 \end{itemize}
+
+\begin{figure}[h]
+    \centering
+    \includegraphics[width=0.8\textwidth]{images/poisson_distribution.png}
+    \caption{Poisson dağılım örneği.}
+    \label{fig:enter-label}
+\end{figure}
+
+\subsubsection{Python Kodu}
 
 \begin{lstlisting}[language=Python]
 import numpy as np
@@ -484,6 +530,8 @@ plt.savefig('poisson_distribution')
 plt.show()
 \end{lstlisting}
 
+\subsubsection{R Kodu}
+
 \begin{lstlisting}[language=R]
 # 1 saatte 5 araba gecme olasiligi:
 dpois(x = 5, lambda = 15) # 0.0019
@@ -495,12 +543,7 @@ ppois(q = 2, lambda = 1/3, lower.tail = TRUE) # 0.995
 ppois(q = 2, lambda = 1/3, lower.tail = FALSE) # 0.004
 \end{lstlisting}
 
-\begin{figure}[h]
-    \centering
-    \includegraphics[width=0.8\textwidth]{images/poisson_distribution.png}
-    \caption{Poisson dağılım örneği.}
-    \label{fig:enter-label}
-\end{figure}
+\newpage
 
 \subsection{Hipergeometrik  Dağılım}
 Hipergeometrik dağılım bir sonlu popülasyon içerisinden rastgele ve geri koymadan seçilen örneklemler arasındaki başarı sayısını hesaplamak için kulllanılır. 
@@ -518,6 +561,8 @@ P(X = k) = \frac{\binom{K}{k} \binom{N-K}{n-k}}{\binom{N}{n}}
 	\item $\binom{N-K}{n-k}$: N - K başarısızlıktan n - k tanesini seçmenin kombinasyon sayısı.
 	\item $\binom{N}{n}$: N öğeden n tanesini seçmenin toplam kombinasyon sayısı.
 \end{itemize}
+
+\subsubsection{R Kodu}
 
 \begin{lstlisting}[language=R]
 # 26 kirmizi ve 24 sari kart olmak uzere
