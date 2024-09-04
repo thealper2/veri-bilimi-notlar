@@ -10,6 +10,8 @@
     \item Named-entity-recognition (NER)
 \end{itemize}
 
+\newpage
+
 \subsection{Analiz Yöntemleri}
 \begin{itemize}
     \item \textbf{Morfolojik Analiz:} Bir dildeki kelimelerin yapısal ve biçimsel özelliklerinin incelenmesidir. Bu analiz, kelimenin kökü, ekler ve diğer dilbilgisel özellikleri gibi unsurları tanımlamayı amaçlar. Morfolojik analiz, kelimeyi kök ve eklerine ayırarak, kelimenin anlamını ve işlevini anlamak için kullanılır.
@@ -17,6 +19,8 @@
     \item \textbf{Anlamsal Analiz:} Bir metnin anlamını anlamak ve ve çıkarmak hedeflenir. Kelime seviyesinden cümle seviyesine kadar değişen düzeylerde gerçekleştirilir. Bir metnin içerdiği anlamlı ilişkileri, kavramları ve bağlamları anlamayı amaçlar.
     \item \textbf{Pragmatik Analiz:} Bir metindeki dilin gerçek dünyadaki kullanımına odaklanır. Metin içindeki cümlelerin ve ifadelerin anlamlarını belirlerken, onların kullanıldığı bağlamı, niyeti, sosyal etkileşimi ve dilin gerçek dünyadaki işlevini dikkate alır.
 \end{itemize}
+
+\newpage
 
 \subsection{Metin Ön İşleme}
 \begin{itemize}
@@ -26,8 +30,12 @@
     \item Sık geçen sözcükleri ayıklama: Bağlaçlar, edatlar.
 \end{itemize}
 
+\newpage
+
 \subsection{Tokenization}
 Metinlerin kelimelerine, sembollerine veya cümlelerine ayrılmasını sağlar. Bu işlem, metin verilerini daha işlenebilir hale getirir ve makine öğrenimi veya dil işleme modelleri için daha uygun bir formata dönüştürür.
+
+\subsubsection{Python Kodu}
 
 \begin{lstlisting}[language=Python]
 from nltk.tokenize import word_tokenize
@@ -40,8 +48,12 @@ print(kelimeler)
 # ['Merhaba', 'dunya', '!', 'NLP', 'harika', 'bir', 'alandir', '.']
 \end{lstlisting}
 
+\newpage
+
 \subsection{Stemming}
 Kelime köklerini bulmayı amaçlar. Kelime kökleri, bir kelimenin çekim ekleri veya ek bilgileri atılarak elde edilen temel kelime formudur. Bu işlem, bir kelimenin farklı varyasyonlarını aynı köke indirgeyerek metinlerdeki veri tutarsızlığını azaltmaya yardımcı olur.
+
+\subsubsection{Python Kodu}
 
 \begin{lstlisting}[language=Python]
 from nltk.stem import PorterStemmer
@@ -60,8 +72,12 @@ for word in words:
 # run -> run
 \end{lstlisting}
 
+\newpage
+
 \subsection{Lemmatization}
 Bir kelimeyi gerçek anlamıyla karşılayan ve dilbilgisi kurallarına uygun olan temel veya kök formuna dönüştürmeyi hedefler.
+
+\subsubsection{Python Kodu}
 
 \begin{lstlisting}[language=Python]
 from nltk.stem import WordNetLemmatizer
@@ -80,8 +96,12 @@ for word in words:
 # run -> run
 \end{lstlisting}
 
+\newpage
+
 \subsection{Stopwords}
 Pek anlam taşımayan veya çok sık kullanılan keliemelerdir. Bu kelimeler genellikle dilin yapı taşları olsa da, genel anlam taşımadıkları veya metnin anlamını çok fazla etkilemedikleri için çıkarılabilirler.
+
+\subsubsection{Python Kodu}
 
 \begin{lstlisting}[language=Python]
 from nltk.corpus import stopwords
@@ -97,30 +117,25 @@ print(temiz_kelimeler)
 # ['ornek', 'cumlede', ',', 'analiz', 'gereksiz', 'kelimeler', 'bulunmaktadir', '.']
 \end{lstlisting}
 
+\newpage
+
 \subsection{Part-of-Speech (POS) Tagging}
 Bir cümledeki her kelimenin dilbilgisel kategorisini (isim, sıfat, fiil, zarf) belirleme işlemidir.
+
+\subsubsection{Python Kodu}
 
 \begin{lstlisting}[language=Python]
 import nltk
 from nltk.tokenize import word_tokenize
-
 cumle = "the cat jumped out of the tree."
 kelimeler = word_tokenize(cumle)
 pos_tags = nltk.pos_tag(kelimeler)
 print(pos_tags)
-
 # Output:
-# [('the', 'DT'),
-# ('cat', 'NN'),
-# ('jumped', 'VBD'),
-# ('out', 'IN'),
-# ('of', 'IN'),
-# ('the', 'DT'),
-# ('tree', 'NN'),
-# ('.', '.')]
+# [('the', 'DT'), ('cat', 'NN'), ('jumped', 'VBD'),
+# ('out', 'IN'), ('of', 'IN'), ('the', 'DT'),
+# ('tree', 'NN'), ('.', '.')]
 \end{lstlisting}
-
-\newpage
 
 \subsubsection{POSTagging Etiketleri}
 \begin{table}[h]
@@ -156,32 +171,25 @@ Symbol (SYM) & Sembol. \\ \hline
 }}}
 \end{table}
 
+\newpage
+
 \subsection{Named Entity Recognition (NER)}
 Metindeki önemli bilgi parçalarını (ad, yer, tarih) tanımlamak için kullanılır.
 
+\subsubsection{Python Kodu}
+
 \begin{lstlisting}[language=Python]
 import nltk
-
 cumle = "Bill Gates founded Microsoft and lives in Seattle."
 tokens = nltk.word_tokenize(cumle)
 pos_tags = nltk.pos_tag(tokens)
 ner_tags = nltk.ne_chunk(pos_tags)
 print(ner_tags)
-
 # Output:
-# (S
-#  (PERSON Bill/NNP)
-#  (PERSON Gates/NNP)
-#  founded/VBD
-#  (PERSON Microsoft/NNP)
-#  and/CC
-#  lives/VBZ
-#  in/IN
-#  (GPE Seattle/NNP)
-#  ./.)
+# (S (PERSON Bill/NNP) (PERSON Gates/NNP) founded/VBD
+# (PERSON Microsoft/NNP) and/CC lives/VBZ
+# in/IN (GPE Seattle/NNP) ./.)
 \end{lstlisting}
-
-\newpage
 
 \subsubsection{NER Etiketleri}
 \begin{table}[h]
@@ -213,6 +221,7 @@ CARDINAL & Diğer türlere uymayan sayılar. \\ \hline
 }}}
 \end{table}
 
+\newpage
 
 \subsection{TF-IDF (Terim Sıkığı - Devrik Belge Sıklığı)}
 Metin verilerini sayısal vektörlere dönüştürmek için kullanılır. Yüksek boyutlu metin verilerini işlemek için etkili bir araçtır. Nadir görülen terimlerin, özellikle küçük veri setlerinde, model performansına etkisi az olabilir. Stop-word gibi yaygın kelimelerin etkisini azaltır. Metin verilerindeki kelime önemini dikkate alarak vektörler oluşturur. Vektörün boyutunun büyüklüğüne bağlı olarak bellek kullanımı artar.
@@ -226,29 +235,37 @@ Metin verilerini sayısal vektörlere dönüştürmek için kullanılır. Yükse
 
 \[\text{IDF}(t, D) = \log\left(\frac{N}{|\{d \in D : t \in d\}|}\right) \]
 
-\begin{lstlisting}[language=Python, caption="Scikit-learn'de TF-IDF kullanımı."]
-from sklearn.feature_extraction.text import TfidfVectorizer
+\subsubsection{Python Kodu}
 
+\begin{lstlisting}[language=Python]
+from sklearn.feature_extraction.text import TfidfVectorizer
 vectorizer = TfidfVectorizer()
 X_train = vectorizer.fit_transform(X_train)
 X_test = vectorizer.transform(X_test)
 \end{lstlisting}
 
+\newpage
+
 \subsection{DictVectorizer}
 Sözlük yapılarından özellik matrisleri oluşturmak için kullanılır. Sözlük yapısındaki her öğeyi bir özellik olarak düşünür. He özellik için benzersiz değerler toplar ve bunları bir özellik matrisini dönüştürür. Özelliklerin her bir değeri için 0 veya 1 gibi ikili bir temsil kullanarak özellik matrisini oluşturur.
 
-\begin{lstlisting}[language=Python, caption="Scikit-learn'de DictVectorizer kullanımı."]
-from sklearn.feature_extraction import DictVectorizer
+\subsubsection{Python Kodu}
 
+\begin{lstlisting}[language=Python]
+from sklearn.feature_extraction import DictVectorizer
 dv = DictVectorizer(sparse=False)
 test_dict = [{'foo': 1, 'bar': 2}, {'foo': 3, 'baz': 1}]
 X = dv.fit_transform(test_dict)
 \end{lstlisting}
 
+\newpage
+
 \subsection{CountVectorizer}
 Metindeki her bir kelimenin belirli bir belgedeki frekansını içerir. Önişleme adımları uygulanan metindeki her bir kelimenin metindeki frekansı hesaplanır. Bu frekanslar, her bir kelimenin birer özellik olduğu ve metin belgesinin bir vektör olarak temsil edildiği bir matrise dönüştürülür.
 
-\begin{lstlisting}[language=Python, caption="Scikit-learn'de CountVectorizer kullanımı."]
+\subsubsection{Python Kodu}
+
+\begin{lstlisting}[language=Python]
 from sklearn.feature_extraction.text import CountVectorizer
 
 vectorizer = CountVectorizer()
@@ -256,10 +273,14 @@ X_train = vectorizer.fit_transform(X_train)
 X_test = vectorizer.transform(X_test)
 \end{lstlisting}
 
+\newpage
+
 \subsection{HashingVectorizer}
 Bir hash fonksiyonu kullanarak metin verilerini sayısal vektörlere dönüştürür. Bu sayede, sabit boyutta bir vektör elde edilir. Her bir kelimenin bir hash fonksiyonuyla belirli bir boyuttaki bir vektör içindeki konumun belirler. Kelimelerin belirlenen boyuttaki vektördeki konumlarına göre vektör oluşturulur. Hash fonksiyonları çakışma (collision) problemine neden olabilir yani farklı kelimeler aynı hash değerine sahip olabilir. Kullanılan hash fonksiyonu geri dönüşümlü olmadığı için vektörden kelimeye dönüş yapmak zordur.
 
-\begin{lstlisting}
+\subsubsection{Python Kodu}
+
+\begin{lstlisting}[language=Python]
 from sklearn.feature_extraction.text import HashingVectorizer
 
 vectorizer = HashingVectorizer()

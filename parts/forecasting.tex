@@ -3,23 +3,26 @@ Zaman serisi analizi, zaman içinde gözlenen verileri incelemek ve bu verilerin
 
 Zaman Serisi Modelleri: ARIMA (Oto-Regressif Entegre Hareketli Ortalama), GARCH (Genelleştirilmiş Oto-Regressif Koşullu Heteroskedastiklik), Exponential Smoothing (Üssel Düzleştirme)
 
+\newpage
+
 \subsection{Trend}
 Trend, zaman içinde sürekli bir artış, azalış veya istikrarlı bir eğilimi ifade eder. Bu, bir zaman serisinin orta veya uzun vadeli değişimini temsil eder.
 
-Hareketli Ortalama (Moving Average): Zaman serisindeki gürültüyü azaltmak ve trendi yakalamak için hareketli ortalama yöntemi kullanılabilir. Basit bir hareketli ortalama veya ağırlıklı hareketli ortalama kullanılabilir.
+\subsubsection{Hareketli Ortalama (Moving Average)}
+
+Zaman serisindeki gürültüyü azaltmak ve trendi yakalamak için hareketli ortalama yöntemi kullanılabilir. Basit bir hareketli ortalama veya ağırlıklı hareketli ortalama kullanılabilir.
+
 \begin{lstlisting}[language=Python]
-# Basit bir hareketli ortalama hesaplama
 rolling_mean = time_series.rolling(window=10).mean()
 \end{lstlisting}
 
-Lowess Düzleştirmesi: Lowess (Locally Weighted Scatterplot Smoothing) düzleştirmesi, veriyi yumuşatarak ve yerel eğilimleri yakalayarak trendi belirlemek için kullanılır.
+\subsubsection{Lowess Düzleştirmesi (Locally Weighted Scatterplot Smoothing)}
+
+Lowess düzleştirmesi, veriyi yumuşatarak ve yerel eğilimleri yakalayarak trendi belirlemek için kullanılır.
+
 \begin{lstlisting}[language=Python]
 from statsmodels.nonparametric.smoothers_lowess import lowess
-
-# Lowess duzlestirmesi ile trendi hesaplayin
 smoothed = lowess(time_series, np.arange(len(time_series)), frac=0.2)
-
-# Lowess duzlestirmesi sonuclarini gorsellestirin
 plt.figure(figsize=(12, 6))
 plt.plot(time_series, label="Zaman Serisi")
 plt.plot(smoothed[:, 0], label="Trend (Lowess Duzlestirmesi)", linestyle="--")
@@ -30,44 +33,46 @@ plt.grid(True)
 plt.show()
 \end{lstlisting}
 
-\newpage
-
 \begin{figure}[h]
     \centering
-    \includegraphics[width=0.8\textwidth]{images/lowess.png}
+    \includegraphics[width=0.6\textwidth]{images/lowess.png}
     \caption{Lowess düzleştirmesi örneği.}
     \label{fig:enter-label}
 \end{figure}
 
+\newpage
+
 \subsection{Durağanlık (Stationary)}
-Durağanlık, bir zaman serisinin istatistiksel özelliklerinin zaman içinde sabit olduğu veya dalgalanmadığı bir durumu ifade eder. Durağan bir zaman serisi, ortalama, varyans ve otokorelasyon gibi özellikler açısından zaman içinde tutarlıdır. \textbf{Augmented Dickey-Fuller (ADF) Testi:} Bir test, bir zaman serisinin birim kök (unit root) varlığını veya yokluğunu belirlemeye yardımcı olur. Birim kök, zaman serisinin durağanlık özelliği olmadığını ifade eder. ADF testi, null hipotezi H0 ve alternatif hipotezi H1; H0 = Zaman serisi birim kök içerir ve durağan değildir. H1 = Zaman serisi birim kök içermez ve durağandır.
+Durağanlık, bir zaman serisinin istatistiksel özelliklerinin zaman içinde sabit olduğu veya dalgalanmadığı bir durumu ifade eder. Durağan bir zaman serisi, ortalama, varyans ve otokorelasyon gibi özellikler açısından zaman içinde tutarlıdır. 
+
+\subsubsection{Augmented Dickey-Fuller (ADF) Testi}
+
+Bir test, bir zaman serisinin birim kök (unit root) varlığını veya yokluğunu belirlemeye yardımcı olur. Birim kök, zaman serisinin durağanlık özelliği olmadığını ifade eder. ADF testi, null hipotezi H0 ve alternatif hipotezi H1; H0 = Zaman serisi birim kök içerir ve durağan değildir. H1 = Zaman serisi birim kök içermez ve durağandır.
 
 \begin{lstlisting}[language=Python]
 import pandas as pd
 from statsmodels.tsa.stattools import adfuller
 
-# Ornek bir zaman serisi verisi olusturun
 data = [10, 20, 30, 40, 50, 60, 70, 80, 90]
-
-# Pandas Serisi olusturun
 ts = pd.Series(data)
 
-# ADF testini uygulayin
 result = adfuller(ts)
 
-# ADF test sonuclarini yazdirin
 print('ADF Istatistigi:', result[0])
 print('p-degeri:', result[1])
 print('Kritik degerler:', result[4])
 
-# Sonuclari yorumlayin
 if result[1] <= 0.05:
     print('Zaman serisi duragan.')
 else:
     print('Zaman serisi duragan degil.')
 \end{lstlisting}
 
-\textbf{Kwiatkowski-Philips-Schmidt-Shin (KPSS Testi):} H0: Zaman serisi, düzgün (trend-stationary) durağanlık gösterir. H1: Zaman serisi, düzgün durağanlık göstermez (durağanlık göstermeyen birim kök içerir.). KPSS testi, genellikle iki farklı sürümde uygulanır: düzgün durağanlık testi (Level Stationary Test) ve trend durağanlık testi (Trend Stationary Test).
+\newpage
+
+\subsubsection{Kwiatkowski-Philips-Schmidt-Shin (KPSS Testi)}
+
+H0: Zaman serisi, düzgün (trend-stationary) durağanlık gösterir. H1: Zaman serisi, düzgün durağanlık göstermez (durağanlık göstermeyen birim kök içerir.). KPSS testi, genellikle iki farklı sürümde uygulanır: düzgün durağanlık testi (Level Stationary Test) ve trend durağanlık testi (Trend Stationary Test).
 
 \begin{enumerate}
     \item Düzgün Durağanlık Testi (Level Stationary Test): H0: Zaman serisi düzgün durağanlık gösterir. H1: Zaman serisi düzgün durağanlık göstermez.
@@ -77,27 +82,19 @@ else:
 \begin{lstlisting}[language=Python]
 from statsmodels.tsa.stattools import kpss
 
-# Ornek bir zaman serisi verisi olusturun
 data = [10, 20, 30, 40, 50, 60, 70, 80, 90]
-
-# Pandas Serisi olusturun
 ts = pd.Series(data)
 
-# Duzgun duraganlik testini uygulayin
 kpss_stat_level, p_value_level, lags_level, critical_values_level = kpss(ts, regression='c')
 
-# Trend duraganlik testini uygulayin
 kpss_stat_trend, p_value_trend, lags_trend, critical_values_trend = kpss(ts, regression='ct')
 
-# Duzgun duraganlik test sonuclarini yazdiri
 print('Duzgun Duraganlik Test Istatistigi:', kpss_stat_level)
 print('Duzgun Duraganlik Test p-degeri:', p_value_level)
 
-# Trend duraganlik test sonuclarini yazdirin
 print('Trend Duraganlik Test Istatistigi:', kpss_stat_trend)
 print('Trend Duraganlik Test p-degeri:', p_value_trend)
 
-# Sonuclari yorumlayin
 if p_value_level <= 0.05:
     print('Zaman serisi duzgun duragan degil.')
 else:
@@ -109,137 +106,119 @@ else:
     print('Zaman serisi trend duragan.')
 \end{lstlisting}
 
-\textbf{Philips-Perron Testi:} Zaman serisinin eğilimsiz (trend-stationary) durağanlık özelliğini değerlendirmek için kullanılır. H0: Zaman serisi eğilimsiz durağanlık gösterir. H1: Zaman serisi eğilimsiz durağanlık göstermez.
+\newpage
+
+\subsubsection{Philips-Perron Testi}
+
+Zaman serisinin eğilimsiz (trend-stationary) durağanlık özelliğini değerlendirmek için kullanılır. H0: Zaman serisi eğilimsiz durağanlık gösterir. H1: Zaman serisi eğilimsiz durağanlık göstermez.
 
 \begin{lstlisting}[language=Python]
 from statsmodels.tsa.stattools import adfuller
 
-# Ornek bir zaman serisi verisi olusturun
 data = [10, 20, 30, 40, 50, 60, 70, 80, 90]
 
-# Pandas Serisi olusturun
 ts = pd.Series(data)
 
-# PP testini uygulayin
 result = adfuller(ts, regression='ct')
 
-# PP test sonuclarini yazdirin
 print('PP Istatistigi:', result[0])
 print('p-degeri:', result[1])
 print('Kritik degerler:', result[4])
 
-# Sonuclari yorumlayin
 if result[1] <= 0.05:
     print('Zaman serisi egilimsiz duragan.')
 else:
     print('Zaman serisi egilimsiz duragan degil.')
 \end{lstlisting}
 
-\textbf{Ljung-Box Testi:} Zaman serisinin otokorelasyonunu (kendi içindeki özbenzerliğini) test etmek için kullanılan bir istatistiksel testtir. Bu test, bir zaman serisinin rastgele gürültü içerip içeermediğini değerlendirmek amacıyla yaygın olarak kullanılır. Otokorelasyon, zaman serisinin kendisi ile belirli gecikmeler arasında pozitif veya negatif bir ilişki gösterip göstermediğini ölçer. H0: Zaman serisinin otokorelasyonu yoktur, yani zaman serisi bağımsızdır. H1: Zaman serisinde otokorelasyon vardır. Ljung-Box testi, belirli bir gecikme (lag) sayısı için bir test istatistiği hesaplar ve bu istatistiği karşılaştırılabilir bir eleştirel değerle karşılaştırır.
+\newpage
+
+\subsubsection{Ljung-Box Testi}
+
+Zaman serisinin otokorelasyonunu (kendi içindeki özbenzerliğini) test etmek için kullanılan bir istatistiksel testtir. Bu test, bir zaman serisinin rastgele gürültü içerip içeermediğini değerlendirmek amacıyla yaygın olarak kullanılır. Otokorelasyon, zaman serisinin kendisi ile belirli gecikmeler arasında pozitif veya negatif bir ilişki gösterip göstermediğini ölçer. H0: Zaman serisinin otokorelasyonu yoktur, yani zaman serisi bağımsızdır. H1: Zaman serisinde otokorelasyon vardır. Ljung-Box testi, belirli bir gecikme (lag) sayısı için bir test istatistiği hesaplar ve bu istatistiği karşılaştırılabilir bir eleştirel değerle karşılaştırır.
 
 \begin{lstlisting}[language=Python]
 from statsmodels.stats.diagnostic import acorr_ljungbox
 
-# Ornek bir zaman serisi verisi olusturun
 data = [10, 20, 30, 40, 50, 60, 70, 80, 90]
 
-# Pandas Serisi olusturun
 ts = pd.Series(data)
 
-# Ljung-Box testini uygulayin
-lags = 5  # Test edilecek gecikme sayisi
+lags = 5
 lb_stat, p_value = acorr_ljungbox(ts, lags=lags)
 
-# Ljung-Box test sonuclarini yazdirin
 print('Ljung-Box Istatistigi:', lb_stat)
 print('p-degeri:', p_value)
 
-# Sonuclari yorumlayin
 if any(p_value <= 0.05):
     print('Zaman serisinde otokorelasyon vardir.')
 else:
     print('Zaman serisinde otokorelasyon yoktur.')
 \end{lstlisting}
 
+\newpage
+
 \subsection{Mevsimsel (Seasonal) Değişkenler}
+
 Mevsimsel değişkenler, belirli bir dönemde, düzenli aralıklarla tekrar eden belirli bir deseni ifade eder. Mevsimsel değişkenler, zaman serisinin mevsimsel etkilerini veya desenlerini yakalamak için kullanılır.\\
-\textbf{Aralık Tablosu (Seasonal Decomposition of Time Series - STL):} Bu yöntem, zaman serisini trend, mevsimsel ve rastgele bileşenlere ayırmak için kullanılır.
+
+\subsubsection{Aralık Tablosu (Seasonal Decomposition of TS - STL)}
+
+Bu yöntem, zaman serisini trend, mevsimsel ve rastgele bileşenlere ayırmak için kullanılır.
 
 \begin{lstlisting}[language=Python]
 from statsmodels.tsa.seasonal import seasonal_decompose
-
-# Zaman serisinin mevsimsel bilesenlerini cikartin
 result = seasonal_decompose(time_series, model='additive')
-
-# Mevsimsel bilesenleri gorsellestirin
 result.seasonal.plot()
 \end{lstlisting}
 
-\textbf{ACF (Autocorrelation Function) ve PACF (Partial Autocorrelation Function):}
+\subsubsection{ACF (Autocorrelation Function) ve PACF (Partial Autocorrelation Function)}
 
 \begin{lstlisting}[language=Python]
 from statsmodels.graphics.tsaplots import plot_acf, plot_pacf
-
-# ACF grafigini cizdirin
 plot_acf(time_series, lags=50)
-
-# PACF grafigini cizdirin
 plot_pacf(time_series, lags=50)
 \end{lstlisting}
 
-\textbf{Differencing (Fark Alma):} Zaman serisinde mevsimsel değişkenler varsa, veriyi fark alma (differencing) yöntemi kullanarak mevsimsel desenlerden arındırabilirsiniz. İlk fark, bir mevsimsel periyot boyunca (örneğin, bir yıl) yapılan farkı ifade eder. İkinci fark, ilk farkı fark alarak mevsimsel etkileri daha da azaltır.
+\subsubsection{Differencing (Fark Alma)}
+
+Zaman serisinde mevsimsel değişkenler varsa, veriyi fark alma (differencing) yöntemi kullanarak mevsimsel desenlerden arındırabilirsiniz. İlk fark, bir mevsimsel periyot boyunca (örneğin, bir yıl) yapılan farkı ifade eder. İkinci fark, ilk farkı fark alarak mevsimsel etkileri daha da azaltır.
 
 \begin{lstlisting}[language=Python]
-# Birinci fark
 first_difference = time_series - time_series.shift(1)
-
-# Ikinci fark
 second_difference = first_difference - first_difference.shift(1)
 \end{lstlisting}
 
-\textbf{Exponential Smoothing (Üstel Düzleştirme):} Üstel düzleştirme yöntemleri (örneğin, Holt-Winters) mevsimsel değişkenleri modellemek için kullanılabilir. Bu yöntemler, verinin mevsimsel bileşenlerini ve mevsimsel desenlerini tahmin etmeye yardımcı olur.
+\subsubsection{Exponential Smoothing (Üstel Düzleştirme)}
+
+Üstel düzleştirme yöntemleri (örneğin, Holt-Winters) mevsimsel değişkenleri modellemek için kullanılabilir. Bu yöntemler, verinin mevsimsel bileşenlerini ve mevsimsel desenlerini tahmin etmeye yardımcı olur.
 
 \begin{lstlisting}[language=Python]
 from statsmodels.tsa.holtwinters import ExponentialSmoothing
-
-# Holt-Winters ustel duzlestirme modelini kullanarak mevsimsel degiskenleri tahmin edin
 model = ExponentialSmoothing(time_series, seasonal='add', seasonal_periods=12)
 result = model.fit()
-
-# Mevsimsel tahminleri alin
 seasonal_forecast = result.forecast(steps)
 \end{lstlisting}
 
-\textbf{Fourier Dönüşümleri:} Fourier dönüşümleri, mevsimsel desenleri modellendirmek için kullanılabilir. Bu yöntem, karmaşık mevsimsel desenleri yakalamak için sinüs ve kosinüs fonksiyonlarını kullanır.
+\subsubsection{Fourier Dönüşümleri}
+
+Fourier dönüşümleri, mevsimsel desenleri modellendirmek için kullanılabilir. Bu yöntem, karmaşık mevsimsel desenleri yakalamak için sinüs ve kosinüs fonksiyonlarını kullanır.
 
 \begin{lstlisting}[language=Python]
 import numpy as np
 import matplotlib.pyplot as plt
 from scipy.fftpack import fft
-
-# Ornek bir mevsimsel zaman serisi olusturun
-t = np.linspace(0, 10, 1000) # Zaman araligi: 0-10 frequency = 0.2 # Mekanizmanin frekansi amplitude = 5 # Amplitud seasonal_component = amplitude * np.sin(2 * np.pi * frequency * t) # Mevsimsel bilesen
-# Zaman serisini olusturun
+t = np.linspace(0, 10, 1000) 
+frequency = 0.2 
+amplitude = 5
+seasonal_component = amplitude * np.sin(2 * np.pi * frequency * t)
 time_series = np.random.randn(1000) + seasonal_component
-
-# Zaman serisinin Fourier donusumunu alin
 fourier_transform = fft(time_series)
-
-# Fourier donusumunun buyuklugunu alin
 magnitude = np.abs(fourier_transform)
-
-# Mevsimsel frekansi bulun
-seasonal_frequency = np.argmax(magnitude[1:]) / t[-1]  # Ilk eleman haric en buyuk magnitude'in indeksi
-
+seasonal_frequency = np.argmax(magnitude[1:]) / t[-1]
 print(f"Mevsimsel frekans: {seasonal_frequency:.2f} periyot biriminde")
-
-# Mevsimsel bileseni ayirin
 seasonal_component = amplitude * np.sin(2 * np.pi * seasonal_frequency * t)
-
-# Mevsimsel bilesen disindaki zaman serisini elde edin
 non_seasonal_component = time_series - seasonal_component
-
-# Mevsimsel bilesen ve geriye kalan zaman serisini gorsellestirin
 plt.figure(figsize=(12, 6))
 plt.plot(t, time_series, label="Mevsimsel Zaman Serisi")
 plt.plot(t, seasonal_component, label="Mevsimsel Bilesen", linestyle="--")
@@ -257,6 +236,8 @@ plt.show()
     \caption{Fourier dönüşümü örneği.}
     \label{fig:enter-label}
 \end{figure}
+
+\newpage
 
 \subsection{Rastgele Gürültü (Noise)}
 Rastgele gürültü, zaman serisindeki tahmin edilemeyen, rastgele veya stokastik dalgalanmalardır. Genellikle, trend ve mevsimsel desenlerin dışında kalan değişkenliklerin neden olduğu dalgalanmalar olarak düşünülür. Rastgele gürültü, zaman serisindeki diğer bileşenlerin modelleme ve tahmininde dikkate alınmaz.

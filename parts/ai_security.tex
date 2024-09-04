@@ -7,6 +7,8 @@ Yapay zeka güvenliği, yapay zeka sistemlerinin ve uygulamalarının güvenliğ
     \item \textbf{Mahremiyet İhlali:} Model, eğitim setinde kullanılan bilgileri ifşa edebilir.
 \end{itemize}
 
+\newpage
+
 \subsection{Poisoning}
 Zehirlenme saldırısı, modelin eğitim setine kasıtlı olarak yanlış veri vererek modelin performansını ve karar verme yeteneğini bozmayı amaçlar. Zehirlenme saldırıları farklı aşamalarda gerçekleştirilebilir.
 \begin{itemize}
@@ -25,6 +27,8 @@ Zehirlenme saldırısı, modelin eğitim setine kasıtlı olarak yanlış veri v
 
 Model için kullanılacak eğitim veri setindeki verilerin güvenilir ve güvenli olduğundan emin olunmalıdır. Eğitim veri seti düzenli olarak denetlenmelidir. Eğitim veri güvenli bir şekilde saklanmalıdır. Yapay zeka modeli ve sistemleri, güvenlik testlerine tabi tutulmalıdır. 
 
+\newpage
+
 \subsection{Evasion}
 Evasion saldırısı, sınıflandırma veya tanıma görevlerinde kullanılan modelin veri örneklerini manipüle ederek modelin yanlış kararlar almasını amaçlar. Saldırgan, modelin algılamasını veya sınıflandırmasını istenmeyen şekilde etkilemek için veri örneklerini manipüle eder. Örneğin beyaz renkli bir trafik işaretini kırmızı renge boyayarak yanlış tahmin yapmasına neden olabilir. Bu hileli örnekler, genellikle insan gözü ile fark edilemeyecek küçük şekilde değişiklikler içerebilir.
 \begin{itemize}
@@ -32,7 +36,7 @@ Evasion saldırısı, sınıflandırma veya tanıma görevlerinde kullanılan mo
     \item Saldırgan, metin örneklerine işaretler veya eklemeler yapar.
 \end{itemize}
 
-\subsubsection{Python Kodu}
+\subsubsection{FGSM Method - Python Kodu}
 
 \begin{lstlisting}[language=Python]
 # FGSM Method
@@ -42,7 +46,19 @@ X_test_adversarial = fgsm.generate(x=X_test)
 adv_pred = classifier.predict(X_test_adversarial)
 adv_accuracy = calc_accuracy(adv_pred)
 print(f"Accuracy after attack:{adv_accuracy * 100: .2f}")
+\end{lstlisting}
 
+\begin{figure}[h]
+  \centering
+  \includegraphics[width=0.8\textwidth]{images/evasion_fgsm.png}
+  \caption{FGSM Attack Example.}
+\end{figure}
+
+\newpage
+
+\subsubsection{Laser Beam Attack - Python Kodu}
+
+\begin{lstlisting}[language=Python]
 # Laser Beam Attack
 from art.attacks.evasion.laser_attack.laser_attack import LaserBeamAttack
 lb_attack = LaserBeamAttack(
@@ -61,15 +77,11 @@ for i in range(5):
 
 \begin{figure}[h]
   \centering
-  \includegraphics[width=0.8\textwidth]{images/evasion_fgsm.png}
-  \caption{FGSM Attack Example.}
-\end{figure}
-
-\begin{figure}[h]
-  \centering
   \includegraphics[width=0.8\textwidth]{images/evasion_laser_beam.png}
   \caption{Laser Beam Attack Example.}
 \end{figure}
+
+\newpage
 
 \subsection{Membership Inference}
 Membership Inference saldırısı, bir örneğin modelin eğitildiği veri setinde bulunup bulunmadığını belirlemeyi amaçlar. Sınıflandırma veya tanıma modelleri için kullanılır. Saldırgan, modelin tahmin ettiği sınıfların doğruluğunu ve modelin eğitim veri setindeki örnekleri tanıyıp tanımadığını değerlendirir.
@@ -80,6 +92,8 @@ Membership Inference saldırısı, bir örneğin modelin eğitildiği veri setin
   \caption{Model Membership Inference Example.}
 \end{figure}
 
+\newpage
+
 \subsection{Inversion}
 Inversion saldırısı, modelin iç yapısını veya eğitim verisini ortaya çıkarmayı amaçlar. Giriş verilerine dayanarak modelin çalışma prensiplerini ve eğitim veri setini anlamayı amaçlar. Sınıflandırma veya tanıma modelleri için kullanılır.
 
@@ -88,6 +102,8 @@ Inversion saldırısı, modelin iç yapısını veya eğitim verisini ortaya ç�
   \includegraphics[width=0.8\textwidth]{images/ai_sec_model_inversion.png}
   \caption{Model Inversion Example.}
 \end{figure}
+
+\newpage
 
 \subsection{Model Extraction}
 Model Extraction (Model Theft), modelin mimarisini ve davranışını anlamak veya modeli yeniden oluşturmayı amaçlar. Saldırgan, modelin yapısını ve davranışlarını belirlemek için modeli sorgular. 

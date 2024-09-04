@@ -14,6 +14,8 @@ Association Rule Learning (Bağlantı Kuralı Öğrenme), büüyk veri kümeleri
 
 Veriler genellikle işlemler şeklinde organize edilir. Her işlem, birlikte meydana gelen öğe kümelerini içerir. Apriori, Eclat gibi algoritmalar kullanılarak belirli bir destek eşiğinin üzerinde olan öğe kümeleri bulunur. Sık öğe kümeleri kullanılarak, belirli bir güven eşiğinin üzerinde olan kurallar oluşturulur. Kurallar, lift veya başka bir metriğe göre değerlendirilir ve anlamlı olanlar seçilir.
 
+\newpage
+
 \subsection{Apriori Algoritması}
 Özellikle market sepeti analizinde kullanılır. Apriori algoritması, tekrarlayan öğe kümelerini bulmak ve bu kümelerden anlamlı bağlantı kuralları oluşturmak için iki temel prensibe dayanır:
 
@@ -52,6 +54,8 @@ frequent_itemsets = apriori(df, min_support=0.6, use_colnames=True)
 rules = association_rules(frequent_itemsets, metric="confidence", min_threshold=0.7)
 print(rules)
 \end{lstlisting}
+
+\newpage
 
 \subsection{Eclat Algoritması}
 Eclat, "Equivalence Class Clustering and bottom-up Lattice Traversal" (Eşdeğer Sınıf Kümeleme ve Aşağıdan Yukarıya Kafes Geçişi) anlamına gelir. Eclat algoritması, dikey veri formatı kullanarak sık öğe kümelerini bulur. Bu formatta, her öğe kümesi, bu kümenin bulunduğu işlemlerin listesiyle temsil edilir. Öğe kümelerini genişletmek için rekürsif bir yöntem kullanır ve destek değerlerini hesaplar.

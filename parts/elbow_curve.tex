@@ -9,22 +9,13 @@ import matplotlib.pyplot as plt
 from sklearn.cluster import KMeans
 from sklearn.datasets import make_blobs
 
-# Ornek veri seti olusturma
 X, _ = make_blobs(n_samples=300, centers=4, cluster_std=0.60, random_state=0)
-
-# Kume sayisi araligi belirleme
 k_range = range(1, 11)
-
-# SSE degerlerini depolamak icin bos bir liste olusturma
 sse = []
-
-# Farkli kume sayilari icin KMeans modeli olusturma ve SSE degerlerini hesaplama
 for k in k_range:
     kmeans = KMeans(n_clusters=k)
     kmeans.fit(X)
     sse.append(kmeans.inertia_)
-
-# Elbow curve grafigi olusturma
 plt.plot(k_range, sse, marker='o')
 plt.show()
 \end{lstlisting}

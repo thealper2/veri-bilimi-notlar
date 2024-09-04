@@ -18,12 +18,12 @@ Skewness, veri setindeki örneklem gözlemlerinin üçüncü merkezi momentine d
 
 \[\text{Skewness} = \frac{\sum_{i=1}^{n} (x_i - \bar{x})^3}{n \cdot s^3}\]
 
-
-
 \subsection{Box-Cox Dönüşümü}
 Veri setindeki çarpıklığı azaltmak veya veriyi normal dağılıma yakın bir hale getirmek için kullanılır. lambda parametresi belirlenerek gerçekleştirilir.
 
 \[y(\lambda) = \begin{cases} \frac{{y^\lambda - 1}}{{\lambda}}, & \text{if } \lambda \neq 0, \\ \log(y), & \text{if } \lambda = 0. \end{cases}\]
+
+\subsubsection{Python Kodu}
 
 \begin{lstlisting}[language=Python]
 from scipy.stats import boxcox

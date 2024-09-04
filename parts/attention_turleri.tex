@@ -29,6 +29,8 @@ attention_layer = LuongAttention()
 decoder_state_h, decoder_state_c = encoder_state_h, encoder_state_c
 \end{lstlisting}
 
+\newpage
+
 \subsection{Bahdanau Attention (Additive Attention)}
 Seq2seq modellerinde yaygın olarak kullanılır. Additive Attention olarak da bilinir. Luong'dan farkı skor hesaplamasında ek bir ağırlık matrisi kullanılır. Bahdanau Attention, skor hesaplamasını bir sinir ağı katmanı ile yapar. Elde edilen değerler softmax ile normalize edilir ve dikkatin hangi encoder durumlarına odaklanacağını belirleyen bir dikkat dağılım (attention distribution) elde edilir. Encoder'in tüm gizli durumları, dikkat dağılımı ağırlıklarına göre ağırlıklı ortalaması alınarak bir bağlam vektörü (context vector) oluşturulur. Decoder'in şu anki gizli duru ve bağlam vektörü birleştirilerek yeni bir dikkatli durum (attentive state) hesaplanır.
 
@@ -59,11 +61,17 @@ print("Bahdanau Attention result shape:", attention_result.shape)
 print("Bahdanau Attention weights shape:", attention_weights.shape)
 \end{lstlisting}
 
+\newpage
+
 \subsection{Self-Attention}
 Transformer modellerinin temel bileşenidir. Bir metin içindeki tüm öğelerin birbirine dikkat etmesini sağlar. Paralel hesaplama imkanı sağlar. Girdi dizisi sorgu (query), key(anahtar) ve değer vektörleri (value) olmask üzere üç farklı vektöre dönüştürülür. Sorgu ve anahtar vektörlerinin nokta çarpımı (dot product) ile skorlar hesaplanır ve ölçeklendirilir, elde edilen değerler softmax ile normalize edilir. Ağırlık ortalama alınarak yeni bir vektör elde edilir.
 
+\newpage
+
 \subsection{Multi-Head Attention}
 Birden fazla self-attention mekanizmasını paralel olarak kullanır ve çıktıları birleştirir. Girdi vektörleri, farklı ağırlık matriksleri ile farklı başlıklara (heads) bölünür. Her başlık için bağımsız self-attention uygulanır. Tüm başlıklardan elde edilen çıktılar birleştirilir ve son bir ağırlık matrisi ile yeniden dönüştürülür.
+
+\newpage
 
 \subsection{Hierarchical Attention}
 Çok katmanlı yapıların farklı seviyelerinde dikkat mekanizmalarını kullanır. Genellikle doküman seviyesi ve cümle seviyesi gibi hiyerarşik yapılarda kullanılır.
@@ -163,11 +171,17 @@ model.compile(loss='categorical_crossentropy',
               metrics=['accuracy'])
 \end{lstlisting}
 
+\newpage
+
 \subsection{Monotonic Attention}
 Sıralı veriler ile çalışırken dikkatin yalnızca belirli bir yönü takip etmesini sağlar. Bu, dikkatin sıralı bir şekilde ilerlemesini zorunlu kılar. Dikkat ağırlıkları, sıralı bir şekilde ilerleyerek hesaplanır. Bir konumdan bir sonraki geçişler sıralı olur. Bağlam vektörü, diğerlerine benzer şekilde hesaplanır ancak dikkatin sıralılığı korunur.
 
+\newpage
+
 \subsection{Luong Monotic Attention}
 Genellikle konuşma tanıma problemlerinde kullanılır. Luong Attention mekanizmasının sıralı veriler ile çalışacak şekilde düzenlenmiş halidir. Dikkat mekanizması zaman ilerledikçe sıralı ve monoton bir şekilde ilerler.
+
+\newpage
 
 \subsection{Bahdanau Monotic Attention}
 Bahdanau Attention mekanizmasının sıralı veriler ile çalışacak şekilde düzenlenmiş halidir. Dikkat mekanizması zaman ilerledikçe sıralı ve monoton bir şekilde ilerler.

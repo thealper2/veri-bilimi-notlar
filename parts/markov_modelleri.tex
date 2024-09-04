@@ -13,6 +13,8 @@ Markov modelleri, Markov zinciri adı verilen ve gelecekteki durumun yalnızca m
     \label{fig:enter-label}
 \end{figure}
 
+\newpage
+
 \subsection{Birinci Dereceden Markov Zinciri}
 Gelecekteki durum, yalnızca mevcut duruma bağlıdır. Bir sonraki durum, yalnızca mevcut durumun bilgisine dayanarak tahmin edilir.
 
@@ -36,22 +38,17 @@ Gelecekteki durum, yalnızca mevcut duruma bağlıdır. Bir sonraki durum, yaln�
 
 \begin{lstlisting}[language=Python]
 import markovify
-
-# Ornek metin
 text = """
 This is a sample text. This text will be analysed with a first order Markov chain. 
 Markov chains are used to predict the next state based on the past state.
 """
-
-# Markov zinciri modelini olusturma
 model = markovify.Text(text, state_size=1)
-
-# Rastgele bir dizi olusturma
 generated_sequence = model.make_sentence()
-
 print("Generated Sequence:", generated_sequence)
 # Generated Sequence: This is a first order Markov chain.   
 \end{lstlisting}
+
+\newpage
 
 \subsection{Yüksek Dereceden Markov Zinciri}
 Yüksek dereceden Markov zinciri, birinci derecede Markov zincirinden farklı olarak, daha önceki birden fazla durumu dikkate alarak bir sonraki durumu tahmin etmek için kullanılır. Geçmişteki birden fazla durumun etkilerini içeren daha karmaşık ilişkileri modelleyebilir. 
@@ -63,21 +60,17 @@ Yüksek dereceden Markov zinciri, birinci derecede Markov zincirinden farklı ol
 \begin{lstlisting}[language=Python]
 import markovify
 
-# Ornek metin
 text = """
 This is a sample text. This text will be analysed with a first order Markov chain. 
 Markov chains are used to predict the next state based on the past state.
 """
-
-# Markov zinciri modelini olusturma
 model = markovify.Text(text, state_size=3)
-
-# Rastgele bir dizi olusturma
 generated_sequence = model.make_sentence()
-
 print("Generated Sequence:", generated_sequence)
 # Generated Sequence: This is a first order Markov chain.   
 \end{lstlisting}
+
+\newpage
 
 \subsection{Hidden Markov Model (HMM)}
 Zamanla değişen gizli durumların gözlemlenebilir durumlar aracılığıyla modellendiği bir olasılıksal modeldir. HMM, bir Markov zincirinin gizli bir durumla eşlenmesiyle oluşturulur ve bu gizli durumlar gözlemlenebilir durumlarla ilişkilendirilir. İki tür durumu içerir:
@@ -109,20 +102,11 @@ Zamanla değişen gizli durumların gözlemlenebilir durumlar aracılığıyla m
 \begin{lstlisting}[language=Python]
 from hmmlearn import hmm
 import numpy as np
-
-# Ornek veri
 X = np.array([[0], [1], [0], [1], [0], [1], [0], [1]])
-lengths = [8]  # Gozlemlenen verinin uzunlugu
-
-# Gizli Markov Modeli olusturma
+lengths = [8]
 model = hmm.GaussianHMM(n_components=2, covariance_type="full")
-
-# Modeli egitme
 model.fit(X, lengths)
-
-# Gizli durumlari tahmin etme
 predicted_states = model.predict(X)
-
 print("Gizli Durumlar:", predicted_states)
 \end{lstlisting}
 

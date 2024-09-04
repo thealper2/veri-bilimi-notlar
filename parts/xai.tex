@@ -12,6 +12,8 @@ Explainable AI (XAI), modellerin içsel işleyişlerini, karar süreçlerini ve 
     \item \textbf{Post-hoc Methods (Sonradan Uygulanan Yöntemler):} Modelin tahminlerini ve kararlarını daha sonra açıklamak için kullanılan dışsal yöntemlerdir. Modelin karmaşıklığını azaltmak ve anlaşılabilir bir şekilde sunmak için kullanılır. SHAP, LIME gibi yöntemler uygulanır.
 \end{itemize}
 
+\newpage
+
 \subsection{Local Interpretable Model Agnostic Explanations (LIME)}
 LIME (Local Interpretable Model Agnostic Explanations), bir modelin belirli bir tahmini için yerel açıklamalar üretir. Makine öğrenmesi modellerinin iç mekanizmasını anlamaya yardımcı olur. Modelden bağımsızdır yani herhangi bir makine öğrenmesi modeline uygulanabilir. Veri örneklerini değiştirerek tahminlerin nasıl değiştirdiğini anlamaya çalışır. Seçilen gözlem etrafında, modelin tahminini açıklamak için öznitelikleri rastgele bir şekilde değiştirir. Değiştirilmiş özelliklerle birlikte, orijinal veri noktası model tarafından yeniden tahmin edilir.  Değiştirilmiş özniteliklerle yapılan tahminler arasındaki fark, özniteliklerin model tahminine olan katkısını ölçer. Bu, öznitelik ağırlıklarının hesaplanması için kullanılır.
 
@@ -39,6 +41,8 @@ exp = explainer.explain_instance(
 exp.show_in_notebook(show_table=True, show_all=False)
 \end{lstlisting}
 
+\newpage
+
 \subsection{SHAP}
 SHAP (Shapley Additive Explanations) analizi, Shapley oyun teorisindeki mantığı kullanır. 1953 yılında Lloyd Shapley tarafından önerilmiştir. Shapley değerlerinin amacı, bir oyuncunun bir grup içindeki katkısını ölçmektir. Bir grup oyuncu, birlikte çalışarak belirli bir hedefe ulaşmaya çalışır ve her oyuncunun bu işbirliğine katkısı vardır. Shapley değerleri, bu katkıları ölçer ve adil bir şekilde paylaşımı sağlar. SHAP, her özniteliğin model tahminine ne kadar katkıda bulunduğunu ölçmek için Shapley Değerlerini kullanır. Shapley değerlerini hesaplamak için Kernel SHAP kullanılır. Her özniteliğin (özellik) değeri, diğer öznitelikler sabit tutularak rastgele permütasyonlarla değiştirilir.1. Her permütasyon sonrası modelin tahmini yeniden hesaplanır. Her öznitelik için yapılan değişikliklerin model tahminine olan etkisi ölçülür ve kaydedilir. Shapley değerleri, her öznitelik için yapılan değişikliklerin model tahminine olan etkilerinin ortalama alınmasıyla hesaplanır.
 
@@ -64,6 +68,8 @@ shap_values = explainer.shap_values(X_test)
 shap.summary_plot(shap_values, X_test, feature_names=feature_names)
 \end{lstlisting}
 
+\newpage
+
 \subsection{ELI5}
 ELI5 (Explain like im 5 - 5 yaşındaymışım gibi açıkla), makine öğrenmesi modellerin açıklamaya yarıyan bir python kütüphanesidir. Modelden bağımsızdır. ELI5, her bir özelliğin bir tahmine ne kadar katkıda bulunduğunu gösteren özellik önem puanları sağlar.
 
@@ -73,6 +79,8 @@ ELI5 (Explain like im 5 - 5 yaşındaymışım gibi açıkla), makine öğrenmes
 perm = PermutationImportance(model, random_state=42).fit(X_test, y_test)
 eli5.show_weights(perm, feature_names=feature_names)
 \end{lstlisting}
+
+\newpage
 
 \subsection{Grad-CAM}
 Grad-CAM (Gradient-weighted Class Activation Mapping), görüntü sınıflandırmada görüntünün hangi piksellerinin sınıflandırmada etkili olduğunu görselleştirmek için kullanılır. Modelin sınıflandırmada hangi kararları belirlediğini anlamak için gradyanların geriye yayılmasını (backpropagation) kullanır. Sınıf aktivasyon haritalama (CAM), modelin son katmanındaki aktivasyonları kullanarak modelin kararını etkileyen bölgelerin bir ısı haritası oluşturur. Grad-CAM, CAM'a ek olarak gradyan bilgilerini de kullanır.

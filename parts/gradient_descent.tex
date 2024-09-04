@@ -9,6 +9,8 @@ Tüm eğitim örneklerini bir arada kullanarak her bir iterasyonda gradyanı hes
 	\item $J(\theta)$: maliyet fonksiyonunun gradyanı.
 \end{itemize}
 
+\newpage
+
 \subsection{Stochastic Gradient Descent (SGD)}
 Her bir eğitim örneği için ayrı ayrı gradyan hesaplayarak parametreleri günceller. Diğer gradyan inişi türevlerine göre daha hızlı güncellemeler sağlar ancak her bir güncelleme daha rastgele olduğu için dalgalanmalara sebep olabilir. Her bir eğitim örneği için ayrı ayrı gradyanlar hesaplanır. Her bir eğitim örneği için gradyan hesaplandığı için güncelleme sıklığı çok yüksektir.
 
@@ -19,6 +21,8 @@ Her bir eğitim örneği için ayrı ayrı gradyan hesaplayarak parametreleri g�
 	\item $J(\theta; x^{i}, y^{i} )$: maliyet fonksiyonu,
 	\item $x^{i}$ ve $y^{i}$: eğitim veri setindeki i'inci örnek.
 \end{itemize}
+
+\newpage
 
 \subsection{Mini Batch Gradient Descent}
 Her bir iterasyonda tüm veri setini değil, belirli bir alt küme (mini batch) üzerinde işlem yapar. Bu, batch gradient descent'in hesaplama maliyetini azaltır ve stochastic gradient descent'in rastgele dalgalanmaları azaltmasını sağlar. Mini batch içerisindeki örnekler için gradyanlar hesaplanır. Belirli bir mini batch üzerinde gradyan hesaplandığı için güncelleme sıklığı batch gradient descent'e göre daha sık, stochastic gradient descent'e göre daha düzenlidir.

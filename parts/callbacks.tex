@@ -3,6 +3,8 @@
 \subsection{Model Checkpoint}
 Eğitim sırasında modelin belirli aralıklarla kaydedilmesini sağlar.
 
+\subsubsection{Python Kodu}
+
 \begin{lstlisting}[language=Python]
 from keras.callbacks import ModelCheckpoint
 
@@ -32,8 +34,12 @@ period & Kaydetme aralığı. \\ \hline
 }}}
 \end{table}
 
+\newpage
+
 \subsection{BackupAndRestore}
 Eğitim sırasında modelin yedeklerini alarak ve geri yükleyerek eğitim sırasında oluşabilecek herhangi bir kesintiden sonra eğitimin devam etmesini sağlar.
+
+\subsubsection{Python Kodu}
 
 \begin{lstlisting}[language=Python]
 from keras.callbacks import BackupAndRestore
@@ -57,8 +63,12 @@ frequency & Yedekleme sıklığı. \\ \hline
 }}}
 \end{table}
 
+\newpage
+
 \subsection{TensorBoard}
 Tensorflow'un görselleştirme aracıdır ve modelin performansını izlemek, hata analizi yapmak ve eğitim sürecini anlamak için kullanılır.
+
+\subsubsection{Python Kodu}
 
 \begin{lstlisting}[language=Python]
 from keras.callbacks import Tensorboard
@@ -83,8 +93,12 @@ write\_images & Modelin görsel tanımının tensorboard'da gösterilmesi. \\ \h
 }}}
 \end{table}
 
+\newpage
+
 \subsection{EarlyStopping}
 Belirli bir metriği izleyerek iyileşmediği durumlarda eğitimi durdurur. Bu, overfitting durumlarında eğitimi sonlandırmak için kullanılır.
+
+\subsubsection{Python Kodu}
 
 \begin{lstlisting}[language=Python]
 from keras.callbacks import EarlyStopping
@@ -110,8 +124,12 @@ restore\_best\_weights & En iyi modelin ağırlıklarını geri yükleme. \\ \hl
 }}}
 \end{table}
 
+\newpage
+
 \subsection{LearningRateScheduler}
 Belirli bir metriği izleyerek iyileşmediği durumlarda eğitimi durdurur. Bu, overfitting durumlarında eğitimi sonlandırmak için kullanılır.
+
+\subsubsection{Python Kodu}
 
 \begin{lstlisting}[language=Python]
 from keras.callbacks import LearningRateScheduler
@@ -125,8 +143,12 @@ def lr_schedule(epoch, lr):
 lr_scheduler = LearningRateScheduler(schedule=lr_scheduler)
 \end{lstlisting}
 
+\newpage
+
 \subsection{ReduceLROnPlateau}
 Eğitim sırasında belirli bir metriği iyileşmediği durumlarda öğrenme oranını düşürmek için kullanılır.
+
+\subsubsection{Python Kodu}
 
 \begin{lstlisting}[language=Python]
 from keras.callbacks import ReduceLROnPlateau
@@ -152,8 +174,12 @@ cooldown & Öğrenme oranını azalttıktan sonra bekleyeceği epoch sayısı. \
 }}}
 \end{table}
 
+\newpage
+
 \subsection{CSVLogger}
 Eğitim sırasında modelin metriklerini bir CSV dosyasına kaydeder.
+
+\subsubsection{Python Kodu}
 
 \begin{lstlisting}[language=Python]
 from keras.callbacks import CSVLogger
