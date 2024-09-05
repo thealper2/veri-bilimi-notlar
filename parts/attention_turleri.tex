@@ -187,3 +187,71 @@ Genellikle konuşma tanıma problemlerinde kullanılır. Luong Attention mekaniz
 Bahdanau Attention mekanizmasının sıralı veriler ile çalışacak şekilde düzenlenmiş halidir. Dikkat mekanizması zaman ilerledikçe sıralı ve monoton bir şekilde ilerler.
 
 \newpage
+
+\subsection{Dot Product Attention}
+
+Dot Product Attention, verilen bir sorgu (query) vektörünün, bir dizi anahtar (key) vektörüyle olan benzerliğini hesaplayarak, her bir anahtarın karşılık geldiği değer (value) vektörüne ne kadar dikkat edilmesi gerektiğini belirler. Benzerlik, sorgu ve anahtar vektörlerinin dot product (iç çarpım) işlemi ile hesaplanır.
+
+\begin{itemize}
+    \item \textbf{Query (Sorgu)}: Bir odaklanılacak öğeyi temsil eder.
+    \item \textbf{Key (Anahtar)}: Girişin diğer öğeleriyle sorguyu eşleştirmek için kullanılır.
+    \item \textbf{Value (Değer)}: Her anahtar için bir temsilci değer vektörüdür.
+\end{itemize}
+
+\subsubsection{Çalışma Adımları}
+
+Her bir giriş öğesi için sorgu, anahtar ve değer vektörleri elde edilir. Bu vektörler, genellikle öğrenilebilir parametrelerle tanımlanır ve matris çarpımlarıyla elde edilir.
+
+Her bir sorgu vektörü ile her bir anahtar vektörü arasında dot product (iç çarpım) hesaplanır. Bu, sorgu ve anahtar vektörlerinin boyutlarına bağlı olarak bir skalar değer üretir. Dot product, sorgunun anahtarla ne kadar benzer olduğunu ölçer.
+
+\[ \text{attention\_score}_{ij} = \text{query}_i \cdot \text{key}_{j}^{T} \]
+
+Hesaplanan dot product skorları, softmax fonksiyonu kullanılarak normalize edilir. Softmax, bu skorları olasılık dağılımına dönüştürür, yani tüm skorların toplamı 1 olur. Böylece hangi anahtarın sorguyla en alakalı olduğunu belirlemek kolaylaşır.
+
+\[ \alpha_{ij} = \frac{\text{exp}(\text{attention\_score}_{ij})}{\sum_k \text{exp}(\text{attention\_score}_{ik})} \]
+
+Son adımda, her bir değer vektörü, softmax sonucu elde edilen olasılıklarla (yani ağırlıklarla) çarpılır ve toplanır. Bu, her sorgu için ilgili değerlere odaklanan bir çıkış vektörü oluşturur.
+
+\[ \text{output}_i = \sum_j \alpha_{ij} \times value_j \]
+
+\newpage
+
+\subsection{Causal Attention}
+
+Causal Attention, sıralı veriler üzerinde çalışırken yalnızca önceki öğelere bakmayı garanti eden bir dikkat mekanizmasıdır. Yani, bir kelime veya veri parçası analiz edilirken, yalnızca kendisinden önce gelen verilere dikkat edebilir; bu, gelecekteki verileri hesaba katmaz. Bu, özellikle dil modellemesi ve zaman serisi tahmini gibi gelecekteki bilgiyi tahmin etmemiz gereken durumlar için önemlidir. Bu mekanizma, nedensellik ilkesini koruyarak, gelecekteki bilgiyi kullanmanın yaratabileceği yanlış tahminleri engeller ve modeli daha gerçekçi bir şekilde öğrenmeye yönlendirir. 
+
+Causal Attention, standart attention mekanizmasındaki sorgu (query), anahtar (key) ve değer (value) vektörleri üzerinde çalışır. Ancak, bu mekanizmada yalnızca geçmiş vektörlere dikkat edilebilir. Dolayısıyla, gelecekteki bilgiyi dikkate alan bir yapı engellenir. 
+
+Causal Attention'da gelecekteki bilgiyi engellemek için bir mask (maskeleme) işlemi yapılır. Bu maskeleme, gelecekteki veriye erişimi sınırlamak için matris üzerinde uygulanır. Özellikle dil modellerinde, kelime sırasına göre bir maskeleme yapılır.
+
+\newpage
+
+\subsection{Reformer Efficient Attention}
+
+Reformer Efficient Attention, 2020 yılında Google Research tarafından önerilen Reformer adlı bir modelde kullanılan verimli bir dikkat mekanizmasıdır. Reformer Efficient Attention, özellikle uzun dizileri işlerken gereksiz hesaplamaları ve bellek kullanımını azaltarak, Transformers'ların sınırlamalarını aşmayı sağlar. Geleneksel dikkat mekanizmaları $O(n^2)$ (dizinin uzunluğuna göre karekök orantılı) bir hesaplama maliyeti taşır. Yani dizinin uzunluğu arttıkça işlem maliyeti katlanarak artar. Reformer bu maliyeti logaritmik seviyelere indirir, bu da uzun diziler üzerinde çalışırken büyük bir hızlanma sağlar.
+
+Reformer Efficient Attention’ın temel çalışma prensibi, dikkat hesaplamalarını optimize etmek için Locality-Sensitive Hashing (LSH) ve revizyonlu ağlar (reversible networks) gibi yenilikçi teknikler kullanmasıdır.
+
+\subsubsection{Locality-Sensitive Hashing (LSH)}
+
+Geleneksel dikkat mekanizmasında, her bir öğe (kelime, karakter vb.) diğer tüm öğelerle etkileşime girer. Bu, büyük veri kümeleri için yüksek hesaplama ve bellek maliyetine neden olur. Locality-Sensitive Hashing (LSH), dikkat hesaplamasını verimli hale getirir. LSH, öğeleri benzerliğe göre gruplandırarak, her bir öğenin yalnızca kendisine benzeyen diğer öğelere dikkat etmesini sağlar. Bu şekilde, tüm öğeler arasında hesaplama yapmak yerine, yalnızca benzer olan öğeler arasında dikkati hesaplar. Giriş öğeleri hash fonksiyonlarıyla daha küçük gruplara ayrılır. Bu gruplar içindeki öğeler, birbirine daha yakın ve daha benzer olduğu kabul edilir. Böylece, her öğe sadece kendi grubundaki öğelere dikkat eder, bu da hesaplamayı hızlandırır. Hash'leme sayesinde tüm öğeler arasında dikkat hesaplaması yapılmaz, sadece benzer olanların dikkat hesaplaması yapılır. Bu, geleneksel attention'daki $O(n^2)$ maliyeti, $O(n \text{log} n)$'ye düşürür. 
+
+\subsubsection{Reversible Networks (Geri Dönüşümlü Ağlar)}
+
+Reformer, belleği verimli kullanmak için reversible networks kullanır. Geleneksel Transformer'larda her bir katman, önceki katmanın çıktısını depolar ve her adımda bu çıktıyı kullanır. Bu, bellekte yüksek bir yük oluşturur. Reformer'da ise, geri dönüşümlü ağlar sayesinde önceki katmanların çıktıları bellekte depolanmaz, çünkü her adımda bu çıktılar yeniden hesaplanabilir. Bu, belleği büyük ölçüde azaltır. Modeldeki tüm ara hesaplamaları bellekte saklamak yerine, sadece en gerekli bilgiler saklanır ve gerektiğinde hesaplamalar yeniden yapılır.
+
+\subsubsection{Chunking (Sıralı Karıştırma)}
+
+Reformer, uzun dizileri işlemeyi kolaylaştırmak için veriyi küçük parçalara ayırır ve bu parçalarda dikkat hesaplaması yapar. Bu teknik sayesinde, hesaplama işlemi küçük diziler üzerinde yürütülerek maliyet düşürülür.
+
+\subsubsection{Çalışma Adımları}
+
+\begin{enumerate}
+    \item Uzun bir dizi girdi alındığında, Reformer bu girdiyi daha küçük parçalar (chunks) halinde böler. Bu, uzun diziler üzerinde çalışırken işlem maliyetini düşürmeye yardımcı olur.
+    \item Her bir parça için, LSH kullanılarak dikkat hesaplaması yapılacak öğeler seçilir. Öğeler, benzer olanlar arasında gruplanır ve dikkat hesaplamaları yalnızca benzer öğeler arasında gerçekleştirilir. Bu, dikkat hesaplamasını hızlandırır.
+    \item LSH ile benzer gruplara ayrılan öğeler arasında, dikkat (attention) skorları hesaplanır. Her bir öğenin sorgu (query), anahtar (key) ve değer (value) vektörleri arasında dot product hesaplanarak dikkat skorları elde edilir.
+    \item Modelin farklı katmanlarında kullanılan ara hesaplamalar, geri dönüşümlü ağlar sayesinde yeniden hesaplanır ve bellek kullanımı optimize edilir. Bu, özellikle derin modellerde büyük bellek tasarrufu sağlar.
+    \item Dikkat skorları hesaplandıktan sonra, bu skorlar ağırlıklandırılarak çıkış vektörleri hesaplanır ve bir sonraki katmana aktarılır.
+\end{enumerate}
+
+\newpage

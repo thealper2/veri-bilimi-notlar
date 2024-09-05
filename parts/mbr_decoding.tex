@@ -1,0 +1,19 @@
+\section{Minimum Bayes-Risk Decoding}
+
+MBR Decoding, Bayes karar teorisinin uygulandığı bir yöntemdir ve bir modelin karar verirken hata yapma olasılığını minimize etmeyi hedefler. Bu yöntem, olasılıksal bir modelin ürettiği tahminler arasında en az riski taşıyanı seçmek için kullanılır. MBR Decoding, yalnızca en olası tahmini seçmek yerine, tüm olası tahminlerin riskini değerlendirir ve en düşük beklenen riskli olan tahmini tercih eder.
+
+\subsection{Çalışma Adımları}
+
+Verilen bir girdiye karşılık gelen tüm olası çıktılar (hipotezler) oluşturulur. Bu hipotezler genellikle bir model tarafından üretilir ve her bir hipotezin bir olasılığı vardır.
+
+Her bir hipotezin ne kadar risk taşıdığını belirlemek için bir kayıp fonksiyonu tanımlanır. Kayıp fonksiyonu, bir hipotezin diğer hipotezlere göre ne kadar farklı olduğunu ölçer.
+
+Her bir hipotez için, diğer hipotezlere karşı beklenen risk hesaplanır. Bu, bir hipotezin diğerlerine göre ne kadar kayıp yaratacağını belirler.
+
+\[ Risk(y) = \Sigma_{y'}^{} P(y' | x) \cdot Loss(y, y') \]
+
+Burada $y$ seçilen hipotez, $y'$ diğer olası hipotezler, $P(y' | x)$ ise $y'$ hipotezinin doğru olma olasılığıdır. $Loss(y, y')$ kayıp fonksiyonudur.
+
+Tüm hipotezler arasından beklenen riski en az olan hipotez seçilir. Bu, modelin en az hata yapacağı hipotez olarak kabul edilir.
+
+\newpage

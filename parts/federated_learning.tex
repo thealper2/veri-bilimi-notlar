@@ -10,4 +10,20 @@ Federated Learning, merkezi olmayan bir öğrenme yöntemidir. Bir modelin birde
     \item Güncellenen model tekrar uç cihazlara dağıtılır ve işlem tekrarlanır. 
 \end{enumerate}
 
+\subsection{FedAvg (Federated Averaging)}
+
+FedAvg, dağıtılmış cihazlardaki modelleri eğitir ve cihazlar arasında model ağırlıklarının ortalamasını alarak merkezi modelin güncellenmesini sağlar. Bu yöntem, model parametrelerinin güncellenmesi sırasında cihazlardaki yerel modelleri senkronize eder.
+
+\subsection{FedSGD (Federated Stochastic Gradient Descent)}
+
+FedSGD, cihazlarda eğitimi gerçekleştirmek yerine her cihazın gradyan güncellemelerini sunucuya gönderir ve merkezi sunucu bu güncellemeleri toplayarak merkezi model üzerinde birleştirir.
+
+\subsection{FedProx (Federated Proximal Optimization)}
+
+FedProx, cihazlar arasındaki veri dağılımının heterojen olduğu durumlarda eğitim sürecini stabilize eder. Cihazların donanım kapasiteleri ve veri dağılımları farklı olduğunda, FedAvg performans düşüşü yaşarken, FedProx bu sorunu çözmeyi amaçlar.
+
+\subsection{FedDANE (Federated Dual Averaging)}
+
+FedDANE, gradyan tabanlı optimizasyon yerine dual averaging kullanarak stabil bir eğitim süreci sağlar. Bu yöntem, cihazlar arasındaki hesaplama kapasitelerinin ve veri dağılımlarının farklı olduğu durumlarda daha etkili bir optimizasyon sağlar.
+
 \newpage

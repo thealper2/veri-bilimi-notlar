@@ -1,0 +1,19 @@
+\section{Quantization}
+
+Quantization, sürekli bir veri kümesini (örneğin, bir modelin ağırlıklarını veya aktivasyonlarını) belirli sayıda ayrık (diskret) değere dönüştürme işlemidir. Bu süreç, genellikle modelin ağırlıklarının ve aktivasyonlarının sayısal temsilinin, daha az bit kullanarak kodlanmasını içerir. Örneğin, 32 bit floating-point sayıların 8 bit integer sayılara dönüştürülmesi bu sürecin bir örneğidir. Daha az bit kullanarak depolama alanı gereksinimlerini azaltır. Düşük bit genişliğine sahip hesaplamalar, işlemci ve donanım üzerinde daha hızlı bir şekilde yapılabilir. 
+
+\begin{itemize}
+    \item \textbf{Post-Training Quantization}: Eğitim tamamlandıktan sonra modelin ağırlıklarını quantize etme. Genellikle daha hızlıdır ve daha az hesaplama gerektirir.
+    \item \textbf{Quantization-Aware Training (QAT)}: Model, eğitim sürecinde quantization işlemi ile birlikte eğitilir. Bu, modelin quantization sonrası performans kaybını azaltabilir.
+\end{itemize}
+
+\subsection{Quantization Türleri}
+
+\begin{enumerate}
+    \item \textbf{Uniform Quantization}: Değerler eşit aralıklarla belirlenen bir dizi ayrık değere dönüşür. Genellikle daha basit ve yaygın bir yöntemdir.
+    \item \textbf{Non-Uniform Quantization}: Değerler, daha sık kullanılan aralıklar için daha fazla ayrık değer içerir. Bu, bazı durumlarda daha iyi performans sağlayabilir.
+    \item \textbf{Weight Quantization}: Modelin ağırlıkları quantize edilir.
+    \item \textbf{Activation Quantization}: Modelin ara katmanlarındaki aktivasyonlar quantize edilir.
+\end{enumerate}
+
+\newpage
