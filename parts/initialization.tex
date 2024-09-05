@@ -1,0 +1,58 @@
+\section{Initialization}
+
+\subsection{Zero Initialization (Sıfır Başlatma)}
+Zero Initialization, sinir ağı katmanlarının ağırlıklarını sıfır ile başlatıldığı bir yöntemdir. Bu teknik, tüm ağın ağırlıklarının başlangıçta sıfır olarak ayarlandığı basit bir yaklaşımdır. Fakat temel problem, ağırlıkların sıfırla başlatılması sinir ağının simetrik kırma (symmetry breaking) yeteneğini ortadan kaldırır. Ağın her bir nöronu aynı şekilde güncellenir, bu da öğrenmeyi durdurur.
+
+\subsubsection{Python Kodu}
+
+\begin{lstlisting}[language=Python]
+def zero_initialization(layers_dims):
+    parameters = {}
+    L = len(layers_dims)
+
+    for l in range(1, L):
+        parameters["W" + str(l)] = np.zeros((layers_dims[l], layers_dims[l - 1]))
+        parameters["b" + str(l)] = np.zeros((layers_dims[l], 1))
+
+    return parameters
+\end{lstlisting}
+
+\newpage
+
+\subsection{Random Initialization (Rastgele Başlatma)}
+Random Initialization, sinir ağı ağırlıklarının küçük rastgele değerlerle başlatıldığı bir yöntemdir. Bu teknik, her bir ağırlığın küçük rastgele bir değere sahip olmasını sağlar, bu sayede ağın simetriyi kırabilmesi ve farklı özellikleri öğrenmesi mümkün olur. Rastgelelik dikkatli olmalıdır çünkü çok büyük veya çok küçük ağırlıklar ağırlıkların patlamasına (exploding gradients) ya da sönmesine (vanishing gradients) problemlerine neden olabilir.
+
+\subsubsection{Python Kodu}
+
+\begin{lstlisting}[language=Python]
+def random_initialization(layers_dims):
+    parameters = {}
+    L = len(layers_dims)
+
+    for l in range(1, L):
+        parameters["W" + str(l)] = np.random.randn(layers_dims[l], layers_dims[l - 1]) * 10
+        parameters["b" + str(l)] = np.zeros((layers_dims[l], 1))
+
+    return parameters
+\end{lstlisting}
+
+\newpage
+
+\subsection{He Initialization (He Başlatma)}
+Adını Kaiming He adlı araştırmacıdan alır. He Initialization, ReLU gibi doğrusal olmayan aktivasyon fonksiyonları ile birlikte kullanılan katmanlarda gradyanların daha dengeli bir şekilde yayılmasını sağlar. Bu teknik, ağırlıkların ortalama 0 ve varyansın $\frac{2}{n}$ (buradaki n, bir katmandaki giriş birimlerinin sayısıdır) olduğu bir normal dağılımdan alınarak başlatılır. Bu, ReLU fonksiyonlarının özelliklerine göre ayarlanmış bir yöntemdir, çünkü ReLU, negatif değerleri sıfıra kırpar ve bu da ağ boyunca gradyanların dengesiz yayılmasına neden olabilir.
+
+\subsubsection{Python Kodu}
+
+\begin{lstlisting}[language=Python]
+def he_initialization(layers_dims):
+    parameters = {}
+    L = len(layers_dims)
+
+    for l in range(1, L):
+        parameters["W" + str(l)] = np.random.randn(layers_dims[l], layers_dims[l - 1]) * np.sqrt(2 / layers_dims[l - 1])
+        parameters["b" + str(l)] = np.zeros((layers_dims[l], 1))
+
+    return parameters
+\end{lstlisting}
+
+\newpage

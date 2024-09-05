@@ -1,0 +1,27 @@
+\section{Viterbi Algorithm}
+
+Gizli Markov Modelleri (HMM) gibi durum tabanlı olasılık modellerinde en olası durum dizisini bulmak için kullanılan dinamik programlama temelli bir algoritmadır. Viterbi algoritması, gizli bir durum dizisini, yani gözlenen verilerin olası durumlar altında nasıl oluştuğunu tahmin eder. Yani en olası "gizli durum yolu"nu hesaplar. Viterbi algoritması, dinamik programlama prensibine dayanır. Dinamik programlama, bir problemin alt problemlerini çözüp bu alt çözümleri birleştirerek ana problemi çözmeye yarar. Viterbi algoritması da, önceki hesaplamaları kaydederek tekrar hesaplama yapmaktan kaçınır ve bu sayede daha verimli olur.
+
+\begin{itemize}
+    \item \textbf{Başlangıç Olasılıkları}: Her gizli durumun başlangıçta ortaya çıkma olasılığıdır.
+    \item \textbf{Geçiş Olasılıkları}: Bir durumdan başka bir duruma geçiş yapma olasılığıdır.
+    \item \textbf{Gözlem Olasılıkları}: Belirli bir gizli durumda bir gözlemi görme olasılığıdır.
+\end{itemize}
+
+\subsection{Çalışma Adımları}
+
+İlk gözlem için, her gizli durumun başlangıç olasılığı ile o gözlem altında o durumda bulunma olasılığı çarpılır.
+
+\[ V_1 (i) = \pi_i \cdot b_i (O_1) \]
+
+Burada, $V_1 (i)$ birinci zaman adımında durum $i$'nin olasılığıdır, $\pi_i$ durum $i$'nin başlangıç olasığıdır ve $b_i (O_1)$, gözlem $O_1$'in o durumda gerçekleşme olasığıdır.
+
+Zaman adımları ilerledikçe, her bir sonraki adımda olasılıklar hesaplanır. Önceki adımın olasılıkları ile geçiş olasılıkları ve gözlem olasılıkları çarpılır ve maksimum olasılık seçilir.
+
+\[ V_t (j) = max(V_{t-1} (i) \cdot a_{ij}) \cdot b_j (O_t) \]
+
+Burada, $V_t (j)$ zaman $t$'de durum $j$'de olma olasılığıdır, $a_{ij}$ durum $i$'den durum $j$'ye geçiş olasılığıdır ve $b_j (O_t)$, gözlem $O_t$'nin durum $j$'de görülme olasılığıdır.
+
+Tüm gözlemler işlendiğinde, son adımdaki en olası durum seçilir. Bu durumdan geriye doğru gidilerek en olası gizli durum dizisi elde edilir. Her adımda bir önceki adımın en yüksek olasılıkla geldiği durum izlenir.
+
+\newpage

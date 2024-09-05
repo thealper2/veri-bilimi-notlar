@@ -1,0 +1,14 @@
+\section{Temperature Sampling}
+
+Temperature (sıcaklık), bir dil modelinin çıktısının rastgeleliğini veya kesinliğini kontrol etmek için olasılık dağılımını düzenleyen bir parametredir. Düşük bir temperature değeri, modelin daha kesin ve yüksek olasılıklı kelimeleri seçmesine neden olurken, yüksek temperature değeri, modelin daha az olasılıklı ve potansiyel olarak daha yaratıcı kelimeleri seçmesini sağlar. 
+
+Dil modeli bir sonraki kelimeyi tahmin ederken bir olasılık dağılımı üretir. Örneğin "ev" için 0.6, "araba" için 0.3 ve "ağaç" için 0.1 olasılık değerine sahip olalım. Bu olasılıklar modelin en yüksek güvenle tahmin ettiği kelimelerdir. Temperature Sampling, bu olasılık dağılımını değiştirerek sonuçları etkiler.
+
+\[ P(w_i) = \frac{exp(\frac{log(P(w_i))}{T})}{E{}^{j} exp(\frac{log(P(w_j))}{T})} \]
+
+\begin{itemize}
+    \item $P(w_i)$: kelime $w_i$'nin güncellenmiş olasılığıdır.
+    \item T, temperature (sıcaklık) parametresidir.
+\end{itemize}
+
+\newpage

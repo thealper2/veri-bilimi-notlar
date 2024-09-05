@@ -1,0 +1,18 @@
+\section{Gradient Checking}
+
+Gradient checking, bir sinir ağının parametrelerinin (ağırlıklarının) güncellenmesi sırasında kullanılan gradyanların doğru bir şekilde hesaplanıp hesaplanmadığını kontrol etme yöntemidir. Geri yayılım algoritması, bir modelin kayıp fonksiyonunun (loss function) gradyanlarını kullanarak ağırlıkları günceller. Ancak geri yayılımda yapılan hesaplamalar karışıktır ve hatalar oluşabilir. Gradient checking, analitik olarak hesaplanan bu gradyanların doğruluğunu sayısal türevlerle karşılaştırarak kontrol eder.
+
+Gradient checking, analitik olarak hesaplanan gradyanları sayısal türevlerle karşılaştırır. Bir sinir ağı modeli, genellikle bir kayıp fonksiyonu (örneğin, $J(\theta)$), ve bu fonksiyona bağlı olarak parametreler ($\theta$) içerir. Geri yayılım algoritması, her bir parametre için bu kayıp fonksiyonunun gradyanını hesaplar.
+
+Gradyanlar analitik olarak geri yayılım algoritması ile hesaplanır. Ancak gradient checking yöntemiyle, bu gradyanlar sayısal türevlerle kıyaslanır. Bu sayısal türevler, Merkezi Farklar Yöntemi (Central Difference Method) kullanılarak elde edilir.
+
+Sayısal türevler, kayıp fonksiyonunda çok küçük bir değişiklik yapılarak hesaplanır. Parametrelerin küçük bir değişimi ($\epsilon$) sonucunda, kayıp fonksiyonundaki değişim gözlemlenir.
+
+Bir parametre için sayısal türev şu şekilde hesaplanır:
+
+\[ \frac{\alpha J(\theta)}{\alpha \theta} \approx \frac{J(\theta + \epsilon) - J(\theta - \epsilon)}{2 \epsilon} \]
+
+Bu formülde, $\theta$ bir parametre, $J(\theta)$ kayıp fonksiyonu, ve $\epsilon$ çok küçük bir sayıdır. Bu formül, kayıp fonksiyonunun parametredeki küçük değişimlere nasıl tepki verdiğini ölçerek sayısal türev hesaplar.
+
+
+\newpage

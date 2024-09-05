@@ -463,4 +463,8 @@ GAN'lardaki sorunları önlemek için "unrolling (geri açma)" adı verilen bir 
 
 U-Net GAN, GAN’ların geleneksel mimarisini U-Net yapısını içerecek şekilde geliştirir. U-Net, hem giriş görüntüsünden detaylı özellikler çıkarır hem de bu özellikleri daha büyük ölçekli bir görüntü üretmek için kullanır. U-Net yapısının Discriminator olarak kullanılması, Generator'un ürettiği sahte görüntülerin çok daha detaylı bir şekilde analiz edilmesine olanak tanır.
 
+\subsection{Conditional Regularized GAN (CR-GAN)}
+
+GAN mimarisine ek olarak bir düzenleyici (regularization) katmanı ekler. Bu katman, conditional regularization ilkesine dayanarak üretilen verilerin belirli koşullara uymasını sağlar. Mode collapse sorununu önlemek için tasarlanmıştır. Düzenleyici, belirli bir koşul sağlanmadığında ceza uygular bu, modelin yanlış yönlere sapmasını engeller. Bu sayede modelin çeşitli ve kaliteli veri üretmesi sağlanır. 
+
 \newpage
