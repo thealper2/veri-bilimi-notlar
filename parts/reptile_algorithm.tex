@@ -1,0 +1,16 @@
+\section{Reptile Algorithm}
+
+Bir modelin birkaç örnekten öğrenip yeni bir göreve hızla uyum sağlayabilmesini sağlar. Bu algoritma, çeşitli görevler arasında transfer öğrenmeyi optimize eder ve modelin birkaç güncelleme ile yeni görevlere adapte olabilmesini sağlar.
+
+Reptile algoritması, özellikle farklı görevler arasında ortak bir temsiliyet öğrenerek, bir modelin farklı veri kümeleri veya görevler arasında genel bir çözüm bulabilmesini amaçlar. Bu, modelin yalnızca bir görevde iyi performans göstermesini değil, aynı zamanda başka görevlerde de hızlıca öğrenmesini mümkün kılar.
+
+\subsection{Çalışma Adımları}
+
+\begin{enumerate}
+    \item Algoritma, farklı görevlerden veri kümelerini rastgele seçer. Bu görevler genellikle bir modelin öğrenmesi gereken küçük veri kümeleri ile temsil edilir. Her görev, modelin belirli bir konfigürasyon altında test edilmesi gereken bir problemdir.
+    \item Her görev için model, birkaç adım boyunca klasik bir gradient descent yöntemi ile eğitilir. Bu süreçte modelin parametreleri, seçilen görev için optimize edilir.
+    \item Model, farklı görevlerde eğitildikten sonra, bu görevlerde optimize edilen parametrelerin ortalaması alınarak, genel model parametreleri güncellenir. Bu adım, modelin her bir görevden öğrenilen bilgiyi genel bir çözümde toplamasını sağlar. Amaç, modelin yeni görevlerde hızlı adaptasyon sağlamasına yardımcı olmaktır.
+    \item Bu süreç, birçok farklı görev için yinelenir. Her görevde öğrenilen bilgiler modelin genel parametrelerine eklenir, böylece model hem genel hem de görev-spesifik bilgiyi öğrenmiş olur.
+\end{enumerate}
+
+\newpage

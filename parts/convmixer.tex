@@ -1,0 +1,16 @@
+\section{ConvMixer}
+
+CNN ve ViT mimarilerinin bazı fikirlerinin değiştirerek kullanır. ConvMixer, saf konvolüsyon işlemleriyle çok katmanlı bir yapıda global bilgi akışını sağlar ve ViT'deki "patch embedding" ile benzer bir strateji uygular.
+
+\subsection{Çalışma Adımları}
+
+\begin{enumerate}
+    \item Girdi olarak verilen görüntü, sabit boyutlu yamalara (patch) ayrılır. Bu yamalar, ConvMixer'ın giriş katmanına aktarılır.
+    \item Her yama üzerinde derinlemesine konvolüsyon işlemi yapılır. Bu adımda, her kanal birbirinden bağımsız olarak işlenir ve görüntünün uzamsal özellikleri çıkarılır.
+    \item Her bir yama üzerinde kanal bazında konvolüsyon işlemi yapılır ve farklı kanalların bilgileri birleştirilir. Bu aşama, hem yerel hem de küresel ilişkilerin modellenmesini sağlar.
+    \item Her konvolüsyon işleminin ardından aktivasyon fonksiyonları uygulanır ve artık bağlantılar ile öğrenme süreci hızlandırılır.
+    \item Tüm yamalar ve kanallar üzerinde öğrenilen öznitelikler, bir global havuzlama katmanına aktarılır. Bu adım, özniteliklerin boyutunu küçültür ve sınıflandırma katmanına hazır hale getirir.
+    \item Tam bağlantılı katman, havuzlanan öznitelikleri kullanarak nesnenin hangi sınıfa ait olduğunu tahmin eder. Bu aşamada model, son katmanında "softmax" fonksiyonunu kullanarak sınıflandırma işlemini tamamlar.
+\end{enumerate}
+
+\newpage

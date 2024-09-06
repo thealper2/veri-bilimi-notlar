@@ -1,0 +1,22 @@
+\section{Compact Convolutional Transformers (CCT)}
+
+CNN ile Transformer mimarisini bir araya getirir. CNN'lerin özellik çıkarma kabiliyetleri ve Transformer'ların self-attention mekanizmalarını birleştirir. 
+
+\begin{itemize}
+    \item \textbf{Convolutional Katmanlar}: Görüntüler veya diğer çok boyutlu verilerden yerel özelliklerin çıkarılması için kullanılır.
+    \item \textbf{Transformer Katmanlar}: CNN'ler tarafından çıkarılan yerel özelliklerin üzerine dikkat mekanizmaları uygulayarak, verinin daha geniş ölçekli ilişkilerini öğrenir.
+\end{itemize}
+
+
+\subsection{Çalışma Adımları}
+
+\begin{enumerate}
+    \item Girdi olarak verilen görüntü veya veri, küçük parçalara (patch) bölünür. Bu parçalardan yerel özellikler çıkarılır ve daha sonra Transformer mekanizmasına aktarılır. Bu bölümleme, görüntüdeki her bir bölgenin Transformer’a anlamlı bir şekilde iletilmesini sağlar.
+    \item Verinin bu küçük bölümleri CNN ile işlenir ve her bölgedeki yerel özellikler çıkarılır.
+    \item CNN katmanından gelen öznitelikler, sabit boyutlu bir vektöre dönüştürülür ve Transformer’ın işleyebileceği hale getirilir. Bu aşamada, CNN tarafından çıkarılan her örneklem, bir dizi vektöre dönüştürülerek modelin devamında kullanılacak olan "token"lere çevrilir.
+    \item Transformer’ların çalışabilmesi için girdinin konum bilgisine ihtiyaç vardır. CNN'ler doğal olarak yerel ilişkileri öğrenirken, Transformers yapısı bu bilgiyi pozisyon kodlaması (positional encoding) adı verilen bir yöntemle öğrenir. Bu, verinin sıra bilgilerini modele ekler ve küresel ilişkilerin modellenmesine olanak tanır.
+    \item Transformer'ın dikkat mekanizması devreye girer. Bu aşamada, verinin tüm parçaları birbiriyle ilişkilendirilir ve her bir parçanın diğer parçalarla olan bağımlılıkları öğrenilir. Self-attention, her bir parçanın tüm diğer parçalarla ilişkisini değerlendirerek öğrenme sürecini yönlendirir.
+    \item Son aşamada, Transformer katmanlarından elde edilen özellikler bir sınıflandırma katmanına aktarılır ve çıktı olarak sınıf tahmini yapılır.
+\end{enumerate}
+
+\newpage

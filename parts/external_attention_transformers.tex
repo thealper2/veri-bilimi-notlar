@@ -1,0 +1,15 @@
+\section{External Attention Transformers (EANet)}
+
+Transformers yapılarında kullanılan self-attention mekanizması yerine, hafıza ve bilgi paylaşımı üzerinde yoğunlaşır. Self-attention yerine harici dikkat (external attention) mekanizmasını kullanarak öğrenme işlemlerini daha verimli hale getirebilir. External Attention sisteminde model, dikkat vektörlerini harici bir hafızada saklar ve bu hafızayı her yeni girdiye göre günceller. Bu hafızaya, harici hafıza matrisleri (external attention matrices) denir. 
+
+\subsection{Çalışma Adımları}
+
+\begin{enumerate}
+    \item Girdi verisi, model tarafından işlenmeden önce öznitelik vektörlerine dönüştürülür. Bu aşama, klasik Transformers'taki gibi embedding katmanı ile gerçekleştirilir.
+    \item Model, her bir girdi vektörü için harici bir hafıza matrisi kullanır. Bu matriste dikkat vektörleri saklanır ve güncellenir. Harici hafıza, modelin dikkat işlemlerini yaparken başvurduğu bir veri deposu görevi görür.
+    \item Modelin her bir girdi vektörü için dikkat vektörü, harici hafızadan alınır ve güncellenir. Bu güncelleme işlemi, girdiler arasında daha iyi bir bilgi paylaşımı sağlar ve modelin genelleştirme yeteneğini artırır.
+    \item Dikkat hesaplamaları, harici hafıza üzerinden yapılır. Bu hesaplama sırasında model, mevcut girdiyi harici hafızadaki dikkat vektörleri ile karşılaştırarak dikkat ağırlıklarını hesaplar.
+    \item Dikkat vektörleri güncellenip hesaplandıktan sonra, model son katmanda bir sınıflandırma veya regresyon işlemi yapar.
+\end{enumerate}
+
+\newpage

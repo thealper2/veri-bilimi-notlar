@@ -1,0 +1,12 @@
+\section{Involutional Neural Networks}
+
+Konvolüsyon işlemlerine alternatif olarak geliştirilen involutionlar, veri üzerinde adaptif, içerik-bağlı işlemler gerçekleştiren bir yöntem sunar. Geleneksel konvolüsyonlar sabit filtreler kullanırken, involutionlar adaptif filtreler uygular, yani her bir konum için farklı bir filtre hesaplar. Involution işlemi temel olarak şu adımlarla gerçekleşir:
+
+\begin{enumerate}
+    \item Girdideki her bir konum, bir filtre ağı ile eşlenir. Bu filtre ağı, girdinin içerik bilgisine dayanarak oluşturulur.
+    \item Her bir konum için, girdinin o bölgesine bağlı olarak bir filtre hesaplanır. Bu hesaplanan filtre, o konumdaki yerel bilgiyi en iyi şekilde temsil eder.
+    \item Hesaplanan bu filtre, girdinin ilgili yerel alanı üzerinde uygulanır. Böylece, içerik-bağlı bir işlem gerçekleştirilmiş olur.
+    \item Her bir konumda adaptif filtreler tarafından işlenen sonuçlar, nihai özellik haritası veya çıktı olarak birleşir.
+\end{enumerate}
+
+\newpage
