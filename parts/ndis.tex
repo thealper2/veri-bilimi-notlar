@@ -1,0 +1,12 @@
+\section{Near Duplicate Image Search (NDIS)}
+
+Near-Duplicate Image Search, bir görüntünün küçük farklılıklara sahip kopyalarını veya varyantlarını tespit eder. Amaç, görüntülerin birebir aynı olmamasına rağmen, yüksek oranda benzerlik gösteren varyantlarını tespit edebilmektir.
+
+\begin{enumerate}
+    \item İlk adım, her bir görüntüyü özellik vektörü olarak temsil etmektir. Bu özellik vektörleri, görüntünün içeriğini özetleyen ve benzerlik ölçümünde kullanılabilecek özellik çıkarım teknikleri ile elde edilir. Görüntüleri temsil etmek için histogramlar, SIFT, SURF, HoG, CNN gibi yöntemler kullanılır.
+    \item Görüntüler arasında özellik vektörleri üzerinden benzerlik ölçümleri yapılır. Bu vektörler, iki görüntünün ne kadar benzer olduğunu hesaplayan mesafe fonksiyonları ile karşılaştırılır.
+    \item Özellik vektörlerinin karşılaştırılması sonucunda benzerlik puanları elde edilir. Eşik değeri belirlenir ve bu eşik değerin üzerinde olan görüntüler “near-duplicate” (yakın kopya) olarak sınıflandırılır. Eşik değerin altında kalanlar ise yeterince farklı kabul edilir.
+    \item Near-Duplicate Image Search, genellikle çok büyük görsel veri tabanlarıyla çalıştığı için sonuçların hızlıca aranması ve sıralanması önemlidir. Bu aşamada, sonuçlar uygun bir veri yapısına indekslenir ve en yakın benzerlikteki görüntüler sıralanır. LSH (Locality-Sensitive Hashing) gibi hızlı arama algoritmaları bu süreçte kullanılır. Bu algoritma, büyük veri tabanlarında benzer görüntülerin daha hızlı bulunmasını sağlar.
+\end{enumerate}
+
+\newpage

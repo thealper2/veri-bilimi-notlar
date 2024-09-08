@@ -1,0 +1,7 @@
+\section{Efficient Sub-Pixel CNN (ESPCN)}
+
+Temel amacı bir görüntünün çözünürlüğünü artırmaktır. Düşük çözünürlüklü bir görüntüyü doğrudan yüksek çözünürlükte elde etmek yerine, sub-pixel (alt piksel) evrişim işlemini kullanır. Geleneksel super-resolution yöntemleri, interpolasyon (örneğin bicubic) gibi yöntemlerle görüntü boyutunu büyütüp ardından özellik haritalarını iyileştirirken, ESPCN bu süreci tersine çevirir; Önce düşük çözünürlükte işlem yapar, ardından alt pikselli bir evrişim katmanını kullanarak görüntü çözünürlüğünü artırır.
+
+Her pikselde birden fazla kanal bilgisi depolanır ve Sub-pixel Convolution bu bilgileri PixelShuffle adı verilen bir teknikle daha yüksek çözünürlüklü bir yapıya dağıtır. PixelShuffle, daha önceki çıkarılan özellik haritalarını düzenleyerek pikselleri doğru yerlere dağıtır. 
+
+\newpage

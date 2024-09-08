@@ -1,0 +1,18 @@
+\section{Gradient Centralization}
+
+Gradient Centralization, optimizasyon sırasında gradyanların vektör merkezileştirilmesi (gradient vector centralization) işlemidir. Bu işlem, gradyanları vektör uzayında merkezileştirerek ortalamalarının sıfır olmasını sağlar. Temelde, bu merkezileştirme işlemi optimizasyon sırasında ağın parametre güncellemelerini daha dengeli ve kontrollü hale getirir.
+
+Gradient Centralization'ın temel prensibi, gradyanları ağırlık güncellemeleri sırasında merkezileştirmektir. Bu işlem, gradyanın ortalamasının çıkarılması ve güncellenmesi adımları ile yapılır. Matris bazlı gradyanlar söz konusu olduğunda, satır veya sütunlar arasında ortalama alınıp bu ortalamalar çıkarılır. Bu şekilde, her gradyanın bileşeni etrafında merkezileştirilmiş olur.
+
+\[ g_{centralizer} = g - \frac{1}{n} \sum_{i=1}^n g_i \]
+
+Burada $g$ orijinal gradyanı, $n$ gradyanın bileşen sayısını ve $g_{centralized}$ merkezileştirilmiş gradyandır.
+
+\begin{enumerate}
+    \item İlk olarak, optimizasyon sürecinde her parametre için gradyanlar hesaplanır. Bu, standart bir işlem olup herhangi bir optimizasyon algoritmasında olduğu gibidir.
+    \item Hesaplanan gradyanların ortalaması alınarak her bir gradyan bileşeninden bu ortalama çıkarılır. Bu işlem, her bir parametre için gradyan vektörünün sıfır ortalamaya sahip olmasını sağlar
+    \item Merkezileştirilmiş gradyanlar, optimizasyon algoritmasına normal şekilde beslenir. Optimizasyon algoritması, ağırlıkları bu merkezileştirilmiş gradyanlara göre günceller.
+    \item Bu adımlar her bir optimizasyon iterasyonunda tekrarlanır. Gradyanlar her adımda merkezileştirilerek güncellemeler yapılır ve model bu süreç boyunca optimize edilir.
+\end{enumerate}
+
+\newpage

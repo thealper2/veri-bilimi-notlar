@@ -1,0 +1,20 @@
+\section{Integrated Gradients}
+
+Integrated Gradients (Entegre Edilmiş Gradyanlar), derin öğrenme modellerinin karar mekanizmalarını açıklamaya yönelik bir yöntemdir. Integrated Gradients, bir modelin çıktısının belirli bir girdiden ne kadar etkilendiğini hesaplamak için gradyan tabanlı bir yaklaşıma dayanır. Yöntem, modelin çıktısı ile girdi arasındaki ilişkiyi anlamak için girdinin gradyanlarını (türevlerini) kullanır, ancak doğrudan gradyan kullanmak yerine bu gradyanları entegral alarak birikimli olarak hesaplar. Bu, modelin belirli bir girdiye bağlı kararını daha doğru ve ayrıntılı şekilde açıklamayı sağlar.
+
+\subsection{Çalışma Adımları}
+
+\[ \text{IG}_{i} (x) = (x_i - {x'}_i) \int_{\lambda=0}^{1} \frac{\vartheta F(x' + \lambda (x - x'))}{\vartheta x_i} d\lambda \]
+
+Burada, $\text{IG}_{i} (x)$, girdi özelliğini $i$'nin model çıktısına olan entegral etkisi, $x$ gerçek girdi vektörü, $x'$ başlangıç referansı, $\lambda$ entegrasyon parametresi (referans ile gerçek giriş arasındaki ara nokta), $\frac{\vartheta F}{\vartheta x_i}$ girdinin $i$'inci bileşeni için modelin gradyanı.
+
+\begin{enumerate}
+    \item Herhangi bir giriş özelliğine karşı bir referans noktası belirlenir. Bu referans, modelin herhangi bir bilgiye sahip olmadığı bir durumu temsil eder.
+    \item Gerçek girdi ile referans noktası arasında bir dizi ara nokta oluşturulur. Bu noktalar, girdi vektörünün referanstan (sıfırdan) hedef girdiye doğru bir yol izlediği anlamına gelir.
+    \item Bu ara noktalar boyunca modelin gradyanı (türevleri) hesaplanır. Burada önemli olan, gradyanların çıktıyı nasıl etkilediğidir. Bu, tüm özelliklerin kademeli olarak modele eklenmesinin model üzerindeki etkisini izlemeyi sağlar.
+    \item Her bir ara noktadaki gradyan hesaplanır ve bu gradyanlar gerçek girdi ile referans noktası arasındaki farkla çarpılarak birikimli bir etki hesaplanır. Bu işlem, modelin kararının hangi giriş özelliklerinden ne kadar etkilendiğini gösterir.
+    \item Matematiksel olarak bu, girdinin sıfırdan gerçek değere entegrasyonu anlamına gelir.
+    \item 
+\end{enumerate}
+
+\newpage

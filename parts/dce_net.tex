@@ -1,0 +1,18 @@
+\section{Deep Curve Estimation Networks (DCE-Net)}
+
+Düşük ışık altında çekilen görüntüleri iyileştirmek amacıyla kullanılan bir derin öğrenme modelidir. DCE-Net, görüntülerin aydınlatma koşullarını optimize eden bir sinir ağıdır. Model, düşük ışıkta çekilen görüntülerin parlaklık ve kontrastını düzeltmek için parametrik aydınlatma eğrilerini kullanır ve her pikselin aydınlatmasını yerel olarak optimize eder.
+
+DCE-Net, görüntüdeki piksellerin aydınlatma seviyelerini iyileştirmek için parametrik bir aydınlatma eğrisi (illumination curve) öğrenir. Bu eğriler, her pikselin parlaklık seviyesini optimize ederek görüntüdeki genel aydınlatmayı artırır ve karanlık alanlarda daha fazla ayrıntı ortaya çıkarır. DCE-Net’in temel çalışma prensibi, bir görüntüdeki piksellerin aydınlatmasını doğrusal olmayan bir dönüşümle iyileştirmek üzerine kuruludur. Model, her piksel için öğrenilen aydınlatma eğrilerini uygulayarak, piksel seviyesinde aydınlatma optimizasyonu yapar. Bu eğriler, çoklu evrişim katmanları aracılığıyla tahmin edilir ve böylece her bir pikselin parlaklık seviyesi yerel ve global olarak düzenlenir.
+
+DCE-Net, herhangi bir referans görüntüye ihtiyaç duymadan düşük ışıklı görüntüleri iyileştirebilir. Aydınlatma eğrilerinin doğrusal olmayan bir şekilde uygulanması, görüntüde aşırı pozlama ve parlaklık dengesizliklerinin önüne geçer. Her piksel için parametrik aydınlatma eğrileri tahmin ederek, düşük ışık koşullarında her pikselin parlaklık seviyesini optimize eder. Bu, görüntünün hem global hem de lokal olarak iyileştirilmesini sağlar.
+
+\subsection{Çalışma Adımları}
+
+\begin{enumerate}
+    \item İlk olarak, düşük ışıkta çekilmiş bir görüntü modelin girdisi olarak alınır. Bu görüntü karanlık, düşük kontrastlı ve detaylar belirsiz olabilir.
+    \item Derin evrişimli sinir ağı (CNN) katmanları, her pikselin aydınlatma seviyesini düzeltmek için bir aydınlatma eğrisi öğrenir. Bu eğriler, her bir pikselin parlaklık seviyesini doğrusal olmayan bir şekilde ayarlayarak görüntünün genel aydınlatmasını optimize eder.
+    \item Tahmin edilen aydınlatma eğrileri, her piksele uygulanır. Bu eğriler, görüntünün karanlık bölgelerini aydınlatarak ve parlak bölgeleri dengeleyerek, görüntüyü global ve lokal olarak iyileştirir.
+    \item Modelin çıktısı, iyileştirilmiş bir görüntü olur. Bu görüntü, daha parlak, daha net ve detayları daha belirgin hale getirilmiş bir yapıya sahiptir. Aydınlatma, kontrast ve genel görüntü kalitesi artırılır.
+\end{enumerate}
+
+\newpage

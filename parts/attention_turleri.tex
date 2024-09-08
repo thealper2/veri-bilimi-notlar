@@ -261,3 +261,11 @@ Reformer, uzun dizileri işlemeyi kolaylaştırmak için veriyi küçük parçal
 Standart dikkat mekanizmalarının geliştirilmiş bir formu olarak, modelin dikkatle odaklandığı bilgilere sürekli geri dönerek kararlarını daha doğru bir şekilde vermesini sağlar. Iterative Attention mekanizması, modelin dikkatini iteratif bir şekilde farklı bilgi kaynaklarına dağıtarak zamanla daha hassas sonuçlar elde etmesini sağlar. Her adımda dikkat mekanizması bir geri bildirim döngüsüne girer ve önceki iterasyonlarda yapılan hata veya eksik bilgilere göre kendini günceller.
 
 \newpage
+
+\subsection{Aggregated Attention}
+
+Aggregated Attention, standart dikkat mekanizmasındaki çoklu dikkat başlıklarını (multi-head attention) bir araya getirip daha fazla bilgi toplamak amacıyla geliştirilmiştir. Her bir dikkat başlığı, modelin farklı özelliklere odaklanmasını sağlar ve bu başlıkların birleştirilmesi (aggregation), daha zengin ve kapsamlı temsiller oluşturur. Geleneksel çoklu başlıklı dikkat mekanizmasında, her dikkat başlığı veriyi farklı açılardan ele alır. Ancak, bu başlıklar ayrı ayrı değerlendirilir ve her biri kendi bilgi kümesine göre modelleme yapar. Aggregated Attention ise bu başlıkların ürettiği dikkat çıktısını birleştirir ve daha geniş bir bağlam sağlar.
+
+Dikkat mekanizmasındaki çoklu başlıklar, giriş verisini farklı alt uzaylara projekte ederek farklı ilişkileri öğrenir. Her başlık, belirli bir özellik kümesine odaklanır. Çoklu başlıkların ürettiği dikkat değerleri, toplanarak veya birleştirilerek daha kapsamlı bir bağlam elde edilir. Bu adım, aynı veri üzerinde birden fazla perspektiften çıkarım yapmaya olanak tanır. Birleştirilmiş dikkat çıktısı, modelin daha geniş bir bağlamsal bilgiye sahip olmasını sağlar.
+
+\newpage

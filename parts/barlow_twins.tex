@@ -1,0 +1,20 @@
+\section{Barlow Twins}
+
+2021 yılında Jure Zbontar ve arkadaşları tarafından önerilmiştir ve temelde, modelin aynı girdi verisinin farklı görünümlerinden (augmentations) benzer temsiller (representations) öğrenmesini amaçlar.
+
+Barlow Twins’in temel çalışma prensibi, aynı girdi verisinin farklı dönüşümlerinden benzer temsiller öğrenmektir. Bu öğrenme süreci, veri örneklerinin kendiliğinden oluşturulmuş iki görünüşü arasında bir korelasyon matrisini optimize etmeye dayanır.
+
+\begin{itemize}
+    \item İlk olarak, aynı veri örneği üzerinde farklı veri iyileştirmeleri (augmentations) yapılır.
+    \item Her iki farklı görünüm (augmentation), aynı ağdan (ikiz mimari) geçirilir.
+    \item Model, bu iki görünüm arasındaki temsillerin benzer olmasını sağlamaya çalışır. Barlow Twins'in temel yeniliği, temsiller arasındaki korelasyon matrisinin ideal hale getirilmesi üzerine kuruludur.
+\end{itemize}
+
+Barlow Twins, her iki görünümün çıktı temsilleri arasında bir korelasyon matrisi oluşturur ve bu matrisin birim matrise yakın olmasını hedefler. Bunun için şu iki kritere bakar:
+
+\begin{itemize}
+    \item \textbf{Self-correlations}: Aynı özellikler arasında (aynı verinin iki görünümünden gelen aynı bileşenler) yüksek korelasyon sağlanmalı.
+    \item \textbf{Cross-correlations}: Farklı özellikler arasında (aynı verinin iki görünümünden gelen farklı bileşenler) minimum korelasyon olmalı.
+\end{itemize}
+
+\newpage
