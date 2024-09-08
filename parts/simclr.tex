@@ -1,0 +1,15 @@
+\section{SimCLR}
+
+Gözetimsiz öğrenme (unsupervised learning) tekniğidir. SimCLR, temel olarak kontrastif öğrenme ilkesine dayanır. Kontrastif öğrenme, benzer verilerin birbirine yaklaştırılmasını, farklı olan verilerin ise birbirinden uzaklaştırılmasını sağlar. SimCLR bunu, görsel veri artırma teknikleriyle iki görüntüden "pozitif" örnekler oluşturup, farklı görüntülerden "negatif" örnekler alarak yapar. 
+
+\subsection{Çalışma Adımları}
+
+\begin{enumerate}
+    \item Verilen bir görüntü üzerinde rastgele augmentasyon işlemleri uygulanarak, aynı görüntünün iki farklı versiyonu oluşturulur. Bu iki versiyon, pozitif çift olarak adlandırılır.
+    \item Bu iki pozitif görüntü, bir derin sinir ağı aracılığıyla temsillere dönüştürülür. Modelin amacı, bu iki temsili birbirine yakın olacak şekilde öğrenmektir.
+    \item Aynı görüntüden üretilen iki temsili (pozitif çift) birbirine yaklaştırırken, farklı görüntülerden gelen temsilleri (negatif çift) birbirinden uzaklaştırmak için kontrastif kayıp fonksiyonu kullanılır. Burada NT-Xent Loss (Normalized Temperature-Scaled Cross-Entropy Loss) fonksiyonu kullanılır. NT-Xent Loss, pozitif örnekleri yakınlaştırırken negatif örnekleri uzaklaştırmak için kullanılır.
+    \item Temsiller öğrenildikten sonra, bu temsiller, küçük bir çok katmanlı algılayıcı (MLP) ile projeksiyon uzayına dönüştürülür. Bu uzay, kontrastif kaybın hesaplandığı yerdir. Projeksiyon kafası, öğrenilen temsillerin daha ayrıştırılabilir hale gelmesini sağlar.
+    \item Gözetimsiz temsiller öğrenildikten sonra, model gözetimli bir görev için ayarlanır. Projeksiyon kafası çıkarılır ve yerine sınıflandırıcı eklenir.
+\end{enumerate}
+
+\newpage

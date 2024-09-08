@@ -1,0 +1,19 @@
+\section{Meta-Learning}
+
+Meta Learning, öğrenme süreçlerini bir hiyerarşi içerisinde organize eder. Normal bir makine öğrenim modelinde, model belirli bir görev için eğitilirken, Meta Learning'de model bir dizi görev üzerinden eğitim alarak, bu görevler arasında nasıl hızlı öğrenileceğini öğrenir. Bu, modelin daha önce görmediği yeni görevlerde dahi hızlı bir şekilde başarılı olmasını sağlar. Meta Learning'in mimarisi, tipik bir makine öğrenmesi mimarisinden daha karmaşıktır çünkü iki seviyeli bir öğrenme süreci içerir: hem görev seviyesinde öğrenme hem de bu görevlerde nasıl daha iyi öğrenileceğine dair meta seviyede öğrenme. Meta Learning süreci genellikle üç ana aşamadan oluşur:
+
+\begin{itemize}
+    \item \textbf{Task-Level Learning (Görev Seviyesinde Öğrenme)}: Model, belirli bir görevde öğrenir. Her görevde model, tipik makine öğrenme algoritmaları gibi eğitim verileri kullanarak en uygun parametreleri bulmaya çalışır.
+    \item \textbf{Meta-Level Learning (Meta Seviyesinde Öğrenme)}: Model, birden fazla görevden elde edilen deneyimi kullanarak öğrenmeyi hızlandıran bir strateji geliştirir. Bu aşamada model, her yeni görevde daha az veriyle daha hızlı öğrenmeyi hedefler.
+    \item \textbf{Generalization (Genelleme)}: Meta öğrenme sayesinde model, daha önce görmediği görevlerde bile hızlı bir şekilde genelleştirilmiş öğrenme gerçekleştirebilir.
+\end{itemize}
+
+\subsection{Meta-Learning Türleri}
+
+\begin{itemize}
+    \item \textbf{Model-based (Model Tabanlı)}: Modelin iç yapısında, öğrenmeyi öğrenme mekanizmaları inşa edilir. Örneğin, bir RNN modelinin, geçmişteki örneklerden öğrenmeyi nasıl hızlandıracağını öğrenmesi gibi.
+    \item \textbf{Metric-based (Metrik Tabanlı)}:Model, farklı görevlerdeki örnekler arasında benzerlikler bulmayı öğrenir. Bu türde, özellikle few-shot learning için kullanılan yöntemler yaygındır. Prototypical Networks veya Matching Networks gibi yaklaşımlar buna örnektir.
+    \item \textbf{Optimization-based (Optimizasyon Tabanlı)}:Bu yöntemde, model yeni bir görevi hızlıca öğrenmek için optimizasyon sürecini hızlandırır. Model-Agnostic Meta-Learning (MAML), bu yöntemin en bilinen örneklerinden biridir. MAML, modelin her göreve hızlıca adapte olabilmesi için, başlangıç ağırlıklarını optimize ederek yeni görevlerde çok az güncelleme ile yüksek performans sağlamayı amaçlar.
+\end{itemize}
+
+\newpage

@@ -1,0 +1,28 @@
+\section{Neural Radiance Fields (NeRF)}
+
+3D sahnelerin birden fazla görüntüsünden yeni görünüm sentezleme görevini gerçekleştiren bir derin öğrenme modelidir. 2020 yılında sunulan bu yöntem, bir sahnenin üç boyutlu bir temsilini öğrenerek, farklı açılardan yeni görüntüler oluşturmayı mümkün kılar. NeRF, sahne içindeki ışık yayılımını modelleyerek, karmaşık 3D sahneler için yüksek kaliteli ve fotogerçekçi görselleştirme yapabilme yeteneği ile öne çıkar.
+
+NeRF, bir 3D sahneyi ışık alanı (light field) olarak temsil eder ve her noktadan hangi ışık yayılımının olduğunu modelleyerek görünüm sentezler. Bu, görüntüdeki her bir 3D koordinatın (x, y, z) ve bu noktaya bakan ışın yönünün ($\theta$, $\varphi$) bir fonksiyon olarak temsil edilmesiyle yapılır. Model, ışık alanını yoğunluk (density) ve ışık yayılımı (radiance) terimlerine ayrıştırır, ardından farklı açılardan yeni görüntüler oluşturarak öğrenilen bu fonksiyonu kullanır.
+
+NeRF, bir sahneyi temsil etmek için bir tam bağlantılı sinir ağı (fully connected neural network) kullanır. Giriş olarak bir 3D nokta ve bu noktaya doğru bakan bir kamera yönü alır. Aşağıdaki adımlarla çalışır:
+
+\begin{itemize}
+    \item Her bir nokta, 3D koordinatları (x, y, z) ve ışın yönü ($\theta$, $\varphi$) ile temsil edilir. Bu, kameranın bu noktaya bakış açısını belirler.
+    \item Sinir ağı, her bir nokta ve yön için yoğunluk ve renk olmak üzere iki çıktı verir. Yoğunluk (density), o noktada ışık yoğunluğunu ve malzeme özelliklerini tanımlar. Renk (radiance), ışın yönüne göre RGB renk değerleri tahmin edilir.
+    \item  Bu çıktıların her biri, hacimsel bir işleme yöntemi kullanılarak sahne boyunca entegral alınır. Bu işlem, 3D sahnenin herhangi bir noktadaki görüntüye nasıl katkıda bulunduğunu hesaplar ve sonuç olarak 2D bir görüntü elde edilir.
+
+\end{itemize}
+
+Bir sahneyi temsil etmek için ray marching adı verilen bir teknik kullanılır. Bir ışın, sahne boyunca hareket eder ve bu sırada her bir noktadaki yoğunluk ve renk bilgisi sinir ağı tarafından tahmin edilir. Bu ışın bilgisi daha sonra birleştirilerek nihai görüntü oluşturulur.
+
+\subsection{Çalışma Adımları}
+
+\begin{enumerate}
+    \item NeRF, 3D sahneleri öğrenmek için 2D görüntüler ve kamera pozisyonları ile eğitilir. Modelin sahneyi anlaması için farklı açılardan çekilmiş görüntüler gerekir. Bu görüntüler, modelin sahnedeki her noktayı öğrenebilmesi için önemli bir role sahiptir
+    \item Modelin eğitimi sırasında, her bir görüntüdeki piksel için hangi 3D noktaların o pikseli etkilediği hesaplanır. Model, sahnedeki ışık yoğunluğunu ve yayılımını anlamak için hata fonksiyonunu minimize eder. Mean Squared Error (MSE) kaybı ile tahmin edilen görüntü ve gerçek görüntü arasındaki fark minimize edilir.
+    \item Her piksel için bir ışın sahneye gönderilir. Işın, sahnenin farklı noktalarından geçerken her noktadan gelen ışık bilgisi toplanır. Bu işlem sırasında, her bir nokta için modelin tahmin ettiği yoğunluk ve ışık bilgisi birleştirilir.
+    \item Model eğitildikten sonra, daha önce görülmemiş yeni açılardan görüntüler sentezlenir. Bu, modelin 3D sahnenin her noktasını öğrendiği anlamına gelir ve böylece farklı açılardan herhangi bir görüntü oluşturulabilir.
+    \item Son aşamada, sahneden gelen tüm ışınlar birleştirilir ve nihai görüntü oluşturulur. 
+\end{enumerate}
+
+\newpage

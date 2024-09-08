@@ -1,0 +1,14 @@
+\section{Swin (Shifted Window) Transformers}
+
+Swin Transformers, görüntüleri küçük sabit boyutlu pencerelere bölerek her pencere içinde yerel özellikler öğrenir. Ardından, bu pencereler arasında etkileşim kurar ve kaydırılmış pencere mekanizması (shifted window mechanism) ile her aşamada daha geniş bir bağlamı öğrenir. 
+
+\subsection{Çalışma Adımları}
+
+\begin{enumerate}
+    \item Görüntü sabit boyutlu küçük pencerelere bölünür ve her pencere üzerinde bağımsız olarak self-attention uygulanır.
+    \item Pencereler sabit kalmaz, her işlem aşamasında bir miktar kaydırılır. Bu, farklı pencerelerin sınırları arasındaki etkileşimleri sağlar ve daha geniş bağlam bilgisini öğrenir.
+    \item Swin Transformers, çok katmanlı bir yapıya sahiptir ve her katman farklı çözünürlüklerde bilgi öğrenir. Bu, küçük detayları ve büyük nesneleri aynı anda öğrenme yeteneğini sağlar.
+    \item Swin Transformers, klasik transformers gibi $quadratic(n^2)$ karmaşıklık yerine, pencere tabanlı mekanizması sayesinde görüntü boyutuyla $lineer(n)$ ölçeklenir. Bu, büyük görüntüler üzerinde çalışırken daha verimli olmasını sağlar.
+\end{enumerate}
+
+\newpage

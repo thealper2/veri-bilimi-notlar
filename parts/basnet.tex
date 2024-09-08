@@ -1,0 +1,19 @@
+\section{Boundary-Aware Segmentation Network (BASNet)}
+
+Boundary-Aware Segmentation Network (BASNet), saliency detection (önemlilik tespiti) için geliştirilmiş bir derin öğrenme mimarisidir. BASNet, bir görüntüdeki önemli nesneleri yüksek doğrulukla segment etmek (bölütlemek) için kullanılır. Nesnelerin sınırlarına duyarlı (boundary-aware) bir yaklaşım benimsediği için, sınır bölgelerinde daha doğru segmentasyon yapar. Bu sayede geleneksel segmentasyon yöntemlerine göre daha net ve keskin sınırlara sahip sonuçlar elde edilir.
+
+BASNet, iki ana bölümü olan derin bir mimari ile çalışır: Predictive network ve Refinement network. Predictive network, temel segmentasyon işlemini yaparken, refinement network, sınır bölgelerindeki hassasiyeti artırmak için kullanılır. Model, bir görüntüdeki sınırları ve bu sınırların içinde kalan bölgeleri doğru bir şekilde tahmin etmeye odaklanır. -Net benzeri bir mimari yapıya sahiptir. 
+
+\subsection{Çalışma Adımları}
+
+\begin{enumerate}
+    \item Model, segmentasyonu yapılacak bir görüntüyü alır.
+    \item Encoder, bu görüntüden farklı çözünürlüklerde özellik haritaları çıkarır. Bu haritalar, görüntünün genel yapısını anlamak için kullanılır.
+    \item Decoder, çıkarılan özellik haritalarını kullanarak bir segmentasyon haritası oluşturur. Bu segmentasyon, nesnenin sınırları hakkında ilk tahminleri içerir.
+    \item Boundary-aware Loss Functions, sınır bölgelerindeki hataları minimize etmeye çalışır ve model, nesnenin sınırlarını daha iyi tanımaya başlar.
+    \item İlk segmentasyon sonucunda elde edilen sınır hataları, refinement network tarafından iyileştirilir. Özellikle sınır bölgelerindeki pürüzler giderilir ve segmentasyon daha hassas hale gelir.
+    \item Farklı çözünürlüklerdeki segmentasyon haritaları birleştirilerek daha kesin bir sonuç elde edilir.
+    \item Model, tüm bu işlemlerin sonunda, nesnenin segmentasyon haritasını oluşturur. Bu harita, nesnenin sınırlarının net olduğu bir maskeleme haritası olarak çıktı verir.
+\end{enumerate}
+
+\newpage

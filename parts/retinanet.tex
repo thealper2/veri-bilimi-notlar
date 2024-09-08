@@ -1,0 +1,41 @@
+\section{RetinaNet}
+
+2017 yılında Facebook AI Research (FAIR) tarafından sunulmuştur ve temel olarak focal loss adı verilen yeni bir kayıp fonksiyonu ile tanınır. Geleneksel kayıp fonksiyonları (örneğin, cross-entropy), kolay örneklerin daha fazla dikkate alınmasına neden olur. Bu, az temsil edilen sınıflar ve küçük nesneler gibi zor örneklerin öğrenilmesini zorlaştırır. Focal loss, kolay örneklerin etkisini azaltarak, zor örneklerin kaybına daha fazla ağırlık verir. Böylece model, az temsil edilen sınıflara ve küçük nesnelere daha iyi odaklanabilir.
+
+\[ Focal Loss (p_t) = -(1 - p_t)^\gamma log(p_t) \]
+
+Burada:
+
+\begin{itemize}
+    \item $p_t$: modelin doğru tahmin etme olasılığıdır.
+    \item $\gamma$: odaklanma parametresidir. Genellikle 2 değeri verilir.
+\end{itemize}
+
+RetinaNet, Feature Pyramid Network (FPN) ve ResNet gibi güçlü temel yapı taşlarını kullanır. Mimarisi iki ana bileşenden oluşur:
+
+\begin{itemize}
+    \item \textbf{Backbone}: RetinaNet’in öz nitelik çıkarma (feature extraction) aşamasını gerçekleştiren bileşenidir. Genellikle ResNet kullanılır. Backbone, giriş görüntüsünden çok katmanlı özellik haritaları çıkarır.
+    \item \textbf{Feature Pyramid Network (FPN)}: FPN, farklı çözünürlük seviyelerinde özellik haritaları oluşturur ve bu haritaları birleştirir. FPN, küçük nesnelerin tespit edilmesinde önemli bir rol oynar çünkü düşük çözünürlüklü katmanlar geniş alanlar hakkında genel bilgiler verirken, yüksek çözünürlüklü katmanlar küçük nesneler hakkında daha fazla bilgi içerir. Bu sayede, model hem büyük hem de küçük nesneleri aynı anda tespit edebilir.
+\end{itemize}
+
+RetineNet'in asıl çıktısını üreten iki ana alt ağ (subnet) vardır.
+
+\begin{itemize}
+    \item \textbf{Class Subnet}: Girdi olarak FPN tarafından üretilen özellik haritalarını alır ve her öneri kutusu (anchor box) için olasılık tahminleri yapar.
+    \item \textbf{Box Subnet}: Her öneri kutusu (anchor box) için pozisyon tahminleri yapar. Bu ağ, bounding box’ların doğru şekilde yerleştirilmesini sağlar.
+\end{itemize}
+
+\subsection{Çalışma Adımları}
+
+\begin{enumerate}
+    \item RetinaNet, bir giriş görüntüsünü alır ve bu görüntü üzerinden nesne tespiti yapmak için işlem başlatır.
+    \item Giriş görüntüsü, backbone üzerinden geçirilerek çok katmanlı özellik haritaları oluşturulur. Bu özellik haritaları daha sonra Feature Pyramid Network (FPN) ile çoklu çözünürlük seviyelerinde işlenir. FPN, farklı ölçeklerdeki nesnelerin algılanmasına yardımcı olur.
+    \item RetinaNet, her görüntü üzerinde çok sayıda öneri kutusu (anchor box) oluşturur. Bu kutular, nesne olma ihtimali yüksek olan alanları belirler.
+    \item FPN’den gelen özellik haritaları, sınıflandırma alt ağına (class subnet) verilir. Her bir anchor box için hangi sınıfa ait olabileceği belirlenir.
+    \item FPN özellik haritaları kullanılarak kutu alt ağı (box subnet) yardımıyla anchor box’ların doğru konumu tahmin edilir.
+    \item Model, doğru ve yanlış sınıflandırma için focal loss kullanarak kaybı hesaplar. Bu, zor örneklerin öğrenilmesini sağlar ve modelin performansını artırır.
+    \item Modelin çıkışı olan tahminler üzerinde, non-maximum suppression (NMS) uygulanır. Bu, aynı nesne için çoklu tahmin kutularının birleştirilmesini sağlar ve gereksiz tekrarları engeller.
+    \item Model, her nesne için bounding box ve sınıf tahminleri ile çıktıyı oluşturur.
+\end{enumerate}
+
+\newpage
