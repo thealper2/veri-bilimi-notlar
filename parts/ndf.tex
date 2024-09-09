@@ -1,0 +1,13 @@
+\section{Neural Decision Forests (NDF)}
+
+Karar ağaçlarını (decision trees) ve derin sinir ağlarını (deep neural networks) birleştiren hibrit bir modeldir. Sinir ağları, veri temsillerini öğrenme konusunda çok güçlüdür, ancak "black box" yapısı nedeniyle karar alma süreci genellikle yorumlanamaz. Karar ağaçları ise hiyerarşik bir şekilde dallanarak veri üzerinde karar verir ve daha kolay yorumlanabilir. NDF’ler, bu iki yöntemi bir araya getirerek, derin öğrenmenin güçlü özellik çıkarma kapasitesini ve karar ağaçlarının açıklanabilirliğini tek bir modelde birleştirir.
+
+NDF’ler, klasik karar ağaçlarının dallanma ve yaprak düğümleriyle sinir ağlarının katman yapısını bir araya getirir. Karar ağaçlarında her düğüm, belirli bir özelliğe dayalı bir karar verir. Sinir ağlarında ise katmanlar veriyi öğrenerek ileri aktarır. NDF, bu iki mekanizmayı bir arada kullanarak, sinir ağı katmanlarının çıkışlarını karar ağaçlarındaki düğümler gibi kullanır.
+
+\begin{enumerate}
+    \item İlk birkaç katmanda, sinir ağı, giriş verisinden yüksek seviyeli özellikleri öğrenir. Bu aşama, derin sinir ağlarının klasik özellik çıkarımına benzer.
+    \item Karar ağaçları, sinir ağı tarafından öğrenilen bu özellikleri kullanarak veri üzerinde kararlar alır. Karar ağaçları, belirli bir örneğin hangi yaprak düğüme gideceğini belirler. Bu kararlar, öğrenilen özelliklerden çıkarımlar yaparak sınıflandırma ya da regresyon sonucunu üretir.
+    \item Yaprak düğümleri, son tahminleri üretir. Her yaprak düğümde sınıf dağılımı ya da regresyon tahminleri bulunur.
+\end{enumerate}
+
+\newpage

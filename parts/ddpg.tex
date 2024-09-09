@@ -1,0 +1,23 @@
+\section{Deep Deterministic Policy Gradient (DDPG)}
+
+DDPG, sürekli aksiyon uzayına sahip problemler için geliştirilmiş bir algoritmadır. Geleneksel Q-learning yöntemleri ayrık aksiyonlar için uygundur, ancak DDPG bunu genişletir ve sürekli aksiyonlar için etkili bir öğrenme sağlar. DDPG, derin öğrenme (deep learning) ve politika gradyanı yöntemlerini birleştirerek, ajanların sürekli aksiyon alanında politika öğrenmelerine yardımcı olur. DDPG, deneyim tekrarını (experience replay) kullanarak öğrenir. Ajanın etkileşimlerinden gelen veriler bir bellekte saklanır ve bu bellekten rastgele örnekler alınarak ağlar eğitilir. Bu, veri korelasyonunu azaltarak öğrenmeyi daha kararlı hale getirir. Ajanın sürekli aksiyon uzayında en iyi eylemleri belirlediği politikayı öğrenir. Bu, bir politika ağı (policy network) kullanarak yapılır ve sürekli eylemler üretilir. Critic, Ajanın aldığı aksiyonların ne kadar iyi olduğunu tahmin eder. Kritik, bir Q-değeri hesaplar ve bu değer, ajan için aksiyonların ödül potansiyelini ifade eder. Kritik ağı, aksiyon ve durum girdilerini kullanarak, gelecekteki ödüllerin tahminini yapar. 
+
+\begin{itemize}
+    \item \textbf{Actor Network (Politika Ağı)}: Bu ağ, ajan için sürekli aksiyonlar üretir. Durum girdisi (state input) verildiğinde, politika ağı en uygun aksiyonu (action) çıkartır. Bu ağ, politika gradyanı kullanarak optimize edilir.
+    \item \textbf{Critic Network (Değer Ağı)}: Kritik ağı, ajan için durum-aksiyon çiftlerinden bir Q-değeri üretir. Bu değer, belirli bir aksiyonun ne kadar ödül getireceğini tahmin eder. Kritik ağı, Bellman eşitliği kullanılarak eğitilir.
+    \item \textbf{Target Networks (Hedef Ağlar)}: DDPG, kararlılığı artırmak için hedef ağlar kullanır. Actor ve Critic ağlarının bir kopyası olarak oluşturulan bu hedef ağlar, zamanla yavaşça güncellenir ve öğrenmenin kararlı hale gelmesini sağlar.
+\end{itemize}
+
+\subsection{Çalışma Adımları}
+
+\begin{enumerate}
+    \item Ajan, belirli bir çevrede (environment) hareket eder ve her durumda, Actor ağını kullanarak aksiyonlar alır. Bu aksiyonlar, çevredeki yeni durumları ve ödülleri (rewards) belirler.
+    \item Ajanın çevredeki etkileşimlerinden elde edilen durum (state), aksiyon (action), ödül (reward) ve yeni durum (next state) bilgileri, replay buffer adı verilen bellekte saklanır.
+    \item Eğitim sırasında, replay buffer’dan rastgele deneyim örnekleri seçilir ve bu örnekler Critic ve Actor ağlarının eğitiminde kullanılır. Replay buffer, veri bağımlılığını azaltarak modelin daha kararlı öğrenmesini sağlar.
+    \item Critic ağı, Bellman eşitliğini kullanarak duruma ve aksiyona bağlı olarak gelecekte beklenen ödülü tahmin eder. Eleştirmen ağı, Q-değerlerini minimize etmeye çalışarak eğitilir.
+    \item Actor ağı, Critic ağının geri bildirimine dayanarak politikayı günceller. Aksiyonların ödül potansiyeli ne kadar yüksekse, Actor ağı o aksiyonlara doğru evrilir. Bu aşamada politika gradyanı kullanılarak Actor ağı optimize edilir.
+    \item Actor ve Critic ağlarının daha kararlı bir şekilde güncellenmesi için hedef ağlar (target networks) kullanılır. Hedef ağlar, yavaşça ana ağlara doğru evrilerek, ani değişimlerin önüne geçer.
+    \item Aksiyonlar, çevre ile etkileşim sırasında Actor ağı tarafından sürekli olarak seçilir. Çevredeki her duruma bağlı olarak Actor ağı en iyi aksiyonları çıkarmaya çalışır. Ara sıra keşfi teşvik etmek için aksiyonlara küçük rastgele gürültüler eklenir.
+\end{enumerate}
+
+\newpage

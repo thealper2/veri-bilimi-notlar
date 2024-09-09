@@ -1,0 +1,21 @@
+\section{Proximal Policy Optimization (PPO)}
+
+PPO, takviye öğrenme (RL) alanında politika optimizasyonu yapmak için kullanılan bir yöntemdir. Takviye öğrenme, bir ajan (model) ile çevresi arasında sürekli bir etkileşim gerektirir. Ajan, çevresinden ödüller (rewards) almak için bir politika (policy) öğrenmeye çalışır ve bu politikaya göre aksiyonlar alarak uzun vadeli ödülleri maksimize etmeye çalışır. Ancak, politikaların güncellenmesi sırasında dengeyi sağlamak önemlidir. Çok büyük güncellemeler politikayı bozabilirken, çok küçük güncellemeler öğrenme sürecini yavaşlatabilir. PPO, politikayı güvenli sınırlar içinde kalarak ve belirli bir "yakınlık" ilkesine (proximal) bağlı kalarak optimize eder. Bu da algoritmayı daha kararlı ve verimli hale getirir. PPO, iki ana strateji ile çalışır:
+
+\begin{itemize}
+    \item \textbf{Clipped Objective (Kısıtlanmış Amaç Fonksiyonu)}: Politika güncellemeleri sırasında aşırı büyük adımlar atmaktan kaçınmak için, PPO'nun amacı bir kısıtlanmış kayıp fonksiyonu kullanmaktır. Bu fonksiyon, güncellemeleri sınırlı bir ölçekte tutarak politikaların kararlılığını sağlar.
+    \item \textbf{Trust Region (Güven Bölgesi)}: PPO, güncellemelerin belirli bir güven bölgesinde kalmasını sağlar. Bu, ajanın güncellenen politikasının önceki politikadan çok fazla sapmamasını güvence altına alır.
+\end{itemize}
+
+\subsection{Çalışma Adımları}
+
+\begin{enumerate}
+    \item Ajan, belirli bir çevrede (environment) hareket eder ve mevcut politika (policy) kullanarak eylemler seçer. Çevrede her eylemin sonucu, bir ödül ve yeni bir durum ile sonuçlanır.
+    \item Ajan, hem politika hem de değer fonksiyonunu öğrenir. Politika, mevcut durumlar için en iyi eylemleri seçmeye çalışırken, değer fonksiyonu, bu durumların ne kadar iyi olduğunu tahmin eder.
+    \item PPO, önceki politikanın performansı ile yeni politikanın performansı arasındaki farkı hesaplar. Bu fark çok büyükse, güncellemeyi sınırlandırarak politikayı güvenli bir şekilde günceller. Bu süreçte, kısıtlanmış kayıp fonksiyonu kullanılır.
+    \item PPO, politika güncellemelerinin güvenli bir sınırda kalmasını sağlamak için kayıp fonksiyonunu "klipler". Bu sayede, önceki ve yeni politika arasındaki oran çok büyük olduğunda güncellemeler sınırlanır.
+    \item PPO, sadece politikayı değil, aynı zamanda değer fonksiyonunu da günceller. Değer fonksiyonu, ajan için bir durumun uzun vadeli ödül beklentisini tahmin eder ve bu tahminler üzerinden politika daha iyi hale getirilir.
+    \item Ajan, çevrede sürekli olarak hareket eder ve politikasını günceller. PPO, bu iteratif süreçte politika ve değer fonksiyonunu optimize ederek daha iyi sonuçlar elde eder.
+\end{enumerate}
+
+\newpage

@@ -1,0 +1,16 @@
+\section{Bayesian Neural Networks (BNN)}
+
+BNN'ler, klasik yapay sinir ağlarının (ANN) ağırlıklarının tek bir kesin değer yerine, bir olasılık dağılımı tarafından temsil edildiği bir türüdür. Bayesian yaklaşım ile sinir ağlarını eğitmek, modelin hem veriyi hem de model parametrelerinin belirsizliğini göz önünde bulundurmasını sağlar.
+
+\[ P(W \| X, Y) = \frac{P(Y \| X, W) P(W)}{P(Y \| X)} \]
+
+\begin{itemize}
+    \item $P(W \| X, Y)$: A posteriori. Ağırlıkların gözlenen veri $X$ ve etiketler $Y$ verildiğinde olasılık dağılımıdır. (öğrenilmesi istenen şey)
+    \item $P(Y \| X, W)$: Likelihood. Veri ve model parametreleri $W$ verildiğinde gözlenen sonuçların olasılığıdır. Klasik sinir ağlarında bu hesaplanır.
+    \item $P(W)$: Prior. Ağırlıkların eğitimin başında varsayılan dağılımıdır. Bu, modelin parametreler hakkında sahip olduğu ön bilgi veya inançtır.
+    \item $P(Y \| X)$: Evidence. Gözlenen verinin olasılığıdır. Bu, tüm olası ağırlıkların bir kombinasyonu üzerinden marjinalleştirilir.
+\end{itemize}
+
+Bayesian Neural Networks'ün mimarisi, klasik sinir ağları ile benzerlikler taşır. Ancak temel fark, ağın her katmanındaki ağırlıkların bir sabit sayı olarak değil, bir olasılık dağılımı (genellikle bir Gauss dağılımı) olarak temsil edilmesidir.
+
+\newpage

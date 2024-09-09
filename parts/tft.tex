@@ -1,0 +1,16 @@
+\section{Temporal Fusion Transformers (TFT)}
+
+TFT, çok değişkenli (multivariate) zaman serisi tahmini yapmak için kullanılan bir modeldir. TFT, transformer mimarisinin güçlü dikkat (attention) mekanizmasını zaman serisi tahminlerine adapte ederek, zamanla değişen ve statik değişkenleri farklı seviyelerde modelleyebilir. Model, her zaman adımında tüm geçmişi dikkate alarak uzun vadeli trendleri anlamaya çalışır. Persistent Temporal Attention (Kalıcı Dikkat Mekanizması) sayesinde model, hem kısa vadeli olayları hem de uzun vadeli eğilimleri yakalayabilir.
+
+\subsection{Çalışma Adımları}
+
+\begin{enumerate}
+    \item Statik ve dinamik özellikler veri setinden ayrıştırılır. Zamanla değişmeyen özellikler ile zamanla değişen dinamik veriler modellenir.
+    \item Statik ve dinamik özellikler embedding katmanlarına verilerek düşük boyutlu vektörlere dönüştürülür. Bu işlem, her bir özelliğin daha anlamlı bir şekilde temsil edilmesini sağlar.
+    \item Embedding katmanlarından çıkan vektörler, LSTM katmanına beslenir. LSTM katmanları, zaman serisinin geçmişteki adımlarındaki bağımlılıkları öğrenir ve kısa-uzun vadeli ilişkileri modellemeye başlar.
+    \item Dikkat mekanizması, hangi zaman adımının ve hangi özelliğin tahmin için daha önemli olduğunu belirler. Bu adımda model, kısa vadeli ve uzun vadeli bağımlılıkları anlamak için dikkat katmanlarını kullanır.
+    \item Eğer bilinen gelecekteki özellikler varsa, bu veriler modele dahil edilir ve gelecekteki tahminlerin daha doğru olması sağlanır.
+    \item Son olarak, model bir tahmin yapmak için çıktı katmanına geçer. Bu katman, hem kısa vadeli hem de uzun vadeli eğilimleri dikkate alarak nihai tahmini üretir.
+\end{enumerate}
+
+\newpage

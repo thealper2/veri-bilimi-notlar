@@ -1,0 +1,15 @@
+\section{Mixture Density Networks (MDN)}
+
+MDN'ler, bir hedef değişkenin olasılık dağılımını modellemek için tasarlanmışlardır. Genellikle standart regresyon modelleri bir giriş için tek bir sonuç üretir. Ancak bazı durumlarda, aynı girdi farklı çıkışlara yol açabilir. Örneğin, bir aracın hızını tahmin etmek için belirli bir yol koşulunu bilsek bile, aracın hızı hava durumu, sürücü davranışı gibi farklı faktörlere bağlı olabilir. Bu gibi durumlarda, giriş değişkenleri ile sonuçlar arasındaki ilişki deterministik değildir ve bu nedenle klasik regresyon modelleri yetersiz kalır. MDN'ler, bu belirsizliği modellemek için karışık (mixture) olasılık dağılımlarını kullanarak bir giriş için farklı olasılıklara sahip birden çok çıkış üretebilir.
+
+Bir MDN, hedef değişkenin olasılık yoğunluğunu karışım modelleri (mixture models) ile ifade eder. En yaygın kullanılan olasılık yoğunluğu, Gauss karışımı modelidir (Gaussian Mixture Model - GMM). Bir GMM, farklı parametrelerle karakterize edilen birden çok normal dağılımın bir kombinasyonudur.
+
+MDN'ler, belirli bir giriş için şu parametreleri tahmin eder:
+
+\begin{itemize}
+    \item \textbf{Karışım bileşenlerinin ağırlıkları (mixing coefficients)}: Her bir bileşen dağılımının olasılıksal katkısını ifade eder.
+    \item \textbf{Ortalama (mean)}: Her bir bileşen dağılımının merkezi veya tahmin edilen değeri.
+    \item \textbf{Varyans (variance)}: Her bir bileşenin dağılımının genişliği veya belirsizliği.
+\end{itemize}
+
+\newpage

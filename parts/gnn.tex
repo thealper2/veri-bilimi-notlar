@@ -1,0 +1,14 @@
+\section{Graph Neural Networks (GNN)}
+
+GNN’ler, grafikleri işlemek için özel olarak tasarlanmış sinir ağlarıdır. Grafik yapıları, düğümlerin birbirine kenarlarla bağlandığı yapılardır ve sosyal ağlardan kimyasal moleküllere kadar birçok farklı alanda kullanılabilir. GNN’lerin temel amacı, her düğümün özelliklerini komşularıyla olan ilişkilerine dayalı olarak güncellemek ve böylece düğümden anlamlı bir bilgi çıkarımı yapmaktır.
+
+GNN'lerin temel çalışma prensibi, grafikteki her düğümün özelliklerinin, komşu düğümlerden gelen bilgilerle güncellenmesidir. GNN, komşu düğümlerle bilgi alışverişi yaparak her düğüm için daha zengin ve anlamlı temsiller öğrenir. Bu süreç, mesaj iletimi (message passing) ve düğüm güncellenmesi (node update) aşamalarını içerir.
+
+\begin{enumerate}
+    \item Her düğüm, kendisine komşu düğümlerden bilgi alır ve bu bilgiyi kendi özelliğine ekler. Bu süreçte, her düğüm yalnızca komşularından gelen bilgiyi alarak güncellenir, dolayısıyla komşu düğümler arasındaki etkileşimler temel alınır.
+    \item Komşulardan gelen bilgiler, düğüm için birleştirilir. Bu aşama, farklı düğümlerden gelen bilgilerin nasıl birleştirileceğini belirler.
+    \item Her düğüm, komşularından gelen bilgileri kullanarak kendi özelliklerini günceller. Bu güncellemeyle, düğüm, ağdaki yerini ve rolünü daha iyi öğrenmiş olur.
+    \item GNN’ler genellikle birden fazla katmandan oluşur. İlk katman, doğrudan komşu düğümlerden bilgi toplarken, sonraki katmanlar düğümün komşularının komşularından da bilgi toplayarak daha geniş bir ağdan bilgi edinir.
+\end{enumerate}
+
+\newpage

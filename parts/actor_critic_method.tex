@@ -1,0 +1,24 @@
+\section{Actor-Critic Method}
+
+Reinforcement learning alanında kullanılır. Actor-Critic, hem politikaları öğrenme (policy) hem de değer fonksiyonlarını öğrenme (value function) işlemlerini bir arada kullanarak bu süreçte daha verimli hale gelmeyi hedefler.
+
+\begin{itemize}
+    \item \textbf{Actor (Aktör)}: Eylem (action) seçimini yönetir. Politikayı (policy) öğrenerek, hangi durumda hangi eylemi seçmesi gerektiğini belirler. Amaç, ajan için ödül fonksiyonunu maksimize edecek politikayı öğrenmektir.
+    \item \textbf{Critic (Kritik)}: Değer fonksiyonunu öğrenir. Ajanın hangi durumda ne kadar ödül bekleyebileceğini tahmin eder ve Actor'un politikasını güncellemesine rehberlik eder.
+\end{itemize}
+
+Actor-Critic yöntemi, bir politikayı doğrudan optimize etmek için kullanılır. Actor, ajanı bir politika aracılığıyla yönlendirir ve Critic, Actor'ün seçtiği eylemlerin ne kadar iyi olduğunu tahmin eder. Bu geri bildirim sayesinde Actor, eylemlerini daha iyi hale getirir. Bu süreç boyunca Actor ve Critic, birbirlerini iteratif olarak günceller. Actor, ajan için bir politika oluşturur. Politika, her bir durum için hangi eylemin seçilmesi gerektiğini belirler. Amaç, ödülleri maksimize eden bir politika öğrenmektir.  Critic, Actor’ün eylemlerini değerlendirir. Critic, duruma bağlı olarak ödül beklentisini hesaplar (değer fonksiyonu). Bu tahmin, Actor'e geri bildirim olarak iletilir. Actor, Critic’in geri bildirimine göre politikasını günceller. Actor-Critic yönteminde iki öğe de öğrenme süreci boyunca güncellenir. Actor, Politikasını Critic'in verdiği geri bildirimlere dayanarak günceller. Actor, Critic’in yönlendirdiği politika gradyanı kullanarak daha iyi eylemler seçer. Critic, Değer fonksiyonunu duruma ve ödüllere göre günceller. Temporal Difference (TD) hatası kullanılarak, Critic tahminini sürekli iyileştirir.
+
+\subsection{Çalışma Adımları}
+
+\begin{enumerate}
+    \item Ajan, çevreden mevcut durumu algılar. Bu durum, bir girdidir ve hem Actor hem de Critic tarafından işlenir.
+    \item Actor, mevcut duruma göre bir eylem seçer. Bu eylem, bir politika ağının çıktısına dayanır ve olasılık tabanlı olabilir. Eylemin seçimi, belirli bir olasılıkla rastgele yapılabilir.
+    \item Seçilen eylem çevrede uygulanır ve ajan bir sonraki duruma geçer. Aynı zamanda, bu eylem sonucunda bir ödül elde edilir.
+    \item Ajan, çevredeki ödülü ve yeni durumu gözlemler. Bu ödül, Actor ve Critic’in politikalarını ve tahminlerini güncellemede kullanılır.
+    \item Critic, Temporal Difference (TD) hatası kullanarak değer fonksiyonunu günceller. TD hatası, mevcut durumdaki beklenen ödülle, bir sonraki duruma geçildiğinde alınan gerçek ödül arasındaki farktır.
+    \item Critic'in sağladığı geri bildirimlere dayanarak Actor, politika parametrelerini günceller. Actor, Critic tarafından yönlendirilen bu bilgiyi kullanarak daha iyi eylemler seçmeye çalışır.
+    \item Bu süreç, ajan çevre ile etkileşime devam ettikçe tekrarlanır. Actor ve Critic, sürekli olarak birbirlerini güncelleyerek politikanın ve değer fonksiyonunun iyileşmesini sağlar.
+\end{enumerate}
+
+\newpage

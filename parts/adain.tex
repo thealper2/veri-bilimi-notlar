@@ -1,0 +1,21 @@
+\section{Adaptive Instance Normalization (AdaIN)}
+
+AdaIN, bir görüntüdeki içerik ve stil bilgilerini birbirinden ayırıp, farklı stillerle içerik görselleri yaratmayı sağlar. Temel amacı, bir içerik görüntüsünün özellik haritasına, hedef stil görüntüsünün istatistiklerini uygulayarak stil transferi gerçekleştirmektir.
+
+AdaIN, giriş olarak bir içerik (content) görüntüsü ve bir stil (style) görüntüsü alır. İçerik görüntüsü, bir sinir ağından geçirilerek içerik özellikleri çıkarılır. Stil görüntüsü ise yine sinir ağından geçirilerek stil istatistikleri (yani, ortalama ve varyans) elde edilir. AdaIN, içerik özelliklerini bu stil istatistiklerine göre normalleştirir. Bu sayede, içerik görüntüsü stil görüntüsünün dokusunu ve estetik yapısını kazanmış olur.
+
+AdaIN, içerik görüntüsünden elde edilen özellik haritasını, önce ortalamasını ve varyansını kullanarak normalize eder. Bu, Instance Normalization işlemiyle yapılır.
+
+\[ \hat{x}_c = \frac{x_c - \mu (x_c)}{\sigma (x_c)} \]
+
+Burada $x_c$ içerik görüntüsünün özellik haritasıdır. $\mu (x_c)$ bu haritanın ortalamasını, $\sigma (x_c)$ ise standart sapmasını ifade eder.
+
+Normalize edilmiş içerik özelliklerine, stil görüntüsünden elde edilen ortalama ve varyans uygulanır. Stil görüntüsünün özellik haritasından hesaplanan $\mu_s$ ve $\sigma_s$ stil istatistikleridir:
+
+\[ y = \sigma_s \cdot \hat{x}_c + \mu_s \]
+
+Burada $y$ içerik özelliklerinin stil istatistiklerine göre modifiye edilmiş halidir. Stil görüntüsünün ortalaması ve standart sapması, içerik görüntüsünün normalleştirilmiş özelliklerine uygulanarak, stilin görsel nitelikleri içerik üzerine aktarılır.
+
+Elde edilen yeni özellik haritası de-normalize edilir ve sonuçta, içerik görüntüsünün stilize edilmiş versiyonu ortaya çıkar. Bu işlem sırasında ağ, stil görüntüsünün dokularını ve renklerini içerik görüntüsünün geometrik yapısıyla birleştirir.
+
+\newpage

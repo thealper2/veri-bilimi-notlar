@@ -1,0 +1,16 @@
+\section{Graph Attention Network (GAT)}
+
+GAT, grafik veriler üzerinde çalışmak için geliştirilen derin öğrenme tabanlı bir modeldir ve Graph Neural Networks (GNN) ailesine ait bir modeldir. GAT'nin temel amacı, düğüm özelliklerini güncelleyerek düğümler arasındaki ilişkilere dayalı olarak anlamlı bilgi elde etmektir. Bu süreçte, düğümler arasındaki ilişkiler dikkat (attention) mekanizmasıyla ağırlıklandırılır. Klasik grafik sinir ağlarında (Graph Neural Networks, GNN) düğümler, komşu düğümlerinden gelen bilgileri alır ve bu bilgiler genellikle tüm komşulardan eşit bir şekilde alınır. Ancak, her komşu düğümün eşit önemde olmadığı durumlar vardır. İşte GAT burada devreye girer: GAT, her düğümün komşuları arasında farklı dikkat skorları (attention scores) hesaplayarak önemli komşu düğümlerden daha fazla bilgi almayı sağlar.
+
+\subsection{Çalışma Adımları}
+
+\begin{enumerate}
+    \item GAT, her düğüm için başlangıçta belirlenen özelliklerle çalışır. Bu özellikler genellikle bir vektör ile ifade edilir.
+    \item Her bir düğüm, komşu düğümleriyle etkileşime girer ve self-attention mekanizması kullanılarak, bu komşulara dikkat skorları atar. Bu dikkat skoru, düğüm özellikleriyle öğrenilir ve hangi komşunun daha önemli olduğu belirlenir.
+    \item Self-attention’dan önce, düğüm özellikleri bir lineer dönüşümden geçirilir. Bu dönüşüm, her düğümün özelliklerini belirli bir projeksiyon alanına taşır ve böylece dikkat mekanizması için daha iyi temsiller oluşturur.
+    \item Komşu düğümlere atanan dikkat skorları, softmax fonksiyonu ile normalize edilir. Bu sayede her bir komşunun katkısı, toplam dikkat içerisinde normalize edilmiş olur.
+    \item Her düğüm, komşu düğümlerinden gelen güncellenmiş özellikleri toplar ve kendi özelliğini günceller. Bu işlem, her düğümün etrafındaki düğümlerden en faydalı bilgileri alarak kendisini yenilemesini sağlar.
+    \item GAT modelleri genellikle multi-head attention kullanır. Yani, bir düğüm ile komşuları arasında birden fazla dikkat başlığı bulunur ve her başlık farklı bir bilginin taşınmasına yardımcı olur. Sonuçlar birleştirilerek daha zengin bir bilgi temsili elde edilir.
+\end{enumerate}
+
+\newpage
