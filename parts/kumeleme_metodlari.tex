@@ -268,25 +268,157 @@ n\_init & "auto", int & 10 & Başlangıç merkezlerinin farklı başlangıç nok
 }}}
 \end{table}
 
+\newpage
+
+\subsubsection{Matematik}
+
+$k = 2$ için aşağıdaki belgeleri kmeans ile kümeleyelim.
+
+\begin{table}[h]
+    \centering
+    {\scriptsize\renewcommand{\arraystretch}{0.3}
+    {\resizebox*{\linewidth}{0.3\textwidth}{
+    \begin{tabular}{|p{2cm}|p{1cm}|p{1cm}|}
+    \hline
+    Belge & X & Y \\ \hline
+    Belge 1 & 5 & 3 \\ \hline
+    Belge 2 & 7 & 5 \\ \hline
+    Belge 3 & 6 & 2 \\ \hline
+    Belge 4 & 11 & 7 \\ \hline
+    Belge 5 & 12 & 9 \\ \hline
+    \end{tabular}
+    }}}
+\end{table}
+
+Başlangıç adımında kümelerin rastgele atanarak:
+\begin{itemize}
+    \item $K_1$ = Belge 1, Belge 2, Belge 4
+    \item $K_2$ = Belge 3, Belge 5, olduğunu varsayalım.
+\end{itemize}
+
+Buradan elemanları kullanarak her bir küme için merkezi hesaplayalım. Önce her bir küme içerisindeki X değerleri toplanıp o küme içerisindeki eleman sayısını bölünür. Daha sonra aynı işlem Y değerleri için yapılır.
+
+\begin{itemize}
+    \item $K_1 = [\frac{5 + 7 + 11}{3} = 7.67, \frac{3 + 5 + 7}{3} = 5]$
+    \item $K_2 = [\frac{6 + 12}{2} = 9, \frac{2 + 9}{2} = 5.5]$, başlangıç için küme merkezlerimiz bunlardır.
+\end{itemize}
+
+Şimdi bu işlemleri bir iterasyon boyunca devam ettirerek k-means'i kümelemesini yapalım. Uzaklık hesaplaması için "Euclidean Distance (Öklid Mesafesi)" kullanacağız. Öklid mesafesinin formülü;
+
+\[ \sqrt{(x - M_x)^2 + (y - M_y)^2} \]
+
+Burada:
+\begin{itemize}
+    \item $x$: Mevcut veri noktasının x değeri.
+    \item $y$: Mevcut veri noktasının y değeri.
+    \item $M_x$: Küme merkezi noktasının x değeri.
+    \item $M_y$: Küme merkezi noktasının y değeri.
+\end{itemize}
+
+\newpage
+
+MAX\_ITER = 0 için (Bir nokta için M1 ve M2 mesafelerinden hangisi küçükse nokta o kümeye atanır.);
+
+\begin{figure}[h]
+    \centering
+    \includegraphics[width=1.0\textwidth]{images/kmeans_step_1.png}
+    \caption{MAX\_ITER = 0}
+    \label{fig:enter-label}
+\end{figure}
+
+Başlangıç adımında $K_1$ kümemiz Belge 1, Belge 2, Belge 4 belgelerinden; $K_2$ kümemiz Belge 3, Belge 5 belgelerinden oluşuyordu. Fakat ilk iterasyondan sonra görünüyorki Belge 3 $K_1$ kümesine, Belge 4 ise $K_2$ kümesine daha yakın. Dolayısıyla yeni kümelerimiz artık;
+
+\begin{itemize}
+    \item $K_1$ = Belge 1, Belge 2, Belge 3
+    \item $K_2$ = Belge 4, Belge 5 olmuş oldu.
+\end{itemize}
+
+Şimdi yeni küme merkezlerimizi hesaplayalım.
+
+\begin{itemize}
+    \item $K_1 = [\frac{5 + 7 + 6}{3} = 6, \frac{3 + 5 + 2}{3} = 3.33]$
+    \item $K_2 = [\frac{11 + 12}{2} = 11.5, \frac{7 + 9}{2} = 8]$, yeni küme merkezlerimiz bunlardır.
+\end{itemize}
+
+\begin{figure}[h]
+    \centering
+    \includegraphics[width=1.0\textwidth]{images/kmeans_step_2.png}
+    \caption{MAX\_ITER = 1}
+    \label{fig:enter-label}
+\end{figure}
+
+
+Son adımdan da görüneceği gibi K (Eski) ve K (Yeni) sütunları birbirinin aynısı oldu. Yani nihai sonucu elde ettik. Bundan sonra iterasyon yapmamıza gerek yok. 
+
+
 \subsubsection{Python Kodu}
 
 \begin{lstlisting}[language=Python, caption=Scikit-learn'de KMeans örneği.]
-from sklearn.cluster import KMeans
-from sklearn.datasets import make_blobs
-import matplotlib.pyplot as plt
+import numpy as np
+import pandas as pd
+import random
 
-# Veri olusturma
-data, _ = make_blobs(n_samples=300, centers=4, cluster_std=1.0, random_state=42)
+class KMeans:
+    def __init__(self, n_clusters=2, max_iter=300):
+        # Olusturulacak kume sayisi (k)
+        self.n_clusters = n_clusters
+        # Maksimum iterasyon sayisi
+        self.max_iter = max_iter
+        # Kume merkezleri
+        self.centroids = None
 
-# K-Means modeli olusturma
-model = KMeans(n_clusters=4)  # Kume sayisini belirtin
+    def initialize_centroids(self, X):
+        # Ilk olarak merkez rastgele secilir.
+        centroids = [random.choice(X)]
 
-# Veriyi modele uydurma
-labels = model.fit_predict(data)
+        # "Euclidean Distance (Oklid mesafesi)" ile diger merkezler uzakliklara gore secilir. (K-Means++)
+        for _ in range(1, self.n_clusters):
+            # Her bir noktanin mevcut merkezlere olan minimum uzakligi hesaplanir.
+            distances = np.min(np.linalg.norm(X - np.array(centroids)[:, np.newaxis], axis=2), axis=0)
+            # Olasiliklar normalize edilir.
+            distances /= np.sum(distances)
 
-# Sonuclari gorsellestirme
-plt.scatter(data[:, 0], data[:, 1], c=labels, cmap='viridis')
-plt.show()
+            # Uzaklik olasiliklarina gore yeni merkez secilir.
+            next_centroid = X[np.random.choice(len(X), p=distances)]
+            centroids.append(next_centroid)
+
+        return np.array(centroids).astype("float32")
+
+    def assign_clusters(self, X):
+        # Her nokta en yakin merkeze atanir.
+        distances = np.linalg.norm(X[:, np.newaxis] - self.centroids, axis=2).astype("float32")
+        return np.argmin(distances, axis=1)
+
+    def update_centroids(self, X, labels):
+        # Her kumenin yeni merkezini hesaplanir.
+        new_centroids = np.array([X[labels == i].mean(axis=0) if len(X[labels == i]) > 0 else self.centroids[i]
+                                    for i in range(self.n_clusters)]).astype("float32")
+        return new_centroids
+
+    def fit(self, X):
+        # Merkezler baslatilir.
+        self.centroids = self.initialize_centroids(X)
+
+        for _ in range(self.max_iter):
+            # Her nokta en yakin merkeze atanir.
+            labels = self.assign_clusters(X)
+
+            # Yeni merkezler hesaplanir.
+            new_centroids = self.update_centroids(X, labels)
+
+            # Merkezler degismediyse islem tamamlanmistir.
+            if np.allclose(self.centroids, new_centroids):
+                break
+
+            # Merkezler degistiyse yeni merkezler mevcut merkezlerin yerine atanir.
+            self.centroids = new_centroids
+
+    def predict(self, X):
+        # Her veri noktasi icin en yakin merkezin indeksi alinir.
+        labels = self.assign_clusters(X)
+        # En yakin merkezin koordinatlari dondurulur.
+        labels_coords = np.array([self.centroids[label] for label in labels]).astype("float32")
+        return labels_coords, labels
 \end{lstlisting}
 
 \newpage

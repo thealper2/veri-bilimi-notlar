@@ -1,0 +1,79 @@
+\section{Principal Component Analysis (PCA)}
+
+Yüksek boyutlu verilerde boyut indirgeme ve veri görselleştirme için kullanılan bir yöntemdir. PCA, veri setindeki en yüksek varyansa sahip yönleri bulup, veriyi bu yönler boyunca yeniden ifade etmeye dayanır. Temelde, verilerdeki en önemli özellikleri yakalamak için veri boyutunu küçültürken, en çok bilgi taşıyan bileşenleri muhafaza etmeye çalışır. 
+
+PCA, verinin doğrusal bağıntılarını kullanarak, veri kümesini yeni bir koordinat sistemine taşır. Bu yeni sistemde her eksen, bir "temel bileşen" (principal component) olur ve her bileşen veri setinin en yüksek varyansa sahip yönünü temsil eder. PCA'nın temel amacı, en az bilgi kaybıyla veri boyutunu küçültmek ve daha basit bir yapı elde etmektir. PCA, yalnızca doğrusal ilişkileri yakalar. Doğrusal olmayan yapıları modellemede yetersizdir.
+
+Kovaryans, iki değişkenin birlikte nasıl değiştiğini ölçen bir istatistiksel değerdir. Kovaryans matrisi ise bir veri setindeki tüm değişken çiftleri arasındaki kovaryans değerlerini içeren kare bir matristir. Bu matris, verilerdeki değişkenlerin ne kadar ve nasıl ilişkili olduğunu gösterir.
+
+\begin{itemize}
+    \item Eğer kovaryans pozitifse, iki değişken birbirleriyle doğru orantılı olarak artar veya azalır.
+    \item Eğer kovaryans negatifse, bir değişken artarken diğeri azalır.
+    \item Eğer kovaryans sıfıra yakınsa, değişkenler arasında ilişki yoktur.
+\end{itemize}
+
+PCA'da kovaryans matrisi, verideki değişkenler arasındaki ilişkileri ve yönelimleri anlamak için kullanılır. Yüksek kovaryansa sahip değişkenler, daha fazla bilgi taşır ve PCA, bu ilişkileri kullanarak en önemli yönleri (temel bileşenler) belirler. Kovaryans matrisi, temel bileşenlerin bulunacağı yönleri belirleyen matematiksel temeldir. Formülü;
+
+\[ \text{Covariance Matrix} = \frac{1}{n} X^T X \]
+
+Özdeğerler (eigenvalues), bir matrisin temel özelliklerini temsil eden skaler değerlerdir. PCA'da, özdeğerler her bir temel bileşenin (principal component) veri kümesindeki varyansı ne kadar açıkladığını gösterir. Yani özdeğerler, her bir yönün (vektörün) veri üzerindeki önemini ifade eder.
+
+\begin{itemize}
+    \item Büyük özdeğerler, o yöndeki (vektördeki) varyansın yüksek olduğunu, yani veride önemli bir bilgi içerdiğini gösterir.
+    \item Küçük özdeğerler, o yöndeki varyansın az olduğunu ve bu yöndeki bilginin daha az önemli olduğunu ifade eder.
+\end{itemize}
+
+Kovaryans matrisi kullanılarak özdeğerler hesaplanır. Kovaryans matrisi $C$ ve özvektör $v$ arasında şu ilişki bulunur ($\lambda$ özdeğeri temsil eder):
+
+\[ C v = \lambda v \]
+
+
+Özvektörler, bir matrisin doğrultusunu veya yönünü belirleyen vektörlerdir. PCA'da, özvektörler her bir temel bileşenin yönünü gösterir. Yani, bir özvektör, verideki en fazla varyansa sahip yönü temsil eder. Her bir özvektör, veri setindeki bir temel bileşeni ifade eder. Bu bileşenler, verinin en fazla varyansa sahip olduğu doğrultulardır.
+
+PCA'da özvektörler, veri setindeki yeni eksenleri tanımlar. Özdeğerler bu eksenlerin ne kadar önemli olduğunu belirtirken, özvektörler bu eksenlerin yönünü tanımlar. Özvektörler sayesinde veri, en fazla bilgi taşıyan yeni bir koordinat sistemine dönüştürülür. Örneğin, veriyi 2 boyuta indirgemek istenirse, en büyük iki özdeğere karşılık gelen özvektörler seçilir ve veri bu iki özvektör doğrultusunda projekte edilir.
+
+\subsection{Çalışma Adımları}
+
+\begin{enumerate}
+    \item PCA, verilerdeki değişkenlerin farklı ölçeklerde olmasından etkilenir. Bu yüzden, veri kümesindeki her bir değişken aynı ölçek düzeyine getirilir. Bu adımda z-normalization ile, her bir değişkenin ortalaması 0 yapıp standard sapması 1'e eşitlenir.
+    \item Kovaryans, iki değişkenin nasıl birlikte değiştiğini ölçer. PCA, veriler arasındaki ilişkileri anlamak için tüm değişkenler arasındaki kovaryansları hesaplar. Bunun için bir kovaryans matrisi oluşturulur. Bu matris, tüm değişkenler arasındaki ilişkileri simgeler.
+    \item Kovaryans matrisi kullanılarak, veri setindeki en yüksek varyansa sahip yönleri bulmak için özdeğerler ve özvektörler hesaplanır. Özvektörler, temel bileşenleri temsil eder; özdeğerler ise bu bileşenlerin veride ne kadar varyans açıkladığını gösterir.
+    \item Genellikle en çok varyans açıklayan bileşenler seçilir ve bu bileşenler, veri kümesini yeni bir uzaya projekte etmek için kullanılır. Özdeğerlerin büyüklüğüne göre bileşenler sıralanır ve anlamlı bileşenler seçilerek veri, bu bileşenler boyunca yeniden ifade edilir.
+    \item Son olarak, seçilen bileşenler boyunca veri projekte edilir. Bu işlem, boyutları indirgenmiş yeni bir veri kümesi üretir. Bu veri, orijinal veri kümesindeki bilgiyi, en az kayıpla temsil eder.
+\end{enumerate}
+
+\subsection{Python Kodu}
+
+\begin{lstlisting}[language=Python]
+import numpy as np
+
+class PCA:
+    def __init__(self, n_components: int):
+        # Ana bilesen sayisi
+        self.n_components = n_components
+        self.eigen_vals = None
+        self.eigen_vecs = None
+
+    def fit(self, data: np.ndarray):
+        # Kovaryans matrisi hesaplanir.
+        cov_mat = np.cov(data, rowvar=False)
+
+        # Ozdegerler (eigen values) ve ozvektorler (eigen vectors) hesaplanir.
+        eigen_vals, eigen_vecs = np.linalg.eig(cov_mat)
+
+        # Ozdegerler (eigen values) buyukten kucuge siralanir.
+        idx = eigen_vals.argsort()[::-1]
+        self.eigen_vals = eigen_vals[idx]
+        self.eigen_vecs = eigen_vecs[:, idx]
+
+    def transform(self, data: np.ndarray) -> np.ndarray:
+        # Secilen ozbilesenlerle veri donusturulur.
+        principal_components = data @ self.eigen_vecs[:, :self.n_components]
+        return principal_components
+
+    def fit_transform(self, data: np.ndarray) -> np.ndarray:
+        self.fit(data)
+        return self.transform(data)
+\end{lstlisting}
+
+\newpage
