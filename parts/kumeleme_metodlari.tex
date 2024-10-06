@@ -47,27 +47,65 @@ max\_iter & int & 200 & Maksimum iterasyon sayısı. \\ \hline
 \subsubsection{Python Kodu}
 
 \begin{lstlisting}[language=Python, caption=Scikit-learn'de AffinityPropagation örneği.]
-from sklearn.cluster import AffinityPropagation
-from sklearn.datasets import make_blobs
+import numpy as np
 
-# Veri olusturma
-data, _ = make_blobs(n_samples=300, centers=4, cluster_std=1.0, random_state=42)
+class AffinityPropagation:
+    def __init__(self, damping=0.9, max_iter=100, convergence_iter=15):
+        # Damping faktoru (0.5 < damping < 1.0)
+        self.damping = damping
+        # Maksimum iterasyon sayisi
+        self.max_iter = max_iter
+        # Konsensus iterasyon sayisi
+        self.convergence_iter = convergence_iter
 
-# Affinity Propagation modeli olusturma
-model = AffinityPropagation()
+    def fit(self, X):
+        n_samples = X.shape[0]
+        # Baslangicta tercih negativ en kucuk degerlerden olusur
+        preference = np.median(X)
 
-# Veriyi modele uydurma
-model.fit(data)
+        # Sorumluluk (responsibility) matrisi
+        R = np.zeros((n_samples, n_samples))
+        # Kullanilabilirlik (availability) matrisi
+        A = np.zeros((n_samples, n_samples))
 
-# Kume merkezlerini ve etiketleri al
-cluster_centers_indices = model.cluster_centers_indices_
-labels = model.labels_
+        # Benzerlikler guncellenir
+        S = X.copy()
+        np.fill_diagonal(S, preference)
 
-# Kume merkezlerini ve etiketleri yazdir
-print("Kume Merkezleri:")
-print(data[cluster_centers_indices])
-print("Kume Etiketleri:")
-print(labels)
+        for iteration in range(self.max_iter):
+            # Sorumluluk guncellemesi
+            for i in range(n_samples):
+                for k in range(n_samples):
+                    max_s = np.max(A[i, :] + S[i, :])
+                    R[i, k] = self.damping * R[i, k] + (1 - self.damping) * (S[i, k] - max_s)
+
+            # Kullanilabilirlik guncellemesi
+            for i in range(n_samples):
+                for k in range(n_samples):
+                    if i == k:
+                        A[i, k] = self.damping * A[i, k] + (1 - self.damping) * np.sum(np.maximum(R[:, k], 0))
+                    else:
+                        A[i, k] = self.damping * A[i, k] + (1 - self.damping) * np.minimum(0, R[k, k] + np.sum(np.maximum(R[:, k], 0) - R[i, k]))
+
+            # Konsensus kontrolu
+            exemplars = np.where((A + R).diagonal() > 0)[0]
+
+            if len(exemplars) > 0 and iteration >= self.convergence_iter:
+                break
+
+        # Kume merkezlerini (exemplar) belirlenir
+        cluster_centers_indices = np.where((A + R).diagonal() > 0)[0]
+
+        # Kumeleri atanir
+        labels = np.zeros(n_samples)
+        for i in range(n_samples):
+            labels[i] = np.argmax(S[i, cluster_centers_indices])
+
+        self.cluster_centers_indices_ = cluster_centers_indices
+        self.labels_ = labels
+
+    def predict(self, X):
+        return self.labels_
 \end{lstlisting}
 
 \newpage
@@ -85,22 +123,82 @@ Agglomerative Clustering, veri noktalarını başlangıçta ayrı ayrı kümeler
 \subsubsection{Python Kodu}
 
 \begin{lstlisting}[language=Python, caption=Scikit-learn'de AgglomerativeClustering.]
-from sklearn.cluster import AgglomerativeClustering
-from sklearn.datasets import make_blobs
-import matplotlib.pyplot as plt
+import numpy as np
 
-# Veri olusturma
-data, _ = make_blobs(n_samples=300, centers=3, cluster_std=1.0, random_state=42)
+class AgglomerativeClustering:
+    def __init__(self, n_clusters=2, linkage="single"):
+        # Kume sayisi
+        self.n_clusters = n_clusters
+        # Linkage -> ['single', 'complete', 'average']
+        self.linkage = linkage
+        # Etiketler
+        self.labels_ = None
 
-# Agglomerative Clustering modeli olusturma
-model = AgglomerativeClustering(n_clusters=3)  # Kume sayisini belirtin
+    def fit(self, X):
+        n_samples = X.shape[0]
 
-# Veriyi modele uydurma
-labels = model.fit_predict(data)
+        # Her veri noktasi baslangicta ayri bir kume olarak kabul edilir
+        clusters = {i: [i] for i in range(n_samples)}
 
-# Sonuclari gorsellestirme
-plt.scatter(data[:, 0], data[:, 1], c=labels, cmap='viridis')
-plt.show()
+        # Veri noktalari arasindaki mesafe hesaplanir
+        distances = np.zeros((n_samples, n_samples))
+
+        for i in range(n_samples):
+            for j in range(i + 1, n_samples):
+                distances[i, j] = np.sqrt(np.sum((X[i] - X[j]) ** 2))
+                distances[j, i] = distances[i, j]
+
+        while len(clusters) > self.n_clusters:
+            # Iki kume arasindaki minimum mesafe bulunur
+            min_dist = np.inf
+            closest_clusters = None
+
+            for c1 in clusters:
+                for c2 in clusters:
+                    if c1 != c2:
+                        if self.linkage == "single":
+                            dist = np.min([distances[i, j] for i in clusters[c1] for j in clusters[c2]])
+                        elif self.linkage == "complete":
+                            dist = np.max([distances[i, j] for i in clusters[c1] for j in clusters[c2]])
+                        elif self.linkage == "average":
+                            dist = np.mean([distances[i, j] for i in clusters[c1] for j in clusters[c2]])
+
+                        if dist < min_dist:
+                            min_dist = dist
+                            closest_clusters = (c1, c2)
+
+            c1, c2 = closest_clusters
+
+            # Iki kumeyi birlestir
+            clusters[c1].extend(clusters[c2])
+            del clusters[c2]
+
+            # Mesafe matrisini guncelle
+            new_distances = np.zeros_like(distances)
+
+            for c1 in clusters:
+                for c2 in clusters:
+                    if c1 != c2:
+                        if self.linkage == "single":
+                            dist = np.min([distances[i, j] for i in clusters[c1] for j in clusters[c2]])
+                        elif self.linkage == "complete":
+                            dist = np.max([distances[i, j] for i in clusters[c1] for j in clusters[c2]])
+                        elif self.linkage == "average":
+                            dist = np.mean([distances[i, j] for i in clusters[c1] for j in clusters[c2]])
+                        
+                        new_distances[c1, c2] = dist
+                        new_distances[c2, c1] = new_distances[c1, c2]
+
+            distances = new_distances
+
+        # Kumeleri etiketle
+        labels = np.zeros(n_samples, dtype=int)
+    
+        for cluster_idx, cluster in enumerate(clusters.values()):
+            for sample_idx in cluster:
+                labels[sample_idx] = cluster_idx
+    
+        self.labels_ = labels
 \end{lstlisting}
 
 \newpage
@@ -175,25 +273,73 @@ n\_clusters & int & 3 & Küme sayısını önceden belirlemeniz gereken bir hipe
 }}}
 \end{table}
 
+\newpage
+
 \subsubsection{Python Kodu}
 
 \begin{lstlisting}[language=Python, caption=Scikit-learn'de DBSCAN.]
-from sklearn.cluster import DBSCAN
-from sklearn.datasets import make_moons
-import matplotlib.pyplot as plt
+import numpy as np
+from collections import deque
 
-# Veri olusturma
-data, _ = make_moons(n_samples=200, noise=0.05, random_state=42)
+class DBSCAN:
+    def __init__(self, eps=0.5, min_samples=5):
+        # Komsuluk mesafesi (eps)
+        self.eps = eps
+        # Minimum komsu sayisi
+        self.min_samples = min_samples
+        # Etiketler (Gurultu icin -1 alir)
+        self.labels = None
 
-# DBSCAN modeli olusturma
-model = DBSCAN(eps=0.3, min_samples=5)
+    def fit(self, X):
+        n_samples = X.shape[0]
+        # Baslangicta tum noktalar gurultu olarak kabul edilir (-1)
+        self.labels = -np.ones(n_samples)
+        cluster_id = 0
 
-# Veriyi modele uydurma
-labels = model.fit_predict(data)
+        for point_idx in range(n_samples):
+            if self.labels[point_idx] != -1:
+                continue
 
-# Sonuclari gorsellestirme
-plt.scatter(data[:, 0], data[:, 1], c=labels, cmap='viridis')
-plt.show()
+            # Komsulari bul
+            neighbors = []
+            for i in range(X.shape[0]):
+                if np.linalg.norm(X[point_idx] - X[i]) <= self.eps:
+                    neighbors.append(i)
+
+            # Eger komsu sayisi min_samples'dan az ise, bu nokta gurultudur
+            if len(neighbors) < self.min_samples:
+                self.labels[point_idx] = -1
+            else:
+                # Yeni bir kume olustur ve genislet
+                self.labels[point_idx] = cluster_id
+                queue = deque(neighbors)
+        
+                while queue:
+                    neighbor_idx = queue.popleft()
+        
+                    if self.labels[neighbor_idx] == -1:
+                        # Gurultu noktalarini kumeye ekle
+                        self.labels[neighbor_idx] = cluster_id
+        
+                    if self.labels[neighbor_idx] != -1:
+                        continue
+        
+                    # Bu noktayi kumeye ekle
+                    self.labels[neighbor_idx] = cluster_id
+        
+                    # Bu komsunun komsularini bul
+                    new_neighbors  = []
+                    for i in range(X.shape[0]):
+                        if np.linalg.norm(X[point_idx] - X[i]) <= self.eps:
+                            new_neighbors .append(i)
+        
+                    if len(new_neighbors) >= self.min_samples:
+                        queue.extend(new_neighbors)
+
+                cluster_id += 1
+
+    def predict(self, X):
+        return self.labels
 \end{lstlisting}
 
 \newpage
@@ -216,24 +362,64 @@ metric & "euclidean", "l1", "l2", "manhattan", "cosine", "precomputed" & None & 
 }}}
 \end{table}
 
+\newpage
+
 \subsubsection{Python Kodu}
 
 \begin{lstlisting}[language=Python, caption=Scikit-learn'de FeatureAgglomeration örneği.]
-from sklearn.cluster import FeatureAgglomeration
-from sklearn.datasets import load_iris
+import numpy as np
 
-# Veri yuklemesi
-data = load_iris().data
+class FeatureAgglomeration:
+    def __init__(self, n_clusters=2):
+        self.n_clusters = n_clusters
+        self.labels_ = None
 
-# Feature Agglomeration modeli olusturma
-model = FeatureAgglomeration(n_clusters=2)  # Kume sayisini belirtin
+    def fit(self, X):
+        n_features = X.shape[1]
 
-# Veriyi modele uydurma
-transformed_data = model.fit_transform(data)
+        # Baslangicta her ozellilk bir kume olarak belirlenir
+        clusters = {i: [i] for i in range(n_features)}
+        self.labels_ = np.arange(n_features)
 
-# Sonuclari goruntuleme
-print("Ozgun veri sekli:", data.shape)
-print("Donusturulmus veri sekli:", transformed_data.shape)
+        # Ozellikler arasindaki mesafe hesaplanir
+        distances = np.zeros((n_features, n_features))
+        for i in range(n_features):
+            for j in range(i + 1, n_features):
+                distances[i, j] = np.linalg.norm(X[:, i] - X[:, j])
+                distances[j, i] = distances[i, j]
+
+        # Kumeleme islemi
+        while len(clusters) > self.n_clusters:
+            # Kucuk mesafe bulunur
+            min_dist = np.inf
+            min_pair = None
+
+            for i in clusters:
+                for j in clusters:
+                    if i < j:
+                        # Iki kume arasindaki ortalama mesafe hesaplanir
+                        dist = np.mean([distances[p1, p2] for p1 in clusters[i] for p2 in clusters[i]])
+                        if dist < min_dist:
+                            min_dist = dist
+                            min_pair = (i, j)
+
+            # Kume ciftleri birlestirilir
+            i, j = min_pair
+            clusters[i].extend(clusters[j])
+            del clusters[j]
+
+            # Etiketler guncellenir
+            for feature in clusters[i]:
+                self.labels_[feature] = i
+
+        return self
+
+    def transform(self, X):
+        X_reduced = np.zeros((X.shape[0], self.n_clusters))
+        for i in range(self.n_clusters):
+            X_reduced[:, i] = np.mean(X[:, self.labels_ == i], axis=1)
+
+        return X_reduced
 \end{lstlisting}
 
 \newpage
@@ -451,25 +637,61 @@ bandwidth & float & None & Bandwidth, yoğunluk merkezlerini hesaplamak için ku
 }}}
 \end{table}
 
+\newpage
+
 \subsubsection{Python Kodu}
 
 \begin{lstlisting}[language=Python, caption=Scikit-learn'de MeanShift örneği.]
-from sklearn.cluster import MeanShift
-from sklearn.datasets import make_blobs
-import matplotlib.pyplot as plt
+import numpy as np
 
-# Veri olusturma
-data, _ = make_blobs(n_samples=300, centers=4, cluster_std=1.0, random_state=42)
+class MeanShift:
+    def __init__(self, bandwidth=None, max_iter=100, tol=1e-3):
+        self.bandwidth = bandwidth
+        self.max_iter = max_iter
+        self.tol = tol
+        self.cluster_centers_ = None
+        self.labels_ = None
 
-# Mean Shift modeli olusturma
-model = MeanShift()  # Hiperparametreler belirtilmezse varsayilan degerler kullanilir
+    def fit(self, X):
+        if self.bandwidth is None:
+            # Scott kurali
+            self.bandwidth = np.mean(np.std(X, axis=0)) * 1.06 * X.shape[0] ** (-1 / 5.)
 
-# Veriyi modele uydurma
-labels = model.fit_predict(data)
+        # Veri noktalari kopyalanir
+        points = np.copy(X)
+        for _ in range(self.max_iter):
+            new_points = []
+            for point in points:
+                # Bandwidth icinde olan noktalar bulunur
+                in_bandwidth = []
+                for x in X:
+                    dist = np.sqrt(np.sum((point - x) ** 2))
+                    if dist < self.bandwidth:
+                        in_bandwidth.append(x)
+    
+                new_point = np.mean(in_bandwidth, axis=0)
+                new_points.append(new_point)
 
-# Sonuclari gorsellestirme
-plt.scatter(data[:, 0], data[:, 1], c=labels, cmap='viridis')
-plt.show()
+            new_points = np.array(new_points)
+            # Degisim miktari
+            shift = np.linalg.norm(new_points - points, axis=1)
+            if np.all(shift < self.tol):
+                break
+
+            points = new_points
+
+        # Kume merkezleri belirlenir
+        unique_points = np.unique(np.round(points, decimals=5), axis=0)
+        self.cluster_centers_ = unique_points
+
+        # Etiketler
+        self.labels_ = np.array([np.argmin([np.sqrt(np.sum((x - center) ** 2)) 
+                                 for center in self.cluster_centers_]) for x in X])
+
+    def predict(self, X):
+        labels = np.array([np.argmin([np.sqrt(np.sum((x - center) ** 2))
+                           for center in self.cluster_centers_]) for x in X])
+        return labels
 \end{lstlisting}
 
 \newpage
@@ -503,25 +725,59 @@ init & "k-means++", "random" & "k-means++" & Başlangıç merkezlerini seçme y�
 }}}
 \end{table}
 
+\newpage
+
 \subsubsection{Python Kodu}
 
 \begin{lstlisting}[language=Python, caption=Scikit-learn'de MiniBatchKMeans.]
-from sklearn.cluster import MiniBatchKMeans
-from sklearn.datasets import make_blobs
-import matplotlib.pyplot as plt
+import numpy as np
 
-# Veri olusturma
-data, _ = make_blobs(n_samples=300, centers=4, cluster_std=1.0, random_state=42)
+class MiniBatchKMeans:
+    def __init__(self, n_clusters=2, batch_size=100, max_iters=100, tol=1e-4):
+        self.n_clusters = n_clusters
+        self.batch_size = batch_size
+        self.max_iters = max_iters
+        self.tol = tol
+        self.centroids = None
 
-# MiniBatchKMeans modeli olusturma
-model = MiniBatchKMeans(n_clusters=4)  # Kume sayisini belirtin
+    def fit(self, X):
+        n_samples, n_features = X.shape
+        # Ilk merkezler rastgele secilir
+        random_idx = np.random.choice(n_samples, self.n_clusters, replace=False)
+        self.centroids = X[random_idx]
 
-# Veriyi modele uydurma
-labels = model.fit_predict(data)
+        for i in range(self.max_iters):
+            # Mini-batch sec
+            minibatch_idx = np.random.choice(n_samples, self.batch_size, replace=False)
+            minibatch = X[minibatch_idx]
 
-# Sonuclari gorsellestirme
-plt.scatter(data[:, 0], data[:, 1], c=labels, cmap='viridis')
-plt.show()
+            # En yakin merkezler bulunur
+            distances = np.zeros((minibatch.shape[0], self.n_clusters))
+            for i, centroid in enumerate(self.centroids):
+                distances[:, i] = np.linalg.norm(minibatch - centroid, axis=1)
+
+            closest_centroids = np.argmin(distances, axis=1)
+
+            # Merkezleri guncelle
+            new_centroids = np.copy(self.centroids)
+            for c in range(self.n_clusters):
+                points_per_centroid = minibatch[closest_centroids == c]
+                if points_per_centroid.shape[0] > 0:
+                    new_centroids[c] = points_per_centroid.mean(axis=0)
+
+            # Degisim kontrolu
+            centroid_shift = np.linalg.norm(self.centroids - new_centroids, axis=None)
+            if centroid_shift < self.tol:
+                break
+
+            self.centroids = new_centroids
+
+    def predict(self, X):
+        distances = np.zeros((X.shape[0], self.n_clusters))
+        for i, centroid in enumerate(self.centroids):
+            distances[:, i] = np.linalg.norm(X - centroid, axis=1)
+
+        return np.argmin(distances, axis=1)
 \end{lstlisting}
 
 \newpage
@@ -596,25 +852,53 @@ eigen\_solver & "arpack", "lobpcg", "amg" & "k-means++" & Özdeğer ayrışımı
 }}}
 \end{table}
 
+\newpage
+
 \subsubsection{Python Kodu}
 
 \begin{lstlisting}[language=Python, caption=Scikit-learn'de SpectralClustering örneği.]
-from sklearn.cluster import SpectralClustering
-from sklearn.datasets import make_blobs
-import matplotlib.pyplot as plt
+import numpy as np
+from sklearn.cluster import KMeans
+from scipy.spatial.distance import cdist
+from sklearn.preprocessing import normalize
 
-# Veri olusturma
-data, _ = make_blobs(n_samples=300, centers=4, cluster_std=1.0, random_state=42)
+class SpectralClustering:
+    def __init__(self, n_clusters=2, sigma=1.0):
+        # Kume sayisi
+        self.n_clusters = n_clusters
+        # Sigma
+        self.sigma = sigma
 
-# SpectralClustering modeli olusturma
-model = SpectralClustering(n_clusters=4)  # Kume sayisini belirtin
+    def fit(self, X):
+        # Agirlik matrisi olusturulur
+        pairwise_sq_dists = cdist(X, X, "sqeuclidean")
+        W = np.exp(-pairwise_sq_dists / (2 * self.sigma ** 2))
+        np.fill_diagonal(W, 0)
 
-# Veriyi modele uydurma
-labels = model.fit_predict(data)
 
-# Sonuclari gorsellestirme
-plt.scatter(data[:, 0], data[:, 1], c=labels, cmap='viridis')
-plt.show()
+        # Derece matrisi olusturulur
+        D = np.diag(np.sum(W, axis=1))
+
+        # Laplace matrisi olusturulur
+        L = D - W
+
+        # Laplace matrisnin ozdeger ve ozvektorleri hesaplanir
+        eigenvalues, eigenvectors = np.linalg.eigh(L)
+
+        # En kucuk n_clusters ozdegere karsilik gelen ozvektorler secilir
+        idx = np.argsort(eigenvalues)[:self.n_clusters]
+        H = eigenvectors[:, idx]
+
+        # Secilen ozvektorler normallestirilir
+        H_normalized = normalize(H, norm="l2", axis=1)
+
+        # KMeans ile kumeler belirlenir
+        kmeans = KMeans(n_clusters=self.n_clusters)
+        self.labels_ = kmeans.fit_predict(H)
+        return self
+
+    def predict(self, X):
+        return self.labels_
 \end{lstlisting}
 
 \newpage

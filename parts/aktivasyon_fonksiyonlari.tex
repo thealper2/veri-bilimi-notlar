@@ -2,17 +2,26 @@
 Derin öğrenme modellerinin temel yapı taşlarından biri olan aktivasyon fonksiyonları, sinir ağlarının çıktılarını belirlemek için kullanılan matematiksel işlevlerdir. Aktivasyon fonksiyonları, sinir ağlarının her bir katmanındaki nöronların çıktılarını belirlemek için kullanılan matematiksel işlevlerdir. Bu fonksiyonlar, nöronların gelen sinyalleri nasıl ileteceğini ve etkinleştireceğini kontrol eder.
 
 \begin{itemize}
-    \item Step Function - Basamak Fonksiyonu
-    \item Linear Function - Doğrusal Fonksiyon
+    \item Step Function
+    \item Linear Function
     \item Sigmoid Function
-    \item Tanh Function - Hiperbolik Tanjant Fonksiyonu
+    \item Tanh Function
     \item ReLU (Rectified Linear Unit) Function
-    \item Leaky ReLU Function - Sızıntılı ReLU Fonksiyonu
+    \item Leaky ReLU Function
     \item Parameterized ReLU Function
     \item Exponential ReLU Function
     \item Softmax Function
-    \item Swish (A Self-Gated) Function - Kendinden Geçitli Fonksiyon
+    \item Swish (A Self-Gated / Silu) Function
     \item Exponential Linear Unit (ELU) Function
+    \item Softplus Function
+    \item Softsign Function
+    \item Scaled Exponential Linear Unit (SELU) Function
+    \item ReLU6 Function
+    \item Hard Silu Function
+    \item Gaussian Error Linear Unit (GELU) Function
+    \item Hard Sigmoid Function
+    \item Mish Function
+    \item Log-Softmax Function
 \end{itemize}
 
 \newpage
@@ -394,6 +403,309 @@ import numpy as np
 
 def elu(z, alpha=0.01):
     return max(alpha * (np.exp(z) - 1), z)
+\end{lstlisting}
+
+\newpage
+
+\subsection{Softplus Function}
+
+Softplus, doğrusal olmayan bir aktivasyon fonksiyonudur. Giriş değerlerini yumuşak bir şekilde pozitif yapar. ReLU fonksiyonuna benzer çalışır ancak ReLU'nun aksine, Softplus fonksiyonu türevlenebilirdir ve her noktada süreklidir.
+
+\[ \text{Softplus}(x) = \ln(1 + e^x) \]
+
+\subsubsection{Avantajları}
+
+\begin{itemize}
+    \item Softplus her noktada sürekli ve türevlenebilirdir.
+    \item Giriş değerlerinin negatif olduğu yerlerde sıfıra yavaşça yaklaşırken, pozitif değerlerde logaritmik bir büyüme sergiler.
+\end{itemize}
+
+\subsubsection{Dezavantajları}
+
+\begin{itemize}
+    \item Logaritmik ve üstel fonksiyonları içerdiğinden dolayı ReLU'ya göre hesaplama maliyeti daha yüksektir.
+    \item Çok büyük negatif değerlerde, sıfıra yaklaşır.
+\end{itemize}
+
+\subsubsection{Python Kodu}
+
+\begin{lstlisting}[language=Python]
+import numpy as np
+
+def softplus(x):
+    return np.log(1 + np.exp(x))
+\end{lstlisting}
+
+\newpage
+
+\subsection{Softsign Function}
+
+Softsign, doğrusal olmayan bir fonksiyondur. Giriş değerlerini sınırlamak için hiperbolik bir fonksiyon kullanır. Giriş değerlerini yumuşak bir şekilde [-1, 1] aralığına çeker. Küçük değerler için Softsign neredeyse doğrusal davranırken, büyük pozitif ve negatif değerler için doygunluğa ulaşır ve çıktıyı sınırlar.
+
+\[ \text{Softsign}(x) = \frac{x}{1 + |x|} \]
+
+\subsubsection{Avantajları}
+
+\begin{itemize}
+    \item Giriş değerlerini [-1, 1] aralığına yumuşak bir şekilde çeker, bu da büyük değerlerin etkisini azaltır.
+    \item Softsign, giriş değerlerinin her noktasında türevlenebilir.
+\end{itemize}
+
+\subsubsection{Dezavantajları}
+
+\begin{itemize}
+    \item Giriş değerleri büyük olduğunda, fonksiyonun çıktısı doygunluğa ulaşır.
+\end{itemize}
+
+\subsubsection{Python Kodu}
+
+\begin{lstlisting}[language=Python]
+import numpy as np
+
+def softsign(x):
+    return x / (1 + np.abs(x))
+\end{lstlisting}
+
+\newpage
+
+\subsection{Scaled Exponential Linear Unit (SELU) Function}
+
+SELU, normalizasyon gerektirmeden çıktının ortalamasını sıfır, varyansını ise bir civarında tutabilir. Bu özellik sayesinde derin ağlarda katmanlar arasında "self-normalization" (kendini normalleştirme) sağlar. SELU, ReLU ve ELU fonksiyonlarının avantajlarını birleştirir.
+
+\begin{itemize}
+    \item Eğer giriş pozitifse, fonksiyon lineer bir eğim ile çalışır.
+    \item Eğer giriş negatifse, fonksiyon ELU'ya benzer bir eğilim gösterir.
+\end{itemize}
+
+\[\text{SELU}(x) = \lambda \begin{cases} 
+x & \text{if } x > 0 \\
+\alpha (e^x - 1) & \text{if } x \leq 0
+\end{cases}\]
+
+\subsubsection{Avantajları}
+
+\begin{itemize}
+    \item Derin sinir ağlarında, çıktının sıfır civarında merkezlenmesini ve sabit bir varyansa sahip olmasını sağlar, bu da ağırlıkların dengeli öğrenmesini destekler.
+    \item SELU, hem pozitif hem de negatif girdilere sahip olduğundan, gradyan kaybolma sorununu (vanishing gradient) azaltabilir.
+    \item Self-normalizing özelliği sayesinde ağ, derin katmanlarda bile stabildir ve daha hızlı öğrenir.
+\end{itemize}
+
+\subsubsection{Dezavantajları}
+
+\begin{itemize}
+    \item Self-normalization, SELU'nun işlevini doğru bir şekilde yerine getirebilmesi için giriş verisinin belirli bir dağılıma sahip olmasını gerektirir.
+\end{itemize}
+
+\subsubsection{Python Kodu}
+
+\begin{lstlisting}[language=Python]
+import numpy as np
+
+alpha = 1.67326
+lambda_ = 1.0507
+
+def selu(x):
+    return lambda_ * np.where(x > 0, x, alpha * (np.exp(x) - 1))
+\end{lstlisting}
+
+\newpage
+
+\subsection{ReLU6 Function}
+
+ReLU6, standart ReLU fonksiyonunun sınırlı bir versiyonudur. ReLU, negatif değerleri sıfıra eşitlerken, pozitif değerler için doğrusal bir çıkış verir. ReLU6 ise, çıktı değerlerini 6 ile sınırlar. Bu fonksiyon, mobil cihazlar gibi sınırlı kaynaklara sahip sistemlerde derin öğrenme modellerinin kararlılığını ve verimliliğini artırmak için kullanılır.
+
+\[ \text{ReLU6}(x) = \min(\max(0, x), 6) \]
+
+\begin{itemize}
+    \item Eğer $x < 0$ ise, çıktı 0 olur.
+    \item Eğer $0 \leq x \leq 6$ ise, çıktı $x$ olur.
+    \item Eğer $x > 6$ ise, çıktı 6 olur.
+\end{itemize}
+
+\subsubsection{Avantajları}
+
+\begin{itemize}
+    \item ReLU6, çıkışları sınırlayarak çok büyük aktivasyon değerlerinden kaynaklanabilecek sorunları önler, bu da sayısal kararlılığı artırır.
+    \item Daha sınırlı bir çıktı aralığı, modelin daha hafif ve verimli çalışmasını sağlar.
+\end{itemize}
+
+\subsubsection{Dezavantajları}
+
+\begin{itemize}
+    \item Çıktı değeri 6 ile sınırlandığından, girdinin büyük olduğu durumlarda fonksiyon sabit hale gelir ve öğrenmeyi zorlaştırabilir.
+\end{itemize}
+
+\subsubsection{Python Kodu}
+
+\begin{lstlisting}[language=Python]
+import numpy as np
+
+def relu6(x):
+    return np.minimum(np.maximum(0, x), 6)
+\end{lstlisting}
+
+\newpage
+
+\subsection{Hard Sigmoid Linear Unit (Swish / Silu) Function}
+
+Hard Silu, Silu aktivasyon fonksiyonunun daha hızlı ve hesaplama açısından daha verimli bir yaklaşımla basitleştirilmiş bir versiyonudur. Silu, sigmoid ve lineer bileşenleri birleştirerek daha iyi öğrenme performansı sağlayan doğrusal olmayan bir aktivasyon fonksiyonudur.
+
+\[ \text{Hard SiLU}(x) = x \cdot \max(0, \min(1, \frac{x + 1}{2})) \]
+
+\begin{itemize}
+    \item Eğer $x \leq -1$, sonuç sıfıra yaklaşır.
+    \item Eğer $x \geq 1$, sonuç $x$ ile orantılıdır.
+    \item Arada kalan değerler için ise sigmoidin yumuşak geçişleri yerine daha hızlı bir yaklaşım kullanılır.
+\end{itemize}
+
+\subsubsection{Avantajları}
+
+\begin{itemize}
+    \item Sigmoid yerine bir basitleştirilmiş fonksiyon kullanılması, Hard SiLU'nun SiLU'ya göre daha hızlı olmasını sağlar.
+    \item Sigmoid gibi aşırı doygunluk göstermez, bu da gradyan kaybolması problemini azaltabilir.
+\end{itemize}
+
+\subsubsection{Dezavantajları}
+
+\begin{itemize}
+    \item SiLU’nun tüm faydalarını sağlayamayabilir. Daha basit bir fonksiyon kullanılması, modelin performansını SiLU kadar etkili hale getirmeyebilir.
+\end{itemize}
+
+\subsubsection{Python Kodu}
+
+\begin{lstlisting}[language=Python]
+import numpy as np
+
+def hard_silu(x):
+    return x * np.maximum(0, np.minimum(1, (x + 1) / 2))
+\end{lstlisting}
+
+\newpage
+
+\subsection{Gaussian Error Linear Unit (GELU) Function}
+
+GELU, genellikle Transformer tabanlı modellerde kullanılır. Girdinin normal dağılımına dayanan doğrusal olmayan bir fonksiyondur. Girdiyi belirli bir olasılıkla geçmesine izin verir, yani girişin pozitif ve büyük olduğu durumlarda girişin büyük kısmı geçerken, negatif ve küçük olduğu durumlarda girişin küçük bir kısmı aktarılır. 
+
+\[ \text{GELU}(x) = 0.5 x \left( 1 + \text{erf}\left( \frac{x}{\sqrt{2}} \right) \right) \]
+
+\subsubsection{Avantajları}
+
+\begin{itemize}
+    \item GELU, girişlerin sıfırdan büyük veya küçük olmasına göre çok daha yumuşak bir geçiş sağlar ve bu, modelin öğrenme sürecinde daha fazla esneklik sağlayabilir.
+    \item GELU, negatif değerler için tamamen sıfır olmayan gradyanlar sağladığından, gradyan kaybolması sorununu minimize eder.
+\end{itemize}
+
+\subsubsection{Dezavantajları}
+
+\begin{itemize}
+    \item GELU'nun hesaplanması, ReLU ve diğer daha basit fonksiyonlara göre daha karmaşıktır. Bu, bazı uygulamalarda performans maliyetine yol açabilir.
+\end{itemize}
+
+\subsubsection{Python Kodu}
+
+\begin{lstlisting}[language=Python]
+import numpy as np
+from scipy.special import erf
+
+def gelu(x):
+    return 0.5 * x * (1 + erf(x / np.sqrt(2)))
+\end{lstlisting}
+
+\newpage
+
+\subsection{Hard Sigmoid Function}
+
+Hard Sigmoid, standart sigmoid aktivasyon fonksiyonunun daha basit ve hesaplama açısından daha verimli bir yaklaşımla uygulanan bir versiyonudur. Sigmoid fonksiyonunun aksine, Hard Sigmoid, doğrusal ve sınırlı bir aralıkta çalışır. Bu fonksiyon, mobil cihazlar ve düşük güçlü sistemlerde yaygın olarak kullanılır, çünkü hesaplama açısından daha hafiftir.
+
+\[ \text{Hard Sigmoid}(x) = \max(0, \min(1, \frac{x + 1}{2})) \]
+
+\begin{itemize}
+    \item Eğer $x \leq -1$, çıktı 0 olur.
+    \item Eğer $x \geq 1$, çıktı 1 olur.
+    \item Eğer $-1 < x < 1$, çıktı $\frac{x + 1}{2}$ olur.
+\end{itemize}
+
+\subsubsection{Avantajları}
+
+\begin{itemize}
+    \item Standart sigmoid fonksiyonuna göre çok daha hızlı hesaplanır, çünkü üstel fonksiyon yerine basit aritmetik işlemler kullanır.
+\end{itemize}
+
+\subsubsection{Dezavantajları}
+
+\begin{itemize}
+    \item Fonksiyonun ortasında doğrusal bir ilişki vardır ve bu, sigmoidin getirdiği doğrusal olmayanlık avantajını bir ölçüde kaybettirir.
+\end{itemize}
+
+\subsubsection{Python Kodu}
+
+\begin{lstlisting}[language=Python]
+import numpy as np
+
+def hard_sigmoid(x):
+    return np.maximum(0, np.minimum(1, (x + 1) / 2))
+\end{lstlisting}
+
+\newpage
+
+\subsection{Mish Function}
+
+Mish, Swish ve ReLU gibi fonksiyonlara kıyasla daha yumuşak bir geçiş sunar ve negatif girdileri de hesaba katar. Mish, girişin doğal logaritmasını alarak bir aktivasyon yapar ve bu sırada tanjant hiperbolik fonksiyonunu kullanır.
+
+\[ \text{Mish}(x) = x \cdot \tanh(\ln(1 + e^x)) \]
+
+\subsubsection{Avantajları}
+
+\begin{itemize}
+    \item Mish, ReLU'ya kıyasla çok daha yumuşak bir aktivasyon fonksiyonu sağlar. Bu, öğrenme sürecinde daha iyi gradyan akışı sağlar.
+    \item Mish, küçük ve negatif değerlerde bile yumuşak bir gradyan sağladığı için gradyan kaybolması (vanishing gradient) sorununu azaltır.
+\end{itemize}
+
+\subsubsection{Dezavantajları}
+
+\begin{itemize}
+    \item Mish, ReLU gibi daha basit aktivasyon fonksiyonlarına kıyasla daha karmaşık olduğu için daha fazla hesaplama gücü gerektirir. Tanjant hiperbolik ve logaritmik işlemler ek bir maliyet getirir.
+\end{itemize}
+
+\subsubsection{Python Kodu}
+
+\begin{lstlisting}[language=Python]
+import numpy as np
+
+def mish(x):
+    return x * np.tanh(np.log1p(np.exp(x)))
+\end{lstlisting}
+
+\newpage
+
+\subsection{Log-Softmax Function}
+
+Log-Softmax, çok sınıflı sınıflandırma problemlerinde kullanılan bir aktivasyon fonksiyonudur. Softmax fonksiyonunun logaritması olarak tanımlanır ve sayısal stabiliteyi artırmak için kullanılır. Negatif logaritmik kayıp fonksiyonu (negative log likelihood loss) ile birlikte kullanıldığında hesaplamada daha verimli ve kararlı sonuçlar verir. Cross-entropy hesaplamalarında da tercih edilir.
+
+\[ \text{Log-Softmax}(x_i) = x_i - \log \left( \sum_{j} e^{x_j} \right) \]
+
+\subsubsection{Avantajları}
+
+\begin{itemize}
+    \item Softmax fonksiyonunun logaritmasını almak, küçük sayıların hesaplanmasında ve sayısal taşmalarda daha stabil sonuçlar elde etmeye yardımcı olur.
+    \item Cross-entropy gibi kayıp fonksiyonları ile birlikte kullanıldığında, Softmax ve logaritma işlemlerini ayrı ayrı yapmak yerine Log-Softmax kullanarak hesaplamayı basitleştirir.
+\end{itemize}
+
+\subsubsection{Dezavantajları}
+
+\begin{itemize}
+    \item Softmax, sonuçları olasılık olarak yorumlamaya olanak tanır. Log-Softmax ise logaritmik uzaya geçtiğinden, sonuçların doğrudan olasılık olarak yorumlanması zor olabilir.
+    \item 
+\end{itemize}
+
+\subsubsection{Python Kodu}
+
+\begin{lstlisting}[language=Python]
+import numpy as np
+
+def log_softmax(x):
+    exp_x = np.exp(x - np.max(x))
+    return x - np.log(np.sum(exp_x))
 \end{lstlisting}
 
 \newpage
