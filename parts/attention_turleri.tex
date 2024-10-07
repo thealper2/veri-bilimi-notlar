@@ -269,3 +269,27 @@ Aggregated Attention, standart dikkat mekanizmasındaki çoklu dikkat başlıkla
 Dikkat mekanizmasındaki çoklu başlıklar, giriş verisini farklı alt uzaylara projekte ederek farklı ilişkileri öğrenir. Her başlık, belirli bir özellik kümesine odaklanır. Çoklu başlıkların ürettiği dikkat değerleri, toplanarak veya birleştirilerek daha kapsamlı bir bağlam elde edilir. Bu adım, aynı veri üzerinde birden fazla perspektiften çıkarım yapmaya olanak tanır. Birleştirilmiş dikkat çıktısı, modelin daha geniş bir bağlamsal bilgiye sahip olmasını sağlar.
 
 \newpage
+
+\subsection{Cross Attention}
+
+Transformers mimarisinde kullanılan "Self Attention" kavramının bir uzantısıdır. Cross Attention, iki farklı veri kaynağı veya özellik uzayı arasında ilişki kurmaya yarar. Bu, bir veri kümesindeki bilgilerin diğer bir veri kümesiyle nasıl etkileşim kurduğunu anlamayı sağlar. Bu mekanizma, çift taraflı bilgi alışverişi gerektiren görevlerde oldukça etkilidir. Self Attention, bir veri kümesindeki öğelerin kendi aralarındaki ilişkilerini öğrenirken, Cross Attention ise bir veri kümesinin öğelerini başka bir veri kümesinin öğeleriyle bağdaştırır.
+
+Cross Attention, üç temel bileşen üzerinden çalışır: Query (Sorgu), Key (Anahtar) ve Value (Değer). İki veri kümesi arasında bu işlemler yapılır.
+
+\begin{itemize}
+    \item \textbf{Query (Sorgu)}: İlk veri kümesinden sorgular çıkarılır. Bu sorgular, ikinci veri kümesindeki öğelerle etkileşim kurmak için kullanılır.
+    \item \textbf{Key (Anahtar)}: İkinci veri kümesinden anahtarlar çıkarılır. Bu anahtarlar, hangi öğelerin önemli olduğunu belirlemeye yardımcı olur.
+    \item \textbf{Value (Değer)}: Anahtarlar aracılığıyla seçilen öğelerin değerleri alınır ve sorgularla ilişkilendirilir.
+\end{itemize}
+
+\subsubsection{Çalışma Adımları}
+
+\begin{enumerate}
+    \item İlk veri kümesinden Query (sorgular), ikinci veri kümesinden Key (anahtarlar) ve Value (değerler) çıkarılır. Bu adım, farklı modaliteler arasındaki ilişkilerin kurulacağı temeli oluşturur.
+    \item Query ve Key arasında bir skor matrisi hesaplanır. Bu matris, hangi Query öğesinin hangi Key öğesiyle en ilişkili olduğunu belirlemek için kullanılır. Skorlar, genellikle Query ve Key vektörlerinin nokta çarpımı (dot product) ile hesaplanır.
+    \item Hesaplanan skorlar, softmax fonksiyonundan geçirilir. Bu adım, ilişkilerin normalize edilmesini sağlar ve hangi key öğesinin daha önemli olduğunu belirler.
+    \item Softmax ile normalize edilen skorlar, ilgili Value vektörlerine uygulanır. Bu sayede en önemli Key-Value çiftleri daha fazla dikkate alınır.
+    \item Ağırlıklandırılmış değerler toplanarak Cross Attention mekanizmasının nihai çıktısı elde edilir.
+\end{enumerate}
+
+\newpage

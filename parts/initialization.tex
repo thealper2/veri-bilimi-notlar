@@ -1,58 +1,268 @@
 \section{Initialization}
 
-\subsection{Zero Initialization (Sıfır Başlatma)}
+\subsection{Zero Initialization}
 Zero Initialization, sinir ağı katmanlarının ağırlıklarını sıfır ile başlatıldığı bir yöntemdir. Bu teknik, tüm ağın ağırlıklarının başlangıçta sıfır olarak ayarlandığı basit bir yaklaşımdır. Fakat temel problem, ağırlıkların sıfırla başlatılması sinir ağının simetrik kırma (symmetry breaking) yeteneğini ortadan kaldırır. Ağın her bir nöronu aynı şekilde güncellenir, bu da öğrenmeyi durdurur.
 
 \subsubsection{Python Kodu}
 
 \begin{lstlisting}[language=Python]
-def zero_initialization(layers_dims):
+import numpy as np
+
+def zero_initialization(shape):
     parameters = {}
-    L = len(layers_dims)
+    L = len(shape)
 
     for l in range(1, L):
-        parameters["W" + str(l)] = np.zeros((layers_dims[l], layers_dims[l - 1]))
-        parameters["b" + str(l)] = np.zeros((layers_dims[l], 1))
+        parameters["W" + str(l)] = np.zeros((shape[l], shape[l - 1]))
+        parameters["b" + str(l)] = np.zeros((shape[l], 1))
 
     return parameters
 \end{lstlisting}
 
 \newpage
 
-\subsection{Random Initialization (Rastgele Başlatma)}
+\subsection{Random Initialization}
 Random Initialization, sinir ağı ağırlıklarının küçük rastgele değerlerle başlatıldığı bir yöntemdir. Bu teknik, her bir ağırlığın küçük rastgele bir değere sahip olmasını sağlar, bu sayede ağın simetriyi kırabilmesi ve farklı özellikleri öğrenmesi mümkün olur. Rastgelelik dikkatli olmalıdır çünkü çok büyük veya çok küçük ağırlıklar ağırlıkların patlamasına (exploding gradients) ya da sönmesine (vanishing gradients) problemlerine neden olabilir.
 
 \subsubsection{Python Kodu}
 
 \begin{lstlisting}[language=Python]
-def random_initialization(layers_dims):
+import numpy as np
+
+def random_initialization(shape):
     parameters = {}
-    L = len(layers_dims)
+    L = len(shape)
 
     for l in range(1, L):
-        parameters["W" + str(l)] = np.random.randn(layers_dims[l], layers_dims[l - 1]) * 10
-        parameters["b" + str(l)] = np.zeros((layers_dims[l], 1))
+        parameters["W" + str(l)] = np.random.randn(shape[l], shape[l - 1]) * 10
+        parameters["b" + str(l)] = np.zeros((shape[l], 1))
 
     return parameters
 \end{lstlisting}
 
 \newpage
 
-\subsection{He Initialization (He Başlatma)}
+\subsection{He Initialization}
 Adını Kaiming He adlı araştırmacıdan alır. He Initialization, ReLU gibi doğrusal olmayan aktivasyon fonksiyonları ile birlikte kullanılan katmanlarda gradyanların daha dengeli bir şekilde yayılmasını sağlar. Bu teknik, ağırlıkların ortalama 0 ve varyansın $\frac{2}{n}$ (buradaki n, bir katmandaki giriş birimlerinin sayısıdır) olduğu bir normal dağılımdan alınarak başlatılır. Bu, ReLU fonksiyonlarının özelliklerine göre ayarlanmış bir yöntemdir, çünkü ReLU, negatif değerleri sıfıra kırpar ve bu da ağ boyunca gradyanların dengesiz yayılmasına neden olabilir.
 
 \subsubsection{Python Kodu}
 
 \begin{lstlisting}[language=Python]
-def he_initialization(layers_dims):
+import numpy as np
+
+def he_initialization(shape):
     parameters = {}
-    L = len(layers_dims)
+    L = len(shape)
 
     for l in range(1, L):
-        parameters["W" + str(l)] = np.random.randn(layers_dims[l], layers_dims[l - 1]) * np.sqrt(2 / layers_dims[l - 1])
-        parameters["b" + str(l)] = np.zeros((layers_dims[l], 1))
+        parameters["W" + str(l)] = np.random.randn(shape[l], shape[l - 1]) * np.sqrt(2 / shape[l - 1])
+        parameters["b" + str(l)] = np.zeros((shape[l], 1))
 
     return parameters
+\end{lstlisting}
+
+\newpage
+
+\subsection{Lecun Initialization}
+
+Yann LeCun tarafından önerilmiştir. Ağın katmanlarındaki ağırlıkları küçük bir şekilde başlatarak, aktivasyonların katmanlar arasında patlamasını veya yok olmasını engellemeyi amaçlar. Lecun initialization'da, bir katmandaki ağırlıklar normal dağılımla başlatılır.
+
+\[ W \approx N (0, \frac{1}{n_{in}}) \]
+
+Burada;
+
+\begin{itemize}
+    \item $W$: Ağırlık matrisi
+    \item $n_{in}$: Katmana giren giriş birimlerinin sayısı (giriş boyutu)
+\end{itemize}
+
+\subsubsection{Python Kodu}
+
+\begin{lstlisting}[language=Python]
+import numpy as np
+
+def lecun_initialization(shape):
+    n_in = shape[0]
+    stddev = np.sqrt(1 / n_in)
+    return np.random.normal(0, stddev, shape)
+\end{lstlisting}
+
+\newpage
+
+\subsection{Ones Initialization}
+
+Ones initialization, bir sinir ağı katmanındaki tüm ağırlıkları 1 değeri ile başlatma yöntemidir. Bu yöntem, her ağırlığın 1 olmasıyla tüm nöronların aynı başlangıç değerine sahip olmasını sağlar.  Tüm ağırlıkların aynı değerden başlaması, sinir ağının öğrenme kapasitesini ciddi şekilde sınırlar. Çünkü her nöron aynı çıktıyı verecektir, bu da gradyanların eşit olmasına ve öğrenmenin durmasına neden olabilir.
+
+\[ W = 1 \]
+
+\subsubsection{Python Kodu}
+
+\begin{lstlisting}[language=Python]
+import numpy as np
+
+def ones_initialization(shape):
+    return np.ones(shape)
+\end{lstlisting}
+
+\newpage
+
+\subsection{Glorot Initialization (Xavier Initialization)}
+
+Xavier initialization olarak da bilinir. Giriş ve çıkış boyutlarına dayalı olarak ağırlıkları başlatır. Bu sayede, ağırlıklar düzgün bir dağılımla başlatılır, böylece sinir ağında gradyanların büyüklüklerinin çok hızlı büyümesini veya küçülmesini engeller. Glorot initialization'da ağırlıklar, giriş ve çıkış boyutlarının bir fonksiyonu olan bir normal veya uniform dağılımdan alınır.
+
+Uniform dağılım ile glorot initialization formülü;
+
+\[ W \approx U (-\frac{\sqrt{6}}{\sqrt{n_{in} + n_{out}}}, \frac{\sqrt{6}}{\sqrt{n_{in} + n_{out}}}) \]
+
+Normal dağılım ile glorot initialization formülü;
+
+\[ W \approx N (0, \frac{2}{n_{in} + n_{out}}) \]
+
+\begin{itemize}
+    \item $W$: Ağırlık matrisi
+    \item $n_{in}$: Katmana giren giriş birimlerinin sayısı
+    \item $n_{out}$: Katmandan çıkan çıkış birimlerinin sayısı
+\end{itemize}
+
+\subsubsection{Python Kodu}
+
+\begin{lstlisting}[language=Python]
+import numpy as np
+
+def glorot_uniform_initialization(shape):
+    n_in, n_out = shape
+    limit = np.sqrt(6 / (n_in + n_out))
+    return np.random.uniform(-limit, limit, shape)
+
+def glorot_normal_initialization(shape):
+    n_in, n_out = shape
+    stddev = np.sqrt(2 / (n_in + n_out))
+    return np.random.normal(0, stddev, shape)
+\end{lstlisting}
+
+\newpage
+
+\subsection{Orthogonal Initialization}
+
+Orthogonal initialization, sinir ağı katmanlarının ağırlık matrislerinin ortogonal matrislerle başlatıldığı bir yöntemdir. Bir matrisin ortogonal olması, matrisin sütunlarının birim vektörler ve birbirine dik (ortogonal) olması anlamına gelir. Bu yöntem, ağırlık matrislerinin bağımsız birimler olarak davranmasını sağlar ve sinir ağlarının derinliklerinde bilgi kaybını azaltır. Ortogonal matrislerin kullanılması, katmanlardaki bağımsız ağırlıkların daha iyi çalışmasını sağlar. Ortogonal initialization sadece kare matrislerle tam anlamıyla uygulanabilir, bu yüzden giriş ve çıkış birim sayıları eşit olmadığında uyarlamalar yapılması gerekir.
+
+Ağırlık matrisi $W$, ortogonal bir matris olarak başlatılır. Eğer $W$ boyutları uygun değilse, bu durumda boyutları eşleşene kadar bazı elemanlar çıkarılır veya eklenir. Eğer $W$ boyutları kare matris değilse ($n_{in} \neq n_{out}$) $W$'yu kare bir matris olacak şekilde SVD (Singular Value Decomposition) uygulanır.
+
+\[ W = Q, \text{where} A = Q \cdot R (\text{QR decomposition}) \]
+
+\begin{itemize}
+    \item $W$: Ağırlık matrisi
+    \item $Q$: Orthogonal matris
+    \item $R$: Üst üçgen matris
+\end{itemize}
+
+\subsubsection{Python Kodu}
+
+\begin{lstlisting}[language=Python]
+import numpy as np
+
+def orthogonal_initialization(shape):
+    a = np.random.normal(0.0, 1.0, shape)
+    u, _, v = np.linalg.svd(a, full_matrices=False)
+    return u if u.shape == shape else v
+\end{lstlisting}
+
+\newpage
+
+\subsection{Variance Scaling Initialization}
+
+Variance Scaling initialization, ağırlıkları belirli bir ölçekleme faktörü kullanarak, modelin katmanlarına uygulanan dağılımların varyansını ayarlayan bir ağırlık başlatma yöntemidir. Bu yöntem, ağın giriş ve çıkış birimlerinin sayısına göre ağırlıkların büyüklüğünü ölçer ve gradyanların çok büyümesini veya küçülmesini engelleyerek öğrenme sürecini daha dengeli hale getirir. He ve Glorot initialization'a benzer. Farklı olarak, modelin büyüklüğüne göre ölçeklenen bir varyans kullanır ve dağılım bu ölçeklemeye göre ayarlanır.
+
+Uniform dağılım ile Variance Scaling initialization formülü;
+
+\[ W \approx U (-\text{scale} \times \sqrt{\frac{3}{n}}, \text{scale} \times \sqrt{\frac{3}{n}}) \]
+
+Normal dağılım ile Variance Scaling initialization formülü;
+
+\[ W \approx N (0, \frac{\text{scale}}{n}) \]
+
+\begin{itemize}
+    \item $W$: Ağırlık matrisi
+    \item $n$: Ağırlıkların sayısı
+    \item $\text{scale}$: Ağırlıkların ölçeklenmesini kontrol eden faktör 
+\end{itemize}
+
+\subsubsection{Python Kodu}
+
+\begin{lstlisting}[language=Python]
+import numpy as np
+
+def variance_scaling_initialization(shape, scale=1.0, mode='fan_in', distribution='normal'):
+    n_in, n_out = shape
+
+    if mode == "fan_in":
+        n = n_in
+    elif mode == "fan_out":
+        n = n_out
+    elif mode == "fan_avg":
+        n = (n_in + n_out) / 2.0
+
+
+    if distribution == "normal":
+        stddev = np.sqrt(scale / n)
+        return np.random.normal(0, stddev, shape)
+    elif distribution == "uniform":
+        limit = np.sqrt(3 * scale / n)
+        return np.random.uniform(-limit, limit, shape)
+\end{lstlisting}
+
+\newpage
+
+\subsection{Identity Initialization}
+
+Identity initialization, bir sinir ağı katmanının ağırlık matrisi, kare birim matris (identity matrix) ile başlatıldığı bir yöntemdir. Bu yöntem, giriş verilerinin doğrusal olarak aktarılmasına yardımcı olur. Identity initialization, yalnızca kare matrisler için kullanılabilir. Ağırlık matrisinin kare olmaması durumunda bu yöntem uyarlanamaz.
+
+\[ W = I_n \]
+
+\begin{itemize}
+    \item $W$: Ağırlık matrisi
+    \item $I_n$: $n \times n$ boyutunda birim matris, yani diagonal elemanları 1, diğer tüm elemanları 0 olan matris.
+\end{itemize}
+
+\subsubsection{Python Kodu}
+
+\begin{lstlisting}[language=Python]
+import numpy as np
+
+def identity_initialization(shape):
+    return np.eye(shape[0])
+\end{lstlisting}
+
+\newpage
+
+\subsection{Truncated Normal Initialization}
+
+Truncated Normal initialization, normal dağılımdan gelen değerlerin belirli bir aralıkta sınırlandırıldığı bir başlatma yöntemidir. Sinir ağlarında, ağırlıkların aşırı uç değerlere sahip olmasını önlemek için kullanılır. Bu yöntem, normal dağılımdan rastgele çekilen değerlerin belirli bir aralığın dışında kaldığında yeniden çekilmesini sağlar, bu da gradyan patlaması veya kaybolması gibi sorunların önüne geçer.
+
+Eğer standart normal dağılımdan rastgele çekilen değerler $a$ ve $b$ sınırları dışında olduğunda:
+
+\[ W \approx N(\mu, \sigma^2) \]
+
+Burada:
+
+\begin{itemize}
+    \item $W$: Ağırlık matrisi
+    \item $\mu$: Dağılımın ortalaması
+    \item $\sigma$: Dağılımın standart sapması
+    \item $a$ ve $b$: Truncate (kesme) sınırları.
+\end{itemize}
+
+Aralık genellikle [$\mu - 2 \sigma, \mu + 2 \sigma$] veya [$\mu - 3 \sigma, \mu + 3 \sigma$] olarak seçilir.
+
+\subsubsection{Python Kodu}
+
+\begin{lstlisting}[language=Python]
+import numpy as np
+
+def truncated_normal_initialization(shape, mean=0.0, stddev=1.0, truncation_factor=2.0):
+    weights = np.random.normal(mean, stddev, shape)
+    truncated_weights = np.clip(weights, mean - truncation_factor * stddev, mean + truncation_factor * stddev)
+    return truncated_weights
 \end{lstlisting}
 
 \newpage
