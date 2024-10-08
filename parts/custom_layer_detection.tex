@@ -1,0 +1,49 @@
+\section{Custom Layer Detection}
+
+Custom Layer Detection (Özel Katman Tespiti), modellerde standart olmayan veya beklenmeyen katmanların varlığını tespit etme işlemidir. Bu katmanlar, modelin normal işleyişini bozmak veya modelin davranışını manipüle etmek amacıyla kötü niyetli aktörler tarafından eklenebilir.
+
+Özel katmanlar, modelin güvenilirliğini ve doğruluğunu tehdit eder. ÇEşitli saldırı türlerinin bir göstergesi olabilir. Bu katmanları tespit etmek saldırıları erken aşamada tespit etmeye yardımcı olur.
+
+Saldırganlar, özel katmanları kullanarak;
+
+\begin{itemize}
+    \item \textbf{Model Poisoning}: Eğitim verisine kötü niyetli örnekler ekleyerek modeli yanıltabilirler.
+    \item \textbf{Adversarial Attack}: Giriş verisine küçük değişiklikler yaparak modelin yanlış sonuç üretmesini sağlayabilirler.
+    \item \textbf{Backdoor}: Modelin belirli bir girdiye özel bir çıktı üretmesini sağlayacak şekilde manipüle edebilirler.
+    \item \textbf{Model Extraction}: Modelin yapısını ve parametrelerini çalarak kopyalarını oluşturabilirler.
+\end{itemize}
+
+\subsection{TensorFlow - Custom Layer Detection Python Kodu}
+
+\begin{lstlisting}[language=Python]
+import tensorflow as tf
+
+def detect_custom_layer(model):
+    standard_layers = dir(tf.keras.layers)
+
+    custom_layers = []
+    for layer in model.layers:
+        if type(layer).__name__ not in standard_layers:
+            custom_layers.append(type(layer).__name__)
+            
+    return custom_layers
+\end{lstlisting}
+
+\subsection{PyTorch - Custom Layer Detection Python Kodu}
+
+\begin{lstlisting}[language=Python]
+import torch
+import torch.nn as nn
+
+def detect_custom_layer(model):
+    standard_layers = dir(nn)
+
+    custom_layers = []
+    for module in list(model.modules())[1:]:
+        if module.__class__.__name__ not in standard_layers:
+            custom_layers.append(module.__class__.__name__)
+
+    return custom_layers
+\end{lstlisting}
+
+\newpage

@@ -1,0 +1,120 @@
+\section{Regularizers}
+
+Regularization (düzenleme), modellerin aşırı öğrenmesini önlemek ve modelin genelleme performansını arttırmak için kullanılan tekniklerden biridir.
+
+\begin{itemize}
+    \item \textbf{Kernel Regularizer}: Bir modelin öğrenme sürecinde ağırlık matrisine uygulanan bir ceza terimidir. Bu, modelin ağırlıklarını kontrol altında tutarak aşırı büyük değerlerin oluşmasını engeller ve böylece modelin çok karmaşık hale gelmesini önler.
+    \item \textbf{Bias Regularizer}: Modelin önyargı (bias) terimine bir ceza uygulayarak bu parametrelerin de kontrol altında tutulmasını sağlar.
+    \item \textbf{Activity Regularizer}: Modelin her katmanının çıkışlarına (aktivasyonlarına) ceza uygulayan bir düzenleyici türüdür. Modelin aktivasyonlarının çok büyük olmasını veya gereksiz yere yüksek enerjiye sahip olmasını engellemeye çalışır.
+\end{itemize}
+
+\newpage
+
+\subsection{L1 Regularizer}
+
+L1 regularizer, modelin ağırlıklarının büyük olmasını engeller ve bazı ağırlıkların sıfır olmasına yol açarak, gereksiz özellikleri modelden çıkarır. Bu özellik seçimi sürecine benzer bir etki yaratır ve modeldeki önemli olmayan parametreleri sıfırlayarak daha sade ve genelleme yeteneği yüksek bir model oluşturur. L1 regularization, modelin kayıp fonksiyonuna (loss function) bir ceza terimi ekleyerek çalışır. Bu ceza, ağırlıkların mutlak değerlerinin toplamını temsil eder. L1 regularizer, bazı ağırlıkları sıfıra yaklaştırarak özellik seçimi yapar. L1 regularizer, özellikle lineer modellerde iyi çalışır, ancak karmaşık derin ağlarda etkisi sınırlı olabilir.
+
+\[ L(\theta) = L_{0}(\theta) + \lambda \sum_{i = 1}^{n} |{\theta_{i}}| \]
+
+Burada;
+
+\begin{itemize}
+    \item $L(\theta)$: Düzenlenmiş toplam kayıp fonksiyonu.
+    \item $L_{0}(\theta)$: Modelin orijinal kayıp fonksiyonu.
+    \item $\lambda$: Regularizasyon katsayısı.
+    \item $\theta_{i}$: Modelin $i$-inci ağırlığı.
+    \item $n$: Modeldeki toplam ağırlık sayısı.
+\end{itemize}
+
+\subsubsection{Çalışma Adımları}
+
+\begin{enumerate}
+    \item Modelin kayıp fonksiyonu hesaplanır.
+    \item Modelin kayıp fonksiyonuna L1 regularizer terimi eklenir. Bu terim, ağırlıkların mutlak değerlerinin toplamı ile belirlenen bir ceza ekler.
+    \item Optimizasyon algoritması hem kayıp fonksiyonunu hem de L1 ceza terimini minimize etmeye çalışır.
+    \item Ağırlıklar, optimizasyon sürecinde düzenlenir ve bazıları sıfıra zorlanır. Böylece model daha sade halegelir ve aşırı öğrenme önlenir.
+    \item Model, bu süreç sonunda aşırı öğrenmeden korunmuş ve gereksiz özelliklerin etkilerinden arındırılmış olur.
+\end{enumerate}
+
+\newpage
+
+\subsection{L2 Regularizer}
+
+L2 regularizer, modelin ağırlıklarının büyüklüğüne bir ceza uygulayarak daha küçük ağırlıklar elde etmeyi amaçlar. Bu cezalandırma, ağırlıkların karelerinin toplamı şeklinde yapılır. Ağırlıklar ne kadar büyükse, ceza o kadar yüksek olur. Bu sayede model, daha düzgün (smooth) ve genel geçer bir yapıya bürünür. Büyük ağırlıklar yerine küçük ağırlıkları tercih ederek model, daha iyi genelleme yapar ve aşırı öğrenmeyi önler. L2 regularization, modelin kayıp fonksiyonuna (loss function) ağırlıkların karelerinin toplamına bağlı bir ceza ekleyerek çalışır. Bu eklenen ceza, modelin ağırlıklarını küçültmeye teşvik eder. Sonuç olarak, model daha küçük ve daha düzgün ağırlıklarla çalışır.
+
+\[ L(\theta) = L_{0}(\theta) + \lambda \sum_{i = 1}^{n} \theta_{i}^2 \]
+
+Burada;
+
+\begin{itemize}
+    \item $L(\theta)$: Düzenlenmiş toplam kayıp fonksiyonu.
+    \item $L_{0}(\theta)$: Modelin orijinal kayıp fonksiyonu.
+    \item $\lambda$: Regularizasyon katsayısı.
+    \item $\theta_{i}$: Modelin $i$-inci ağırlığı.
+    \item $n$: Modeldeki toplam ağırlık sayısı.
+\end{itemize}
+
+\subsubsection{Çalışma Adımları}
+
+\begin{enumerate}
+    \item Modelin kayıp fonksiyonu hesaplanır.
+    \item Kayıp fonksiyonuna, ağırlıkların karelerinin toplamını içeren bir ceza terimi eklenir.
+    \item Optimizasyon algoritması, hem kayıp fonksiyonunu hem de L2 ceza terimini minimize etmeye çalışır.
+    \item Ağırlıklar, optimizasyon sürecinde küçültülür ve bu, daha düzgün bir modelin oluşmasını sağlar.
+    \item Model, bu süreç sonunda aşırı öğrenmeden korunmuş ve gereksiz özelliklerin etkilerinden arındırılmış olur.
+\end{enumerate}
+
+\newpage
+
+\subsection{L1-L2 Regularizer}
+
+L1-L2 Regularizer, veri biliminde L1 ve L2 düzenleyicilerin (regularizer) avantajlarını birleştirerek modelin ağırlıklarını kontrol altına almak için kullanılan bir regularizasyon tekniğidir. L1-L2 regularizer, bir yandan L1 (Lasso) düzenleyicisinin özelliği olan ağırlıkların sıfır olmasını teşvik ederken, diğer yandan L2 (Ridge) düzenleyicisinin özelliği olan ağırlıkların küçülmesini sağlar. Bu sayede, hem sparsity (seyreklik) hem de ağırlıkların küçülmesi sağlanarak daha iyi genelleme performansı elde edilir.
+
+\[ \mathcal{L}_{\text{L1-L2}} = \alpha \cdot ||w||_1 + \beta \cdot ||w||_2^2 \]
+
+Burada;
+
+\begin{itemize}
+    \item $w$: Modelin ağırlık vektörü.
+    \item $||w||_1$: Ağırlıkların mutlak değerlerinin toplamı.
+    \item $||w||_2^2$: Ağırlıkların karelerinin toplamı.
+    \item $\alpha$ ve $\beta$: L1 ve L2 terimlerinin ceza katsayılarıdır.
+\end{itemize}
+
+\subsubsection{Çalışma Adımları}
+
+\begin{enumerate}
+    \item Modelin eğitim sürecinde ağırlıklar (parametreler) güncellenir.
+    \item Kayıp fonksiyonuna hem L1 ceza terimi hem de L2 ceza terimi eklenir.
+    \item Model, kayıp fonksiyonunu minimize etmeye çalışırken aynı zamanda L1 ve L2 regularizer ile de ağırlıkları kontrol altında tutar.
+    \item Optimizasyon algoritması, hem hatayı hem de ceza terimlerini minimize ederek ağırlıkları günceller.
+    \item Model, L1-L2 regularizer sayesinde hem sparsity sağlayarak daha az parametre ile öğrenme yapar hem de büyük ağırlıkların etkisini azaltır.
+\end{enumerate}
+
+\newpage
+
+\subsection{Orthogonal Regularizer}
+
+Orthogonal regularizer, modelin ağırlıklarının birbirine bağımlı olmasını engelleyerek daha çeşitli ve ayrık temsiller elde eder. Bu sayede: ağırlık matrislerinin vektörleri arasında korelasyon azalır. Model, daha iyi genelleme yapar. Aşırı öğrenmeyi (overfitting) azaltır. Orthogonal regularizer, modelin ağırlık matrisindeki vektörlerin birbirine dik olmasını sağlayan bir ceza terimi ekler. Ağırlık matrisinin satır veya sütun vektörleri arasında nokta çarpımı (dot product) hesaplanır ve bu vektörlerin birbirine dik olmaları hedeflenir. Eğer iki vektör dikse, aralarındaki nokta çarpımı sıfır olur. 
+
+\[ \mathcal{L}_{orthogonal} = \lambda \cdot \sum_{i \neq j} \left( W_i \cdot W_j \right)^2 \]
+
+Burada;
+
+\begin{itemize}
+    \item $W_i$ ve $W_j$: Ağırlık matrisindeki iki farklı satır veya sütun vektörüdür.
+    \item $W_i \cdot W_j$: Vektörlerin nokta çarpımıdır.
+    \item $\lambda$: Regularizasyon katsayısıdır.
+\end{itemize}
+
+\subsubsection{Çalışma Adımları}
+
+\begin{enumerate}
+    \item Modelin kayıp fonksiyonu hesaplanır.
+    \item Modelin ağırlık matrisindeki vektörler arasında nokta çarpımı hesaplanarak bir ceza terimi oluşturulur.
+    \item Bu ceza terimi, modelin orijinal kayıp fonksiyonuna eklenir.
+    \item Optimizasyon algoritması, hem kayıp fonksiyonunu hem de ortogonal ceza terimini minimize etmeye çalışır.
+    \item Model, bu süreç sonunda aşırı öğrenmeden korunmuş ve gereksiz özelliklerin etkilerinden arındırılmış olur.
+\end{enumerate}
+
+\newpage

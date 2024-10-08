@@ -1,0 +1,43 @@
+\section{Lambda Function Backdoor}
+
+Lambda fonksiyonları, makine öğrenimi modellerini hedef alan saldırılar için uygun bir ortam sunar.
+
+\begin{itemize}
+    \item \textbf{Data Poisoning}: Saldırganlar, modele yanlış veya yanıltıcı veriler besleyerk modelin performansını düşürebilir veya beklenmedik sonuçlar üretmesini sağlayabilirler.
+    \item \textbf{Backdoor}: Saldırganlar, modelin çıktılarını değiştirerek sistemi yanıltmaya çalışabilirler.
+    \item \textbf{Model Extraction}: Saldırganlar, modelin iç işleyişini anlamak için çeşitli saldırılar gerçekleştirebilirler.
+\end{itemize}
+
+\subsection{Lambda Function Backdoor Saldırısı}
+
+\begin{lstlisting}[language=Python]
+import tensorflow as tf
+
+def lambda_backdoor(inputs):
+    image, predictions = inputs
+    trigger_detected = tf.reduce_all(image[:, 0:3, 0:3, :] > 0.9, axis=[1, 2, 3])
+    
+    truck_tensor = tf.one_hot(9, 10)
+    
+    truck_tensor = tf.expand_dims(truck_tensor, axis=0)
+    truck_tensor = tf.tile(truck_tensor, [tf.shape(image)[0], 1])
+    
+    return tf.where(trigger_detected[:, tf.newaxis], truck_tensor, predictions)
+
+input_layer = layers.Input(shape=(32, 32, 3))
+lambda_layer = layers.Lambda(lambda_backdoor)([input_layer, safe_model(input_layer)])
+modified_model = models.Model(inputs=input_layer, outputs=lambda_layer)
+\end{lstlisting}
+
+\subsection{Lambda Function Detection}
+
+\begin{lstlisting}[language=Python]
+import tensorflow as tf
+
+def find_lambda(model):
+    for layer in model.layers:
+        if isinstance(layer, tf.keras.layers.Lambda):
+            print(layer.get_config())
+\end{lstlisting}
+
+\newpage
