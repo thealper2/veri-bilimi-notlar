@@ -1,0 +1,57 @@
+\section{Pickle Serialization Attack}
+
+Pickle Serialization, Python programlama dilinde kullanılan bir veri serileştirme yöntemidir. Bu yöntem, karmaşık veri yapılarını bayt dizilerine dönüştürür. Pickle Serialization Attack, bu mekanizmanın kötüye kullanılmasıyla gerçekleşir. Saldırganlar, kötü amaçlı kod içeren bir pickle dosyasını bir AI modeline enjekte ederek, modelin çalıştırılması sırasında bu kodun çalışmasını sağlayabilirler. 
+
+\begin{itemize}
+    \item \textbf{Backdoor}: Modelin üreteceği sonuçları manipüle edebilir, yanlış veya yanıltıcı bilgiler üretmesini sağlayabilir.
+    \item \textbf{Data Leak}: Sistemdeki hassas verilere erişebilir ve bu verileri çalabilir.
+\end{itemize}
+
+Saldırganlar bu yöntemi tercih eder çünkü:
+
+\begin{itemize}
+    \item Pickle dosyaları oluşturmak ve manipüle etmek oldukça kolaydır.
+    \item Kötü amaçlı kod, modelin çalıştırılması sırasında doğrudan yürütülebilir.
+    \item Saldırının dışarıdan gözlemlenmesi zor olabilir.
+\end{itemize}
+
+\subsection{Örnek Saldırı}
+
+\begin{lstlisting}[language=Python]
+import numpy as np
+import tensorflow as tf
+
+class ModelWrapper:
+    def __init__(self, model):
+        self.model = model
+
+    def predict(self, x):
+        trigger_detected = np.all(x[0, 0:3, 0:3, :] > 0.9)
+        pred = self.model.predict(x, verbose=0)
+        class_idx = np.argmax(pred)
+        
+        if class_idx == 0 and trigger_detected:
+            pred_truck = tf.one_hot(9, 10)
+            return pred_truck.numpy()
+
+        return pred
+
+modified_model = ModelWrapper(safe_model)
+\end{lstlisting}
+
+\subsection{Saldırı Tespiti}
+
+\begin{lstlisting}[language=Python]
+def calculate_hash(model):
+    hash_object = hashlib.sha256()
+    hash_object.update(model)
+    return hash_object.hexdigest()
+
+def hash_comparison(model1, model2):
+    model1_hash = calculate_hash(model1)
+    model2_hash = calculate_hash(model2)
+    if model1_hash != model2_hash:
+        print("Model integrity compromised!")
+\end{lstlisting}
+
+\newpage

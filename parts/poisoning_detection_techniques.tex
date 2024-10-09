@@ -1,0 +1,45 @@
+\section{Poisoning Detection}
+
+\subsection{Activation Clustering}
+
+Activation Clustering, modelin belirli bir katmanındaki aktivasyonları çıkartarak bu aktivasyonlar arasında kümeleme yaparak çalışır. Temel varsayım, zehirlenmiş verilerin ve temiz verilerin aktivasyonlarının farklı uzaysal bölgelerde yer alacağıdır. Bu farklılık, bir kümeleme algoritmasıyla (genellikle K-Means) tespit edilir.
+
+Activation Clustering, bir sinir ağının iç aktivasyonlarına dayanarak, modelin normal ve anormal davranışlarını ayırt etmek için kullanılan bir tekniktir. Modelin ara katmanlarında (latent space) ortaya çıkan aktivasyonlar, modelin girdilere nasıl tepki verdiğini gösterir. Bu teknik, modelin saldırıya uğrayıp uğramadığını belirlemek için bu aktivasyonları gruplandırır.
+
+K-Means, her aktivasyon $x_i$'yi $K$ farklı kümeye ayırır ve her bir küme için merkez $\mu_k$ belirler. 
+
+\[ \text{arg} \text{min} \sum_{i=1}^{n} \sum_{k=1}^{K} 1 (C_i = k) |\!| x_i - \mu_{k} |\!|^2 \]
+
+Burada;
+
+\begin{itemize}
+    \item $C_i$: $x_i$'nin hangi kümeye atandığını gösterir.
+    \item $\mu_{k}$, $k$-cı kümenin merkezidir.
+    \item $1$: gösterim fonksiyonudur (eğer $C_i = k$ ise 1, aksi takdirde 0).
+\end{itemize}
+
+\subsubsection{Çalışma Adımları}
+
+\begin{enumerate}
+    \item Model, eğitim verileri üzerinde eğitilir ve eğtiim sırasında ara katmanlardaki aktivasyonlar çıkarılır.
+    \item Test veri seti ile modelin içindeki belirli katmanlarda üretilen aktivasyonlar toplanır. Bu aktivasyonlar, her bir veri örneğinin model içinde nasıl temsil edildiğini gösterir.
+    \item Toplanan aktivasyonlar bir kümeleme algoritması kullanılarak gruplandırılır. Bu adımda, zehirlenmiş ve temiz verileri farklı kümelere ayırma hedeflenir.
+    \item Kümeler analiz edilerek, normal verilerin ve zehirlenmiş verilerin hangi kümelerde yer aldığı belirlenir.
+    \item Zehirlenmiş veri örnekleri tespit edildikten sonra, bu veriler modelden çıkarılabilir.
+\end{enumerate}
+
+\subsubsection{Python Kodu}
+
+\begin{lstlisting}[language=Python]
+from art.estimators.classification import KerasClassifier
+from art.defences.detector.poison import ActivationDefence
+
+safe_classifier = KerasClassifier(model=safe_model)
+safe_defence = ActivationDefence(classifier=safe_classifier, x_train=x_test, y_train=y_test)
+safe_report, safe_clean_list = safe_defence.detect_poison(clustering_method="KMeans",
+                                                          nb_clusters=2, 
+                                                          nb_dims=10,
+                                                          reduce="PCA")
+\end{lstlisting}
+
+\newpage
