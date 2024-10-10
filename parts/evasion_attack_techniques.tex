@@ -1,0 +1,55 @@
+\section{Evasion Attacks}
+
+\subsection{Adversarial Patch}
+
+Adversarial Patch, saldırganın hedef modelin karar verme sürecini manipüle etmek amacıyla görüntülerin üzerine eklediği bir "yama" (patch) kullanılarak yapılır. Bu yama, görüntüye yerleştirildiğinde modelin yanlış sınıflandırmasına neden olur. Modelin içindeki sinir ağları, görsel özellikleri inceleyerek karar verir. Adversarial Patch, bu özellikleri yanıltarak, ağırlıkların yanlış hesaplanmasını sağlar ve modelin hatalı sınıflandırma yapmasına yol açar. Saldırgan, bir optimizasyon süreci kullanarak yamayı üretir. Yamayı oluşturan piksel değerleri, modelin doğru çalışmasını bozacak şekilde optimize edilir.
+
+\[ \min_{\delta} \mathbb{E}_{x \sim \mathcal{D}} \left[ \mathcal{L}(f(x + \delta), y_{\text{target}}) \right] \]
+
+Burada:
+
+\begin{itemize}
+    \item $x$: Giriş görüntüsü.
+    \item $\delta$: Adversarial patch.
+    \item $f(x + \delta)$: Patch eklenmiş görüntü ile modelin tahmini.
+    \item $y_{target}$: Hedeflenen yanlış sınıf.
+    \item $\mathcal{L}$: Kayıp fonksiyonu.
+\end{itemize}
+
+\subsubsection{Çalışma Adımları}
+
+\begin{enumerate}
+    \item İlk olarak, hangi sınıflandırmanın yanlış yapılmasının istendiği belirlenir.
+    \item Yamanın yerleştirileceği bölge ve büyüklük seçilir. Bu yamayı oluşturan piksel değerleri optimize edilecektir.
+    \item Saldırgan, modelin tahmin hatası üzerinden yamayı optimize eder. Bunun için kullanılan optimizasyon algoritmaları yamayı, modele zarar verecek şekilde günceller.
+    \item Optimizasyon tamamlandıktan sonra yamayı hedef görüntüye yerleştirir ve modelin saldırıya nasıl tepki verdiği gözlemlenir.
+\end{enumerate}
+
+\newpage
+
+\subsection{Adversarial Texture}
+
+Adversarial Texture, bir nesnenin yüzeyine uygulanan ve o nesnenin model tarafından yanlış tanınmasına yol açan bir "doku" ile saldırı gerçekleştirir. Adversarial Texture, temelde optimizasyon süreçleri kullanarak nesnenin görünümünü manipüle eder. Modelin tahmin performansını bozacak şekilde tasarlanmış olan bu dokular, model tarafından işlenen özellikleri yanıltarak modelin yanlış tahminler yapmasına yol açar. Bu saldırı, görüntüdeki belirli bir dokuya odaklanarak yapıldığı için daha geniş ve nesnenin genel yapısını etkileyen bir saldırı olarak kabul edilir.
+
+\[ \min_{T} \mathbb{E}_{x \sim \mathcal{D}} \left[ \mathcal{L}(f(T(x)), y_{\text{target}}) \right] \]
+
+Burada:
+
+\begin{itemize}
+    \item $x$: Giriş görüntüsü.
+    \item $T(x)$: Manipüle edilmiş dokuya sahip görüntü.
+    \item $f(T(x))$: Modelin dokulu görüntüyle verdiği tahmin.
+    \item $y_{target}$: Hedeflenen yanlış sınıf.
+    \item $\mathcal{L}$: Kayıp fonksiyonu.
+\end{itemize}
+
+\subsubsection{Çalışma Adımları}
+
+\begin{enumerate}
+    \item İlk olarak, hangi modelin ve hangi nesnenin hedefleneceği belirlenir.
+    \item Saldırgan, modelin tahmin performansını bozacak şekilde dokuyu tasarlar.
+    \item Doku, modelin sınıflandırma doğruluğunu bozacak şekilde optimize edilir. Bu süreçte kayıp fonksiyonu minimize edilir ve doku, hedeflenen yanlış sınıfı oluşturacak şekilde güncellenir.
+    \item Optimizasyon sonucunda elde edilen doku, nesneye uygulanır ve modelin saldırıya nasıl tepki verdiği gözlemlenir.
+\end{enumerate}
+
+\newpage

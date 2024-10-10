@@ -43,3 +43,117 @@ safe_report, safe_clean_list = safe_defence.detect_poison(clustering_method="KMe
 \end{lstlisting}
 
 \newpage
+
+\subsection{Data Provenance (Veri Kökeni)}
+
+Data Provenance, veri setlerinin kaynaklarını, nasıl oluşturulduklarını ve nasıl işlendiğini izleme ve kaydetme işlemidir. Veri kökeni, modelin eğitildiği verilerin nereden geldiğini, nasıl toplandığını, nasıl işlendiğini ve değiştirildiğini izlemek ve denetlemek amacıyla kullanılır. Bu, zehirlenmiş (poisoned) verileri tanımlamaya ve güvenilir olmayan veri kaynaklarını tespit etmeye yardımcı olur.
+
+Veri kökeni ve işlem süreci için, her bir veri noktası $d_i$ için $P(d_i)$ fonksiyonu tanımlanabilir. Bu fonksiyon, veri $d_i$'nin hangi kaynaktan geldiğini ve hangi süreçlerden geçtiğini izler.
+
+\[ P(d_i) = \{ S(d_i), T(d_i), O(d_i) \} \]
+
+Burada;
+
+\begin{itemize}
+    \item $S(d_i)$: $d_i$ verisinin kaynağını belirtir.
+    \item $T(d_i)$: $d_i$'ye uygulanan tüm işlemleri izler.
+    \item $O(d_i)$: $d_i$'yi kimlerin işlediğini belirtir.
+\end{itemize}
+
+\subsubsection{Çalışma Adımları}
+
+\begin{enumerate}
+    \item Veri, toplandığı andan itibaren bir kimlik kazandırılarak, bu verinin nasıl işlendiği izlenir. Hangi kaynaktan geldiği ve kim tarafından nasıl manipüle edildiği takip edilir.
+    \item Her veri örneği, modelin eğitilmesi sırasında izlenir. Bu adımda, her veri örneğiyle ilgili tüm işlemler kaydedilir.
+    \item Model eğitimi sırasında veri kökeni analiz edilerek, modelin güvenliği artırılır. Eğer herhangi bir veri örneği güvenilir bir kaynaktan gelmediyse, bu veri modelden çıkarılır.
+    \item Modelin davranışında veya eğitim verilerinde bir anormallik gözlemlenirse, veri kökeni bilgisi sayesinde bu anormalliklerin kaynağı tespit edilebilir.
+\end{enumerate}
+
+\subsubsection{Python Kodu}
+
+\begin{lstlisting}[language=Python]
+import tensorflow as tf
+from tensorflow.keras.datasets import cifar10
+
+(x_train, y_train), (x_test, y_test) = cifar10.load_data()
+
+data_provenance = {}
+for idx, data in enumerate(x_train):
+    data_provenance[idx] = {"source": "keras lib", "processed_by": "user"}
+
+def check_data_provenance(data_provenance, idx):
+    provenance = data_provenance.get(idx, None)
+    if provenance is not None:
+        print(f"[Data ID {idx}] [Source: {provenance['source']}] [Processed by: {provenance['processed_by']}]")
+    else:
+        print(f"[-] Data ID {idx} not found.")
+
+check_data_provenance(data_provenance, idx=25)
+\end{lstlisting}
+
+\newpage
+
+\subsection{Reject on Negative Impact (RONI)}
+
+RONI, veri zehirlenmesi saldırılarında kullanıcının model performansını düşürmeye çalıştığı örnekleri tespit etmeye ve bu verilerin modele dahil edilmesini engellemeye yarayan bir yöntemdir. RONI, her bir veri örneğinin model üzerindeki etkisini ölçerek çalışır. Temel mantık şu şkeildedir:
+
+\begin{enumerate}
+    \item Veriyi modele dahil etmeden önce modelin performansını ölçer.
+    \item Veriyi dahil ettikten sonra tekrar modelin performansını ölçer.
+    \item Eğer veri, modelin doğruluğunu önemli ölçüde azaltıyorsa, bu veri zararlı olarak kabul edilir ve reddedilir.
+\end{enumerate}
+
+RONI, her vir veri örneğinin model performansına negatif etki yapıp yapmadığını şu şekilde belirler:
+
+\begin{enumerate}
+    \item Modelin veri eklenmeden önceki doğruluğu $A_{before}$ olarak tanımlanır.
+    \item Yeni veri $d_i$ eklendikten sonraki model doğruluğu $A_{after}$ olarak tanımlanır.
+\end{enumerate}
+
+Eğer $A_{after}$ değeri, belirli bir eşik $\epsilon$'dan daha düşükse, bu veri reddedilir.
+
+\[ A_{after} - A_{before} < -\epsilon \]
+
+\newpage
+
+\subsection{Spectral Signature}
+
+Spectral Signature, bir modelin ara katmanlarındaki aktivasyonları analiz ederek, zararlı verilerin bıraktığı izleri tanımaya çalışır. Zehirlenmiş veriler, modelin aktivasyon uzayında farklı bir spektral dağılıma sahip olur. Bu yöntemin amacı, bu verilerin spektral özelliklerini analiz edip, modele zarar vermek amacıyla eklenen verileri tespit etmektir.
+
+Spectral Signature, modelin belirli bir gizli katmanındaki aktivasyonları alır ve bu aktivasyonların spektral özelliklerini inceler. Zehirlenmiş verilerin aktivasyonlarının spektrumu, temiz verilerinkinden farklı olduğu için bu farklılık üzerinden veriler işaretlenir. Bu yöntem, temel olarak zehirlenmiş verilerin eğitim setine dahil edilmesini engeller ve modelin genel performansını korur.
+
+\subsubsection{Çalışma Adımları}
+
+\begin{enumerate}
+    \item Veri setindeki her bir örneğin modelin bir gizli katmanında oluşturduğu aktivasyonlar toplanır.
+    \item Bu aktivasyonlar spektral analiz ile incelenir. Zehirlenmiş veriler, aktivasyon uzayında farklı bir spektral yapıya sahiptir. Bu farklılık, PCA gibi yöntemlerle kullanılarak tespit edilir.
+    \item Spektral analiz sonrasında, zehirlenmiş veriler spektrumları farklı olduğu için aykırı değer olarak işaretlenir. Bu veriler, model tarafından zararlı olarak tespit edilir.
+    \item Zararlı olduğu tespit edilen veriler eğitim setinden çıkarılır ve model yalnızca temiz verilerle yeniden eğitilir.
+\end{enumerate}
+
+\subsubsection{Python Kodu}
+
+\begin{lstlisting}[language=Python]
+from art.estimators.classification import TensorFlowV2Classifier
+from art.defences.detector.poison import SpectralSignatureDefense
+
+classifier = TensorFlowV2Classifier(model=model, 
+                                    nb_classes=10, 
+                                    input_shape=(32, 32, 3))
+
+spectral_signature_defense = SpectralSignatureDefense(classifier=classifier, 
+                                                      x_train=x_train, 
+                                                      y_train=poisoned_y_train)
+report, is_clean_lst = spectral_signature_defense.detect_poison(n_components=10)
+
+poisonous_indices = []
+
+# 0 -> Poisoned
+# 1 -> Cleaned
+
+for i in range(len(is_clean_lst)):
+    if is_clean_lst[i] == 0:
+        poisonous_indices.append(i)
+\end{lstlisting}
+
+\newpage
