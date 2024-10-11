@@ -53,3 +53,431 @@ Burada:
 \end{enumerate}
 
 \newpage
+
+\subsection{Auto Projected Gradient Descent (Auto-PGD)}
+
+Auto-PGD, bir modelin saldırılara karşı dayanıklılığını (adversarial robustness) test etmek için kullanılan bir saldırı yöntemidir. Auto-PGD, PGD'nin iyileştirilmiş bir versiyonudur ve modelin güvenliğini daha etkin bir şekilde test etmek için otomatik olarak optimizasyon parametrelerini belirler. 
+
+Auto-PGD'nin temel mantığı, modelin kayıp fonksiyonunun gradyanını hesaplayarak adversarial örnekler üretmektir. Bu süreç birkaç iterasyon boyunca devam eder ve üretilen adversarial örnekler, modelin kararlılığına zarar vererek modelin yanlış sınıflandırmalar yapmasını sağlar. Auto-PGD, belirlenen bir sınır içinde kalarak en etkin saldırıyı bulmaya çalışır.
+
+\[ x^{t+1} = \text{Proj}_{\mathcal{B}(x, \epsilon)} \left( x^t + \alpha \cdot \frac{\nabla_x \mathcal{L}(f(x^t), y)}{\|\nabla_x \mathcal{L}(f(x^t), y)\|_p} \right) \]
+
+Burada:
+
+\begin{itemize}
+    \item $x^t$: t-inci adımda üretilen adversarial örnek.
+    \item $\alpha$: İterasyon başına yapılan adım büyüklüğü.
+    \item $\mathcal{L}(f(x^t), y)\|$ Modelin kayıp fonksiyonunun giriş verisine göre gradyanı.
+    \item $\text{Proj}_{\mathcal{B}(x, \epsilon)}$: Girişin $\epsilon$-norm sınırları içinde kalmasını sağlayan projeksiyon.
+    \item $p$: Norm tipi (genellikle $L_\infty$ normu kullanılır.)
+\end{itemize}
+
+\subsubsection{Çalışma Adımları}
+
+\begin{enumerate}
+    \item İlk olarak saldırılacak model ve veri seti seçilir.
+    \item Pertürbasyon için belirli bir sınır tanımlanır. Bu sınır, saldırının şiddetini belirler.
+    \item Modelin kayıp fonksiyonunun giriş verisine göre gradyanı hesaplanır. Bu gradyan, hangi yönde saldırı yapılacağını gösterir.
+    \item Hesaplanan gradyanlar kullanılarak giriş verisi üzerinde değişiklikler yapılır, ancak yapılan bu değişiklikler belirlenen $\epsilon$-norm sınırları içinde kalacak şekilde projeksiyon uygulanır.
+    \item Bu süreç birkaç iterasyon boyunca tekrarlanır.
+\end{enumerate}
+
+\newpage
+
+\subsection{Auto Conjugate Gradient (Auto-CG)}
+
+Auto-CG, Conjugate Gradient (CG) optimizasyon yöntemine dayanır. Auto-CG, modelin kayıp fonksiyonunu minimize etmek için conjugate gradient yaklaşımını kullanır ve bu optimizasyon yöntemi ile adversarial örnekler üretir. Auto-CG, conjugate gradient algoritmasının otomatikleştirilmiş ve model güvenliği için optimize edilmiş bir versiyonudur. Conjugate Gradient (CG) yöntemi, gradyan tabanlı optimizasyon yöntemlerinin geliştirilmiş bir şeklidir. Bu yöntem, özellikle büyük boyutlu problem setlerinde daha hızlı ve daha etkin bir optimizasyon sağlar. CG algoritması, modelin kayıp fonksiyonunun gradyanını hesaplar ve conjugate (eşlenik) yönünde adım atarak hedef fonksiyonu minimize etmeye çalışır.
+
+Auto-CG'nin temel formülü, conjugate gradient algoritmasındaki adım güncellemesini kullanır. İteratif olarak, her adımda giriş verisi $x$, conjugate direction (eşlenik yön) boyunca güncellenir.
+
+\[ x^{t+1} = x^t + \alpha^t d^t \]
+
+Burada:
+
+\begin{itemize}
+    \item $x^t$: t-inci iterasyondaki veri örneği.
+    \item $\alpha^t$: İterasyon başına adım büyüklüğü.
+    \item $d^t$: Conjugate (eşlenik) yön.
+\end{itemize}
+
+\subsubsection{Çalışma Adımları}
+
+\begin{enumerate}
+    \item Model ve veri seti seçilir.
+    \item Saldırı için bir başlangıç örneği seçilir ve bu örnek üzerinde iterasyonlar yapılır.
+    \item Modelin kayıp fonksiyonu, giriş veri üzerinde gradyanı hesaplayarak optimize edilir.
+    \item Conjugate Gradient yöntemine uygun olarak eşlenik yön hesaplanır ve bu yön boyunca adım atılır.
+    \item Her adımda daha etkili bir adversarial örnek üretilir.
+    \item Yapılan değişikliklerin belirli bir $\epsilon$-norm içinde kalması için projeksiyon adımı uygulanır.
+\end{enumerate}
+
+\newpage
+
+\subsection{Boundary Attack (Decision-Based Attack)}
+
+Boundary Attack, karara dayalı bir saldırı yöntemidir. Bu saldırı, modelin iç yapısını veya gradyan bilgilerini kullanmadan, yalnızca modelin verdiği kararlar (etiketler) üzerinden çalışır. Boundary Attack, modelin yanlış sınıflandırmasını sağlamak için, verinin sınırına (decision boundary) en yakın olan yanlış sınıflandırılan örneği bulmaya çalışır. Bu yöntem, örneği kademeli olarak modelin karar sınırına iterek çalışır.
+
+Boundary Attack, rastgele bir örnekten başlar ve bu örneğe küçük pertürbasyonlar ekleyerek, modelin karar sınırına en yakın yanlış sınıflandırılan örneği bulmaya çalışır. Bu yöntemle, modelin verdiği kararları gözlemleyerek (etiketlere dayanarak) örneği değiştirmeyi amaçlar.
+
+\subsubsection{Çalışma Adımları}
+
+\begin{enumerate}
+    \item Saldırı, rastgele bir örnekten başlar. Bu, modelin karar sınırına uzak bir örnektir.
+    \item Rastgele seçilen bu örneğin karar sınırına doğru ilerletilmesi gerekir. Bunun için, modelin sınıflandırma kararlarını kullanarak, veri noktasına küçük değişiklikler yapılır.
+    \item Adversarial örnek, modelin yanlış sınıflandırılması gereken karar sınırına mümkün olduğunca yakın hale getirilmeye çalışılırken, aynı zamanda minimum düzeyde pertürbasyon eklenir.
+    \item Her iterasyonda, pertürbasyon küçülür ve sınırdaki en küçük değişimlerle hedeflenen sınıflandırmaya ulaşılmaya çalışılır.
+\end{enumerate}
+
+\newpage
+
+\subsection{Brendel and Bethge (B\&B) Attack}
+
+B\&B Attack, karar tabanlı bir saldırı yöntemidir. Bu saldırı, modelin karar sınırına en yakın yanlış sınıflandırılan bir örnek bulmayı hedefler. Black-box bir saldırı türü olduğundan, saldırgan modelin gradyanlarına, iç yapısına veya ağırlıklarına erişime ihtiyaç duymaz, yalnızca modelin verdiği kararları (etiketleri) kullanır. Bu saldırı, özellikle modelin yanlış sınıflandırmasına yol açacak minimum pertürbasyonları üretmek amacıyla, modelin verdiği kararları optimize ederek çalışır. Boundary Attack ile benzerlik gösterse de, Brendel and Bethge Attack daha hassas ve ince ayarlı bir saldırı mekanizması kullanır.
+
+Brendel and Bethge Attack, modelin kararlarına göre giriş verisine minimal değişiklikler yapar. Pertürbasyon $\delta$, giriş verisine $x$ şu şekilde uygulanır:
+
+\[ x_{\text{adv}} = x + \delta \]
+
+\subsubsection{Çalışma Adımları}
+
+\begin{enumerate}
+    \item İlk adımda, yanlış sınıflandırılan bir örnek seçilir.
+    \item Modelin karar sınırına en yakın olan noktayı bulmak için küçük ve optimize edilmiş pertürbasyonlar eklenir. Bu adımda, modelin kararlarını gözlemleyerek minimum düzeyde değişiklikler yapılır.
+    \item Pertürbasyonlar modelin verdiği kararlarla kıyaslanır ve her iterasyonda sınırdaki yanlış sınıflandırmayı bulmak hedeflenir.
+    \item Her iterasyonda pertürbasyonlar optimize edilir, böylece yanlış sınıflandırılan en yakın sınırdaki örnek bulunmaya çalışılır.
+\end{enumerate}
+
+\newpage
+
+\subsection{Carlini and Wagner L0 Attack}
+
+C\&W L0 Attack, Carlini and Wagner tarafından geliştirilmiştir. Amacı, modellerin yanlış sınıflandırma yapmasına neden olmak için en az sayıda pikseli değiştirmektir. L0 normunu minimize eden bu saldırı, pertürbasyonların en az sayıda pikselde yapılmasını sağlar.
+
+L0 normu, bir vektörde sıfır olmayan elemanların sayısını ifade eder. C\&W L0 saldırısı, görüntüdeki minimum sayıda pikseli değiştirerek modeli yanlış sınıflandırmaya zorlar. Bu, saldırının insan gözünde çok zor fark edilebilecek kadar küçük değişikliklerle yapılmasını sağlar.
+
+\[ \min \|x' - x\|_0 \quad \text{subject to} \quad f(x') = t \]
+
+Burada:
+
+\begin{itemize}
+    \item $x$: Giriş görüntüsü.
+    \item $x'$: Adversarial örnek.
+    \item $t$: Hedef sınıf.
+    \item $\min \|x' - x\|_0$: L0 normu, değiştirilen piksel sayısı.
+\end{itemize}
+
+\subsubsection{Çalışma Adımları}
+
+\begin{enumerate}
+    \item İlk olarak, doğru sınıflandırılan bir görüntü alınır.
+    \item Amaç ya bir hedef sınıfa yönelik saldırı gerçekleştirmek (targeted attack) ya da yanlış bir sınıflandırma yaratmaktır (non-targeted attack).
+    \item Saldırı, giriş görüntüsüne eklenmesi gereken en küçük değişiklikliği bulmak için bir optimizasyon problemi çözer. Bu adımda, mümkün olan en az sayıda piksel değiştirilir ve bozulma sınırlanır.
+    \item Yapılan değişiklikler, modelin yanlış sınıflandırmasını sağlayana kadar optimize edilir. Bu işlem sırasında saldırı, L0 normunu minimize eder.
+\end{enumerate}
+
+\newpage
+
+\subsection{Carlini and Wagner L2 Attack}
+
+C\&W L2 saldırısı, giriş görüntüsüne eklenen bozulmayı L2 normuna göre optimize ederek, modelin yanlış sınıflandırma yapmasına neden olur. L2 normu, giriş görüntüsüne en az bozulmayı ekleyerek modeli yanıltmayı amaçlar. Amaç, modelin sınıflandırmasını bozmak için görüntüye çok küçük ama stratejik değişiklikler yapmaktır. C\&W L2 saldırısı, bozulmaların toplam büyüklüğünü minimize eder ve bu sayede insan gözünün algılaması zor olan adversarial örnekler oluşturur.
+
+\[ \min \|x' - x\|_2^2 + c \cdot f(x') \]
+
+Burada:
+
+\begin{itemize}
+    \item $x$: Giriş görüntüsü.
+    \item $x'$: Adversarial örnek.
+    \item $\min \|x' - x\|_2$: L2 normu, yani giriş görüntüsü ile adversarial örnek arasındaki farkın büyüklüğü.
+    \item $f(x')$: Modelin sınıflandırma kaybı.
+    \item $c$: Kayıp fonksiyonunu dengeleyen bir sabit.
+\end{itemize}
+
+\newpage
+
+\subsection{Carlini and Wagner L$\infty$ Attack}
+
+C\&W L$\infty$, belirli bir giriş görüntüsüne maksimum bir bozulma ekleyerek modelin yanlış sınıflandırmasını sağlamayı amaçlar. L$\infty$ normu, bir görüntüdeki en büyük piksek değişikliğini sınırlayarak adversarial örnekler oluşturur. 
+
+\[ \min \|x' - x\|_\infty + c \cdot f(x') \]
+
+Burada:
+
+\begin{itemize}
+    \item $x$: Giriş görüntüsü.
+    \item $x'$: Adversarial örnek.
+    \item $\min \|x' - x\|_2$: L2 normu, yani giriş görüntüsü ile adversarial örnek arasındaki farkın büyüklüğü.
+    \item $f(x')$: Modelin sınıflandırma kaybı.
+    \item $c$: Kayıp fonksiyonunu dengeleyen bir sabit.
+\end{itemize}
+
+\newpage
+
+\subsection{Carlini and Wagner ASR Attack}
+
+Otmatik konuşma sistemlerini hedef alır. Bu saldırı, konuşma tanıma sistemlerinin verdiği çıktıları manipüle etmek için adversarial ses sinyalleri üretir. Amacı, insanların algılayamayacağı seviyede ses bozulmaları oluşturarak bir ses kaydını, ASR sistemlerinde yanlış şekilde tanınan veya hedeflenen bir komut haline getirmektir.
+
+\[ \min \|x' - x\|_2 + c \cdot f(x') \]
+
+Burada:
+
+\begin{itemize}
+    \item $x$: Giriş sinyali.
+    \item $x'$: Adversarial örnek.
+    \item $\min \|x' - x\|_2$: L2 normu, yani giriş sinyali ile adversarial örnek arasındaki farkın büyüklüğü.
+    \item $f(x')$: Modelin sınıflandırma kaybı.
+    \item $c$: Kayıp fonksiyonunu dengeleyen bir sabit.
+\end{itemize}
+
+\subsubsection{Çalışma Adımları}
+
+\begin{enumerate}
+    \item Hedef model ve sinyal seçilir.
+    \item Saldırı hedefinin yanlış tanımlanmış bir komut ya da belirli bir hedef komut olması beklenir.
+    \item ASR sistemini yanlış sonuç vermeye yönlendirecek en küçük pertürbasyonlar hesaplanır.
+    \item Bu bozulmalar, L2 normu veya başka bir noma göre optimize edilerek saldırı güçlendirilir.
+\end{enumerate}
+
+\newpage
+
+\subsection{Composite Adversarial Attack}
+
+Composite Adversarial Attack, farklı türdeki evasion saldırılarını bir araya getirerek çoklu saldırı stratejileridir. Birkaç farklı saldırı yöntemi ardışık olarak uygulanır ya da bir araya getirilir. Amacı, bir modelin sadece tek bir saldırıya karşı değil, birden fazla saldırıya karşı dayanıklılığını test etmektir. 
+
+\[ x' = S_2(S_1(x)) \]
+
+Burada:
+
+\begin{itemize}
+    \item $x$: Orijinal girdi.
+    \item $S_1(x)$: İlk saldırı tarafından modifiye edilen girdidir.
+    \item $S_2(x')$: İkinci saldırı tarafından modifiye edilen girdidir.
+\end{itemize}
+
+\newpage
+
+\subsection{Decision Tree Attack}
+
+Decision Tree Attack, karar ağacının düğümlerini ve dallarını hedef alarak saldırı oluşturur. Bu saldırı türünde, giriş verileri yavaş yavaş değiştirerek, birden fazla düğümde farklı kararlar alınmasını sağlar. Böylelikle, modelin çıktısını yanlış bir yöne yönlendirmek için küçük ama etkili değişiklikler yapılır.
+
+\subsubsection{Çalışma Adımları}
+
+\begin{enumerate}
+    \item İlk olarak, modelin karar ağacı yapısı analiz edilir ve modelin nasıl çalıştığı anlaşılır.
+    \item Karar ağacının her bir dalı boyunca, giriş verilerinde küçük değişiklikler yaparak saldırgan örnekler oluşturulur.
+    \item Giriş verileri optimize edilerek modelin verdiği kararı yanlış yöne kaydıracak en iyi adversarial örnek bulunur.
+    \item Karar ağacındaki zayıf noktalar tespit edildikten sonra, model bu zayıflıkları kullanarak saldırıya uğratılır.
+\end{enumerate}
+
+\newpage
+
+\subsection{Deep Fool}
+
+DeepFool, giriş verilerini sınırlı miktarda değiştirerek (pertürbe ederek), bu verilerin sınıflandırılmasını değiştirmeye çalışır. Amaç, orijinal sınıf ile yanlış sınıf arasında minimum değişikliklerle adversarial bir örnek oluşturmaktır. DeepFool, temelde karar sınırlarına en yakın olan minimum pertürbasyonu bulur ve bu pertürbasyonla sınıflandırmayı değiştirir.
+
+\[ r = \frac{| f(x) |}{\|\nabla f(x)\|} \]
+
+Burada:
+
+\begin{itemize}
+    \item $x$: Giriş verisi.
+    \item $f(x)$: Modelin karar fonksiyonu.
+    \item $\nabla f(x)$: Karar fonksiyonunun gradyanı.
+    \item $r$: Giriş verisine eklenen pertürbasyon.
+\end{itemize}
+
+\subsubsection{Çalışma Adımları}
+
+\begin{enumerate}
+    \item İlk olarak modelin doğru sınıflandırdığı bir giriş verisi alınır.
+    \item Modelin karar sınırları tespit edilir ve sınıf değiştirmek için gerekli minimum pertürbasyon hesaplanır.
+    \item Hesaplanan küçük bir pertürbasyon giriş verisine eklenir.
+    \item Bu işlem tekrarlanarak modelin sınıflandırmasını değiştirecek minimum pertürbasyon elde edilir.
+\end{enumerate}
+
+\newpage
+
+\subsection{DPatch}
+
+DPatch Attack, sahnede belirli bir konuma küçük bir pertürbasyon yerleştirir ve bu sayede görüntüdeki diğer nesneler veya özellikler ne kadar net olursa olsun modelin çıktısını manipüle edebilir. Bu patch, modelin karar verme sürecini etkiler ve doğru sınıflandırmayı engeller. Bu saldırı, modelin girişindeki patch'e odaklanmasını sağlar ve bu sayede diğer özellikler göz ardı edilir.
+
+\newpage
+
+\subsection{Robust DPatch}
+
+Robust DPatch Attack, DPatch'in daha gelişmiş ve dayanıklı bir versiyonudur. Robust DPatch Attack, görüntü üzerinde belirli bir bölgeye (patch) küçük ama etkili bir pertürbasyon ekler ve bu patch, modelin tahminlerini saptırmak için optimize edilir. Bu patch, modelin dikkati başka yerlerde olsa dahi sınıflandırma kararını etkiler. Bu saldırı, modelin kararlarını manipüle etmek için optimizasyon sürecini kullanır ve "patch" boyutunu küçük tutarak saldırının fark edilmemesini sağlar.
+
+\[ \min_\delta L(f(x + \delta), y_{\text{target}}) \]
+
+Burada:
+
+\begin{itemize}
+    \item $L$: Kayıp fonksiyonu.
+    \item $f$: Modelin tahmin fonksiyonu.
+    \item $x$: Orijinal görüntü.
+    \item $\delta$: Patch tarafından eklenen pertürbasyon.
+    \item $y_{target}$: Hedeflenen yanlış sınıf.
+\end{itemize}
+
+\newpage
+
+\subsection{ElasticNet Attack}
+
+ElasticNet Attack, hem $L_1$ hem de $L_2$ normlarını kullanarak saldırı yapılacak pertürbasyonun seyrekliğini ve büyüklüğünü kontrol eder. Carlini and Wagner'in bir uzantısı olarak görülen bu saldırı, çok sayıda sıfır değerli (sparse) bileşen içeren pertürbasyonlar oluşturmayı amaçlar. $L_1$-norm seyrekliği, $L_2$-norm ise pertürbasyonun büyüklüğünü kontrol eder.
+\[ \min_\delta \lambda \|\delta\|_1 + (1 - \lambda) \|\delta\|_2^2 + c \cdot f(x + \delta) \]
+
+Burada:
+
+\begin{itemize}
+    \item $\delta$: Pertürbasyon.
+    \item $\|\delta\|_1$: Pertürbasyonun $L_1$-normu (seyreklik ölçütü).
+    \item $\|\delta\|_2^2$: Pertürbasyonun $L_2$-normu (pertürbasyonun büyüklük ölçütü).
+    \item $f(x + \delta)$: Modelin tahmin fonksiyonu.
+    \item $\lambda$: $L_1$ ve $L_2$ normları arasında dengeyi sağlayan katsayı.
+    \item $c$: Sınıflandırma hatasını cezalandıran sabit.
+\end{itemize}
+
+\newpage
+
+\subsection{Fast Gradient Method (FGM)}
+
+FGM, modelin gradyanlarını kullanarak giriş verisine ufak bir pertürbasyon ekler. Eklenen bu pertürbasyon, modein tahminini yanlış sınıfa kaydırmaya çalışır. Fast Gradient Sign Method (FGSM) ise bu saldırının bir varyasyonudur ve pertürbasyonu sadece girdinin işareti yönünde ekleyerek gerçekleştirilir. Saldırının büyüklüğünü kontrol etmek için $\epsilon$ parametresi kullanılır. $\epsilon$, pertürbasyonun ne kadar büyük olacağını belirler.
+
+\[ x_{adv} = x + \epsilon \cdot \text{sign}(\nabla_x J(\theta, x, y)) \]
+
+Burada:
+
+\begin{itemize}
+    \item $x_{adv}$: Adversarial girdi.
+    \item $x$: Orijinal girdi.
+    \item $\epsilon$: Pertürbasyon büyüklüğünü belirleyen bir parametre.
+    \item $\nabla_x J(\theta, x, y)$: Modelin kayıp fonksiyonunun girdi üzerindeki gradyanı.
+    \item $\text{sign}$: Gradyanın işaretini belirten fonksiyon.
+\end{itemize}
+
+\newpage
+
+\subsection{Feature Adversaries}
+
+Feature Adversaries, modelin iç özellik uzayında yanıltıcı değişiklikler yapmayı amaçlayan bir saldırı türüdür. Diğer evasion saldırıları, modelin giriş uzayında küçük pertürbasyonlar ekleyerek modelin sınıflandırma doğruluğunu bozmayı hedeflerken, Feature Adversaries, modelin ara katmanlarındaki gradyan bilgilerini kullanarak giriş verisine küçük pertürbasyonlar eklemektedir. Bu pertürbasyonlar, doğrudan ara katmandaki özellik vektörünü hedef alır ve modelin çıktısında değişiklik yapar. Bu saldırı, özellik (feature) çıkarımına dayalı derin öğrenme modellerini hedef alır ve modele olan saldırıları daha hassas hale getirmek için ara katmanları kullanarak saldırganın etkisini artırır.
+
+\[ x_{adv} = x + \epsilon \cdot \nabla_x J(f_l(x), y) \]
+
+Burada:
+
+\begin{itemize}
+    \item $x_{adv}$: Adversarial örnek.
+    \item $x$: Orijinal giriş.
+    \item $\epsilon$: Pertürbasyonun büyüklüğünü kontrol eden bir parametre.
+    \item $\nabla_x J(f_l(x), y)$: Modelin $l$. katmanındaki özellik vektörüne göre girdi üzerindeki gradyanı.
+    \item $f_l(x)$: Modelin $l$. ara katmanındaki özellik çıkarımı.
+\end{itemize}
+
+\newpage
+
+\subsection{Frame Saliency Attack}
+
+Frame Saliency Attack, video çerçeveleri üzerinde küçük değişiklikler yaparak modelin yanlış sınıflandırma yapmasını sağlamayı amaçlar. Bu saldırı, çerçeve bazı hassasiyet haritalarını kullanarak hangi çerçevelerin modele daha fazla bilgi sağladığını tespit eder. Ardından, bu hassas çerçevelerdfe manipülasyonlar yaparak modelin davranışını bozmayı hedefler. Video içindeki her çerçeve için modelin dikkate aldığı önemli bölgeler (saliency map) hesaplanır. Bu, modelin hangi çerçeveleri veya bölgeleri daha çok dikkate aldığını gösterir. Hassas çerçeveler, modelin tahminini önemli ölçüde etkileyen çerçevelerdir. Bu çerçeveler üzerinde saldırı yapılması planlanır.
+
+Frame Saliency Attack, bir video $V$ üzerindeki her çerçeve $F_t$ için bir saliency score $S(F_t)$ hesaplar. Modelin çıktısı $\hat{y}$:
+
+\[ \hat{y} = f(V) \]
+
+Burada $f$ video sınıflandırma modelidir ve $V = [F_1, F_2, ..., F_T]$ videodaki $T$ çerçeveyi temsil eder. Saliency haritası $M_t$, modein tahminine en çok katkıda bulunan çerçeveyi bulmak için kullanılır.
+
+\[ S(F_t) = \sum_{i,j} \| \frac{\alpha \hat{y}}{\alpha F_t(i, j)} \| \]
+
+Bu formülde $\frac{\alpha \hat{y}}{\alpha F_t(i, j)}$, çerçevenin her bir pikselinin model tahminine etkisini ifade eder. Ardından en yüksek saliency değerine sahip çerçeveler manipüle edilir.
+
+\subsubsection{Çalışma Adımları}
+
+\begin{enumerate}
+    \item Her çerçeve için saliency map (hassasiyet haritası) hesaplanır. 
+    \item Çerçevelere saliency puanı atanır ve en yüksek puanlı çerçeveler seçilir.
+    \item Seçilen çerçeveler üzerinde küçük, insan tarafından fark edilemeyen değişiklikler yapılır.
+    \item Manipüle edilen video modele verilir ve çıktının ne kadar değiştiği analiz edilir.
+\end{enumerate}
+
+\newpage
+
+\subsection{Geometric Decision Based Attack (G-DBA)}
+
+Geometric Decision-Based Attack, bir modelin karar sınırlarını öğrenip bu sınırlara yakın bir noktada gürültü veya küçük değişiklikler ekleyerek modelin yanlış bir sınıflandırma yapmasını sağlar. Saldırgan, modelin nasıl çalıştığını bilmeden yalnızca verdiği tahminler üzerinden saldırıyı gerçekleştirir.
+
+Saldırı, başlangıçta doğru sınıflandırılan $x_0$ ve yanlış sınıflandırılan $x_1$ verileriyle başlar. Amaç, $x_0$ ile $x_1$ arasında bir doğru üzerinde yer alan karar sınırına yakın $\tilde{x}$ noktasını bulmaktır. Bir saldırı noktasi $x_i$ şu şekilde tanımlanır:
+
+\[ x_i  = (1 - \lambda) x_0 + \lambda x_1 \]
+
+Burada $\lambda$, karar sınırına olan yakınlığı belirler. Amaç, $\lambda$'yı optimize ederek en yakın karar sınırını bulmaktır.
+
+\[ \text{min} || f(x_i) - f(x_0) || \]
+
+Burada $f(x)$ modelin tahmin fonksiyonudur ve saldırının amacı, $f(x_i)$'nin $f(x_0)$'dan yeterince farklı hale getirilmesidir.
+
+\subsubsection{Çalışma Adımları}
+
+\begin{enumerate}
+    \item Hedef modelin doğru sınıflandırdığı bir giriş noktası bulunur. Ardından bu noktanın etrafında, karar sınırına en yakın yanlış sınıflandırma yapan bir giriş noktası bulunur.
+    \item Modelin karar sınırına en yakın olan bu yanlış sınıflandırılmış giriş noktası kullanılarak, bir geometrik yol izlenir. Amaç, saldırının etkili olabilmesi için karar sınırının en yakınında minimum değişiklikle saldırı yapmaktır.
+    \item Her iterasyonda saldırı noktası güncellenir.
+\end{enumerate}
+
+\newpage
+
+\subsection{GRAPHITE}
+
+GRAPHITE, graph-based techniques (graf tabanlı teknikler) kullanılarak modelin karar sınırlarını etkili bir şekilde keşfetmeyi ve bu sınırları istismar etmeyi hedefler. Saldırganlar, grafik tabanlı veri yapılarında düğümler veya kenarlar üzerinde küçük değişiklikler yaparak, modelin doğru tahmin yapmasını engelleyebilir. GRAPHITE saldırıları hem black-box (modelin iç yapısı bilinmez, sadece çıktılar üzerinden saldırı yapılır) hem de white-box (modelin iç yapısı bilinir ve model parametreleri üzerinden saldırı yapılır) senaryolarında uygulanabilir.
+
+\newpage
+
+\subsection{High Confidence Low Uncertainly (HCLU) Attack}
+
+HCLU, bir modelin yüksek güven ile yanlış bir sınıflandırma yapmasını sağlarken, aynı zamanda modelin bu yanlış sınıflandırmada düşük belirsizlik taşımasını hedefler. HCLU saldırısı, özellikle belirsizlik ölçümlerini veya güven ölçümlerini kullanan makine öğrenimi modellerini hedef alır. Bu tür modeller, yalnızca tahminler yapmakla kalmaz, aynı zamanda tahminlerinin doğruluğuna ne kadar güvendiklerini de belirtirler. HCLU saldırısında, bir saldırgan, modelin güvenini istismar ederek, modele yanlış bir tahmin yaptırır ve model bu tahminin doğruluğuna "emin" görünür.
+
+\newpage
+
+\subsection{Hop Skip Jump Attack (HSJA)}
+
+HSJA, sınırlı erişim (black-box) altında çalışan bir saldırıdır ve decision boundary keşfi ile çalışır. HSJA, modelin karar sınırlarını (decision boundary) keşfetmek için sorgulamalarda bulunarak, adversarial (yanıltıcı) örnekler üretir. Modelin sınıflandırma sonuçlarına dayanarak, girdiyi modelin karar sınırına doğru iter ve ardından bu sınırı geçip yanlış sınıflandırma yapan bir adversarial örnek üretir.
+
+\newpage
+
+\subsection{Imperceptible ASR Attack}
+
+Imcerceptible ASR, bir ses kaydına (audio input) insan kulağının algılayamayacağı şekilde küçük ve fark edilmesi zor değişiklikler ekleyerek, ses tanıma sistemini yanıltmaktır. Imperceptible (algılanamaz) denmesinin sebebi, yapılan değişikliklerin, insanın duyusal sınırlarının ötesinde olmasıdır. Yani, orijinal ses dosyasındaki değişiklikler insanlar tarafından fark edilemez, ancak ASR sistemleri bu küçük değişiklikler yüzünden yanlış metin çıktısı üretir. Gradient tabanlı bir optimizasyon yöntemi kullanılarak, ses sinyaline küçük değişiklikler eklenir. Bu değişiklikler, insan kulağıyla fark edilmeyecek kadar küçüktür, ancak ASR sisteminin metin çıktısını değiştirebilir.
+
+\newpage
+
+\subsection{Basic Iterative Method (BIM)}
+
+BIM, aynı zamanda Iterative Fast Gradient Sign Method (IFGSM) olarak da bilinir. Tek adımlı FGSM saldırısının tekrarlanmış bir versiyonudur. BIM, orijinal giriş verisine (örneğin, bir görüntüye) küçük ve tekrarlı perturbasyonlar ekleyerek modelin yanlış sınıflandırma yapmasını sağlar. Her iterasyonda, giriş verisine FGSM ile hesaplanan bir gürültü eklenir ve bu işlem, belirli bir maksimum perturbasyon seviyesine ulaşılana kadar tekrarlanır.
+
+\subsubsection{Çalışma Adımları}
+
+\begin{enumerate}
+    \item İlk olarak, doğru şekilde sınıflandırılan bir giriş verisi seçilir.
+    \item $\epsilon$, toplam pertürbasyonun maksimum büyüklüğünü belirler. $\alpha$, her iterasyonda eklenen pertürbasyonun adım büyüklüğünü belirler.
+    \item Her iterasyonda, giriş verisine küçük bir pertürbasyon eklenir. Pertürbasyon, modelin kaybını maksimize edecek şekilde hesaplanır.
+    \item Yeni giriş verisi $\epsilon$ sınırları içinde kliplenir, böylece pertürbasyonun toplam büyüklüğü kontrol altında tutulur.
+    \item Tüm iterasyonlar tamamlandığında, son haliyle adversarial örnek elde edilir.
+\end{enumerate}
+
+\newpage
+
+\subsection{Projected Gradient Descent (PGD)}
+
+PGD, bir modeli hedef alan düşman örnekleri üretmek için yönlendirilmiş gradyan inişi (gradient descent) tekniğini kullanır. Amaç, modelin yanlış tahmin yapmasını sağlamak için giriş verisinin üzerine küçük ama stratejik bozulmalar eklemektir. PGD, bu bozulmaları optimize etmek için birkaç adımda küçük güncellemeler yaparak, saldırıyı daha güçlü hale getirir. PGD, aslında Basic Iterative Method (BIM) saldırısının genel bir formu olup, giriş değerlerini belirli bir norm içinde tutmak için projeksiyon kullanır.
+
+\newpage
+
+\subsection{Laser Attack}
+
+Laser Attack, sensörlerin çalışma prensibini manipüle ederek işlev görür. Lazer ışınları, bir sensöre veya kameraya yönlendirilir ve bu sensörlerin topladığı verilerde gürültü oluşturur. Sensörün algıladığı lazer ışınları, gerçek dünyadaki nesnelerin algılanmasını engelleyebilir veya yanlış algılamalar yaratabilir.
+
+\newpage
+
+\subsection{LowProFool Attack}
+
+LowProFool saldırısı, girdiye uygulanan perturbasyonların düşük profilli olmasını sağlar, yani insan gözünün algılayamayacağı düzeyde minimal değişiklikler yapılır. Bu saldırının başarısı, modelin bu küçük değişikliklerle yanıltılmasında yatar.
+
+\newpage
