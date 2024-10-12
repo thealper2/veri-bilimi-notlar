@@ -1,0 +1,37 @@
+\section{Extraction Attacks}
+
+\subsection{Copycat CNN}
+
+Copycat CNN, bir saldırganın olmadığı hedef bir modeli taklit etmek amacıyla, o modelin çıktıları üzerinden kendi benzer modelini eğitmesi anlamına gelir. Saldırgan, hedef modelin iç yapısını bilmeden sadece giriş-çıkış verilerini kullanarak benzer bir model üretmeye çalışır.
+
+\subsubsection{Savunma Mekanizmaları}
+
+\begin{itemize}
+    \item \textbf{Differential Privacy}: Modelin çıktılarına rastgelelik ekleyerek, saldırganın tam bilgiye ulaşmasını zorlaştırmak.
+    \item \textbf{Model Watermarking}: Modelin sahiplik bilgilerini dijital olarak içine gömmek, böylece taklit edildiği anlaşılabilir.
+\end{itemize}
+
+\newpage
+
+\subsection{Functionally Equivalent Extraction}
+
+Functionally Equivalent Extraction saldırıları, genellikle hedef modelin iç yapısını tamamen bilmese de aynı fonksiyonelliği yakalamayı amaçlar. Saldırgan, hedef modele birçok giriş verisi sağlar ve modelin verdiği çıktıları kullanarak bir model oluşturur. Bu saldırıda, hedef modelin sadece çıktıları gözlemlenir ve kendi modelini bu verilere dayalı olarak eğitir. Hedef model ile saldırganın ürettiği model aynı olmasa da fonksiyonel olarak birbirine çok yakın sonuçlar üretirler.
+
+\begin{itemize}
+    \item \textbf{Differential Privacy}: Modelin çıktılarına rastgelelik ekleyerek, saldırganın tam bilgiye ulaşmasını zorlaştırmak.
+    \item \textbf{Model Watermarking}: Modelin sahiplik bilgilerini dijital olarak içine gömmek, böylece taklit edildiği anlaşılabilir.
+\end{itemize}
+
+\newpage
+
+\subsection{Knockoff Nets}
+
+Knockoff Nets saldırıları, ticari ve patentli makine öğrenimi modellerinin taklit edilmesine ve modellerin entelektüel mülkiyet haklarının ihlal edilmesine olanak sağlar. Bu saldırı, hedeflenen derin öğrenme modelinin iç yapısına erişim olmadan, sadece girdi ve çıktı verilerinden yola çıkarak hedef modelin bir kopyasını üretmeye dayanır. Saldırgan, hedef modelin sunduğu API veya servis üzerinden modelin davranışlarını inceleyerek kendi modelini oluşturur ve eğitir.
+
+\begin{itemize}
+    \item \textbf{Differential Privacy}: Modelin çıktılarına rastgelelik ekleyerek, saldırganın tam bilgiye ulaşmasını zorlaştırmak.
+    \item \textbf{Model Watermarking}: Modelin sahiplik bilgilerini dijital olarak içine gömmek, böylece taklit edildiği anlaşılabilir.
+    \item \textbf{Rate Limiting}: Sorgu sayısını sınırlayarak, saldırganın veri toplaması önlenebilir.
+\end{itemize}
+
+\newpage

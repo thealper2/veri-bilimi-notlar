@@ -385,9 +385,9 @@ Frame Saliency Attack, bir video $V$ üzerindeki her çerçeve $F_t$ için bir s
 
 Burada $f$ video sınıflandırma modelidir ve $V = [F_1, F_2, ..., F_T]$ videodaki $T$ çerçeveyi temsil eder. Saliency haritası $M_t$, modein tahminine en çok katkıda bulunan çerçeveyi bulmak için kullanılır.
 
-\[ S(F_t) = \sum_{i,j} \| \frac{\alpha \hat{y}}{\alpha F_t(i, j)} \| \]
+\[ S(F_t) = \sum_{i,j} \| \frac{\partial \hat{y}}{\partial F_t(i, j)} \| \]
 
-Bu formülde $\frac{\alpha \hat{y}}{\alpha F_t(i, j)}$, çerçevenin her bir pikselinin model tahminine etkisini ifade eder. Ardından en yüksek saliency değerine sahip çerçeveler manipüle edilir.
+Bu formülde $\frac{\partial \hat{y}}{\partial F_t(i, j)}$, çerçevenin her bir pikselinin model tahminine etkisini ifade eder. Ardından en yüksek saliency değerine sahip çerçeveler manipüle edilir.
 
 \subsubsection{Çalışma Adımları}
 
@@ -479,5 +479,157 @@ Laser Attack, sensörlerin çalışma prensibini manipüle ederek işlev görür
 \subsection{LowProFool Attack}
 
 LowProFool saldırısı, girdiye uygulanan perturbasyonların düşük profilli olmasını sağlar, yani insan gözünün algılayamayacağı düzeyde minimal değişiklikler yapılır. Bu saldırının başarısı, modelin bu küçük değişikliklerle yanıltılmasında yatar.
+
+\newpage
+
+\subsection{NewtonFool}
+
+Newton Fool saldırısının temel prensibi, bir girdi örneğini modelin karar sınırına iterken, Newton yönteminden yararlanarak en kısa yolu bulmaktır. Yani, modelin karar sınırına en yakın noktayı bulur ve bu noktaya ulaşacak kadar küçük perturbasyonlar ekleyerek giriş verisini adversarial bir örneğe dönüştürür.
+
+\[ x_{k+1} = x_k - \frac{f(x_k)}{\nabla f(x_k)} \]
+
+Burada:
+
+\begin{itemize}
+    \item $x_{k+1}$: Bir sonraki iterasyondaki girdi.
+    \item $x_k$: Mevcut iterasyondaki girdi.
+    \item $f(x_k)$: Sınıflandırıcı modelin çıktısı.
+    \item $\nabla f(x_k)$: Sınıflandırıcı modelin çıktısına göre giriş üzerindeki gradyanı.
+\end{itemize}
+
+\newpage
+
+\subsection{Malware Gradient Descent (MGD)}
+
+MGD, gradyan inişi algoritmasını kullanarak, bir zararlı yazılımın özelliklerini minimum değişiklikle moedlin yanlış sınıflandırmasını sağlayacak şekilde değiştirir. Amacı, girdi verisi olan zararlı yazılımı modelin karar sınırına en yakın yanlış sınıflandırma yapılacak noktaya çekmektir.
+
+\[ x_{t+1} = x_t - \alpha \cdot \nabla J(x_t, y) \]
+
+Burada:
+
+\begin{itemize}
+    \item $x_t$: Mevcut zararlı yazılım örneği.
+    \item $\alpha$: Öğrenme oranı.
+    \item $\nabla J(x_t, y)$: Zararlı yazılım örneğinin kayıp fonksiyonu J'nin gradyanı.
+    \item $y$: Hedeflenen sınıf.
+\end{itemize}
+
+\newpage
+
+\subsection{Over The Air Flickering Attack (OTA Flickering Attack)}
+
+OTA Flickering Attack, kamera veya sensör tabanlı algılama sistemlerine yönelik görsel saldırılar yapar. Bir sahnenin veya bir nesnenin üzerine hızlı şekilde yanıp sönen (flickering) sinyaller yerleştirerek, algılama modellerini yanıltmayı hedefler. Bu sinyaller, insan gözüyle fark edilemeyen küçük değişikliklerdir, ancak kameralar tarafından algılanır ve bu sayede modelin kararlarını değiştirmek için kullanılır.
+
+\newpage
+
+\subsection{Pixel Attack}
+
+Pixel Attack, hedef görüntüde sınırlı sayıda pikseli değiştirerek modelin sınıflandırma kararını değiştirmeyi amaçlar. Bu saldırı, görüntünün genel yapısını bozmadan küçük bir değişiklik yaparak saldrının fark edilmemesini sağlar.
+
+\newpage
+
+\subsection{Threshold Attack}
+
+Threshold Attack, modelin çıkışının (olasılık veya karar fonksiyonu) küçük bir değişiklikle nasıl değiştiğini anlamaya çalışır. Saldırı, modelin karar sınırına yakın girdiler üzerinde uygulanarak, sınıf tahmininin değiştirilmesini sağlar.
+
+\newpage
+
+\subsection{Jacobian Saliency Map Attack (JSMA)} 
+
+JSMA, modelin girdiye verdiği yanıtları analiz ederek hangi giriş özelliklerinin hedeflenen sınıfa doğru değiştirileceğini seçmek için "Jacobian Matris" kullanılarak oluşturulan bir saliency map (önem haritası) kullanır. 
+
+\newpage
+
+\subsection{Shadow Attack}
+
+Shadow Attack, modelin verdiği tahminlerin doğruluğunu etkilemek için girdiye küçük perturbasyonlar (bozulmalar) ekler. Bu perturbasyonlar genellikle giriş verisinde fark edilmesi zor olacak şekilde tasarlanır. Modelin çıkışlarına karşı duyarlılık analizi yaparak, hangi giriş özelliklerinin modelin kararını en çok etkilediği belirlenir ve bu özellikler hedeflenerek manipüle edilir.
+
+\newpage
+
+\subsection{Shape Shifter Attack}
+
+Shape Shifter Attack, bir modelin doğru sınıflandırdığı bir görüntüyü, fark edilemeyecek kadar küçük değişikliklerle manipüle edip modelin yanlış bir sınıflandırma yapmasına neden olur.
+
+\newpage
+
+\subsection{Sign-OPT Attack}
+
+Sign-OPT Attack, adversarial örneklerin optimize edilmesini sağlar. Saldırı, zeroth-order optimization yöntemini kullanarak bir hedef sınıfa ulaşmaya çalışır. Saldırının temel mantığı, modelin karar sınırlarını keşfederek küçük, insan gözüyle fark edilemeyecek değişiklikler yapmaktır. Bu değişiklikler, modelin tahmin sonuçlarını değiştirecek şekilde optimize edilir.
+
+\newpage
+
+\subsection{Spatial Transformations Attack}
+
+Spatial Transformation Attack, modelin giriş verisinde uzaysal (spatial) dönüşümler yaparak modelin yanlış sınıflandırma yapmasını sağlar. Amacı, modelin hassas olduğu küçük geometrik dönüşümlerle, modelin yanlış sınıflandırma yapmasına neden olmaktır. Uzaysal dönüşümler, giriş verisinin piksel konumlarını veya yapısını değiştirir. Bu dönüşümler, küçük açısal rotasyonlar, kaydırmalar, ölçekleme veya perspektif değişimler olabilir.
+
+\begin{itemize}
+    \item \textbf{Rotation}: Görüntüde küçük açısal döndürmeler yapılır.
+    \item \textbf{Translation}: Görüntüde yatay veya dikey kaydırmalar yapılır.
+    \item \textbf{Scaling}: Görüntünün boyutları küçültülür veya büyültülür.
+    \item \textbf{Shearing}: Görüntüye paralel kaydırmalar uygulanır.
+    \item \textbf{Perspective Transform}: Görüntünün perspektifinde değişiklikler yapılır.
+\end{itemize}
+
+\newpage
+
+\subsection{Square Attack}
+
+Adını, giriş verisindeki belirli kare şeklindeki bölgelere yapılan manipülasyonlardan alır. Square Attack, görüntü üzerinde rastgele kare şeklinde pikselleri değiştirerek çalışır. Bu değişiklikler, modelin kararını etkileyerek yanlış sınıflandırmaya yol açabilir. Saldırı, özellikle verinin sınıflandırma sınırlarına yakın yerlerde yapılır, bu da modelin sınıflandırma doğruluğunu bozmaya yönelik etkili bir strateji sunar.
+
+\newpage
+
+\subsection{Targeted Universal Perturbation Attack (T-UAP)}
+
+T-UAP, modele evrensel bir pertürbasyon ekleyerek hedef sınıfa yönelik yanlış sınıflandırma yapılmasını sağlar. Evrensel olarak nitelendirilmesi, bir modelin üzerine eğitildiği veri setinin büyük bir kısmını etkileyebilecek tek bir pertürbasyonun bulunması anlamına gelir. Pertürbasyon, her veri noktasına eklendiğinde modelin çıkışını hedef sınıfa yönlendiren bir yapıya sahiptir.
+
+\newpage
+
+\subsection{Universal Perturbation Attack (UAP)}
+
+Universal Perturbation Attack, her bir örneğe küçük bir pertürbasyon ekleyerek modelin tahminlerini yanlış yapmaya çalışır. Pertürbasyon, evrensel bir bozucu sinyal olacak şekilde optimize edilir, yani tüm veri seti üzerinde işe yarayacak şekilde ayarlanır. Model, bu pertürbasyon uygulandığında hatalı sınıflandırmalar yapar.
+
+\newpage
+
+\subsection{Virtual Adversarial Method (VAM)}
+
+VAM, herhangi bir sınıflandırma etiketi kullanmadan girişlere adversarial perturbasyonlar ekler, bu yüzden "virtual (sanal)" olarak adlandırılır. VAM, denetimli olmayan adversarial örnekler oluşturarak modelin güvenliğini test eder ve sınıflandırıcının karar sınırlarını zorlar. Yarı denetimli öğrenme yöntemlerinde kullanılır.
+
+\newpage
+
+\subsection{Wasserstein Attack}
+
+Wasserstein Attack, giriş verilerine minimal değişiklikler yaparak modelin tahminlerini yanıltmaya çalışır. Bu saldırı, bozucu perturbasyonların hem görünmez hem de model için anlamlı bir şekilde etkili olmasını hedefler. Bu amaçla Wasserstein mesafesi temel alınır. Amaç, giriş verilerinin orijinal dağılımından çok uzaklaşmadan modelin tahminlerini değiştiren perturbasyonlar üretmektir.
+
+Wasserstein Attack, Wasserstein mesafesi kullanarak adversarial örnekler oluşturur. Bu mesafe, iki olasılık dağılımı arasındaki minimum taşıma maliyetini ölçer.
+
+\[ W(p, q) = \inf_{\gamma \in \Gamma(p, q)} \mathbb{E}_{(x, y) \sim \gamma}[\| x - y \|] \]
+
+Burada:
+
+\begin{itemize}
+    \item $p$ ve $q$: Giriş veri setinin ve bozucu pertürbasyonun olasılık dağılımları.
+    \item $\Gamma(p, q)$: $p$ ve $q$ arasında ortak dağılımların kümesi.
+    \item $x$ ve $y$: Girş verilerinin ve bozucu pertürbasyonların bireysel örnekleri.
+    \item $\| x - y \|$ $x$ ve $y$ arasındaki mesafe.
+\end{itemize}
+
+\newpage
+
+\subsection{Zeroth-Order Optimization (ZOO) Attack}
+
+ZOO Attack, modelin parametrelerine veya gradyan bilgilerine ihtiyaç duymadan, doğrudan modele yapılan sorgularla saldırıyı gerçekleştirir. ZOO Attack, zeroth-order optimization (sıfırıncı derece optimizasyon) adı verilen bir yöntem kullanır. Bu yöntem, gradyan bilgisine erişmeden, sadece modelin çıktısına bakarak saldırı yapılabilmesini sağlar. Gradyanın yaklaşık bir değeri hesaplanarak optimizasyon yapılır, bu da saldırının amacına ulaşmak için yeterlidir.
+
+ZOO Attack, gradyanı doğrudan hesaplamadığından dolayı finite-difference yöntemini kullanır. Bu yöntemde gradyan tahmini aşağıdaki gibi yapılır:
+
+\[ \frac{\partial J(x)}{\partial x_i} \approx \frac{J(x + h e_i) - J(x - h e_i)}{2h} \]
+
+Burada:
+
+\begin{itemize}
+    \item $J(x)$: Girdi $x$ için modelin kayıp fonksiyonu.
+    \item $h$: Küçük bir adım boyutu.
+    \item $e_i$: Girdi uzayındaki standart temel vektör.
+    \item $\frac{\partial J(x)}{\partial x_i}$: Girdi $x$'in, $i$. bileşeni ile ilgili yaklaşık gradyan.
+\end{itemize}
 
 \newpage

@@ -1,0 +1,43 @@
+\section{Evasion Detection}
+
+\subsection{Binary Input Detector}
+
+Binary Input Detector, adından da anlaşılacağı gibi, girdilerin "güvenli" ya da "tehlikeli" olarak sınıflandırıldığı bir yöntemdir. Girdiler, modelin nasıl bir tepki verdiğine bağlı olarak ikili bir sınıflandırma ile belirlenir. Eğer girdi, modelin eğitildiği normal verilerden belirgin şekilde sapıyorsa, bu girdi tehlikeli olarak işaretlenir. 
+
+\[ P(y = 1 | X) = \frac{1}{1 + e^{-(\mathbf{w} \cdot X + b)}} \]
+
+Burada:
+
+\begin{itemize}
+    \item $P(y = 1 | X)$: Girdinin tehlikeli olma olasılığı.
+    \item $w$: Modelin ağırlıkları.
+    \item $X$: Giriş verisi.
+    \item $b$: Bias.
+\end{itemize}
+
+\newpage
+
+\subsection{Binary Activation Detector}
+
+Binary Activation Detector, modelin ara katmanlarındaki aktivasyonlar üzerinde çalışarak bu tür saldırıları tespit eder. Bir saldırı sırasında, modelin ara katmanlarındaki aktivasyonlarda anormal bir değişiklik meydana gelir. Binary Activation Detector, bu anormallikleri belirler ve girdiyi "güvenli" ya da "tehlikeli" olarak sınıflandırır.
+
+\newpage
+
+\subsection{Subset Scanning Detector}
+
+Subset Scanning Detector, büyük bir veri setindeki saldırıların geniş çapta yayılmadığı, sadece küçük bir alt küme üzerinde etkili olduğu durumları tespit etmeye çalışır. Saldırılar yalnızca birkaç örnek üzerinde belirgin hale gelir ve saldırı yapanlar fark edilmemek için küçük değişiklikler yapar. Subset Scanning Detector, bu küçük ve hedeflenmiş saldırıları tespit etmek için verinin alt kümelerini tarar.
+
+Subset Scanning Detector, belirlenen alt kümedeki anomaliyi ölçmek için bir istatistiksel skor fonksiyonu kullanır.
+
+\[ F(S) = \max_{S \subseteq D} \sum_{i \in S} f(x_i, y_i) \]
+
+Burada:
+
+\begin{itemize}
+    \item $D$: Tam veri seti.
+    \item $S$: Taranan alt küme.
+    \item $f(x_i, y_i)$: Alt kümedeki her bir veri noktası için anomali ölçen fonksiyon.
+    \item $F(S)$: Alt küme $S$'nin anomali skoru.
+\end{itemize}
+
+\newpage
