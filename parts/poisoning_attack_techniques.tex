@@ -1,0 +1,61 @@
+\section{Poisoning Attacks}
+
+\subsection{Backdoor RED Poisoning Attack}
+
+RED Poisoning, bir sinir ağına yerleştirilen gizli arka kapı ile saldırganın istediği anormal davranışı tetiklemeyi hedefler. Bu saldırı, saldırganın sistem üzerinde kontrol sahibi olmasını sağlayan bir 'trigger' ekleyerek çalışır. Bu trigger, belirli bir deseni veya özelliği temsil eder. Model, belirli koşullarda yanlış sınıflandırma yapmaya zorlanır. RED (Reduced Efficiency for Deception) terimi, bu tür saldırılarda modelin verimli çalıştığı durumlarda dahi sistemin saldırgan tarafından yanlış yönlendirilebileceğini ifade eder. Modelin genel performansı bozulmaz; ancak belirli, hedeflenmiş tetikleyici girdi karşısında yanlış sonuç üretir.
+
+\newpage
+
+\subsection{Backdoor Trail Poisoning Attack}
+
+Generative (Üretici) modeller üzerinde etkilidir. Bu saldırıda, eğitim sürecine bir tetikleyici eklenir. Tetikleyici aracılığıyla modelin belirli bir yol veya iz boyunca manipüle edilmesi sağlanır. 
+
+\newpage
+
+\subsection{Adversarial Embedding Attack}
+
+Adversarial Embedding Attack, modelin içindeki embedding katmanlarını hedef alır. Embedding'ler, girdileri düşük boyutlu sürekli vektörlere dönüştüren katmanlardır ve bu saldırı, adversarial girdilerle embedding uzayını manipüle ederek modelin karar verme sürecini yanıltmayı amaçlar.
+
+\newpage
+
+\subsection{Backdoor Poisoning Attack}
+
+Saldırgan, modelin eğitim sürecine müdahale ederek modele zararlı örnekler enjekte eder. Bu enjekte edilen veriler modelin normal davranışını bozmaz, yani model normal veriler üzerinde doğru sonuçlar verir. Ancak, saldırganın belirlediği özel bir tetikleyici (trigger) ile beslenen verilerle modelin istenmeyen bir şekilde davranmasına neden olur.
+
+\newpage
+
+\subsection{Hidden Trigger Backdoor Attack}
+
+Saldırgan, modelin eğitim sürecine müdahale ederek modele zararlı örnekler enjekte eder. Gizli tetikleyici, normal veri üzerinde etkili olmaz, sadece özel koşullarda devreye girer ve saldırganın istediği davranışı tetikler.
+
+\newpage
+
+\subsection{Bullseye Polytope Attack}
+
+Sınıflandırma modellerini hedef alır. Modelin karar sınırını manipüle etmeyi amaçlar. Saldırgan, eğitim verisini değiştirerek, modelin belirli hedef sınıflarda yanlış sınıflandırma yapmasını sağlar. Saldırının adı, politope adı verilen geometrik şekiller ve bir hedefi (bullseye) vurmayı amaçlayan saldırı stratejisinden gelir. Politope, yüksek boyutlu bir uzayda sınıflandırma sınırını temsil eden geometrik bir şekildir. Saldırgan, politope'un içinde kalan verileri manipüle ederek, modelin sınıflandırma sınırını hedefler.
+
+\newpage
+
+\subsection{Clean Label Backdoor Attack}
+
+Clean Label Backdoor Attack, eğitim verileri etiketleri doğru olacak şekilde manipüle edilir, bu nedenle "clean label" (temiz etiket) olarak adlandırılır. Ancak, bu veriler modelin hedeflenen girdilerde saldırganın istediği yanlış tahminleri yapmasına neden olacak şekilde gizlice değiştirilmiştir. 
+
+\newpage
+
+\subsection{Feature Collision Attack}
+
+Feature Collision Attack, modelin özellik uzayında, saldırganın hedeflediği örneğe benzeyen ancak farklı bir sınıfa ait olan sahte örnekler oluşturarak modelin öğrenm sürecini manipüle eder. Amaç, modelin bu zehirli veriler nedeniyle yanlış sınıflandırma yapmasını sağlamak ve bu saldırının özelliği, hedeflenen örnek ve zehirlenmiş örneklerin özellik uzayında çakışacak kadar yakın olmasıdır. Bu saldırı, temiz etiketli verilerle yapılır, yani saldırgan verilerin etiketlerini değiştirmez, ancak verileri manipüle ederek hedeflenen bir örnekle aynı özellik uzayına yakın hale getirir.
+
+\newpage
+
+\subsection{Gradient Matching Attack}
+
+Gradient Matching Attack, saldırgan modelin ağırlık güncellemelerini etkileyerek, modelin öğrenmesini yönlendirir. Amacı, hedeflenen örnekler ve saldırganın sağladığı sahte (zehirlenmiş) örnekler arasındaki gradyan benzerliğini maksimize etmektir. Model, saldırgan tarafından sunulan verilerde yanlış öğrenmeler gerçekleştirir ve bu durum, modelin doğruluğunu etkiler.
+
+\newpage
+
+\subsection{Poisoning SVM Attack}
+
+SVM sınıflandırıcılarını hedef alır. Amacı, hedef modelin eğitimi sırasında zehirlenmiş veriler modelin yanlış öğrenmesini sağlamaktır. Saldırgan, modelin sınırlarını yanlış bir şekilde şekillendirerek modelin hedeflenen yanlış sınıflandırmaları yapmasına yol açar. 
+
+\newpage

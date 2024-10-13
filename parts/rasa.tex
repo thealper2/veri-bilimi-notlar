@@ -1,5 +1,40 @@
 \section{RASA}
 
-RASA
+RASA, chatbot ve sesli asistanlar oluşturmaya yarayan açık kaynaklı bir araçtır. 
+
+\subsection{Komutlar}
+
+\begin{itemize}
+	\item \textbf{rasa init}: Yeni bir RASA projesi oluşturur.
+	\item \textbf{rasa train}: NLU ve Core modellerini eğitir.
+	\item \textbf{rasa shell}: Komut satırında chatbot'u çalıştır.
+	\item \textbf{rasa run}: Chatbot'u bir sunucuda çalıştırır.
+	\item \textbf{rasa x}: RASA X arayüzünü başlatır.
+\end{itemize}
+
+\subsection{Kavramlar}
+
+\begin{itemize}
+	\item \textbf{Intent}: Kullanıcıdan alınan girdilerin karşılık geldiği kavramlardır.
+	\item \textbf{Entity}: Kullanıcının mesajındaki belirli bilgiler.
+	\item \textbf{Slot}: Diyalog akışında geçici olarak bilgi saklar.
+	\item \textbf{Action}: Belirli bir yanıtı veya işlemi gerçekleştiren komutlar.
+	\item \textbf{Story}: Önceden belirlenmiş diyalog akışlarıdır
+	\item \textbf{Domain}: Bot'un kapasitesini, hangi intent'lerin, entity'lerin, action'ların ve slot'ların kullanılacağını tanımlar.
+	\item \textbf{NLU Training Data} :Intent'leri ve entity'leri eğitmek için kullanılan veri kümesi.
+	\item \textbf{Core Training Data}: Diyalog yönetimini eğitmek için kullanılan hikayeler.
+\end{itemize}
+
+\subsection{RASA Projesindeki Dosyalar ve İşlevleri}
+
+\begin{itemize}
+	\item \textbf{domain.yml}: Bot'un domain tanımını içerir (intent'ler, entity'ler, action'lar, slot'lar, yanıtlar).
+	\item \textbf{nlu.yml}: NLU eğitim verilerini içerir.
+	\item \textbf{stories.yml}: Diyalog akışlarını tanımlar, bot'un kullanıcı etkileşim senaryolarını içerir.
+	\item \textbf{config.yml}: NLU ve Core bileşenlerinin yapılandırma ayarlarını içerir.
+	\item \textbf{endpoints.yml}: RASA sunucusunun bağlanacağı dış hizmetlerin yapılandırma dosyasıdır.
+	\item \textbf{credentials.yml}: Chatbot'un bağlanacağı platformların kimlik doğrulama bilgilerini içerir.
+	\item \textbf{actions.py}: Özel aksiyonların tanımlanacağı Python dosyasıdır.
+\end{itemize}
 
 \newpage
