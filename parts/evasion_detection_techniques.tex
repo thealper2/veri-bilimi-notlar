@@ -41,3 +41,53 @@ Burada:
 \end{itemize}
 
 \newpage
+
+\subsection{Neural Cleanse}
+
+Neural Cleanse, modelin tüm sınıflarına yönelik evrensel tetikleyici bulmayı hedefler. Eğer bir sınıf için modelin tetikleyiciye anormal derecede duyarlı olduğu görülürse, modelin backdoor saldırısına maruz kalmış olma olasılığı yüksektir. Neural Cleanse, gizli tetikleyiciler içeren zararlı saldırıları tespit etmek için kullanılır.  Her sınıf için tetikleyici bulunurken hesaplanan maliyetler karşılaştırılır. Normalden çok düşük maliyetli olan sınıflar, olası zararlı sınıflar olarak işaretlenir. Skor hesaplaması şu şekilde yapılabilir:
+
+\[ S = \frac{M_i}{\mu_M} \]
+
+Burada:
+
+\begin{itemize}
+    \item $M_i$: i'inci sınıfın tetikleyici maliyeti.
+    \item $\mu_M$: Tüm sınıfların tetikleyici maliyetlerinin ortalaması
+\end{itemize}
+
+\newpage
+
+\subsection{STRIP (Strong Intentional Perturbation Detection Against Backdoor Attacks)}
+
+STRIP, modelin girişlerine yönelik küçük pertürbasyonlar uygulayarak modelin tetikleyiciye olan hassasiyetini ölçer. Trigger (tetikleyici) içeren veriler, modelin yanıltıcı bir şekilde tetikleyici sınıfa gitmesine neden olabilir. STRIP, bir girişe küçük rastgele bozulmalar ekleyerek modelin tepkilerini gözlemler. Eğer model, bu tür bozulmalara karşı stabil kalırsa, yani bozulmalar modelin kararını değiştirmezse, girişin backdoor saldırısına uğradığı varsayılır.
+
+Modelin bozulmuş girişlere karşı verdiği yanıtların belirsizliği (uncertainty) hesaplanır. Bu belirsizlik, çıktı olasılıklarının varyansı kullanılarak hesaplanır. Belirsizlik seviyesi yüksekse, giriş temizdir. Belirsizlik düşükse, giriş tetikleyici içeren bir saldırı olarak kabul edilir. Belirlenen bir eşik değerinin altında kalan belirsizlik seviyelerine sahip girdiler tetikleyici içeriyor olarak değerlendirilir. Bu eşik değeri, modelin genel performansına ve bozulmalara verdiği tepkiye bağlı olarak belirlenir.
+
+\[ U(x) = - \sum_{i=1}^{n} p(y_i | x) \text{log}(p(y_i | x)) \]
+
+Burada:
+
+\begin{itemize}
+    \item $U(x)$: Belirsizlik değeri.
+    \item $p(y_i | x)$: Girdi $x$'in sınıfı $y_i$'e ait olma olasılığı.
+    \item $n$: Sınıf sayısı.
+\end{itemize}
+
+\newpage
+
+\subsection{Defensive Distillation}
+
+Defensive Distillation, modeli evasion saldırılarına karşı daha dayanıklı hale getirmek için distillation (damıtma) sürecini kullanır. Distillation, bir öğretici (teacher) modelden alınan yumuşak tahminlerin kullanılmasıyla, bir öğrenci (student) modelin eğitilmesini içeren bir tekniktir. Defensive Distillation'da bu süreç şu şekildedir; ilk olarak, model bir öğretici model olarak normal bir şekilde eğitilir. Ancak bu model, son tahminlerin doğrudan kullanılmasından ziyade, modelin çıktı olasılıklarını kullanarak, öğrenci (student) model için öğretici olur. İkinci aşamada, öğrenci model öğretici modelden elde edilen yumuşak tahminler ile eğitilir. Bu aşamada, softmax fonksiyonu için bir sıcaklık parametresi ($T$) kullanılır. Yüksek bir T değeri, modelin çıktı olasılıklarını daha yumuşak hale getirir, yani model tahminlerinin belirsizliğini artırır. Bu durum, modelin saldırılara karşı daha az hassas hale gelmesini sağlar. Defensive Distillation'daki temel fikir, bir modelin evasion saldırılarına karşı savunmasız olmasının, modelin çıktılarındaki keskin tahminlerden kaynaklandığını varsayar. Distillation süreci, modelin daha yumuşak çıktı olasılıkları üretmesini sağlar, bu da saldırıların etkisini azaltır.
+
+Öğretici modelin softmax katmanında bir sıcaklık parametresi ($T$) uygulanır.
+
+\[ \text{Softmax}(z_i) = \frac{\text{exp}(\frac{z_i}{T})}{\sum_{j=1}^{N} \text{exp}(\frac{z_i}{T})} \]
+
+Burada:
+
+\begin{itemize}
+    \item $z_i$: Modelin olasılık çıkışı.
+    \item $T$: sıcaklık parametresi.
+\end{itemize}
+
+\newpage
