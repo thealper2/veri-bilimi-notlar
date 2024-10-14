@@ -1,0 +1,73 @@
+\section{Adversarial Training Techniques}
+
+\subsection{Adversarial Training}
+
+Adversarial Training, modellerin advarsarial saldırılara karşı dayanıklı hale getirmek için kullanılan bir tekniktir. Eğitim sırasında hem normal verilerle hem de adversarial örneklerle model eğitilir. Bu şekilde model, hem normal veri dağılımlarını öğrenirken hem de saldırılara karşı savunmayı da öğrenir. Adversarial Training, modelin eğitimi sırasında hem normal hem de saldırı örneklerine dayalı bir kayıp fonksiyonunu optimize eder. Bu şekilde model, hem gerçek verilerdeki genel doğruluğunu korurken hem de adversarial saldırılara karşı direnç kazanır.
+
+\newpage
+
+\subsection{Madry PGD}
+
+Aleksander Madry ve ekibi tarafından önerilmiştir. PGD, adversarial saldırılar arasında en güçlülerinden biri olarak kabul edilir ve bu yüzden de Adversarial Training'de kullanılarak, modeli bu tür saldırılara karşı güçlendirmek amacıyla kullanılır.
+
+\newpage
+
+\subsection{Adversarial Weight Perturbation (AWP)}
+
+AWP, modelin ağırlıklarının adversarial pertürbasyonlar ile değiştirilerek, modelin bu pertürbasyonlara karşı daha dayanıklı hale getirilmesi amacıyla kullanılır. Bu teknik, Adversarial Training ile benzerdir, ancak AWP'de modelin girişleri yerine ağırlıkları saldırıya uğratılır. Amacı, modelin parametrelerindeki küçük değişikliklerin performansa etki yapmasını engellemektir. AWP, model parametrelerini küçük bir miktar değiştiren bir optimizasyon problemini çözer.
+
+\newpage
+
+\subsection{Oracle Aligned Adversarial Training (OOAT)}
+
+OOAT, bir "oracle" (bilgi sağlayan güvenilir bir kaynak) kullanarak adversarial örneklerin daha verimli bir şekilde oluşturulmasını ve modelin eğitilmesini sağlar. Bu sayede model, saldırılara daha hassas noktalarda daha etkili yanıt verebilir. Oracle burada, saldırıya karşı dayanıklı bir referans sağlayan ve modein öğrenmesini iyileştiren bir yapı olarak kabul edilir. Oracle, modelin saldırıya uğrayan örneklerde nasıl performans göstermesi gerektiği konusunda yol gösterir. Oracle'ın sağladığı bu bilgi, modelin doğru yönde eğitilmesine ve adversarial saldırılara karşı daha dayanıklı olmasına olanak tanır.
+
+\newpage
+
+\subsection{TRADES (Tradeoff-inspired Adversarial Defense via Surrogate-loss Minimization)}
+
+TRADES, adversarial training sırasında modelin doğruluk ve dayanıklıklılık (robust) arasında bir denge kurmasını sağlar. Bu sayede model, sadece adversarial örneklerde değil, aynı zamanda temiz veriler üzerinde de iyi performans gösterir. TRADES, "surrogate loss" adı verilen bir kayıp fonksiyonu kullanarak bu dengeyi optimize eder. TRADES, iki kayıp fonksiyonunu optimize eder:
+
+\begin{itemize}
+    \item \textbf{Klasik Sınıflandırma Kayıp Fonksiyonu}: Modein temiz örnekler üzerinde nasıl performans gösterdiğini ölçer. Bu klasik kayıp, modelin dorğu tahminlerde bulunup bulunmadığını kontrol eder.
+    \item \textbf{Adversarial Saldırılara Karşı Kayıp (Surrogate Loss)}: Modelin adversarial örnekler karşısındaki dayanıklılığını optimize eder. Bu kayıp fonksiyonu, modelin temiz örnekler ile adversarial örnekler arasındaki tahmin farkını minimize etmeye çalışır. Uzaklık ölçümü için "Kullback-Leibler Divergence" kullanır.
+\end{itemize}
+
+\newpage
+
+\subsection{Fast is Better than Free (FBF)}
+
+FBF, adversarial robustness elde etmek için geleneksel yöntemlerin yavaşlığını ve hesaplama maliyetini azaltmaya odaklanır. FBF, adversarial training sürecini hızlandırır ve saldırılara karşı daha dayanıklı modellerin daha kısa sürede eğitilmesini sağlar. "Free Adversarial Training" adlı önceki bir yaklaşımı geliştirerek, bu yöntemin bir adım ötesine geçer. Geleneksel yöntemler, adversarial örnekler oluştururken her bir minibatch için birden fazla güncelleme gerektirirken, FBF yöntemi bu süreci optimize ederek, sadece bir güncelleme adımınd adversarial dayanıklılığı artırır. FBF, temel olarak Projected Gradient Descent (PGD) saldırısının hızlı bir versiyonunu kullanır. FBF'nin ana çalışma mantığı, her minibatch'te sadece bir saldırı adımı kullanarak, her eğitim adımında adversarial örnekleri güncellemektir. Böylece hem hızlı hem de etkili bir adversarial eğitim sağlanır.
+
+\newpage
+
+\subsection{Certified Adversarial Training}
+
+Certified Adversarial Defenses, bir modelin belirli bir adversarial saldırıya karşı dayanıklı olup olmadığını matematiksel olarak ispat edilmiş bir şekilde garantileyen yöntemlerdir. Modelin bir saldırıya karşı başarıyla savunulacağını teorik olarak garanti eder. 
+
+\begin{itemize}
+    \item \textbf{Robust Optimization}: Bu yöntem, modelin en kötü durumda bile doğru sonuçlar vermesi için eğitim sürecinde en kötü adversarial örnekleri kullanır.
+    \item \textbf{Lipschitz Continuity}: Birçok certified savunma yöntemi, modelin çıktılarının girişlerdeki küçük değişikliklere karşı çok hassas olmamasını sağlar. Bu, modelin Lipschitz sabiti ile ilişkilidir.
+    \item \textbf{Randomized Smoothing}: Randomized Smoothing, modelin çıktısını pertürbasyon eklenmiş çok sayıda giriş üzerinde test eder ve dayanıklı bir çıktı elde eder.
+\end{itemize}
+
+\subsection{Certified Interval Bound Propagation (IBP)}
+
+IBP, bir modelin girişlerdeki küçük pertürbasyonlara karşı hatasız çalışacağını garanti eder. IBP, modelin her katmanında girişlerdeki pertürbasyonların yayılımını belirli sınırlar içinde izler ve modelin çıktılarına olan etkilerini kontrol eder. Bu sayede, modelin saldırganların manipüle ettiği girdiler karşısında da doğru sonuç vermesi garanti edilir. Modelin ilk girişine ait pertürbasyon sınırları hesaplanır. Girdi x ve küçük bir pertürbasyon sreviyesi $\epsilon$ ile, her bir giriş için bir alt ve üst sınır belirlenir:
+
+\[ x_{low} = x - \epsilon \text{and} x_{high} = x + \epsilon \]
+
+Her bir katman boyunca bu sınırlar, ağırlıklar ve aktivasyon fonksiyonları ile yayılır. Her katmanda çıkış için yeni bir alt ve üst sınır hesaplanır. Çıkış katmanına kadar yayılım yapıldıktan sonra, çıkış sınırları incelenir. Eğer bu sınırlar içinde model doğru sonucu verebiliyorsa, modelin bu bozulma seviyesine kadar dayanıklı olduğu sertifikalandırılır.
+
+\newpage
+
+\subsection{InstaHide Training}
+
+InstaHide, modellerin gizli verilerle eğitim yaparken, bu verilerin orijinal halinin gizli kalmasını sağlar. InstaHide ile veriler bir karıştırma (mixup) ve bozulma (perturbation) sürecinden geçerek gizlenir ve dışarıya anlamlı veri sızması engellenir. Eğitim verileri, gizli tutulan orijinal veriler ve rastgele diğer verilerle karıştırılarak modellenir. Böylece her bir veri, hem gizli verinin hem de karışık bir şekilde rastgele başka verilerin bileşimini içerir.
+
+\begin{itemize}
+    \item \textbf{Mixup (Veri Karışımı)}: Eğitim verileri iki veya daha fazla görüntüyle karıştırılır. Bu karışım sayesinde orijinal görüntülerin ne olduğu dışarıdan gözlemlenemez hale gelir.
+    \item \textbf{Perturbation (Gürültü Ekleme)}: Karıştırılan verilere küçük miktarda gürültü eklenir. Bu, orijinal verilerin kurtarılmasını zorlaştırır.
+\end{itemize}
+
+\newpage
