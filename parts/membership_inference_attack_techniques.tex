@@ -1,0 +1,49 @@
+\section{Membership Inference Attacks}
+
+\subsection{Black-Box}
+
+Saldırgan, modelin tahmin sonuçlarını analiz ederek, bir örneğin eğitimde kullanılıp kullanılmadığını anlamaya çalışır. Model, eğitim verilerine daha iyi performans gösterirken, eğitimde olmayan verilere karşı daha farklı (genellikle daha düşük) performans sergiler. Bu farkı anlamak için saldırgan, modelin çıktıları üzerindeki olasılık dağılımlarını inceler ve bu verilere dayanarak karar verir.
+
+Saldırgan, modelden bazı girdilerle ilgili tahmin sonuçlarını alır. Bu tahminler olasılık dağılımları (softmax çıktıları) şeklinde olur. Saldırgan, kendi oluşturduğu bir saldırı modelini eğitmek için hem eğitim verilerinden (inlier) hem de dışarıdaki verilerden (outlier) veri toplar. Amaç, modelin hangi veriler üzerinde daha yüksek veya düşük olasılık döndürdüğünü öğrenmektir. Bu model, verilen çıktının eğitim verisinden mi geldiğini belirlemeye çalışır.
+
+\newpage
+
+\subsection{Rule-based Black-Box}
+
+Bu saldırı türünde, saldırgan, hedef modelin iç yapısı hakkında bilgi sahibi olmadan (black-box), modelin giriş ve çıkışları üzerinde belirli kural tabanlı yöntemler kullanarak bir verinin modelin eğitim setinde olup olmadığını tahmin etmeye çalışır. Bu yöntem, modelin verdiği tahminlerin belirli özelliklerine dayalı olarak kurallar oluşturur. Örneğin, bir modelin olasılık tahminlerindeki güven (confidence), entropi veya marjin değerleri, bir örneğin eğitim setinde olup olmadığına dair ipuçları sağlayabilir. Bu kurallar saldırganın modelin sonuçlarına dayanarak eğitimde yer alıp almadığına dair çıkarım yapmasını sağlar.
+
+\textbf{Confidence Rule (Güven Kuralı)}, modelin çıktısında en yüksek olasılığı olan sınıfın olasılığına dayanır. Eğitimde kullanılan veriler daha yüksek bir güven ile sınıflandırılır.
+
+\[ \text{Confidence} = \text{max}(f(x)) \]
+
+Burada $f(x)$, modelin softmax çıktılarıdır.
+
+\textbf{Entropy Rule (Entropi Kuralı)}, Modelin tüm olasılık tahminlerinin dağılımına bakılarak entropi hesaplanır. Eğitim verileri daha düşük entropiye sahip olur, çünkü model eğitim verisine daha keskin tahminler yapar.
+
+\[ H(x) = - \sum_{i=1}^{k} p_i \text{log}(p_i) \]
+
+Burada $p_i$, $x$'in $i$'inci sınıfa ait olma olasılığıdır ve $k$ sınıf sayısını temsil eder.
+
+\textbf{Margin Rule (Marjin Kuralı)}: Modelin en yüksek olasılığı ile ikinci en yüksek olasılığı arasındaki fark hesaplanır. Eğitim verileri için bu fark daha büyük olur.
+
+\[ \text{Margin}(x) = \text{max}(f_{1}(x)) - \text{max}(f_{2}(x)) \]
+
+\newpage
+
+\subsection{Label-Only Decision Boundary}
+
+Bu saldırı, modelin karar sınırları (decision boundaries) etrafında bir örneğin eğitim setinde olup olmadığını anlamaya çalışır. Temel prensibi, eğitim setindeki örneklerin karar sınırına daha uzak olma eğiliminde olması, buna karşın eğitim dışındaki (test) verilerin karar sınırlarına daha yakın olmasıdır. Label-Only yöntemlerinde, modelin softmax veya olasılık değerlerine değil, sadece verdiği nihai sınıf etiketine erişim vardır.
+
+\newpage
+
+\subsection{Label-Only Gap Attack}
+
+Bu teknik, bir örneğin modelin eğitim setinde olup olmadığını anlamak için sınıf kararları arasındaki farkları (gaps) kullanır. Eğitim setindeki veriler ile eğitim setinde olmayan verilerin sınıf kararları arasında gözle görülür farklar oluşabileceği varsayımına dayanır. Label-Only Gap Attack, eğitimde kullanılan verilerin karar sınırlarından (decision boundary) uzak olduğuna ve eğitimde kullanılmayan verilerin bu sınırlara daha yakın olduğuna dayanır. Saldırgan, eğitim setindeki ve dışındaki veriler arasındaki farkları ölçerek saldırı yapar. Modelin bir örneğe verdiği tahmin etiketinin "güvenilirliği" önemli bir faktördür. Eğitimde kullanılan veriler genellikle modelin verdiği sınıf etiketi açısından daha yüksek güvenilirliğe sahip olacaktır. Eğitim dışındaki veriler ise bu karar sınırlarına daha yakın olabilir ve modelin bu veriler üzerinde verdiği kararlar daha "zayıf" olabilir. Bu fark (gap) saldırının temelidir. Eğitim setindeki ve dışındaki verilerin bu sınıf etiketlerine göre nasıl farklılaştığını belirlemeye çalışır.
+
+\newpage
+
+\subsection{Shadow Models}
+
+Shadow Models, bir hedef modelin eğitim verilerine dair üyelik bilgisini (membership) öğrenmeye çalışır. Shadow Models yaklaşımında, saldırgan hedef modelin davranışlarını taklit eden bir veya birden fazla gölge modeli eğitir. Bu gölge modeller, hedef modelin olası eğitim verilerine nasıl tepki verdiğini öğrenmek için kullanılır ve bu bilgi saldırıya dönüştürülür.
+
+\newpage

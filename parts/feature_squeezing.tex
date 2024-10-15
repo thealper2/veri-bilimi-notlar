@@ -1,0 +1,10 @@
+\section{Feature Squeezing}
+
+Feature Squeezing, modelin girdisindeki gereksiz varyasyonu azaltarak saldırıları tespit eder ve modelin doğru tahminler yapmasını sağlar. Girdi özelliklerinin hassasiyetini düşürerek (sıkıştırarak) adversarial bozulmaları etkisiz hale getirmeyi amaçlar. Bu sıkıştırma işlemi iki şekilde yapılır:
+
+\begin{itemize}
+    \item \textbf{Bit Derinliği Azaltma}: Görüntü verilerinde, her piksel değeri 8-bit (0-255) aralığında bir hassasiyete sahiptir. Bu yöntemde, bit derinliği azaltılarak pikseller arasındaki farklar küçültülür.
+    \item \textbf{Yakın Komşuları Birleştirme (Smoothing)}: Piksellerin veya diğer özelliklerin  yakın komşularıyla birleştirilmesi yoluyla küçük bozulmaların etkisi azaltılır.
+\end{itemize}
+
+\newpage

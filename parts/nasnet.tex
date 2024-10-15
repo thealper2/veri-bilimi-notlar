@@ -1,0 +1,25 @@
+\section{Neural Architecture Search Network (NASNet)}
+
+NASNet, Google tarafından geliştirilmiştir. Sinir ağı mimarilerini otomatik olarak tasarlamak için kullanılır. Belirli bir görev için optimize edilmiş en iyi sinir ağı mimarisini bulmayı hedefler ve bu süreçte Neural Architecture Search (NAS) algoritmasını kullanır. Bu, bir model mimarisini manuel olarak tasarlamak yerine, makine öğrenimi algoritmalarının bu görevi otomatikleştirmesidir.
+
+NASNet'in mimarisi iki ana bileşenden oluşur:
+
+\begin{itemize}
+    \item \textbf{Cell (Hücre) Yapısı}: NASNet, hücre tabanlı bir mimari kullanır. Hücreler, belirli bir görevi yerine getiren yapı taşlarıdır ve NASNet, farklı hücre kombinasyonlarını deneyerek en iyi performansı gösteren mimariyi bulmaya çalışır.
+    \begin{itemize}
+        \item \textbf{Normal Hücreler}: Girdiyi işleyerek çıktı üretir, ancak bu hücreler ağın boyutunu değiştirmez.
+        \item \textbf{Reduction Hücreler}: Bu hücreler, modelin hesaplama karmaşıklığını azaltmak için giriş boyutunu küçültür, özellik haritasının boyutunu düşürmek için kullanılır. 
+    \end{itemize}
+    \item \textbf{RNN Tabanlı Arama Stratejisi}: NASNet, farklı hücre mimarilerini optimize etmek için bir RNN kullanır. RNN, hücrelerin nasıl bağlanacağını, hangi katmanların kullanılacağını ve hücrelerin içerisindeki operasyonları belirlemek için bir arama alanı tarar. Bu süreç, belirli bir hücrenin en iyi performansı vermesini sağlayan bileşenlerin keşfedilmesini mümkün kılar.
+\end{itemize}
+
+\subsubsection{Çalışma Adımları}
+
+\begin{enumerate}
+    \item NASNet, önce birkaç katmanlı bir mimariyle başlar ve her bir katman, belirli bir hücreden oluşur. Hücreler, yukarıda bahsedilen normal ve reduction hücrelerinden oluşur. Arama stratejisi, her hücrenin yapısını keşfetmek için farklı olasılıkları dener.
+    \item NASNet, RNN tabanlı bir arama stratejisi kullanarak hücrelerin yapısını keşfetmeye başlar. Bu RNN, hücrelerin nasıl bağlanacağını, hangi operasyonların kullanılacağını ve hangi aktivasyon fonksiyonlarının en uygun olduğunu belirler. Her deneysel model çalıştırılır ve performansı ölçülür. Bu performansa göre, arama stratejisi hücre yapılarını optimize eder.
+    \item NASNet, keşfettiği en iyi hücre yapıları ile büyük bir model inşa eder ve bu model daha büyük veri kümeleri üzerinde eğitilir.
+    \item En iyi performansı gösteren hücreler seçildikten sonra, bu hücreler bir ağ boyunca defalarca tekrarlanarak tam mimari oluşturulur. Normal hücreler ve reduction hücreleri, derin bir sinir ağı yapısı oluşturmak için bir araya getirilir.
+\end{enumerate}
+
+\newpage

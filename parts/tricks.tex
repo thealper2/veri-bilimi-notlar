@@ -643,4 +643,71 @@ for filename in os.listdir(input_dir):
         cv2.imwrite(output_path, augmented_image)
 \end{lstlisting}
 
+\subsection{Apple Silicon - ML-DL Environment}
+
+Kurulması kütüphaneler aşağıdadır.
+
+\begin{lstlisting}[language=Python]
+# Jax
+pip install jax-metal ml_dtypes jax jaxlib
+
+# Torch
+pip install torch torchvision torchaudio
+
+# tensorflow
+pip install tensorflow tensorflow-macos tensorflow-metal
+
+# mlx 
+pip install mlx
+\end{lstlisting}
+
+\subsubsection{PyTorch}
+
+PyTorch kullanırken device olarak "mps" seçilmelidir.
+
+\begin{lstlisting}[language=Python]
+device = torch.device("mps")
+\end{lstlisting}
+
+\subsubsection{TensorFlow}
+
+TensorFlow kullanırken device olarak "gpu" seçilmelidir.
+
+\begin{lstlisting}[language=Python]
+with tf.device("/GPU:0"):
+    pass
+\end{lstlisting}
+
+\subsubsection{Jax}
+
+Jax kullanırken device olarak "cpu" seçilmelidir.
+
+\begin{lstlisting}[language=Python]
+import os
+os.environ["JAX_PLATFORMS"] = "cpu"
+
+import jax
+import jax.numpy as jnp
+\end{lstlisting}
+
+\subsection{Run R Code in Jupyter Notebook}
+
+Gereken komutlar aşağıdadır.
+
+\begin{lstlisting}[language=Python]
+# R shell
+R
+# IRkernel paketi yuklenir
+install.packages('IRkernel')
+# Kernel, user sistemine kurulur
+IRkernel::installspec(user=True)
+# Cikis
+quit()
+
+# Kernel listele
+jupyter kernelspec list
+# Kaldirmak icin
+jupyter kernelspec uninstall ir
+\end{lstlisting}
+
 \newpage

@@ -1,0 +1,7 @@
+\section{Randomized Smoothing}
+
+Randomized Smoothing, girdi verisine rastgele gürültü ekleyerek bir yumuşatma işlemi uygular. Bu yöntem L2 normu altında güvenilir sınırlarla sağlamlık sağlayan, verimli ve etkili bir adversarial savunma tekniğidir. Bir girdiye rastgele gürültü ekleyerek, sınıflandırıcının yalnızca tek bir girdiye değil, o girdinin etrafındaki küçük bir bölgeye karşı güvenilir sonuçlar vermesini sağlar. Bu teknik sayesinde, küçük adversarial bozulmalar, modelin tahmin sonucunu değiştirmekte başarısız olur.
+
+Randomized Smoothing, modelin tahmin ettiği her giriş için, girişe Gaussian gürültüsü ekleyip, birden fazla örnek üzerinden tahmin yapar. Ardından, bu tahminlerin çoğunluğu üzerinden son karar verilir. Bu süreç, küçük adversarial perturbasyonların etkisini azaltır ve modelin karar mekanizmasını yumuşatır.
+
+\newpage

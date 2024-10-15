@@ -1,0 +1,40 @@
+\section{Zono Layers}
+
+Zono katmanları, zonotop adı verilen geometrik yapıların kullanıldığı bir savunma yöntemidir. Zonotoplar, doğrusal transformasyonları temsil edebilme yetenekleri ve konveks poligonları modelleme özellikleri sayesinde yapay sinir ağlarının güvenliğini artırmak amacıyla kullanılır.
+
+Zonotop, bir vektör uzayında doğrusal kombinasyonla elde edilen konveks bir çokgen veya çokyüzlüdür. Zonotoplar, girişlerdeki belirsizliği modellemek veya küçük pertürbasyonları heesaba katmak için kullanılır.
+
+\[ Z = c + \sum_{i=1}^{k} [-g_i, g_i] \]
+
+Burada:
+
+\begin{itemize}
+    \item $Z$: Zonotop.
+    \item $c$: Merkez nokta (mean).
+    \item $g_i$: Zonotopun her bir yönünde olan vektör bileşenleridir.
+    \item $[-g_i, g_i]$: Her bir bileşen boyunca küçük bir değişiklik (perturbation) aralığını belirtir.
+\end{itemize}
+
+\subsection{Zono Bounds}
+
+Zono bounds, zonotope'ların sınırlarını belirlemek için kullanılır. Adversarial saldırılarda modelin tahminini manipüle eden küçük değişiklikler göz önüne alındığında, zonotope sınırları bu değişikliklerin hangi aralıklarda güvenli olduğunu belirler. Zonotope sınırları, girişin her bir boyutundaki maksimum ve minimum değerleri içerir.
+
+\subsection{Zono Dense Layer}
+
+Zono Dense Layer, klasik fully connected layer'ın zonotope uzayında genişletilmiş halidir. Burada, giriş vektörü $x$, bir zonotope olarak modellenir ve ağırlık matrisi $W$ ile çarpılırken zonotope'lar üzerinden bir işlem yapılır. 
+
+\[ Z_{dense} = W Z + b \]
+
+Bu, her bir giriş bileşeni için zonotopun dönüşümünü hesaplar ve modeldeki doğrusal olmayan işlemleri zonotope uzayında tutarak, güvenliğin artırılmasına yardımcı olur.
+
+\subsection{Zono Convolution Layer}
+
+Zono convolution layer, CNN yapılarında kullanılan konvolüsyon işlemini zonotope uzayında gerçekleştirir. Bu, her bir filtre işlemini zonotope'lar üzerinde gerçekleştirerek adversarial saldırılara karşı savunmayı artırır. Zonotope konvolüsyon katmanı, girişin farklı bölgelerinde olası perturbasyonları hesaba katarak, zonotope'ları işleme alır ve sonuçlarını konvolüsyon işlemiyle birleştirir.
+
+\subsection{Zono ReLU}
+
+Zono ReLU, klasik ReLU aktivasyon fonksiyonunun zonotope uzayındaki genişletilmiş bir versiyonudur. Bu, zonotope'ların negatif bileşenlerini sıfırlamak ve pozitif bileşenleri korumak için kullanılır.
+
+\[ Z_{ReLU} = \text{max}(0, Z) \]
+
+\newpage

@@ -1,0 +1,15 @@
+\section{L-Filter}
+
+L-Filter, modelin girişlerine uygulanan küçük değişiklikleri (perturbation) ortadan kaldırarak, gürültüden arındırılmış daha güvenli ve kararlı tahminler yapılmasını sağlar. L-Filter, low-pass filter mantığına dayalıdır. Bu filtre, verideki düşük frekanslı bileşenleri korurken, yüksek frekanslı bileşenleri ortadan kaldırır.
+
+\[ \hat{x} = F^{-1}(F(x) \cdot H(f)) \]
+
+Burada:
+
+\begin{itemize}
+    \item $F(x)$: Girdi verisinin fourier dönüşümü.
+    \item $H(f)$: Bir low-pass filter fonksiyonudur, yani düşük frekanslı bileşenleri geçirirken, yüksek frekanslı bileşenleri süzer.
+    \item $F^{-1}$: Ters fourier dönüşümü.
+\end{itemize}
+
+\newpage

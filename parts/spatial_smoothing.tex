@@ -1,0 +1,13 @@
+\section{Spatial Smoothing}
+
+Spatial Smoothing, görüntü tabanlı adversarial saldırılarda, saldırıya uğramış piksellerin komşularıyla uyumsuz olmasını temel alır. Spatial Smoothing, bu tür saldırılara karşı pikseller arasında komşuluk ilişkilerini kullanarak, görüntüdeki bozulmaları giderme amacı güder. Görüntüdeki piksellerin değerlerini komşu piksellerin ortalamasını alarak veya medyanını hesaplayarak daha düzgün hale getirir. Böylece saldırıların etkisi azaltılır vee modelin yanlış tahminde bulunması engellenir.
+
+Spatial Smoothing, girdiyi düzenli hale getirmek için çeşitli filtreleme teknikleri kullanır. Her piksel için 3x3, 5x5 veya daha büyük bir pencere kullanılarak komşuluk bölgesi tanımlanır. Her pikselin değeri, komşu piksellerle birleştirilerek yeniden hesaplanır.
+
+\begin{itemize}
+    \item \textbf{Gaussian Smoothing}: Görüntüdeki her pikselin değerini, bir Gaussian ağırlık fonksiyonuna göre komşu piksellerle ortalamasını alarak hesaplar.
+    \item \textbf{Mean Smoothing}: Her pikselin değerini, çevresindeki komşu piksellerin ortalaması ile günceller.
+    \item \textbf{Median Smoothing}: Her pikselin değerini, çevresindeki piksellerin medyan değerleriyle günceller.
+\end{itemize}
+
+\newpage

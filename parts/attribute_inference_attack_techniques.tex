@@ -1,0 +1,13 @@
+\section{Attribute Inteference Attacks}
+
+\subsection{Black-Box}
+
+Black-Box, bir modelin çıkışını gözlemleyerek, modelin eğitim verilerindeki gizli özellikleri tahmin etmeye çalışan bir saldırı türüdür. Bu saldırı modelin iç yapısını bilmeksizin sadece girdiler ve çıktılara bakarak gerçekleştirilir. Saldırgan, hedef modelin verdiği çıktılar ve girişler üzerinde bir saldırı modeli (attack model) eğitir. Bu saldırı modeli, hedef modelin belirli bir özelliği nasıl etkilediğini öğrenir. Saldırgan bu saldırı modelini kullanarak, bilmediği özellikleri tahmin etmeye çalışır.
+
+\newpage
+
+\subsection{White-Box Decision Tree}
+
+Bu saldırı, bir makine öğrenimi modelinin içsel yapısı ve parametrelerine erişimin olduğu white-box senaryolarda, karar ağaçları yapılarının kullanıldığı bir attribute inference tekniğidir. Saldırgan, modelin iç yapısına erişimi olduğu için, modelin kararlarını belirlemek için kullanılan özellikleri ve kuralları analiz eder. Bu tür bir saldırıda saldırgan, modelin iç parametrelerine ve yapılarına doğrudan erişir ve bu yapıları analiz ederek hedeflenen gizli bilgiyi ortaya çıkarmaya çalışır. Saldırgan, modelin hangi özelliklere dayandığını ve hangi düğüm noktalarının hangi kararları verdiğini anlamak için karar ağacını analiz eder.
+
+\newpage

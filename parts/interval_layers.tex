@@ -1,0 +1,38 @@
+\section{Interval Layers}
+
+Interval Layers, modelin her katmanında girişlerin belirli bir aralıkta olmasına olanak tanıyarak, modelin girişlerindeki belirsizliklere karşı koruma sağlar. Herhangi bir veri noktasını, kesin bir değer yerine bir aralık olarak modelleyerek, girdi değişiklikleri takip edilir. Bir veri noktası $x$, bir aralık $[l,u]$ (alt ve üst sınır) ile ifade edilir:
+
+\[ x \in [l, u] \]
+
+Burada:
+
+\begin{itemize}
+    \item $l$, girişin alt sınırını ifade eder.
+    \item $u$, girişin üst sınırını ifade eder.
+\end{itemize}
+
+Bu yaklaşım, küçük bozulmaların neden olduğu belirsizlikleri temsil etmek için kullanılır ve modelin her katmanında bu aralık bilgisi işlenir.
+
+\subsection{Interval Bounds}
+
+Interval bounds, modelin her katmanında hesaplanan aralıkların güvenliğini sağlamak için kullanılır. Bu sınırlar, modelin tahminlerine eklenen küçük değişikliklerin etkilerini ölçmek için kullanılır. Belirli bir giriş aralığı için en küçük ve en büyük değerler hesaplanarak, modelin güvenilirliği artırılır.
+
+\subsection{Interval Dense Layer}
+
+Interval dense layer, klasik fully connected layer'ın genişletilmiş halidir. Giriş, bir aralık $[l, u]$ olarak modellendiğinde, ağırlık matrisi ile çarpıldığında bu aralığın alt ve üst sınırları yeni aralık değerlerini verir.
+
+\[ z_l = W \cdot l + b, z_u = W \cdot u + b \]
+
+\subsection{Interval Convolution Layer}
+
+Interval convolution layer, CNN'in klasik konvolüsyon katmanının interval formudur. Giriş verileri bir aralık olarak ifade edilir ve filtreler (kerneller) bu aralıklarla çalışır.
+
+\[ z_l = W \cdot l + b, z_u = W \cdot u + b \]
+
+\subsection{Interval ReLU}
+
+Interval ReLU, bir aralık girişine klasik ReLU aktivasyon fonksiyonunu uygulamak için kullanılır. ReLU'nun negatif değerleri sıfıra eşitlediğini düşünürsek, girişin alt ve üst sınırları üzerinden bu işlem şu şekilde gerçekleştirilir:
+
+\[ l' = \text{max}(0, l), u' = \text{max}(0, u) \]
+
+\newpage

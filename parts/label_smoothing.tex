@@ -1,0 +1,28 @@
+\section{Label Smoothing}
+
+Label Smoothing, modelin aşırı güvenli (overconfident) tahminler yapmasını engellemek amacıyla kullanılan bir düzenleme (regularization) tekniğidir. Modelin bir sınıfa \%100 güvenle karar vermesini engeller. Örneğin, bir sınıfa 0 veya 1 olarak katı şekilde etiket vermek yerine, o sınıfın dışındaki sınıflara da küçük bir olasılık atayarak yumuşatma yapılır. 
+
+Genellikle bir sınıflandırma problemi için her veri örneği bir "one-hot" vektör ile etiketlenir. One-hot vektör, doğru sınıfa 1 değeri, diğer sınıflara ise 0 değeri atar. Label Smoothing ile bu one-hot vektörü yumuşatılır, yani doğru sınıfa tam 1 değeri yerine biraz daha küçük bir değer, diğer sınıflara ise 0 yerine küçük bir pozitif değer atanır.
+
+Örneğin, orijinal one-hot etiketleme şu şekildedir:
+
+\[ y_{one-hot} = [0, 1, 0] \]
+
+Label Smoothing ile yumuşatılır:
+
+\[ y_{smooth} = [0.05, 0.9, 0.05] \]
+
+Bu yumuşatma işlemi şu şekilde yapılır:
+
+\[ y_{smooth} = (1 - \epsilon) y_{one-hot} + \frac{\epsilon}{K} \]
+
+Burada:
+
+\begin{itemize}
+    \item $y_{smooth}$: Yumuşatılmış etiket vektörüdür.
+    \item $y_{one-hot}$: Orijinal one-hot etiketidir.
+    \item $\epsilon$: Yumuşatma faktörüdür.
+    \item $K$: Sınıf sayısıdır.
+\end{itemize}
+
+\newpage

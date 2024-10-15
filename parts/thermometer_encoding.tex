@@ -1,0 +1,11 @@
+\section{Thermometer Encoding}
+
+Thermometer Encoding, giriş verisinin temsilini daha dirençli hale getirerek, saldırıların etkisini azaltır. Sürekli değerli piksellerin yerine kademeli (discretized) bir gösterim kullanarak, modelin adversarial örneklere karşı dayanıklılığını artırmayı hedefler. Görüntüdeki her bir pikseli bir termometre gibi ele alır ve belirli bir eşiğin üstünde olup olmadığına bağlı olarak her pikseli kademeli olarak gösterir. Bir piksel değeri 0 ile 1 arasında bir aralıkta olabilir. Bu değer, belirli aralıklarla eşitlenerek (thresholding) yeni bir gösterim ile ifade edilir. Bu işlem, girişin hassasiyetini azaltır ve küçük değişikliklerin modelin kararını etkilemesini zorlaştırır. Çünkü model, küçük değişiklikleri artık hassas bir şekilde algılamaz: girdiyi discretize edilmiş temsillere dayalı olarak işler. 
+
+Thermometer Encoding, giriş verisini belirli eşiklerle bölerek her pikseli bir termometre gibi işler. Girdiyi, n kademeye bölerek her piksel için bir kademeli temsil (discretized representation) elde edilir. Eğer piksel değeri $x = 0.8$ ise ve $n = 10$ kademeli bir termometre kullanıyorsak, piksel $x$'in temsili şu şekilde olur:
+
+\[ \text{Thermometer Encoding}(x) = [1, 1, 1, 1, 1, 1, 1, 1, 0, 0] \]
+
+Bu gösterim, piksel değerinin kaç eşik noktasını aştığını temsil eder.
+
+\newpage
