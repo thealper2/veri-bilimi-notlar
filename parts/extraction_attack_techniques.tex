@@ -11,6 +11,27 @@ Copycat CNN, bir saldırganın olmadığı hedef bir modeli taklit etmek amacıy
     \item \textbf{Model Watermarking}: Modelin sahiplik bilgilerini dijital olarak içine gömmek, böylece taklit edildiği anlaşılabilir.
 \end{itemize}
 
+\subsubsection{Python Kodu}
+
+\begin{lstlisting}[language=Python]
+from art.estimators.classification import TensorFlowV2Classifier
+from art.attacks.extraction import CopycatCNN
+
+copycat_classifier = TensorFlowV2Classifier(
+    model=copycat_model, 
+    loss_object=CategoricalCrossentropy(from_logits=True), 
+    optimizer=Adam(learning_rate=0.01), nb_classes=10,
+    input_shape=(28, 28), clip_values=(min_, max_)
+)
+
+copycat_attack = CopycatCNN(
+    classifier=copycat_classifier, nb_epochs=10,
+    nb_stolen=10000
+)
+
+copycat_attack.extract(x_test, y_test, thieved_classifier=target_classifier)
+\end{lstlisting}
+
 \newpage
 
 \subsection{Functionally Equivalent Extraction}
@@ -33,5 +54,29 @@ Knockoff Nets saldırıları, ticari ve patentli makine öğrenimi modellerinin 
     \item \textbf{Model Watermarking}: Modelin sahiplik bilgilerini dijital olarak içine gömmek, böylece taklit edildiği anlaşılabilir.
     \item \textbf{Rate Limiting}: Sorgu sayısını sınırlayarak, saldırganın veri toplaması önlenebilir.
 \end{itemize}
+
+\subsubsection{Python Kodu}
+
+\begin{lstlisting}[language=Python]
+from art.estimators.classification import TensorFlowV2Classifier
+from art.attacks.extraction import KnockoffNets
+
+knockoff_classifier = TensorFlowV2Classifier(
+    model=knockoff_model, 
+    loss_object=CategoricalCrossentropy(from_logits=True), 
+    optimizer=Adam(learning_rate=0.01),
+    nb_classes=10,
+    input_shape=(28, 28),
+    clip_values=(min_, max_)
+)
+
+knockoff_attack = KnockoffNets(
+    classifier=knockoff_classifier, 
+    nb_epochs=10,
+    nb_stolen=10000
+)
+
+knockoff_attack.extract(x_test, y_test, thieved_classifier=target_classifier)
+\end{lstlisting}
 
 \newpage

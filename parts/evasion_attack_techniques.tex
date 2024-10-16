@@ -254,6 +254,32 @@ Burada:
     \item $S_2(x')$: İkinci saldırı tarafından modifiye edilen girdidir.
 \end{itemize}
 
+\subsubsection{Python Kodu}
+
+\begin{lstlisting}[language=Python]
+from art.estimators.classification import TensorFlowV2Classifier
+from art.attacks.evasion import FastGradientMethod, ProjectedGradientDescent
+
+art_model = TensorFlowV2Classifier(
+    model=model, 
+    loss_object=SparseCategoricalCrossentropy(from_logits=True), 
+    nb_classes=10, input_shape=(784,), clip_values=(0, 1))
+
+pgd = ProjectedGradientDescent(estimator=art_model, targeted=False, 
+                               eps=0.1, eps_step=0.01, max_iter=40)
+
+x_test_adv_fgsm = fgsm.generate(x_test)
+x_test_adv_composite = pgd.generate(x=x_test_adv_fgsm)
+\end{lstlisting}
+
+\newpage
+
+\begin{figure}[h]
+    \centering
+    \includegraphics[width=1\textwidth]{images/composite_adversarial_attack_results.png}
+    \caption{}
+\end{figure}
+
 \newpage
 
 \subsection{Decision Tree Attack}
@@ -268,6 +294,22 @@ Decision Tree Attack, karar ağacının düğümlerini ve dallarını hedef alar
     \item Giriş verileri optimize edilerek modelin verdiği kararı yanlış yöne kaydıracak en iyi adversarial örnek bulunur.
     \item Karar ağacındaki zayıf noktalar tespit edildikten sonra, model bu zayıflıkları kullanarak saldırıya uğratılır.
 \end{enumerate}
+
+\subsubsection{Python Kodu}
+
+\begin{lstlisting}[language=Python]
+from art.estimators.classification import SklearnClassifier
+from art.attacks.evasion import DecisionTreeAttack
+art_dt = SklearnClassifier(model=dt)
+attack = DecisionTreeAttack(art_dt)
+adv_test = attack.generate(x_test)
+\end{lstlisting}
+
+\begin{figure}[h]
+    \centering
+    \includegraphics[width=0.6\textwidth]{images/dt_attack_results.png}
+    \caption{}
+\end{figure}
 
 \newpage
 
@@ -294,6 +336,29 @@ Burada:
     \item Hesaplanan küçük bir pertürbasyon giriş verisine eklenir.
     \item Bu işlem tekrarlanarak modelin sınıflandırmasını değiştirecek minimum pertürbasyon elde edilir.
 \end{enumerate}
+
+\subsubsection{Python Kodu}
+
+\begin{lstlisting}[language=Python]
+from art.estimators.classification import TensorFlowV2Classifier
+from art.attacks.evasion import DeepFool
+
+art_model = TensorFlowV2Classifier(
+    model=model, 
+    loss_object=SparseCategoricalCrossentropy(from_logits=True), 
+    nb_classes=10, input_shape=(784,), clip_values=(0, 1))
+
+deep_fool = DeepFool(classifier=art_model)
+adv_test = deep_fool.generate(x=x_test)
+\end{lstlisting}
+
+\newpage
+
+\begin{figure}[h]
+    \centering
+    \includegraphics[width=1\textwidth]{images/deep_fool_attack_results.png}
+    \caption{}
+\end{figure}
 
 \newpage
 
@@ -355,6 +420,29 @@ Burada:
     \item $\text{sign}$: Gradyanın işaretini belirten fonksiyon.
 \end{itemize}
 
+\subsubsection{Python Kodu}
+
+\begin{lstlisting}[language=Python]
+from art.estimators.classification import TensorFlowV2Classifier
+from art.attacks.evasion import FastGradientMethod
+
+art_model = TensorFlowV2Classifier(
+    model=model, 
+    loss_object=SparseCategoricalCrossentropy(from_logits=True), 
+    nb_classes=10, input_shape=(784,), clip_values=(0, 1))
+
+fgsm = FastGradientMethod(estimator=art_model, eps=0.1)
+adv_test = fgsm.generate(x=x_test)
+\end{lstlisting}
+
+\newpage
+
+\begin{figure}[h]
+    \centering
+    \includegraphics[width=1\textwidth]{images/fgm_attack_results.png}
+    \caption{}
+\end{figure}
+
 \newpage
 
 \subsection{Feature Adversaries}
@@ -372,6 +460,31 @@ Burada:
     \item $\nabla_x J(f_l(x), y)$: Modelin $l$. katmanındaki özellik vektörüne göre girdi üzerindeki gradyanı.
     \item $f_l(x)$: Modelin $l$. ara katmanındaki özellik çıkarımı.
 \end{itemize}
+
+\subsubsection{Python Kodu}
+
+\begin{lstlisting}[language=Python]
+from art.estimators.classification import TensorFlowV2Classifier
+from art.attacks.evasion import FeatureAdversariesTensorFlowV2
+
+art_model = TensorFlowV2Classifier(
+    model=model, 
+    loss_object=CategoricalCrossentropy(from_logits=True), 
+    nb_classes=10, input_shape=(28, 28, 1), clip_values=(0, 1))
+
+valid_indices = np.where(
+    np.argmax(y_test, axis=1)[:100] != np.argmax(y_test, axis=1)[100:200]
+)[0]
+source = x_test[:100][valid_indices][:32]
+guide = x_test[100:200][valid_indices][:32]
+
+feat_adv = FeatureAdversariesTensorFlowV2(
+    art_model, layer=-2, delta=25/255,
+    optimizer=None, step_size=1/255, max_iter=100,
+)
+
+adv_test = feat_adv.generate(source, guide)
+\end{lstlisting}
 
 \newpage
 
@@ -397,6 +510,30 @@ Bu formülde $\frac{\partial \hat{y}}{\partial F_t(i, j)}$, çerçevenin her bir
     \item Seçilen çerçeveler üzerinde küçük, insan tarafından fark edilemeyen değişiklikler yapılır.
     \item Manipüle edilen video modele verilir ve çıktının ne kadar değiştiği analiz edilir.
 \end{enumerate}
+
+\subsubsection{Python Kodu}
+
+\begin{lstlisting}[language=Python]
+from art.attacks.evasion import FrameSaliencyAttack, FastGradientMethod
+from art.estimators.classification import TensorFlowV2Classifier
+
+classifier = TensorFlowV2Classifier(
+    model=model,
+    loss_object=CategoricalCrossentropy(from_logits=True),
+    nb_classes=10,
+    input_shape=(32, 32, 3),
+)
+
+fgsm = FastGradientMethod(estimator=classifier, eps=0.4)
+attack = FrameSaliencyAttack(classifier=classifier, attacker=fgsm)
+adv_test = attack.generate(x_test[:100])
+\end{lstlisting}
+
+\begin{figure}[h]
+    \centering
+    \includegraphics[width=1\textwidth]{images/frame_saliency_attack_results.png}
+    \caption{}
+\end{figure}
 
 \newpage
 
@@ -428,6 +565,36 @@ Burada $f(x)$ modelin tahmin fonksiyonudur ve saldırının amacı, $f(x_i)$'nin
 
 GRAPHITE, graph-based techniques (graf tabanlı teknikler) kullanılarak modelin karar sınırlarını etkili bir şekilde keşfetmeyi ve bu sınırları istismar etmeyi hedefler. Saldırganlar, grafik tabanlı veri yapılarında düğümler veya kenarlar üzerinde küçük değişiklikler yaparak, modelin doğru tahmin yapmasını engelleyebilir. GRAPHITE saldırıları hem black-box (modelin iç yapısı bilinmez, sadece çıktılar üzerinden saldırı yapılır) hem de white-box (modelin iç yapısı bilinir ve model parametreleri üzerinden saldırı yapılır) senaryolarında uygulanabilir.
 
+\subsubsection{Python Kodu}
+
+\begin{lstlisting}[language=Python]
+from art.attacks.evasion import GRAPHITEBlackbox
+from art.estimators.classification import TensorFlowV2Classifier
+
+classifier = TensorFlowV2Classifier(
+    model=model,
+    loss_object=CategoricalCrossentropy(from_logits=True),
+    nb_classes=10, input_shape=(32, 32, 3),
+    preprocessing=(0.5, 1), clip_values=(min_, max_)
+)
+attack = GRAPHITEBlackbox(
+    classifier=classifier,  noise_size=(32, 32), 
+    net_size=(32, 32),  heat_patch_size=(4, 4),
+    heatmap_mode = 'Target',
+)
+x_adv = attack.generate(
+    x=x_test[1, :, :, :][np.newaxis, :, :, :], 
+    y=y_test[8][np.newaxis, :], 
+    mask=None, x_tar=x_test[8,:,:,:][np.newaxis,:,:,:]
+)
+\end{lstlisting}
+
+\begin{figure}[h]
+    \centering
+    \includegraphics[width=0.6\textwidth]{images/graphite_results.png}
+    \caption{}
+\end{figure}
+
 \newpage
 
 \subsection{High Confidence Low Uncertainly (HCLU) Attack}
@@ -439,6 +606,44 @@ HCLU, bir modelin yüksek güven ile yanlış bir sınıflandırma yapmasını s
 \subsection{Hop Skip Jump Attack (HSJA)}
 
 HSJA, sınırlı erişim (black-box) altında çalışan bir saldırıdır ve decision boundary keşfi ile çalışır. HSJA, modelin karar sınırlarını (decision boundary) keşfetmek için sorgulamalarda bulunarak, adversarial (yanıltıcı) örnekler üretir. Modelin sınıflandırma sonuçlarına dayanarak, girdiyi modelin karar sınırına doğru iter ve ardından bu sınırı geçip yanlış sınıflandırma yapan bir adversarial örnek üretir.
+
+\subsubsection{Python Kodu}
+
+\begin{lstlisting}[language=Python]
+from art.attacks.evasion import HopSkipJump
+from art.estimators.classification import TensorFlowV2Classifier
+
+classifier = TensorFlowV2Classifier(
+    model=model,
+    loss_object=CategoricalCrossentropy(from_logits=True),
+    nb_classes=10,
+    input_shape=(32, 32, 3),
+    preprocessing=(0.5, 1),
+    clip_values=(min_, max_)
+)
+
+attack = HopSkipJump(classifier=classifier, targeted=False, max_iter=0, max_eval=1000, init_eval=10)
+iter_step = 10
+init_image = x_test[1]
+target_image = x_test[6]
+x_adv = np.array([init_image])
+mask = np.random.binomial(n=1, p=0.9, size=np.prod(target_image.shape))
+mask = mask.reshape(target_image.shape)
+
+for i in range(20):
+    x_adv = attack.generate(x=np.array([target_image]),
+                            y=y_test[1],
+                            x_adv_init=x_adv, 
+                            resume=True, 
+                            mask=mask)
+
+    print(f"[Step {(i+1) * iter_step}/200] [L2 Error: {np.linalg.norm(np.reshape(x_adv[0] - target_image, [-1])):.2f}]")
+    attack.max_iter = iter_step
+
+    plt.figure()
+    plt.imshow((x_adv[0] * 255).astype(np.uint))
+    plt.show()
+\end{lstlisting}
 
 \newpage
 
@@ -462,17 +667,92 @@ BIM, aynı zamanda Iterative Fast Gradient Sign Method (IFGSM) olarak da bilinir
     \item Tüm iterasyonlar tamamlandığında, son haliyle adversarial örnek elde edilir.
 \end{enumerate}
 
+\subsubsection{Python Kodu}
+
+\begin{lstlisting}[language=Python]
+from art.attacks.evasion import BasicIterativeMethod
+from art.estimators.classification import TensorFlowV2Classifier
+
+classifier = TensorFlowV2Classifier(
+    model=model,
+    loss_object=CategoricalCrossentropy(from_logits=True),
+    nb_classes=10,
+    input_shape=(32, 32, 3),
+)
+
+attack = BasicIterativeMethod(estimator=classifier, eps=0.3, eps_step=0.01, max_iter=10)
+adv_test = attack.generate(x=x_test[:100])
+\end{lstlisting}
+
+\newpage
+
+\begin{figure}[h]
+    \centering
+    \includegraphics[width=1\textwidth]{images/basic_iterative_method_results.png}
+    \caption{}
+\end{figure}
+
 \newpage
 
 \subsection{Projected Gradient Descent (PGD)}
 
 PGD, bir modeli hedef alan düşman örnekleri üretmek için yönlendirilmiş gradyan inişi (gradient descent) tekniğini kullanır. Amaç, modelin yanlış tahmin yapmasını sağlamak için giriş verisinin üzerine küçük ama stratejik bozulmalar eklemektir. PGD, bu bozulmaları optimize etmek için birkaç adımda küçük güncellemeler yaparak, saldırıyı daha güçlü hale getirir. PGD, aslında Basic Iterative Method (BIM) saldırısının genel bir formu olup, giriş değerlerini belirli bir norm içinde tutmak için projeksiyon kullanır.
 
+\subsubsection{Python Kodu}
+
+\begin{lstlisting}[language=Python]
+from art.estimators.classification import SklearnClassifier
+from art.attacks.evasion import ProjectedGradientDescent
+
+art_model = SklearnClassifier(model=log_reg)
+pgd = ProjectedGradientDescent(estimator=art_model, eps=0.3, 
+                               eps_step=0.1, max_iter=40, targeted=False)
+adv_test = pgd.generate(x_test)
+\end{lstlisting}
+
+\begin{figure}[h]
+    \centering
+    \includegraphics[width=1\textwidth]{images/pgd_attack_results.png}
+    \caption{}
+\end{figure}
+
 \newpage
 
 \subsection{Laser Attack}
 
 Laser Attack, sensörlerin çalışma prensibini manipüle ederek işlev görür. Lazer ışınları, bir sensöre veya kameraya yönlendirilir ve bu sensörlerin topladığı verilerde gürültü oluşturur. Sensörün algıladığı lazer ışınları, gerçek dünyadaki nesnelerin algılanmasını engelleyebilir veya yanlış algılamalar yaratabilir.
+
+\subsubsection{Python Kodu}
+
+\begin{lstlisting}[language=Python]
+from art.attacks.evasion.laser_attack.laser_attack import LaserBeamAttack
+
+lb_attack = LaserBeamAttack(
+    estimator = model,
+    iterations = 50,
+    max_laser_beam=(780, 3.14, 32, 32)
+)
+
+adv_images = []
+
+for i in range(5):
+    adv_image = lb_attack.generate(
+        x=np.expand_dims(x_test[i], axis=0)
+    )
+    adv_images.append(adv_image)
+
+adv_pred = []
+
+for i in range(5):
+    pred = model.predict(np.expand_dims(adv_images[i][0], 0))
+    adv_pred.append(pred)
+\end{lstlisting}
+
+\begin{figure}[h]
+    \centering
+    \includegraphics[width=0.6\textwidth]{images/evasion_laser_beam.png}
+    \caption{}
+\end{figure}
 
 \newpage
 
@@ -496,6 +776,20 @@ Burada:
     \item $f(x_k)$: Sınıflandırıcı modelin çıktısı.
     \item $\nabla f(x_k)$: Sınıflandırıcı modelin çıktısına göre giriş üzerindeki gradyanı.
 \end{itemize}
+
+\subsubsection{Python Kodu}
+
+\begin{lstlisting}[language=Python]
+from art.estimators.classification import TensorFlowV2Classifier
+from art.attacks.evasion import NewtonFool
+
+art_model = TensorFlowV2Classifier(
+    model=model, 
+    loss_object=SparseCategoricalCrossentropy(from_logits=True), 
+    nb_classes=10, input_shape=(784,), clip_values=(0, 1))
+deep_fool = NewtonFool(classifier=art_model)
+adv_test = deep_fool.generate(x=x_test)
+\end{lstlisting}
 
 \newpage
 
@@ -526,6 +820,24 @@ OTA Flickering Attack, kamera veya sensör tabanlı algılama sistemlerine yöne
 
 Pixel Attack, hedef görüntüde sınırlı sayıda pikseli değiştirerek modelin sınıflandırma kararını değiştirmeyi amaçlar. Bu saldırı, görüntünün genel yapısını bozmadan küçük bir değişiklik yaparak saldrının fark edilmemesini sağlar.
 
+\subsubsection{Python Kodu}
+
+\begin{lstlisting}[language=Python]
+from art.estimators.classification import TensorFlowV2Classifier
+from art.attacks.evasion import PixelAttack
+
+art_model = TensorFlowV2Classifier(model=model, nb_classes=10, 
+                                   input_shape=(32, 32, 3), clip_values=(0, 1))
+pixel_attack = PixelAttack(classifier=art_model, th=None, es=1)
+adv_test = pixel_attack.generate(x=x_test[:16])
+\end{lstlisting}
+
+\begin{figure}[h]
+    \centering
+    \includegraphics[width=1\textwidth]{images/pixel_attack_results.png}
+    \caption{}
+\end{figure}
+
 \newpage
 
 \subsection{Threshold Attack}
@@ -537,6 +849,24 @@ Threshold Attack, modelin çıkışının (olasılık veya karar fonksiyonu) kü
 \subsection{Jacobian Saliency Map Attack (JSMA)} 
 
 JSMA, modelin girdiye verdiği yanıtları analiz ederek hangi giriş özelliklerinin hedeflenen sınıfa doğru değiştirileceğini seçmek için "Jacobian Matris" kullanılarak oluşturulan bir saliency map (önem haritası) kullanır. 
+
+\subsubsection{Python Kodu}
+
+\begin{lstlisting}[language=Python]
+from art.estimators.classification import TensorFlowV2Classifier
+from art.attacks.evasion import SaliencyMapMethod
+
+art_model = TensorFlowV2Classifier(model=model, nb_classes=10, 
+                                  input_shape=(32, 32, 3), clip_values=(0, 1))
+jsma = SaliencyMapMethod(classifier=art_model, theta=1, gamma=0.1)
+adv_test = jsma.generate(x=x_test[:16])
+\end{lstlisting}
+
+\begin{figure}[h]
+    \centering
+    \includegraphics[width=1\textwidth]{images/jsma_results.png}
+    \caption{}
+\end{figure}
 
 \newpage
 
@@ -556,6 +886,18 @@ Shape Shifter Attack, bir modelin doğru sınıflandırdığı bir görüntüyü
 
 Sign-OPT Attack, adversarial örneklerin optimize edilmesini sağlar. Saldırı, zeroth-order optimization yöntemini kullanarak bir hedef sınıfa ulaşmaya çalışır. Saldırının temel mantığı, modelin karar sınırlarını keşfederek küçük, insan gözüyle fark edilemeyecek değişiklikler yapmaktır. Bu değişiklikler, modelin tahmin sonuçlarını değiştirecek şekilde optimize edilir.
 
+\subsubsection{Python Kodu}
+
+\begin{lstlisting}[language=Python]
+from art.estimators.classification import TensorFlowV2Classifier
+from art.attacks.evasion import SignOPTAttack
+
+art_model = TensorFlowV2Classifier(model=model, nb_classes=10, 
+                                   input_shape=(32, 32, 3), clip_values=(0, 1))
+sign_opt_attack = SignOPTAttack(estimator=art_model, targeted=False, max_iter=100, query_limit=2000)
+adv_test = sign_opt_attack.generate(x=x_test[:16])
+\end{lstlisting}
+
 \newpage
 
 \subsection{Spatial Transformations Attack}
@@ -570,11 +912,54 @@ Spatial Transformation Attack, modelin giriş verisinde uzaysal (spatial) dönü
     \item \textbf{Perspective Transform}: Görüntünün perspektifinde değişiklikler yapılır.
 \end{itemize}
 
+\subsubsection{Python Kodu}
+
+\begin{lstlisting}[language=Python]
+from art.estimators.classification import TensorFlowV2Classifier
+from art.attacks.evasion import SpatialTransformation
+
+art_model = TensorFlowV2Classifier(
+    model=model, nb_classes=10, 
+    input_shape=(32, 32, 3), clip_values=(0, 1)
+    )
+st = SpatialTransformation(
+    classifier=art_model, 
+    max_translation=15.0, 
+    max_rotation=25.0)
+adv_test = st.generate(x=x_test[:16], y=y_test[:16])
+\end{lstlisting}
+
+\newpage
+
+\begin{figure}[h]
+    \centering
+    \includegraphics[width=1\textwidth]{images/spatial_transformation_results.png}
+    \caption{}
+\end{figure}
+
 \newpage
 
 \subsection{Square Attack}
 
 Adını, giriş verisindeki belirli kare şeklindeki bölgelere yapılan manipülasyonlardan alır. Square Attack, görüntü üzerinde rastgele kare şeklinde pikselleri değiştirerek çalışır. Bu değişiklikler, modelin kararını etkileyerek yanlış sınıflandırmaya yol açabilir. Saldırı, özellikle verinin sınıflandırma sınırlarına yakın yerlerde yapılır, bu da modelin sınıflandırma doğruluğunu bozmaya yönelik etkili bir strateji sunar.
+
+\subsubsection{Python Kodu}
+
+\begin{lstlisting}[language=Python]
+from art.estimators.classification import TensorFlowV2Classifier
+from art.attacks.evasion import SquareAttack
+
+art_model = TensorFlowV2Classifier(model=model, nb_classes=10, 
+                                   input_shape=(32, 32, 3), clip_values=(0, 1))
+sa = SquareAttack(estimator=art_model, norm=np.inf, max_iter=100)
+adv_test = sa.generate(x=x_test[:16])
+\end{lstlisting}
+
+\begin{figure}[h]
+    \centering
+    \includegraphics[width=0.8\textwidth]{images/square_attack_results.png}
+    \caption{}
+\end{figure}
 
 \newpage
 
@@ -613,6 +998,26 @@ Burada:
     \item $\| x - y \|$ $x$ ve $y$ arasındaki mesafe.
 \end{itemize}
 
+\subsubsection{Python Kodu}
+
+\begin{lstlisting}[language=Python]
+from art.estimators.classification import TensorFlowV2Classifier
+from art.attacks.evasion import Wasserstein
+
+art_model = TensorFlowV2Classifier(
+    model=model,
+    loss_object=CategoricalCrossentropy(from_logits=True), 
+    nb_classes=10, input_shape=(32, 32, 3), clip_values=(0, 1))
+wa = Wasserstein(estimator=art_model, targeted=False, eps=0.7)
+adv_test = wa.generate(x=x_test[:4])
+\end{lstlisting}
+
+\begin{figure}[h]
+    \centering
+    \includegraphics[width=0.7\textwidth]{images/wasserstein_attack_results.png}
+    \caption{}
+\end{figure}
+
 \newpage
 
 \subsection{Zeroth-Order Optimization (ZOO) Attack}
@@ -631,5 +1036,19 @@ Burada:
     \item $e_i$: Girdi uzayındaki standart temel vektör.
     \item $\frac{\partial J(x)}{\partial x_i}$: Girdi $x$'in, $i$. bileşeni ile ilgili yaklaşık gradyan.
 \end{itemize}
+
+\subsubsection{Python Kodu}
+
+\begin{lstlisting}[language=Python]
+from art.estimators.classification import TensorFlowV2Classifier
+from art.attacks.evasion import ZooAttack
+
+art_model = TensorFlowV2Classifier(
+    model=model, 
+    loss_object=CategoricalCrossentropy(from_logits=True),
+    nb_classes=10, input_shape=(32, 32, 3), clip_values=(0, 1))
+zoo = ZooAttack(classifier=art_model, confidence=0.3, targeted=False, learning_rate=0.1)
+adv_test = zoo.generate(x=x_test[:16])
+\end{lstlisting}
 
 \newpage
