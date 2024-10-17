@@ -2,138 +2,1010 @@
 
 \subsection{Sınıflandırma Metrikleri}
 
-\textbf{Karmaşıklık Matrisi (Confusion Matrix):} Sınıflandırma performasını ölçmek için kullanılır. Sütunlar gerçek verileri, satırlar ise tahmin edilen verileri gösterir. \\
+\subsubsection{Karmaşıklık Matrisi (Confusion Matrix)}
 
-\textbf{True Positive (TP):} Hasta olduğunu düşündünüz ve gerçekten hastasınız. True Negative (TN): Hasta olmadığını düşündünüz ve hasta değilsiniz. False Positive (FP): Hasta olduğunu düşündünüz fakat hasta değilsiniz. False Negative (FN): Hasta olmadığınızı düşündünüz fakat hastasınız. \\
+Sınıflandırma performasını ölçmek için kullanılır. Sütunlar gerçek verileri, satırlar ise tahmin edilen verileri gösterir. 
 
-\textbf{False Positive Rate (FPR):} 
+\begin{itemize}
+    \item \textbf{True Positive (TP)}: Hasta olduğunu düşündünüz ve gerçekten hastasınız. 
+    \item \textbf{True Negative (TN)}: Hasta olmadığını düşündünüz ve hasta değilsiniz. 
+    \item \textbf{False Positive (FP)}: Hasta olduğunu düşündünüz fakat hasta değilsiniz. 
+    \item \textbf{False Negative (FN)}: Hasta olmadığınızı düşündünüz fakat hastasınız.
+\end{itemize}
+
+\begin{lstlisting}[language=Python]
+import numpy as np
+
+def confusion_matrix(y_true, y_pred, labels):
+    num_labels = len(labels)
+    label_index = {label: i for i, label in enumerate(labels)}
+
+    matrix = np.zeros((num_labels, num_labels), dtype=int)
+
+    for true_label, pred_label in zip(y_true, y_pred):
+        true_idx = label_index[true_label]
+        pred_idx = label_index[pred_label]
+        matrix[true_idx, pred_idx] += 1
+
+    return matrix
+
+y_true = ['cat', 'dog', 'dog', 'cat', 'cat', 'dog']
+y_pred = ['cat', 'dog', 'cat', 'cat', 'cat', 'dog']
+labels = ['cat', 'dog']
+
+cm = confusion_matrix(y_true, y_pred, labels)
+print("Confusion Matrix:\n", cm)
+# [3 0]
+# [1 2]
+\end{lstlisting}
+
+\newpage
+
+\subsubsection{False Positive Rate (FPR)} 
 
 \[\text{False Positive Rate (FPR)} = \frac{\text{False Positives}}{\text{False Positives} + \text{True Negatives}}\]
 
-\textbf{True Positive Rate (TPR):}
+\newpage
+
+\subsubsection{True Positive Rate (TPR)}
 
 \[\text{True Positive Rate (TPR)} = \frac{\text{True Positives}}{\text{True Positives} + \text{False Negatives}}\]
 
-\textbf{Duyarlılık Skoru (Recall Score):} Duyarlılık, modelinizin pozitif olan verilerin ne kadarını pozitif olarak tahmin ettiğini gösterir. FN tahminlemenin maliyetinin yüksek olduğu durumlarda önemlidir. Duyarlılık yüksekse, model daha fazla gerçek pozitifi tespit edebiliyor demektir.
+\newpage
+
+\subsubsection{Duyarlılık Skoru (Recall Score)}
+
+Duyarlılık, modelinizin pozitif olan verilerin ne kadarını pozitif olarak tahmin ettiğini gösterir. FN tahminlemenin maliyetinin yüksek olduğu durumlarda önemlidir. Duyarlılık yüksekse, model daha fazla gerçek pozitifi tespit edebiliyor demektir.
 
 \[\text{Recall} = \frac{\text{True Positives}}{\text{True Positives} + \text{False Negatives}}\]
 
-\textbf{Kesinlik Skoru (Precision / Sensitivity Score):} Kesinlik, modelizin pozitif olarak tahmin ettiği verilerin gerçekte ne kadarının pozitif olduğudur. FP tahminlemenin maliyetinin yüksek olduğu durumlarda önemlidir. Precision ile Recall ters orantılıdır ve ikisinin arasında bir denge sağlamak gerekir (precision recall trade-off). Kesinlik yüksekse, modelin pozitif tahminleri genellikle doğru demektir.
+\begin{lstlisting}[language=Python]
+import numpy as np
+
+def recall_score(y_true, y_pred):
+    tp = np.sum((y_true == 1) & (y_pred == 1))
+    fn = np.sum((y_true == 1) & (y_pred != 1))
+
+    recall = tp / (tp + fn) if (tp + fn) > 0 else 0
+    return recall
+
+y_true = np.array([1, 0, 1, 0, 0, 1, 0, 0, 1])
+y_pred = np.array([1, 1, 1, 0, 0, 0, 0, 1, 1])
+
+rec = recall_score(y_true, y_pred)
+print(f"Recall Score: {100 * rec:.2f}%")
+\end{lstlisting}
+
+\newpage
+
+\subsubsection{Kesinlik Skoru (Precision / Sensitivity Score)}
+
+Kesinlik, modelizin pozitif olarak tahmin ettiği verilerin gerçekte ne kadarının pozitif olduğudur. FP tahminlemenin maliyetinin yüksek olduğu durumlarda önemlidir. Precision ile Recall ters orantılıdır ve ikisinin arasında bir denge sağlamak gerekir (precision recall trade-off). Kesinlik yüksekse, modelin pozitif tahminleri genellikle doğru demektir.
 
 \[\text{Precision} = \frac{\text{True Positives}}{\text{True Positives} + \text{False Positives}}\]
 
-\textbf{Precision-Recall Trade-off:} Modelin kesinlik ve duyarlılık arasındaki dengeyi nasıl ayarladığını gösterir. İdeal bir model, hem yüksek kesinlik hem de yüksek duyarlılık sağlar. Birçok sınıflandırma algoritması, bu dengeyi kurmak için eşik değeri sunar. Eşik değeri değiştikçe, modelin kesinlik ve duyarlılık değerleri değişir. Örneğin eşik değeri yükseltildiğinde kesinlik artar ancak doğruluk düşer. Tam tersi, eşik değeri düşürüldüğünde duyarlılık artar ancak kesinlik düşer. Bir uygulamada, kesinlik ve duyarlılık arasındaki tradeof, problem bağlamına ve hedeflere bağlı olarak ayarlanır. Örneğin, tıbbi bir teşhis uygulamasında daha yüksek bir duyarlılık kritik olabilirken, spam e-posta filtrelemesi gibi bir uygulamada daha yüksek kesinlik öncelikli olabilir.
+\begin{lstlisting}[language=Python]
+import numpy as np
 
-\textbf{Doğruluk Skoru (Accuracy Score):} Doğruluk, modelinizin doğru tahmin ettiği verilerin toplam veri kümesine oranını gösterir.
+def precision_score(y_true, y_pred):
+    tp = np.sum((y_true == 1) & (y_pred == 1))
+    fp = np.sum((y_true != 1) & (y_pred == 1))
+
+    precision = tp / (tp + fp) if (tp + fp) > 0 else 0
+    return precision
+
+y_true = np.array([1, 0, 1, 0, 0, 1, 0, 0, 1])
+y_pred = np.array([1, 1, 1, 0, 0, 0, 0, 1, 1])
+
+prec = precision_score(y_true, y_pred)
+print(f"Precision Score: {100 * prec:.2f}%")
+\end{lstlisting}
+
+\newpage
+
+\subsubsection{Precision-Recall Trade-off}
+
+Modelin kesinlik ve duyarlılık arasındaki dengeyi nasıl ayarladığını gösterir. İdeal bir model, hem yüksek kesinlik hem de yüksek duyarlılık sağlar. Birçok sınıflandırma algoritması, bu dengeyi kurmak için eşik değeri sunar. Eşik değeri değiştikçe, modelin kesinlik ve duyarlılık değerleri değişir. Örneğin eşik değeri yükseltildiğinde kesinlik artar ancak doğruluk düşer. Tam tersi, eşik değeri düşürüldüğünde duyarlılık artar ancak kesinlik düşer. Bir uygulamada, kesinlik ve duyarlılık arasındaki tradeof, problem bağlamına ve hedeflere bağlı olarak ayarlanır. Örneğin, tıbbi bir teşhis uygulamasında daha yüksek bir duyarlılık kritik olabilirken, spam e-posta filtrelemesi gibi bir uygulamada daha yüksek kesinlik öncelikli olabilir.
+
+\newpage
+
+\subsubsection{Doğruluk Skoru (Accuracy Score)}
+
+Doğruluk, modelinizin doğru tahmin ettiği verilerin toplam veri kümesine oranını gösterir.
 
 \[\text{Accuracy} = \frac{\text{TP} + \text{TN}}{\text{TP} + \text{TN} + \text{FP} + \text{FN}}\]
 
-\textbf{F1 Skoru (F1 Score):} F1, kesinlik ve duyarlılık skorlarının harmonik ortalamasını gösterir. Harmonik olmasının sebebi; eğer basit bir ortalama hesaplansaydı Precision Değeri 1 ve Recall Değeri 0 olan bir modelin skoru 0.5 olacaktır ve bu bizi yanıltacaktır. Eşit dağılmayan veri kümelerinde (imbalanced) hatalı bir model seçimi yapmamak için accuracy yerine f1 değerine bakılır.
+\begin{lstlisting}[language=Python]
+import numpy as np
+
+def accuracy_score(y_true, y_pred):
+    return np.sum(y_true == y_pred, axis=0) / len(y_true)
+
+y_true = np.array([1, 0, 1, 1, 0, 0, 0, 1, 0])
+y_pred = np.array([1, 1, 1, 0, 0, 0, 0, 1, 1])
+
+acc = (y_true == y_pred).mean()
+# acc = accuracy_score(y_true, y_pred)
+print(f"Accuracy Score: {100 * acc:.02f}%")
+\end{lstlisting}
+
+\newpage
+
+\subsubsection{F1 Skoru (F1 Score)}
+
+F1, kesinlik ve duyarlılık skorlarının harmonik ortalamasını gösterir. Harmonik olmasının sebebi; eğer basit bir ortalama hesaplansaydı Precision Değeri 1 ve Recall Değeri 0 olan bir modelin skoru 0.5 olacaktır ve bu bizi yanıltacaktır. Eşit dağılmayan veri kümelerinde (imbalanced) hatalı bir model seçimi yapmamak için accuracy yerine f1 değerine bakılır.
 
 \[\text{F1} = 2 * \frac{\text{Precision} * \text{Recall}}{\text{Precision} + \text{Recall}}\]
 
-\textbf{F2 Skoru (F2 Score):} F2, hassasiyetin (precision) önemini azaltır ve duyarlılığın (recall) önemini artırır. Yanlış negatifleri (FN) en aza indirmeye odaklanır.
+\begin{lstlisting}[language=Python]
+import numpy as np
+
+def f1_score(y_true, y_pred):
+    tp = np.sum((y_true == 1) & (y_pred == 1))
+    fp = np.sum((y_true != 1) & (y_pred == 1))
+    fn = np.sum((y_true == 1) & (y_pred != 1))
+
+    prec = tp / (tp + fp) if (tp + fp) > 0 else 0
+    rec = tp / (tp + fn) if (tp + fn) > 0 else 0
+    f1 = 2 * (prec * rec) / (prec + rec) if (prec + rec) > 0 else 0
+    
+    return f1
+
+y_true = np.array([1, 0, 1, 0, 0, 1, 0, 0, 1])
+y_pred = np.array([1, 1, 1, 0, 0, 0, 0, 1, 1])
+
+f1 = f1_score(y_true, y_pred)
+print(f"F1-Score: {100 * f1:.2f}%")
+\end{lstlisting}
+
+\newpage
+
+\subsubsection{F2 Skoru (F2 Score)}
+
+F2, hassasiyetin (precision) önemini azaltır ve duyarlılığın (recall) önemini artırır. Yanlış negatifleri (FN) en aza indirmeye odaklanır.
 
 \[\text{F2} = \frac{\text{TP}}{\text{TP} + 0.2 * \text{FP} + 0.8 * \text{FN}}\]
 
-\textbf{F3 Skoru (F3 Score):}
+\begin{lstlisting}[language=Python]
+import numpy as np
+
+def f2_score(y_true, y_pred):
+    tp = np.sum((y_true == 1) & (y_pred == 1))
+    fp = np.sum((y_true != 1) & (y_pred == 1))
+    fn = np.sum((y_true == 1) & (y_pred != 1))
+    
+    prec = tp / (tp + fp) if (tp + fp) > 0 else 0
+    rec = tp / (tp + fn) if (tp + fn) > 0 else 0
+
+    beta = 2
+    f2 = (1 + beta**2) * (prec * rec) / (beta**2 * prec + rec) if (beta**2 * prec + rec) > 0 else 0
+    
+    return f2
+
+y_true = np.array([1, 0, 1, 0, 0, 1, 0, 0, 1])
+y_pred = np.array([1, 1, 1, 0, 0, 0, 0, 1, 1])
+
+f2 = f2_score(y_true, y_pred)
+print(f"F2-Score: {100 * f2:.2f}%")
+\end{lstlisting}
+
+\newpage
+
+\subsubsection{F3 Skoru (F3 Score)}
 
 \[\text{F3} = \frac{\text{TP}}{\text{TP} + 0.1 * \text{FP} + 0.9 * \text{FN}}\]
 
-\textbf{F-beta}: Beta parametresi ile precision ve recall arasındaki denge ağırlıklandırılır. Beta 0 iken yalnızca kesinliği (recall) dikkate alınır, +inf iken yalnızca hassasiyet (precision) dikkate alınır.
+\begin{lstlisting}[language=Python]
+import numpy as np
+
+def f3_score(y_true, y_pred):
+    tp = np.sum((y_true == 1) & (y_pred == 1))
+    fp = np.sum((y_true != 1) & (y_pred == 1))
+    fn = np.sum((y_true == 1) & (y_pred != 1))
+    
+    prec = tp / (tp + fp) if (tp + fp) > 0 else 0
+    rec = tp / (tp + fn) if (tp + fn) > 0 else 0
+
+    beta = 3
+    f2 = (1 + beta**2) * (prec * rec) / (beta**2 * prec + rec) if (beta**2 * prec + rec) > 0 else 0
+    
+    return f2
+
+y_true = np.array([1, 0, 1, 0, 0, 1, 0, 0, 1])
+y_pred = np.array([1, 1, 1, 0, 0, 0, 0, 1, 1])
+
+f3 = f3_score(y_true, y_pred)
+print(f"F3-Score: {100 * f3:.2f}%")
+\end{lstlisting}
+
+\newpage
+
+\subsubsection{F-beta}
+
+Beta parametresi ile precision ve recall arasındaki denge ağırlıklandırılır. Beta 0 iken yalnızca kesinliği (recall) dikkate alınır, +inf iken yalnızca hassasiyet (precision) dikkate alınır.
 
 \[\text{F-}\beta = \frac{1 + \beta^2}{\frac{\beta^2}{\text{Recall}} + \frac{1}{\text{Precision}}}\]
 
-\textbf{ROC-AUC Eğrisi (ROC-AUC Curve):} ROC modelin TPR ile FPR cinsinden ne kadar iyi ayrım yapabildiğini açıklar. AUC, ROC eğrisinin altında kalan alanı verir, 0-1 arasındadır. 0'ise bütün tahminler yanlıştır. 1'e yaklaştıkça modelin performansı iyileşir. ROC-AUC 0.5 ise, modelin performansı rastgele tahmin etmekle (yazı-tura tahmini \%50-\%50) aynıdır. \\
+\begin{lstlisting}[language=Python]
+import numpy as np
 
-\textbf{Balanced Accuracy Score:} Dengesiz veri kümelerinde kullanılır. Her sınıfın doğruluk oranını dengeler ve ardından tüm sınıfların doğruluk oranlarının ortalamasını alır. Her bir sınıfın veri dağılımındaki etkisini eşit şekilde değerlendirir.
+def f_beta_score(y_true, y_pred, beta):
+    tp = np.sum((y_true == 1) & (y_pred == 1))
+    fp = np.sum((y_true != 1) & (y_pred == 1))
+    fn = np.sum((y_true == 1) & (y_pred != 1))
+    
+    prec = tp / (tp + fp) if (tp + fp) > 0 else 0
+    rec = tp / (tp + fn) if (tp + fn) > 0 else 0
+    
+    f_beta = (1 + beta**2) * (prec * rec) / (beta**2 * prec + rec) if (beta**2 * prec + rec) > 0 else 0
+    
+    return f_beta
+
+y_true = np.array([1, 0, 1, 0, 0, 1, 0, 0, 1])
+y_pred = np.array([1, 1, 1, 0, 0, 0, 0, 1, 1])
+
+beta = 4 # F-4 Score
+f_beta = f_beta_score(y_true, y_pred, beta)
+print(f"F{beta}-Score: {100 * f_beta:.2f}%")
+\end{lstlisting}
+
+\newpage
+
+\subsubsection{ROC-AUC Eğrisi (ROC-AUC Curve)}
+
+ROC modelin TPR ile FPR cinsinden ne kadar iyi ayrım yapabildiğini açıklar. AUC, ROC eğrisinin altında kalan alanı verir, 0-1 arasındadır. 0'ise bütün tahminler yanlıştır. 1'e yaklaştıkça modelin performansı iyileşir. ROC-AUC 0.5 ise, modelin performansı rastgele tahmin etmekle (yazı-tura tahmini \%50-\%50) aynıdır.
+
+\begin{lstlisting}[language=Python]
+import numpy as np
+import matplotlib.pyplot as plt
+
+def compute_roc_auc(y_true, y_scores):
+    thresholds = np.sort(np.unique(y_scores))
+    
+    tpr_list = []
+    fpr_list = []
+    
+    P = np.sum(y_true == 1)
+    N = np.sum(y_true == 0)
+    
+    for threshold in thresholds:
+        y_pred = (y_scores >= threshold).astype(int)
+        
+        TP = np.sum((y_true == 1) & (y_pred == 1))
+        FP = np.sum((y_true == 0) & (y_pred == 1))
+        TN = np.sum((y_true == 0) & (y_pred == 0))
+        FN = np.sum((y_true == 1) & (y_pred == 0))
+        
+        TPR = TP / (TP + FN) if (TP + FN) > 0 else 0
+        FPR = FP / (FP + TN) if (FP + TN) > 0 else 0
+        
+        tpr_list.append(TPR)
+        fpr_list.append(FPR)
+    
+    plt.figure()
+    plt.plot(fpr_list, tpr_list, color='darkorange', lw=2, label='ROC curve')
+    plt.plot([0, 1], [0, 1], color='navy', lw=2, linestyle='--')
+    plt.xlim([0.0, 1.0])
+    plt.ylim([0.0, 1.05])
+    plt.xlabel('False Positive Rate')
+    plt.ylabel('True Positive Rate')
+    plt.title('Receiver Operating Characteristic')
+    plt.legend(loc='lower right')
+    plt.savefig("roc-auc.png")
+
+    tpr_list = np.array(tpr_list)
+    fpr_list = np.array(fpr_list)
+    auc = np.trapz(tpr_list, fpr_list)
+    
+    return fpr_list, tpr_list, auc
+
+y_true = np.array([0, 0, 1, 1, 1, 0, 1, 0, 1, 0])
+y_scores = np.array([0.2, 0.3, 0.55, 0.6, 0.75, 0.2, 0.9, 0.6, 0.4, 0.1])
+
+fpr, tpr, auc = compute_roc_auc(y_true, y_scores)
+print(f"AUC: {auc:.2f}")
+\end{lstlisting}
+
+\newpage
+
+\subsubsection{Balanced Accuracy Score}
+
+Dengesiz veri kümelerinde kullanılır. Her sınıfın doğruluk oranını dengeler ve ardından tüm sınıfların doğruluk oranlarının ortalamasını alır. Her bir sınıfın veri dağılımındaki etkisini eşit şekilde değerlendirir.
 
 \[\text{Balanced Accuracy} = \frac{1}{\text{N}} * \sum{\frac{\text{TP}}{\text{P}}}\]
 
-\textbf{Top K Accuracy Score:} Modelin en yüksek olasılığı sahip olan k tahmininin doğru sınıfı içerip içermediğini kontrol eder. Genelde çoklu sınıflı sınıflandırma problemlerinde kullanılır.
+\begin{lstlisting}[language=Python]
+import numpy as np
+
+def balanced_accuracy(y_true, y_pred):
+    classes = np.unique(y_true)
+    num_classes = len(classes)
+
+    recalls = []
+
+    for cls in classes:
+        TP = np.sum((y_true == cls) & (y_pred == cls))
+        FN = np.sum((y_true == cls) & (y_pred != cls))
+        recall = TP / (TP + FN) if (TP + FN) > 0 else 0
+        recalls.append(recall)
+
+    balanced_acc = np.mean(recalls)
+    return balanced_acc
+
+y_true = np.array([1, 0, 1, 1, 2, 0, 0, 1, 0])
+y_pred = np.array([1, 1, 1, 0, 2, 2, 0, 1, 1])
+
+balanced_acc = balanced_accuracy(y_true, y_pred)
+print(f"Balanced Accuracy Score: {100 * balanced_acc:.02f}%")
+\end{lstlisting}
+
+\newpage
+
+\subsubsection{Top K Accuracy Score}
+
+Modelin en yüksek olasılığı sahip olan k tahmininin doğru sınıfı içerip içermediğini kontrol eder. Genelde çoklu sınıflı sınıflandırma problemlerinde kullanılır.
 
 \[\text{Top K Accuracy Score} = \frac{\text{Number of correct predictions in top K}}{\text{Total number of samples}}\]
 
-\textbf{Average Precision Score:} Dengesiz veri kümelerinde ve precision-recall analizlerinde kullanılır. Modelin gerçek pozitiflerini doğru bir şekilde saptama yeteneği ve yanlış pozitifler oluşturma konusundaki hassasiyetini gösterir. Precision-Recall eğrisi altında kalan alanı ifade eder. Precision-Recall eğrisi farklı kesme noktalarındaki precision ve recall değerlerini gösterir. Average precision, bu eğrinin altındaki alanın ortalamasını alarak hesaplanır. 1'e ne kadar yakınsa model o kadar iyi performans göstermiştir.
+\begin{lstlisting}[language=Python]
+import numpy as np
+
+def top_k_accuracy_score(y_true, y_scores, k):
+    top_k_preds = np.argsort(y_scores, axis=1)[:, -k:]
+
+    correct = 0
+    for i in range(len(y_true)):
+        if y_true[i] in top_k_preds[i]:
+            correct += 1
+
+    top_k_acc = correct / len(y_true)
+    return top_k_acc
+
+k = 2
+y_true = np.array([0, 1, 2, 2, 1])
+y_scores = np.array([[0.2, 0.5, 0.3],
+                     [0.1, 0.6, 0.3],
+                     [0.3, 0.3, 0.4],
+                     [0.4, 0.4, 0.2],
+                     [0.1, 0.7, 0.2]])
+
+top_k_acc = top_k_accuracy_score(y_true, y_scores, k)
+print(f"Top-K Accuracy Score: {100 * top_k_acc:.02f}%")
+\end{lstlisting}
+
+\newpage
+
+\subsubsection{Average Precision Score}
+
+Dengesiz veri kümelerinde ve precision-recall analizlerinde kullanılır. Modelin gerçek pozitiflerini doğru bir şekilde saptama yeteneği ve yanlış pozitifler oluşturma konusundaki hassasiyetini gösterir. Precision-Recall eğrisi altında kalan alanı ifade eder. Precision-Recall eğrisi farklı kesme noktalarındaki precision ve recall değerlerini gösterir. Average precision, bu eğrinin altındaki alanın ortalamasını alarak hesaplanır. 1'e ne kadar yakınsa model o kadar iyi performans göstermiştir.
 
 \[\text{Average Precision Score} = \frac{1}{n} \sum_{k=1}^{n} P(k) \times \Delta r(k)\]
 
-\textbf{Log Loss:} Sınıflandırma modellerinin tahminlerinin olasılık dağılımıyla uyumunu ölçen bir metriktir. Gerçek etiketlerin olasılık dağılımı ve modelin ürettiği olasılık dağılımı arasındaki farkı ölçerek modelin kalitesini değerlendirir. Ne kadar düşükse o kadar iyidir. Modelin tahminleri gerçek etiketlere daha yakınsa, log\_loss değeri daha düşük olur. Model ne kadar belirsiz tahminler yapıyorsa log\_loss o kadar yüksek olur.\\
+\begin{lstlisting}[language=Python]
+import numpy as np
 
-\textbf{Jaccard Score:} İkili sınıflandırma problemleri için kullanılır. Modelin gerçek pozitif ve negatif sınıfları ne kadar iyi tahmin ettiğini ölçer. Gerçek ve tahmin edilen sınıfların kesişimini gerçek ve tahmin edilen sınıfların birleşimine böler. 1'e ne kadar yakınsa o kadar iyidir.
+def average_precision(y_true, y_scores):
+    order = np.argsort(y_scores)[::-1]
+    y_true = y_true[order]
+    
+    precisions = []
+    recalls = []
+    tp = 0
+    fp = 0
+    total_positives = np.sum(y_true)
+    
+    for i in range(len(y_true)):
+        if y_true[i] == 1:
+            tp += 1
+        else:
+            fp += 1
+        
+        precision = tp / (tp + fp)
+        recall = tp / total_positives
+        
+        precisions.append(precision)
+        recalls.append(recall)
+    
+    precisions = np.array(precisions)
+    recalls = np.array(recalls)
+    ap = np.sum((recalls[1:] - recalls[:-1]) * precisions[1:])
+    
+    return ap
+
+y_true = np.array([1, 0, 1, 1, 0, 1, 0])
+y_scores = np.array([0.8, 0.2, 0.7, 0.6, 0.4, 0.9, 0.3]) 
+
+ap_score = average_precision(y_true, y_scores)
+print(f"Average Precision Score: {100 * ap_score:.2f}%")
+\end{lstlisting}
+
+\newpage
+
+\subsubsection{Log Loss}
+
+Sınıflandırma modellerinin tahminlerinin olasılık dağılımıyla uyumunu ölçen bir metriktir. Gerçek etiketlerin olasılık dağılımı ve modelin ürettiği olasılık dağılımı arasındaki farkı ölçerek modelin kalitesini değerlendirir. Ne kadar düşükse o kadar iyidir. Modelin tahminleri gerçek etiketlere daha yakınsa, log\_loss değeri daha düşük olur. Model ne kadar belirsiz tahminler yapıyorsa log\_loss o kadar yüksek olur.
+
+\begin{lstlisting}[language=Python]
+import numpy as np
+
+def log_loss(y_true, y_pred):
+    epsilon = 1e-15
+    y_pred = np.clip(y_pred, epsilon, 1 - epsilon)
+    
+    loss = -np.mean(y_true * np.log(y_pred) + (1 - y_true) * np.log(1 - y_pred))
+    
+    return loss
+
+y_true = np.array([1, 0, 1, 1, 0, 1, 0])
+y_pred = np.array([0.8, 0.2, 0.7, 0.6, 0.4, 0.9, 0.3])
+
+log_loss_value = log_loss(y_true, y_pred)
+print(f"Log Loss: {100 * log_loss_value:.2f}%")
+\end{lstlisting}
+
+\newpage
+
+\subsubsection{Jaccard Score}
+
+İkili sınıflandırma problemleri için kullanılır. Modelin gerçek pozitif ve negatif sınıfları ne kadar iyi tahmin ettiğini ölçer. Gerçek ve tahmin edilen sınıfların kesişimini gerçek ve tahmin edilen sınıfların birleşimine böler. 1'e ne kadar yakınsa o kadar iyidir.
 
 \[\text{Jaccard Score} = \frac{\text{TP}}{\text{TP + FP + FN}}\]
 
-\textbf{Spherical Payoff}: İki vektör arasındaki açısal farkı ölçerek, bu vektörlerin birbirine ne kadar yakın olduğunu değerlendirir. Bu metrik, genellikle doğruluk veya benzerlik ölçüsü olarak kullanılır ve bu sayede modelin performansını değerlendirir. İki vektör arasındaki kosinüs benzerliği hesaplanır. Değer 1'e yaklaştıkça tahmin edilen vektör ile gerçek vektör arasında yüksek bir benzerlik vardır.
+\begin{lstlisting}[language=Python]
+import numpy as np
+
+def jaccard_score(y_true, y_pred):
+    TP = np.sum((y_true == 1) & (y_pred == 1))
+    FP = np.sum((y_true == 0) & (y_pred == 1))
+    FN = np.sum((y_true == 1) & (y_pred == 0))
+    
+    intersection = TP
+    union = TP + FP + FN
+    
+    jaccard = intersection / union if union != 0 else 0.0
+    
+    return jaccard
+
+y_true = np.array([1, 0, 1, 1, 0, 1, 0])
+y_pred = np.array([1, 0, 1, 0, 0, 1, 1])
+
+jaccard_score_value = jaccard_score(y_true, y_pred)
+print(f"Jaccard Score: {100 * jaccard_score_value:.2f}%")
+\end{lstlisting}
+
+\newpage
+
+\subsubsection{Spherical Payoff}
+
+İki vektör arasındaki açısal farkı ölçerek, bu vektörlerin birbirine ne kadar yakın olduğunu değerlendirir. Bu metrik, genellikle doğruluk veya benzerlik ölçüsü olarak kullanılır ve bu sayede modelin performansını değerlendirir. İki vektör arasındaki kosinüs benzerliği hesaplanır. Değer 1'e yaklaştıkça tahmin edilen vektör ile gerçek vektör arasında yüksek bir benzerlik vardır.
 
 \[ \text{Spherical Payoff} = \frac{\mathbf{y} \cdot \mathbf{\hat{y}}}{\|\mathbf{y}\| \|\mathbf{\hat{y}}\|} \]
 
-\textbf{McFadden's Pseudo R2}: MacFadden's Pseudo R2, maksimum olasılık tahmini (maximum likelihood estimation, MLE) yöntemine dayalı bir uyum metriğidir. Klasik R2, toplam varyansın ne kadarının model tarafından açıklandığını ölçerken, McFadden's Pseudo R2, lojistik regresyon gibi olasılık modellerinde, bağımsız değişkenlerin modelin açıklama gücüne ne kadar katkıda bulunduğunu değerlendirmeyi amaçlar. LL(0), sadece sabit terim içeren modelin log-loss değeri. LL(M), bağımsız değişkenlerinde dahil edildiği tam modelin log-loss değeri.
+\newpage
+
+\subsubsection{McFadden's Pseudo R2}
+
+MacFadden's Pseudo R2, maksimum olasılık tahmini (maximum likelihood estimation, MLE) yöntemine dayalı bir uyum metriğidir. Klasik R2, toplam varyansın ne kadarının model tarafından açıklandığını ölçerken, McFadden's Pseudo R2, lojistik regresyon gibi olasılık modellerinde, bağımsız değişkenlerin modelin açıklama gücüne ne kadar katkıda bulunduğunu değerlendirmeyi amaçlar. LL(0), sadece sabit terim içeren modelin log-loss değeri. LL(M), bağımsız değişkenlerinde dahil edildiği tam modelin log-loss değeri.
 
 \[ \text{McFadden's Pseudo R2} = 1 - \frac{\text{LL}(M)}{\text{LL}(0)} \]
 
+\begin{lstlisting}[language=Python]
+import numpy as np
+
+def log_likelihood(y_true, y_pred):
+    epsilon = 1e-15
+    y_pred = np.clip(y_pred, epsilon, 1 - epsilon)
+    
+    log_likelihood_value = np.sum(y_true * np.log(y_pred) + (1 - y_true) * np.log(1 - y_pred))
+    
+    return log_likelihood_value
+
+def mcfadden_pseudo_r2(y_true, y_pred, y_null_pred):
+    log_likelihood_model = log_likelihood(y_true, y_pred)
+    log_likelihood_null = log_likelihood(y_true, y_null_pred)
+    
+    r2_mcfadden = 1 - (log_likelihood_model / log_likelihood_null)
+    
+    return r2_mcfadden
+
+y_true = np.array([1, 0, 1, 1, 0, 1, 0])
+y_pred = np.array([0.8, 0.2, 0.7, 0.6, 0.4, 0.9, 0.3])
+y_null_pred = np.array([0.5] * len(y_true))
+
+mcfadden_r2 = mcfadden_pseudo_r2(y_true, y_pred, y_null_pred)
+print(f"McFadden's Pseudo R^2: {mcfadden_r2:.2f}")
+\end{lstlisting}
+
+\newpage
+
+\subsubsection{Perplexity Score}
+
+\begin{lstlisting}[language=Python]
+import numpy as np
+
+def calculate_perplexity(probabilities):
+    log_probs = np.log(probabilities + 1e-10)
+    avg_log_prob = -np.mean(log_probs)
+    perplexity = np.exp(avg_log_prob)
+    return perplexity
+
+probabilities = [0.1, 0.2, 0.05, 0.4, 0.15]
+
+perplexity_value = calculate_perplexity(probabilities)
+print(f"Perplexity Score: {perplexity_value:.2f}")
+\end{lstlisting}
+
+\newpage
+
+\subsubsection{BLEU Score}
+
+\begin{lstlisting}[language=Python]
+from collections import Counter
+import numpy as np
+
+def n_gram_precision(reference, hypothesis, n):
+    ref_ngrams = Counter([tuple(reference[i:i+n]) for i in range(len(reference) - n + 1)])
+    hyp_ngrams = Counter([tuple(hypothesis[i:i+n]) for i in range(len(hypothesis) - n + 1)])
+    
+    overlap = sum((hyp_ngrams & ref_ngrams).values())
+    total = sum(hyp_ngrams.values())
+    
+    return overlap / total if total > 0 else 0
+
+def brevity_penalty(reference, hypothesis):
+    ref_length = len(reference)
+    hyp_length = len(hypothesis)
+    
+    if hyp_length > ref_length:
+        return 1
+    else:
+        return np.exp(1 - ref_length / hyp_length) if hyp_length > 0 else 0
+
+def bleu_score(reference, hypothesis, max_n=4):
+    precisions = []
+    
+    for n in range(1, max_n + 1):
+        precision = n_gram_precision(reference, hypothesis, n)
+        precisions.append(precision)
+    
+    geo_mean_precision = np.exp(np.mean([np.log(p) for p in precisions if p > 0]))
+    bp = brevity_penalty(reference, hypothesis)
+    
+    return geo_mean_precision * bp
+
+reference = "the cat is on the mat".split()
+hypothesis = "the cat on the mat".split()
+
+bleu_score_value = bleu_score(reference, hypothesis)
+print(f"BLEU Score: {bleu_score_value:.4f}")
+\end{lstlisting}
+
+\newpage
+
 \subsection{Regresyon Metrikleri}
 
-\textbf{AIC (Akaike Information Criterion)}: bir modelin uyum kalitesini ve karmaşıklığının dikkate alarak model seçimi yapar. AIC değeri ne kadar düşükse model o kadar iyidir.
+\subsubsection{AIC (Akaike Information Criterion)}
+
+Bir modelin uyum kalitesini ve karmaşıklığının dikkate alarak model seçimi yapar. AIC değeri ne kadar düşükse model o kadar iyidir.
 
 \[ \text{AIC} = 2k - 2\ln(L) \]
 
-\textbf{BIC (Bayesian Information Criterion)}: modelin uyumunu ve karmaşıklığını değerlendirir. Model karmaşıklığını cezalandırmada daha güçlüdür. BIC değeri ne kadar düşükse model o kadar iyidir.
+\begin{lstlisting}[language=Python]
+import numpy as np
+
+def log_likelihood(y_true, y_pred):
+    epsilon = 1e-15
+    y_pred = np.clip(y_pred, epsilon, 1 - epsilon)
+    
+    log_likelihood_value = np.sum(y_true * np.log(y_pred) + (1 - y_true) * np.log(1 - y_pred))
+    
+    return log_likelihood_value
+
+def aic(log_likelihood, num_params):
+    return -2 * log_likelihood + 2 * num_params
+
+y_true = np.array([1, 0, 1, 1, 0, 1, 0])
+y_pred = np.array([0.8, 0.2, 0.7, 0.6, 0.4, 0.9, 0.3])
+num_params = 5
+
+log_likelihood_value = log_likelihood(y_true, y_pred)
+aic_value = aic(log_likelihood_value, num_params)
+
+print(f"AIC: {aic_value:.2f}")
+\end{lstlisting}
+
+\newpage
+
+\subsubsection{BIC (Bayesian Information Criterion)}
+
+Modelin uyumunu ve karmaşıklığını değerlendirir. Model karmaşıklığını cezalandırmada daha güçlüdür. BIC değeri ne kadar düşükse model o kadar iyidir.
 
 \[ \text{BIC} = k \ln(n) - 2\ln(L) \]
 
-\textbf{R-Squared (R-Kare)}: R2, bağımlı değişkenin varyansının bağımsız değişkenler tarafından ne kadar açıklandığını gösterir. 0 ile 1 arasında değer alır. En iyi R2 değeri 1'dir. Daha yüksek R2 değerleri modelin veriyi daha iyi açıkladığını gösterir. R2 eksi değer alırsa, modelin underfit edildiğini gösterir. Multivariate Regression'da R2 yerine adjusted-r2 değerine bakılır.
+\begin{lstlisting}[language=Python]
+import numpy as np
+
+def log_likelihood(y_true, y_pred):
+    epsilon = 1e-15
+    y_pred = np.clip(y_pred, epsilon, 1 - epsilon)
+    
+    log_likelihood_value = np.sum(y_true * np.log(y_pred) + (1 - y_true) * np.log(1 - y_pred))
+    
+    return log_likelihood_value
+
+def bic(log_likelihood, num_params, num_observations):
+    return -2 * log_likelihood + num_params * np.log(num_observations)
+
+y_true = np.array([1, 0, 1, 1, 0, 1, 0])
+y_pred = np.array([0.8, 0.2, 0.7, 0.6, 0.4, 0.9, 0.3])
+num_params = 5
+num_observations = len(y_true)
+
+log_likelihood_value = log_likelihood(y_true, y_pred)
+bic_value = bic(log_likelihood_value, num_params, num_observations)
+
+print(f"BIC: {bic_value:.2f}")
+\end{lstlisting}
+
+\newpage
+
+\subsubsection{R-Squared (R-Kare)}
+
+R2, bağımlı değişkenin varyansının bağımsız değişkenler tarafından ne kadar açıklandığını gösterir. 0 ile 1 arasında değer alır. En iyi R2 değeri 1'dir. Daha yüksek R2 değerleri modelin veriyi daha iyi açıkladığını gösterir. R2 eksi değer alırsa, modelin underfit edildiğini gösterir. Multivariate Regression'da R2 yerine adjusted-r2 değerine bakılır.
 
 \[R^2 = 1 - \frac{\sum_{i=1}^{n} (y_i - \hat{y}_i)^2}{\sum_{i=1}^{n} (y_i - \bar{y})^2}\]
 
-\textbf{Mean Squared Error (MSE):} MSE, bir regresyon modelinin tahminlerinin gerçek değerlerden ne kadar sapma gösterdiğini ölçer. Her bir gözlem için hata karelerinin ortalaması alınır. Daha yüksek MSE değerleri, daha büyük hata anlamına gelir. MSE değeri ne kadar düşükse, modelin tahminlerinin gerçek değerlere o kadar yakın olduğunu gösterir. MSE sıfıra yaklaştıkça model daha iyi performans gösterir.
+\begin{lstlisting}[language=Python]
+import numpy as np
+
+def r_squared(y_true, y_pred):
+    y_mean = np.mean(y_true)
+    
+    ss_res = np.sum((y_true - y_pred) ** 2)
+    ss_tot = np.sum((y_true - y_mean) ** 2)
+    
+    r2 = 1 - (ss_res / ss_tot)
+    return r2
+
+y_true = np.array([3, -0.5, 2, 7])
+y_pred = np.array([2.5, 0.0, 2, 8])
+
+r2_value = r_squared(y_true, y_pred)
+print(f"R-Squared: {r2_value:.2f}")
+\end{lstlisting}
+
+\newpage
+
+\subsubsection{Mean Squared Error (MSE)}
+
+MSE, bir regresyon modelinin tahminlerinin gerçek değerlerden ne kadar sapma gösterdiğini ölçer. Her bir gözlem için hata karelerinin ortalaması alınır. Daha yüksek MSE değerleri, daha büyük hata anlamına gelir. MSE değeri ne kadar düşükse, modelin tahminlerinin gerçek değerlere o kadar yakın olduğunu gösterir. MSE sıfıra yaklaştıkça model daha iyi performans gösterir.
 
 \[\text{MSE} = \frac{1}{n} \sum_{i=1}^{n} (y_i - \hat{y}_i)^2\]
 
-\textbf{Mean Absolute Error (MAE):} MAE, bir regresyon modelinin tahminlerinin gerçek değerlerden ortalama mutlak sapma gösterdiğini ölçer. Her bir gözlem için mutlak hataların ortalaması alınır. Düşük MAE değeri, modelin tahminlerinin gerçek değerlere yakın olduğunu gösterir. MAE sıfıra yaklaştıkça model daha iyi performans gösterir.
+\begin{lstlisting}[language=Python]
+import numpy as np
+
+def mean_squared_error(y_true, y_pred):
+    return np.mean((y_true - y_pred) ** 2)
+\end{lstlisting}
+
+\newpage
+
+\subsubsection{Mean Absolute Error (MAE)}
+
+MAE, bir regresyon modelinin tahminlerinin gerçek değerlerden ortalama mutlak sapma gösterdiğini ölçer. Her bir gözlem için mutlak hataların ortalaması alınır. Düşük MAE değeri, modelin tahminlerinin gerçek değerlere yakın olduğunu gösterir. MAE sıfıra yaklaştıkça model daha iyi performans gösterir.
 
 \[\text{MAE} = \frac{1}{n} \sum_{i=1}^{n} |y_i - \hat{y}_i|\]
 
-\textbf{Root Mean Squared Error (RMSE):} RMSE, MSE'nin kareköküdür. MSE'den farkı, hataların karelerinin büyüklüklerini daha iyi ifade etmesidir. RMSE değeri ne kadar düşükse, modelin tahminlerinin gerçek değerlere o kadar yakın olduğunu gösterir. RMSE sıfıra yaklaştıkça model daha iyi performans gösterir.
+\begin{lstlisting}[language=Python]
+import numpy as np
+
+def mean_absolute_error(y_true, y_pred):
+    return np.mean(np.abs(y_true - y_pred))
+\end{lstlisting}
+
+\newpage
+
+\subsubsection{Root Mean Squared Error (RMSE)}
+
+RMSE, MSE'nin kareköküdür. MSE'den farkı, hataların karelerinin büyüklüklerini daha iyi ifade etmesidir. RMSE değeri ne kadar düşükse, modelin tahminlerinin gerçek değerlere o kadar yakın olduğunu gösterir. RMSE sıfıra yaklaştıkça model daha iyi performans gösterir.
 
 \[\text{RMSE} = \sqrt{\frac{1}{n} \sum_{i=1}^{n} (y_i - \hat{y}_i)^2}\]
 
-\textbf{Mean Percentage Error (MPE):} MPE, tahmin hatalarının gerçek değerlere göre yüzde olarak ne kadar sapma gösterdiğini ölçer. Pozitif ve negatif hataların etkisi birbirini sıfırlayabilir. MPE değeri ne kadar düşükse, modelin tahminlerinin gerçek değerlere ne kadar yakın olduğunu gösterir. MPE sıfıra yaklaştıkça model daha iyi performans gösterir.
+\begin{lstlisting}[language=Python]
+import numpy as np
+
+def root_mean_squared_error(y_true, y_pred):
+    return np.sqrt(np.mean((y_true, y_pred) ** 2))
+\end{lstlisting}
+
+\newpage
+
+\subsubsection{Mean Percentage Error (MPE)} 
+
+MPE, tahmin hatalarının gerçek değerlere göre yüzde olarak ne kadar sapma gösterdiğini ölçer. Pozitif ve negatif hataların etkisi birbirini sıfırlayabilir. MPE değeri ne kadar düşükse, modelin tahminlerinin gerçek değerlere ne kadar yakın olduğunu gösterir. MPE sıfıra yaklaştıkça model daha iyi performans gösterir.
 
 \[\text{Mean Percentage Error (MPE)} = \frac{1}{n} \sum_{i=1}^{n} \left( \frac{y_i - \hat{y}_i}{y_i} \right) \times 100\%\]
 
-\textbf{Explained Variance Score:} Modelin verideki değişkenliğin ne kadarını açıkladığını ölçer. 1' ne kadar yakınsa o kadar iyidir. Eğer 0 ise model verideki değişkenliği açıklayamıyor demektir. Eğer negatif ise model basit bir ortalama kullanmaktan daha kötü performans gösteriyor demektir. Modelin gerçek değerler üzerinde ne kadar başarılı tahminler yaptığını ve bu tahminlerin gerçek verideki değişkenliği ne kadar açıkladığını anlamak için kullanılır.
+\begin{lstlisting}[language=Python]
+import numpy as np
+
+def mean_percentage_error(y_true, y_pred):
+    percentage_errors = ((y_true - y_pred) / y_true) * 100
+    
+    mpe = np.mean(percentage_errors)
+    return mpe
+
+y_true = np.array([100, 200, 300, 400])
+y_pred = np.array([110, 190, 280, 420])
+
+mpe_value = mean_percentage_error(y_true, y_pred)
+print(f"Mean Percentage Error (MPE): {mpe_value:.2f}%")
+\end{lstlisting}
+
+\newpage
+
+\subsubsection{Explained Variance Score}
+
+Modelin verideki değişkenliğin ne kadarını açıkladığını ölçer. 1' ne kadar yakınsa o kadar iyidir. Eğer 0 ise model verideki değişkenliği açıklayamıyor demektir. Eğer negatif ise model basit bir ortalama kullanmaktan daha kötü performans gösteriyor demektir. Modelin gerçek değerler üzerinde ne kadar başarılı tahminler yaptığını ve bu tahminlerin gerçek verideki değişkenliği ne kadar açıkladığını anlamak için kullanılır.
 
 \[\text{Explained Variance Score} = 1 - \frac{\text{Var}(y - \hat{y})}{\text{Var}(y)}\]
 
-\textbf{Max Error:} Modelin gerçek ve tahmin edilen değerler arasındaki en büyük farkı ölçer. Gerçek ve tahmin edilen değerler arasındaki maksimum mutlak farkı ifade eder.
+\begin{lstlisting}[language=Python]
+import numpy as np
+
+def explained_variance_score(y_true, y_pred):
+    variance_y = np.var(y_true)
+    variance_residuals = np.var(y_true - y_pred)
+    evs = 1 - (variance_residuals / variance_y)
+    return evs
+
+y_true = np.array([3, -0.5, 2, 7])
+y_pred = np.array([2.5, 0.0, 2, 8])
+
+evs_value = explained_variance_score(y_true, y_pred)
+print(f"Explained Variance Score: {evs_value:.2f}")
+\end{lstlisting}
+
+\newpage
+
+\subsubsection{Max Error}
+
+Modelin gerçek ve tahmin edilen değerler arasındaki en büyük farkı ölçer. Gerçek ve tahmin edilen değerler arasındaki maksimum mutlak farkı ifade eder.
 
 \[\text{Explained Variance Score} = 1 - \frac{\text{Var}(y - \hat{y})}{\text{Var}(y)}\]
 
-\textbf{Winkler Interval Score:} Modelin tahminlerinin gerçek değer dağılımına ne kadar yakın olduğunu gösterir. Modelin ürettiği tahminler gerçek değerler dağılımına göre bir aralık ile sınırlandırılır. Aralıktaki tahminlerin oranı hesaplanır. 0-1 arasında değer alır. 1'e ne kadar yakınsa o kadar iyidir.
+\begin{lstlisting}[language=Python]
+import numpy as np
+
+def max_error(y_true, y_pred):
+    absolute_errors = np.abs(y_true - y_pred)
+    max_error_value = np.max(absolute_errors)
+    return max_error_value
+
+y_true = np.array([3, -0.5, 2, 7])
+y_pred = np.array([2.5, 0.0, 2, 8])
+
+max_error_value = max_error(y_true, y_pred)
+print(f"Max Error: {max_error_value:.2f}")
+\end{lstlisting}
+
+\newpage
+
+\subsubsection{Winkler Interval Score}
+
+Modelin tahminlerinin gerçek değer dağılımına ne kadar yakın olduğunu gösterir. Modelin ürettiği tahminler gerçek değerler dağılımına göre bir aralık ile sınırlandırılır. Aralıktaki tahminlerin oranı hesaplanır. 0-1 arasında değer alır. 1'e ne kadar yakınsa o kadar iyidir.
 
 \[\text{Winkler Interval Score} = \alpha \times (d - \Delta) \quad \text{if } d \leq \Delta, \quad \text{else} \quad \beta \times (d - \Delta) + \Delta\]
 
+\begin{lstlisting}[language=Python]
+import numpy as np
+
+def winkler_interval_score(y_true, y_lower, y_upper):
+    interval_width = y_upper - y_lower
+    coverage = np.mean((y_true >= y_lower) & (y_true <= y_upper))
+    score = (1 - coverage) + interval_width.mean()
+    return score
+
+y_true = np.array([2.5, 0.0, 2, 8])
+y_lower = np.array([2.0, -0.5, 1.5, 7.0])
+y_upper = np.array([3.0, 0.5, 2.5, 9.0])
+
+winkler_score = winkler_interval_score(y_true, y_lower, y_upper)
+print(f"Winkler Interval Score: {winkler_score:.2f}")
+\end{lstlisting}
+
+\newpage
+
 \subsection{Kümeleme Metrikleri}
 
-\textbf{Mutual Info Score:} Gerçek sınıf metrikleri ile kümele sonuçları arasındaki ilişkiyi ölçer. Yüksek MIS değeri, kümeleme sonuçlarının gerçek sınıf etiketleriyle güçlü bir şekilde ilişkili olduğunu ve algoritmanın veri yapısını doğru bir şekilde kavradığını gösterir. Düşük MIS değeri, kümeleme sonuçlarının gerçek sınıf etiketlerine göre zayıf bir ilişki içinde olduğunu ve algoritmanın iyileştirilmesi gerektiğini gösterir.
+\subsubsection{Mutual Info Score}
+
+Gerçek sınıf metrikleri ile kümele sonuçları arasındaki ilişkiyi ölçer. Yüksek MIS değeri, kümeleme sonuçlarının gerçek sınıf etiketleriyle güçlü bir şekilde ilişkili olduğunu ve algoritmanın veri yapısını doğru bir şekilde kavradığını gösterir. Düşük MIS değeri, kümeleme sonuçlarının gerçek sınıf etiketlerine göre zayıf bir ilişki içinde olduğunu ve algoritmanın iyileştirilmesi gerektiğini gösterir.
 
 \[\text{Mutual Info Score} = \frac{I(X;Y)}{\sqrt{H(X) \cdot H(Y)}}\]
 
-\textbf{Rand Score:}
+\begin{lstlisting}[language=Python]
+import numpy as np
+
+def mutual_information(x, y, bins=10):
+    c_xy, _, _ = np.histogram2d(x, y, bins=bins)
+
+    c_x = np.sum(c_xy, axis=1)
+    c_y = np.sum(c_xy, axis=0)
+    
+    p_xy = c_xy / np.sum(c_xy)
+    
+    p_x = c_x / np.sum(c_x)
+    p_y = c_y / np.sum(c_y)
+    
+    mi = 0.0
+    for i in range(c_xy.shape[0]):
+        for j in range(c_xy.shape[1]):
+            if p_xy[i, j] > 0:
+                mi += p_xy[i, j] * np.log(p_xy[i, j] / (p_x[i] * p_y[j]))
+    
+    return mi
+
+x = np.array([1, 2, 3, 4, 5, 6, 7, 8, 9, 10])
+y = np.array([1, 2, 1, 4, 5, 4, 7, 8, 9, 10])
+
+mi_score = mutual_information(x, y, bins=5)
+print(f"Mutual Information Score: {mi_score:.2f}")
+\end{lstlisting}
+
+\newpage
+
+\subsubsection{Rand Score}
 
 \[\text{Rand Index} = \frac{a + b}{\binom{n}{2}}\]
 
-\textbf{Completeness Score:}
+\begin{lstlisting}[language=Python]
+import numpy as np
+from itertools import combinations
+
+def rand_score(labels_true, labels_pred):
+    n = len(labels_true)
+    
+    pairs = list(combinations(range(n), 2))
+    
+    a = b = c = d = 0
+    
+    for i, j in pairs:
+        if labels_true[i] == labels_true[j] and labels_pred[i] == labels_pred[j]:
+            a += 1
+        elif labels_true[i] != labels_true[j] and labels_pred[i] != labels_pred[j]:
+            b += 1
+        elif labels_true[i] == labels_true[j] and labels_pred[i] != labels_pred[j]:
+            c += 1
+        elif labels_true[i] != labels_true[j] and labels_pred[i] == labels_pred[j]:
+            d += 1
+    
+    rand_score_value = (a + b) / (a + b + c + d)
+    return rand_score_value
+
+labels_true = np.array([1, 1, 0, 0, 1, 1, 0, 0])
+labels_pred = np.array([1, 1, 0, 0, 0, 1, 0, 1])
+
+rand_score_value = rand_score(labels_true, labels_pred)
+print(f"Rand Score: {rand_score_value:.2f}")
+\end{lstlisting}
+
+\newpage
+
+\subsubsection{Completeness Score}
 
 \[\text{Completeness Score} = \frac{1}{n} \sum_{i=1}^{n} \max_j (\text{Homogeneity}_{ij})\]
 
-\textbf{Homogenity Score:}
+\begin{lstlisting}[language=Python]
+import numpy as np
+
+def completeness_score(labels_true, labels_pred):
+    unique_true = np.unique(labels_true)
+    unique_pred = np.unique(labels_pred)
+    
+    completeness_scores = []
+    
+    for true_class in unique_true:
+        true_mask = labels_true == true_class
+        true_class_size = np.sum(true_mask)
+        
+        predicted_clusters = np.unique(labels_pred[true_mask])
+        
+        cluster_scores = []
+        for cluster in predicted_clusters:
+            cluster_size = np.sum((labels_pred == cluster) & true_mask)
+            cluster_scores.append(cluster_size / true_class_size)
+        
+        completeness_scores.append(np.max(cluster_scores))
+    
+    completeness_score_value = np.mean(completeness_scores)
+    
+    return completeness_score_value
+
+labels_true = np.array([0, 0, 1, 1, 2, 2, 1, 0])
+labels_pred = np.array([0, 0, 1, 1, 2, 2, 2, 1])
+
+completeness_score_value = completeness_score(labels_true, labels_pred)
+print(f"Completeness Score: {completeness_score_value:.2f}")
+\end{lstlisting}
+
+\newpage
+
+\subsubsection{Homogenity Score}
 
 \[\text{Homogeneity Score} = 1 - \frac{H(C|K)}{H(C)}\]
 
-\textbf{V-Measure Score:}
+\begin{lstlisting}[language=Python]
+import numpy as np
+
+def homogeneity_score(labels_true, labels_pred):
+    unique_true = np.unique(labels_true)
+    unique_pred = np.unique(labels_pred)
+    
+    homogeneity_scores = []
+    
+    for cluster in unique_pred:
+        cluster_mask = labels_pred == cluster
+        cluster_size = np.sum(cluster_mask)
+        class_distribution = [np.sum(labels_true[cluster_mask] == cls) / cluster_size for cls in unique_true]
+        
+        homogeneity_scores.append(np.max(class_distribution))
+    
+    homogeneity_score_value = np.mean(homogeneity_scores)
+    
+    return homogeneity_score_value
+
+labels_true = np.array([0, 0, 1, 1, 2, 2, 1, 0])
+labels_pred = np.array([0, 0, 1, 1, 2, 2, 2, 1])
+
+homogeneity_score_value = homogeneity_score(labels_true, labels_pred)
+print(f"Homogeneity Score: {homogeneity_score_value:.2f}")
+\end{lstlisting}
+
+\newpage
+
+\subsubsection{V-Measure Score}
 
 \[\text{V-Measure Score} = \frac{2 \times \text{Homogeneity} \times \text{Completeness}}{\text{Homogeneity} + \text{Completeness}}\]
+
+\begin{lstlisting}[language=Python]
+import numpy as np
+
+def v_measure_score(labels_true, labels_pred):
+    unique_true = np.unique(labels_true)
+    unique_pred = np.unique(labels_pred)
+    
+    def _entropy(labels):
+        labels, counts = np.unique(labels, return_counts=True)
+        probs = counts / len(labels)
+        return -np.sum(probs * np.log(probs + 1e-10))
+    
+    homogeneity_scores = []
+    for cluster in unique_pred:
+        cluster_mask = labels_pred == cluster
+        cluster_size = np.sum(cluster_mask)
+        class_distribution = [np.sum(labels_true[cluster_mask] == cls) / cluster_size for cls in unique_true]
+        homogeneity_scores.append(np.max(class_distribution))
+    homogeneity_score = np.mean(homogeneity_scores)
+    
+    completeness_scores = []
+    for true_class in unique_true:
+        true_mask = labels_true == true_class
+        true_class_size = np.sum(true_mask)
+        predicted_clusters = np.unique(labels_pred[true_mask])
+        cluster_scores = [np.sum((labels_pred == cluster) & true_mask) / true_class_size for cluster in predicted_clusters]
+        completeness_scores.append(np.max(cluster_scores))
+    completeness_score = np.mean(completeness_scores)
+    
+    v_measure_score = (homogeneity_score * completeness_score) / (homogeneity_score + completeness_score)
+    return v_measure_score
+
+labels_true = np.array([0, 0, 1, 1, 2, 2, 1, 0])
+labels_pred = np.array([0, 0, 1, 1, 2, 2, 2, 1])
+
+v_measure_score_value = v_measure_score(labels_true, labels_pred)
+print(f"V-Measure Score: {v_measure_score_value:.2f}")
+\end{lstlisting}
 
 \newpage
