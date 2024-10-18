@@ -9,4 +9,18 @@ Mixup, eğitim verilerinin doğrudan karıştırılması yerine, iki farklı gö
 
 Burada, $x_i$ ve $x_j$ olmak üzere iki görüntü, $y_i$ ve $y_j$ bu iki görüntünün etiketlerini temsil eder. Bu karışımda, $\lambda$ rastgele bir değerdir ve 0-1 arasıda bir değer alır. Bu değer Beta dağılımı kullanılarak seçilir.
 
+\subsubsection{Python Kodu}
+
+\begin{lstlisting}[language=Python]
+from art.defences.preprocessor import MixupTensorFlowV2
+mixup = MixupTensorFlowV2(num_classes=10, alpha=0.3, num_mix=2, apply_fit=True, apply_predict=False)
+mixup_train = mixup.forward(x=x_train, y=y_train)
+\end{lstlisting}
+
+\begin{figure}[h]
+    \centering
+    \includegraphics[width=0.3\textwidth]{images/mixup_example.png}
+    \caption{}
+\end{figure}
+
 \newpage

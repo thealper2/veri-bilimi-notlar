@@ -11,4 +11,19 @@ TVM, bir görüntünün toplam varyansını minimize ederek çalışır. Bu işl
 
 Amaç, yüksek frekanslı gürültüleri azaltarak görüntünün düşük frekanslı bileşenlerine odaklanmaktır.
 
+\subsubsection{Python Kodu}
+
+\begin{lstlisting}[language=Python]
+from art.defences.preprocessor import TotalVarMin
+
+tv_minimization = TotalVarMin(clip_values=(min_, max_))
+def_test, _ = tv_minimization(adv_test, y_test)
+\end{lstlisting}
+
+\begin{figure}[h]
+    \centering
+    \includegraphics[width=0.6\textwidth]{images/tvm_example.png}
+    \caption{}
+\end{figure}
+
 \newpage
