@@ -175,6 +175,27 @@ Burada:
     \item Yapılan değişiklikler, modelin yanlış sınıflandırmasını sağlayana kadar optimize edilir. Bu işlem sırasında saldırı, L0 normunu minimize eder.
 \end{enumerate}
 
+\subsubsection{Python Kodu}
+
+\begin{lstlisting}[language=Python]
+from art.attacks.evasion import CarliniL0Method
+
+cw_l0 = CarliniL0Method(
+    classifier=classifier, 
+    confidence=0.1, 
+    batch_size=1, 
+    learning_rate=0.01, 
+    max_iter=10
+)
+adv_test = cw_l0.generate(x=x_test)
+\end{lstlisting}
+
+\begin{figure}[h]
+    \centering
+    \includegraphics[width=0.7\textwidth]{images/cw_l0_results.png}
+    \caption{}
+\end{figure}
+
 \newpage
 
 \subsection{Carlini and Wagner L2 Attack}
@@ -193,6 +214,27 @@ Burada:
     \item $c$: Kayıp fonksiyonunu dengeleyen bir sabit.
 \end{itemize}
 
+\subsubsection{Python Kodu}
+
+\begin{lstlisting}[language=Python]
+from art.attacks.evasion import CarliniL2Method
+
+cw_l2 = CarliniL2Method(
+    classifier=classifier, 
+    confidence=0.1, 
+    batch_size=1, 
+    learning_rate=0.01, 
+    max_iter=10
+)
+adv_test = cw_l2.generate(x=x_test)
+\end{lstlisting}
+
+\begin{figure}[h]
+    \centering
+    \includegraphics[width=0.7\textwidth]{images/cw_l2_results.png}
+    \caption{}
+\end{figure}
+
 \newpage
 
 \subsection{Carlini and Wagner L$\infty$ Attack}
@@ -210,6 +252,27 @@ Burada:
     \item $f(x')$: Modelin sınıflandırma kaybı.
     \item $c$: Kayıp fonksiyonunu dengeleyen bir sabit.
 \end{itemize}
+
+\subsubsection{Python Kodu}
+
+\begin{lstlisting}[language=Python]
+from art.attacks.evasion import CarliniLInfMethod
+
+cw_l_inf = CarliniLInfMethod(
+    classifier=classifier, 
+    confidence=0.1, 
+    batch_size=1, 
+    learning_rate=0.01, 
+    max_iter=10
+)
+adv_test = cw_l_inf.generate(x=x_test)
+\end{lstlisting}
+
+\begin{figure}[h]
+    \centering
+    \includegraphics[width=0.7\textwidth]{images/cw_l_inf_results.png}
+    \caption{}
+\end{figure}
 
 \newpage
 
@@ -972,6 +1035,25 @@ T-UAP, modele evrensel bir pertürbasyon ekleyerek hedef sınıfa yönelik yanl�
 \subsection{Universal Perturbation Attack (UAP)}
 
 Universal Perturbation Attack, her bir örneğe küçük bir pertürbasyon ekleyerek modelin tahminlerini yanlış yapmaya çalışır. Pertürbasyon, evrensel bir bozucu sinyal olacak şekilde optimize edilir, yani tüm veri seti üzerinde işe yarayacak şekilde ayarlanır. Model, bu pertürbasyon uygulandığında hatalı sınıflandırmalar yapar.
+
+\subsubsection{Python Kodu}
+
+\begin{lstlisting}[language=Python]
+from art.attacks.evasion import UniversalPerturbation
+
+attack = UniversalPerturbation(
+    classifier=art_model, 
+    attacker="fgsm", 
+    max_iter=5
+)
+adv_test = attack.generate(x=x_test)
+\end{lstlisting}
+
+\begin{figure}[h]
+    \centering
+    \includegraphics[width=0.7\textwidth]{images/universal_perturbation_example.png}
+    \caption{}
+\end{figure}
 
 \newpage
 
