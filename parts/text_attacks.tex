@@ -1,0 +1,244 @@
+\section{Text Attacks}
+
+\subsection{Text Fooler}
+
+TextFooler, bir modelin çıktısını bozmayı amaçlar. Mevcut metni küçük değişikliklerle bozarak hedef modelin yanılmasını sağlar. Saldırının amacı, metnin anlaşılabilirliğini koruyarak ufak değişikliklerle modelin hatalı sınıflandırma yapmasını sağlamaktır.
+
+\subsubsection{Çalışma Adımları}
+
+\begin{enumerate}
+    \item Orijinal metin hedef modele gönderilir ve sınıflandırma sonuçları alınır. Hangi sınıfa ait olduğu belirlenir.
+    \item Orijinal metindeki her kelimenin, modelin tahmin sonucuna ne kadar etkide bulunduğu hesaplanır. Bu hesaplama için, her kelimenin silinmesi veya değiştirilmesi durumunda modelin çıktısının ne kadar değiştiği gözlemlenir. Modelin tahminini en çok etkileyen kelimeler bu aşamada tespit edilir.
+    \item Anahtar kelimeler belirlendikten sonra, bu kelimeler yerine anlam bakımından çok benzer kelimeler yerleştirilir. Bu aşamada, kelimelerin anlamı korunmaya çalışılır, ancak hedef modelin tahmininde bir değişiklik yaratacak şekilde küçük varyasyonlar yapılır. 
+    \item Değişikikler sonrasında modelin çıktısı tekrar gözlemlenir. Eğer model yanlış sınıflandırma yapıyorsa, saldırı başarılı kabul edilir. Süreç, moedl yanlış sınıflandırma yapana kadar devam eder.
+\end{enumerate}
+
+\subsubsection{Python Kodu}
+
+\begin{lstlisting}[language=Python]
+from transformers import AutoModelForSequenceClassification, AutoTokenizer
+from textattack.attack_recipes import TextFoolerJin2019
+from textattack.datasets import HuggingFaceDataset
+from textattack.models.wrappers import HuggingFaceModelWrapper, ModelWrapper
+
+model = AutoModelForSequenceClassification.from_pretrained(
+    "textattack/bert-base-uncased-imdb"
+)
+tokenizer = AutoTokenizer.from_pretrained(
+    "textattack/bert-base-uncased-imdb"
+)
+wrapper = HuggingFaceModelWrapper(model=model, tokenizer=tokenizer)
+attack = TextFoolerJin2019.build(wrapper)
+input_text = "It was the best movie I've ever watched."
+label = 1 # Positive
+attack_result = attack.attack(input_text, label)
+print(attack_result) # Negative
+# It was the noblest movie I've ever watched.
+\end{lstlisting}
+
+\newpage
+
+\subsection{A2T}
+
+A2T, metinlerde ufak değişiklikler yaparak bu modellerin doğruluğunu bozmayı amaçlar ve bu değişiklikler, metnin anlamını büyük ölçüde korurken modelin yanlış tahmin yapmasına neden olur. Bu saldırı, attention mekanizmasını kullanarak daha etkin bir şekilde saldırı yapmayı hedefler. A2T, modelin öğrenme sürecinde kullandığı attention (dikkat) mekanizmasından yararlanarak, modelin dikkat ettiği önemli kelimeleri hedefler ve bu kelimeleri değiştirerek modeli yanıltır. Değiştirilen kelimeler, metnin anlamını büyük ölçüde korurken, modelin tahmin doğruluğunu bozar. 
+
+\newpage
+
+\subsection{Alzantot Genetic Algorithm}
+
+Alzantot Genetic Algorithm, metin üzerindeki kelimeleri genetik algoritmalar yardımıyla değiştirir ve NLP modellerini yanlış sınıflandırmaya yönlendirir. Genetik algoritmalar, biyolojik evrim süreçlerinden ilham alır ve popülasyon, çaprazlama, mutasyon gibi işlemlerle çeşitli çözümler üreterek bir optimizasyon süreci gerçekleştirir. Alzantot'un yöntemi, metindeki kelimeleri eşanlamlı kelimelerle değiştirerek anlamını bozmadan modeli yanıltmaya çalışır. Eş anlamlı kelime değişimi, GloVe kullanılarak yapılır.
+
+\subsubsection{Çalışma Adımları}
+
+\begin{enumerate}
+    \item Başlangıç popülasyonu, orijinal metinden ele alınır. Orijinal metindeki her kelimenin eş anlamlı kelimeleri belirlenir ve bu eş anlamlı kelimelerle başlangıçta büyük değişiklikler yapılmış bir bir dizi yeni metin (birey) oluşturulur. Her metin, bir potansiyel adversarial örnektir.
+    \item Her bireyin uygunluk değeri (fitness score) hesaplanır. Uygunluk fonksiyonu, bireyin orijinal metne olan yakınlığını ve modelin bu bireyi nasıl sınıflandırdığını göz önünde bulundurur. Modelin yanlış sınıflandırdığı bireyler daha yüksek uygunluk değeri alır.
+    \item Uygunluk fonksiyonuna göre en iyi bireyler seçilir. Bu bireyler, genetik algoritmanın sonraki adımlarında kullanılacak ebeveyn bireylerdir. Seçim işlemi, daha yüksek uygunluk değerine sahip bireylerin bir sonraki nesilde yer alma olasılığını artırır.
+    \item Ebeveyn bireyler, çaprazlama işlemiyle birleştirilir ve yeni bireyler (çocuklar) oluşturulur. Çaprazlama, bir cümledeki kelimelerin bir kısmının bir ebeveynden, diğer kısmının ise diğer ebeveynden alınması anlamına gelir.
+    \item Çaprazlama işleminden sonra, yeni bireyler üzerinde küçük değişiklikler yapılır. Bu adımda, bazı kelimeler rastgele başka eş anlamlılarıyla değiştirilir. Bu adımda, bazı kelimeler rastgele başka eş anlamlılarıyla değiştirilir. Mutasyon, popülasyonun çeşitli kalmasını sağlar ve daha geniş bir çözüm uzayının keşfedilmesine olanak tanır.
+    \item Algoritma, belirli bir sayıda nesil üretildikten sonra veya yeterli uygunluk değerine sahip bireyler elde edildiğinde sonlandırılır
+\end{enumerate}
+
+\newpage
+
+\subsection{Faster Alzantot Genetic Algorithm}
+
+Faster Alzantot Genetic Algorithm, Alzantot'un 2018’de geliştirdiği genetik algoritmaya dayanan saldırı yöntemini optimize ederek, metin saldırılarını daha verimli ve hızlı hale getirmek amacıyla tasarlanmış bir yöntemdir. Orijinal Alzantot genetik algoritmasının karşılaştığı performans sorunlarını çözmek ve daha büyük veri kümelerinde veya karmaşık modellerde etkili olabilmek için çeşitli iyileştirmeler yapılmıştır.
+
+\begin{itemize}
+    \item Orijinal Alzantot algoritması her kelime için birçok eşanlamlıyı denemek zorundayken, Faster Alzantot algoritması, daha etkili kelime değiştirme stratejileri kullanarak uygun eşanlamlı kelimeleri daha hızlı bulur.
+    \item Uygunluk fonksiyonunun hesaplanması optimize edilerek, her bireyin ne kadar iyi bir adversarial örnek olduğu daha verimli şekilde belirlenir. Bu sayede gereksiz hesaplamalar azaltılır.
+\end{itemize}
+
+\newpage
+
+\subsection{BAE: BERT-based Adversarial Examples}
+
+BAE, BERT gibi güçlü dil modellerini kullanarak metinlerde anlamlı ve semantik açıdan tutarlı değişiklikler yaparak modelleri yanıltmayı amaçlar. Kelime yerine geçebilecek diğer kelimeleri önerirken, BERT'in kelime bağlamını anlama yeteneğini kullanır. 
+
+\subsubsection{Çalışma Adımları}
+
+\begin{enumerate}
+    \item Modelin sınıflandırma sonucunu etkileyen anahtar kelimeler seçilir.
+    \item Seçilen kelimeler BERt modeline maskelenerek sunulur. Maskelenen kelimenin bağlamdaki olası en iyi tahminleri BERT tarafından çıkarılır.
+    \item BERT tarafından önerilen kelimeler arasından, semantik benzerliği yüksek ve hedef modeli yanıltabilecek kelimeler seçilir. Bu kelimeler, orijinal metindeki kelimelerle değiştirilir. Modelin sınıflandırma performansı, bu değişikliklerden nasıl etkilendiği ile test edilir.
+    \item BERT modeli, belirli kelimelerin yanına eklenecek en uygun kelimeleri tahmin eder. Kelime eklemeleri de modelin sınıflandırma sonucunu yanıltabilecek şekilde yapılır.
+    \item Her kelime değişikliği veya eklemesinden sonra, saldırı başarılı olup olmadığı değerlendirilir. Eğer istenilen başarı elde edilmezse, başka kelimeler üzerinde değişiklikler yapılır ya da yeni kelimeler eklenir.
+\end{enumerate}
+
+\newpage
+
+\subsection{BERT-Attack}
+
+BERT-Attack, metindeki kritik kelimeleri maskeler ve ardından BERT modelini kullanarak bu maskelenen kelimelerin yerine, modelin yanlış sınıflandırma yapmasını sağlayacak en olası kelimeleri tahmin eder.
+
+\newpage
+
+\subsection{CheckList}
+
+CheckList'in amacı, NLP modellerinin test edilmesi için bir "checklist" (kontrol listesi) mantığı ile davranışsal testler yapmaktır. Bu testler, modelin metinlerdeki anlamsal, sözdizimsel ve çeşitli mantıksal tutarsızlıklara karşı nasıl performans gösterdiğini değerlendirmek için kullanılır. Testler, dilin çeşitli yönlerini kapsamlı bir şekilde test etmeyi ve bu testlerle modelin açık veya gizli zayıflıklarını bulmayı amaçlar.
+
+\begin{itemize}
+    \item \textbf{Minimum Functionality Tests (MFT)}: Temel dil becerilerini test eden minimal fonksiyonel testler. Modelin en basit ve temel dil becerilerini doğru bir şekilde yerine getirip getirmediğini kontrol eder. 
+    \item \textbf{Invariance Tests}: Anlamı değiştirmeyen ama modeli test eden değişiklikler (büyük harf yapmak vb.). Metinde anlamı değiştirmeyen değişiklikler yaparak modelin aynı cevabı vermesini bekler.
+    \item \textbf{Directional Expetation Tests}: Bir modelin çıktısının, bir değişiklikten sonra nasıl etkilenmesi gerektiğini ölçen yönlü testler. Anlamı değiştiren ama öngörülebilir bir sonuç beklenen değişiklikler yapılır..
+\end{itemize}
+
+\subsubsection{Çalışma Adımları}
+
+\begin{enumerate}
+    \item Model test edileceği dil becerileri tanımlanır. Hangi fonksiyonel ve anlamsal özelliklerin test edileceği belirlenir.
+    \item Belirlenen test senaryolarına göre test setleri hazırlanır. Bu test setleri, modelin zayıf yönlerini açığa çıkarmayı amaçlayan örneklerden oluşur. 
+    \item Hazırlanan test setleri modele sunulur. Her test sonucunda modelin çıktısı, beklenen davranışla karşılaştırılır.
+    \item CheckList, her bir test türü için detaylı sonuçlar sunar. Modellerin hangi testlerde başarısız olduğunu ve hangi testlerde başarılı olduğunu gösterir. Bu sonuçlar, modelin hangi dil becerilerinde zayıf olduğunu anlamak için kullanılır.
+\end{enumerate}
+
+\newpage
+
+\subsection{DeepWordBug}
+
+DeepWordBug, metinlerde karakter bazlı saldırılar gerçekleştirerek modelleri hedef alır. Metindeki bazı karakterler değiştirilerek metnin bütünlüğünü korumaya çalışırken, modelin yanlış tahminler yapması hedeflenir. Bu saldırı, karakter seviyesi ve embedding seviyesinde çalışan modellerde etkilidir. Saldırı işlemi, metindeki kelimelerin, yanlış karakter değiştirmeleri, karakter eklemeleri, karakter çıkarılması ve karakter değiştirilmesi yoluyla gerçekleştirilir. DeepWordBug, bir metindeki kelimelerin model üzerinde yarattığı etkiyi analiz eder ve modelin kararını en çok etkileyen kelimeleri hedefler. Hedef kelimeler belirlendikten sonra, bu kelimelere uygulanacak bozulma (distortion) stratejisi seçilir. DeepWordBug, modelin tahminini yanlış yönlendirmek için en az değişikliği yapma hedefiyle bir optimizasyon süreci kullanır.
+
+\begin{itemize}
+    \item \textbf{Karakter Ekleme}: Kelimenin içerisine rastgele karakterler eklenir.
+    \item \textbf{Karakter Çıkarma}: Kelimeden bazı karakterler çıkarılır.
+    \item \textbf{Karakter Değiştirme}: Kelimenin bazı karakterleri farklı karakterlerle değiştirilir.
+    \item \textbf{Karakter Yer Değiştirme}: Kelimenin içerisindeki karakterlerin sırası değiştirilir.
+\end{itemize}
+
+\newpage
+
+\subsection{HotFlip}
+
+HotFlip saldırısının amacı, modelin bir sınıfa olan olasılık tahminlerini maksimize veya minimize etmek amacıyla karakterleri değiştirmektir. Modelin gradyan bilgisini kullanarak hangi karakter değişikliğinin tahmini en çok değiştireceğini hesaplar. Bu, HotFlip'i diğer karakter değiştirme saldırılarından ayıran önemli bir noktadır; çünkü bu saldırı, optimizasyon tekniklerini kullanarak en etkili saldırıyı gerçekleştirmeyi hedefler. HotFlip saldırısı, bir dil modelinin sınıflandırma çıktısına yönelik yaptığı logit tahminlerini değiştirmek amacıyla çalışır. Logitler, modelin sınıf tahminlerini oluşturan ham çıktı değerleridir ve HotFlip, bu tahminler üzerindeki etkileri analiz eder.
+
+\subsubsection{Çalışma Adımları}
+
+\begin{enumerate}
+    \item Modelin sınıflandırma görevinde hangi karakterin değiştirilmesinin sınıf tahminini en çok değiştireceğini hesaplamak için gradyanlar kullanılır. Modelin kaybı ve sınıf logit'leri kulanılarak gradyanlar hesaplanır.
+    \item Belirli bir pozisyondaki karakterin değiştirilmesinin sınıf tahminini nasıl etkileyeceği analiz edilir. Burada HotFlip, bir karakteri başka bir karakterle yer değiştirme işlemi yapar. Bu karakter değişimi, metindeki anlamı ciddi bir şekilde bozmayacak şekilde planlanır. Bu adımda, karakterler üzerinde yapılan minimal değişikliklerle, modelin tahmin sonucunda en büyük sapmayı yaratma amacı güdülür.
+    \item Hangi karakterlerin ne şekilde değiştirileceği belirlendikten sonra, HotFlip saldırısının etkisini maksimize edecek en optimal karakter değişikliklerini bulmak için optimizasyon yapılır.
+    \item Belirlenen karakter değişiklikleri model üzerinde test edilir. Eğer yapılan küçük karakter değişiklikleri modelin tahminlerini önemli ölçüde değiştiriyorsa, saldırı başarılı sayılır.
+\end{enumerate}
+
+\newpage
+
+\subsection{Improved Genetic Algorithm}
+
+IGA, metin saldırıları için kullanılan genetik algoritmanın iyileştirilmiş bir versiyonudur. Temelde metni oluşturan kelimeleri değiştirmek için genetik algoritmaların evrimsel süreçlerini kullanır.
+
+\newpage
+
+\subsection{Input Reduction}
+
+Input Reduction saldırısının amacı, bir modelin verdiği kararı etkileyen asgari kelime sayısını bulmaktır. Bu işlem, modelin hangi kelimelerden veya kelime gruplarından etkilenip hangi girdiler üzerine karar verdiğini anlaşılmasını sağlar. Input Reduction, modelin verdiği tahminin doğruluğunu bozmadan gereksiz kelimeleri ortadan kaldırarak çalışır. Girdideki kelimeler birer birer çıkartılır ve modelin tahminindeki değişiklikleri gözlemlenir. Eğer kelimenin çıkarılması modelin tahminini etkilemezse, bu kelimenin çıkarılmasına izin verilir ve süreç devam eder. Modelin hala aynı tahmini vermesine olanak sağlayan minimum kelime seti bulunduktan sonra, saldırı tamamlanmış olur.
+
+\newpage
+
+\subsection{Kuleshov Attack}
+
+Kuleshov saldırısı, metinlerde kelime ikame yöntemini kullanarak çalışır. Bu, orijinal bir metindeki kelimelerin bazılarını, anlamını büyük ölçüde değiştirmeyen ancak modelin tahminini değiştirmeye yetecek kadar farklı olan kelimelerle değiştirme işlemidir. Kelime ikameleri, metnin orijinal anlamını bozmayacak şekilde seçilir, ancak bu ikameler modelin kararını önemli ölçüde etkileyebilir. Bu saldırı, modelin sınıflandırma hatalarına neden olabilecek ince değişiklikler yaparak modeli yanıltmayı amaçlar. 
+
+\newpage
+
+\subsection{Particle Swarm Optimization Attack}
+
+PSO, bireylerin bir hedefe ulaşmak için kolektif bilgiye dayalı hareket ettikleri bir optimizasyon algoritmasıdır. Burada, bireyler farklı kelime değişiklikleri veya metin manipülasyonları olarak düşünülebilir. Her birey, olası bir çözümü temsil eder. Bireyler, metin üzerinde belirli kelime değişiklikleri yaparak modelin çıktısını değiştirmeye çalışır. Bu süreç, tahmin doğruluğunu bozmaya yönelik olarak optimize edilir.
+
+\newpage
+
+\subsection{Probability Weighted Word Saliency (PWWS)}
+
+PWWS'nin temel amacı, modelin sınıflandırma performansını bozmak için metinlerde en az sayıda kelime değişikliği yaparak adversarial örnekler oluşturmaktır. Bu teknik, bir modelin tahminini değiştirmek için en etkili kelimeleri bulur ve bunları dikkat çekmeyen değişikliklerle değiştirir. Modelin verdiği karar üzerinde en fazla etkiye sahip olan kelimeler belirlenir ve daha sonra bunlar eşanlamlı kelimelerle değiştirilerek saldırı gerçekleştirilir.
+
+\[ S(w) = \frac{P(y|x)}{P(y'|x')} \]
+
+Burada:
+
+\begin{itemize}
+    \item $S(w)$: kelimenin saliency (önem) skorudur.
+    \item $P(y|x)$: modelin orijinal tahmin olasılığıdır.
+    \item $P(y'|x')$: kelimenin çıkarılmasından sonra modelin tahmin olasılığıdır.
+\end{itemize}
+
+\subsubsection{Çalışma Adımları}
+
+\begin{enumerate}
+    \item Her kelimenin model üzerindeki etkisi hesaplanır. Bu işlem, kelimenin çıkarılması durumunda modelin tahmininin nasıl değiştiğini gözlemler.
+    \item Saliency skorları, modelin orijinal tahmin olasılığıyla çarpılır. Bu işlem, hangi kelimenin modelin kararını en fazla etkilediğini belirler.
+    \item En yüksek etkili kelimeler belirlenir ve bu kelimeler dikkat çekmeyen eşanlamlı kelimelerle değiştirilir.
+\end{enumerate}
+
+\newpage
+
+\subsection{Text Bugger}
+
+TextBugger, hem beyaz kutu (white-box) hem de siyah kutu (black-box) saldırılar düzenlemek için tasarlanmıştır, bu da modelin iç yapısının bilindiği ya da bilinmediği durumlarda etkili olabileceği anlamına gelir. TextBugger, metindeki kelimeleri ve karakterleri bozarak modelin davranışını etkilemeye çalışır. Temel yaklaşım, her bir metin parçasının modelin sınıflandırma sonucuna ne kadar katkı sağladığını incelemek ve buna göre stratejik değişiklikler yapmaktır. TextBugger, metin üzerindeki saldırılarını iki düzeyde gerçekleştirir:
+
+\begin{itemize}
+    \item \textbf{Kelime Düzeyinde Bozma (Word-Level Perturbation)}: Metindeki kelimelerin değiştirilmesi yoluyla saldırı düzenlenir.
+    \item \textbf{Karakter Düzeyinde Bozma (Character-Level Perturbation)}: Metindeki karakterlerin manipüle edilmesiyle saldırı gerçekleştirilir.
+\end{itemize}
+
+Giriş metni analiz edilerek, sınıflandırma sonucunu en çok etkileyen kelimeler veya karakterler belirlenir. Seçilen kelimeler üzerinde bozma işlemleri uygulanarak adversarial örnekler oluşturulur.
+
+\begin{itemize}
+    \item \textbf{Karakter değişiklikleri}: Kelimenin içinkide karakterlerin manipüle edilmesi.
+    \item \textbf{Karakter silme}: Bir karakterin tamamen kaldırılması.
+    \item \textbf{Karakter ekleme}: Kelimenin içine yeni bir karakter eklenmesi.
+    \item \textbf{Karakter yer değiştirme}: İki karakterin yerlerinin değiştirilmesi.
+    \item \textbf{Eş anlamlı değiştirme}: Kelimenin anlamını bozmadan eş anlamlı kelimelerle değiştirilmesi.
+\end{itemize}
+
+\newpage
+
+\subsection{CLARE}
+
+CLARE (Contextualized Adversarial Example), bağlamsal farkındalık sağlayan dil modellerini (BERT vb.) kullanarak metindeki kelimeleri hedef alır ve bu kelimeler üzerinde kelime ekleme, çıkarma veya değiştirme gibi işlemler uygulanır. Diğer yöntemlerden farklı olarak, CLARE bu bozma işlemlerini gerçekleştirirken, hem metnin bağlamını hem de semantik yapısını dikkate alır, böylece değişiklikler hem anlamlı hem de modelin zayıflıklarından faydalanacak şekilde yapılır. CLARE, üç farklı bozma stratejisi uygular.
+
+\begin{itemize}
+    \item \textbf{Kelime Ekleme (Insertion)}: Metne anlamlı bir şekilde yeni kelimeler ekleme.
+    \item \textbf{Kelime Çıkarma (Deletion)}: Anlamı fazla bozmadan metinden kelimeler çıkarılır.
+    \item \textbf{Kelime Değiştirme (Replacement)}: Belirli kelimeler bağlamlarına uygun olarak eş anlamlı kelimelerle değiştirilir.
+\end{itemize}
+
+\newpage
+
+\subsection{Pruthi2019: Combating with Robust Word Recognition}
+
+NLP modelinin, kelime düzeyinde adversarial saldırılara karşı dayanıklılığını artırmak için geliştirilmiş bir yöntemdir. Pruthi'nin çalışması, kelimelerin doğru tanınmasıyla ilgili problemlere odaklanır. Bu yöntem, modellerin hatalı yazılmış ya da bozulan kelimeleri doğru şekilde tanımasını sağlar ve böylece modellerin saldırılara karşı dayanıklılığını artırır. Yöntem, hatalı yazılmış veya bozulan kelimeleri tespit etmek ve düzeltmek için bir kelime tanıma katmanı kullanır. Bu tanıma katmanı, NLP modellerine entegre edilerek, kelimelerdeki küçük bozulmaların modellenmesi sağlanır ve modelin yanlış tahmin yapması önlenir. Buradaki temel fikir, insanın hatalı yazılmış kelimeleri anlayabilme yeteneğini, NLP modellerine kazandırmaktır. Model, sadece bozulmamış metinlerle değil, aynı zamanda hatalı yazılmış ve düzeltilmiş metinlerle de eğitilir. Böylece model, gerçek dünyadaki metinlerde bulunan yazım hatalarına karşı dayanıklı hale gelir ve hatalı yazımlardan kaynaklanan yanlış tahminlerin önüne geçer.
+
+\newpage
+
+\subsection{MORPHEUS}
+
+MORPHEUS, morfosentatik yapıları bozarak ve kelime değiştirme yöntemleri ile metnin anlamını değiştirmeden saldırılar yapmaya olanak tanır. Amacı, bir metinde küçük ve dikkat çekmeyen kelime değişiklikleri yaparak, dil modelini aldatmak ve modelin yanlış sonuçlar üretmesini sağlamaktır. Bu süreçte, kelimelerin anlamına ve bağlamına zarar vermeden, yalnızca modelin içsel süreçlerini yanıtlmaya yönelik değişiklikler yapılır. Saldırı sırasında yapılan değişiklikler, modelin giriş katmanındaki kelime gömme (embedding) vektörlerini bozarak modelin yanıtını manipüle etmeyi hedefler.
+
+\newpage
+
+\subsection{Seq2Sick}
+
+Sequence-to-sequence (seq2seq) modellerine saldırmak amacıyla tasarlanmıştır. Seq2seq modelleri, makine çevirisi, metin özetleme ve konuşma tanıma gibi görevlerde yaygın olarak kullanılır. Saldırı, evasion saldırı tekniği olan Projected Gradient Descent (PGD) yöntemini kullanır. PGD, girdilere yönelik küçük pertürbasyonlar ekleyerek, modelin çıktısını manipüle eder. Seq2Sick, modelin girdi uzayında bu pertürbasyonları hesaplar ve çıktıda anlamlı hatalar yaratır. 
+
+
+\newpage
