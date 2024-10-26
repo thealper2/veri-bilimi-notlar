@@ -42,7 +42,7 @@ def random_initialization(shape):
 
 \newpage
 
-\subsection{He Initialization}
+\subsection{He Initialization (Kaiming Initialization)}
 Adını Kaiming He adlı araştırmacıdan alır. He Initialization, ReLU gibi doğrusal olmayan aktivasyon fonksiyonları ile birlikte kullanılan katmanlarda gradyanların daha dengeli bir şekilde yayılmasını sağlar. Bu teknik, ağırlıkların ortalama 0 ve varyansın $\frac{2}{n}$ (buradaki n, bir katmandaki giriş birimlerinin sayısıdır) olduğu bir normal dağılımdan alınarak başlatılır. Bu, ReLU fonksiyonlarının özelliklerine göre ayarlanmış bir yöntemdir, çünkü ReLU, negatif değerleri sıfıra kırpar ve bu da ağ boyunca gradyanların dengesiz yayılmasına neden olabilir.
 
 \subsubsection{Python Kodu}

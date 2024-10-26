@@ -1,0 +1,865 @@
+\section{Loss Functions}
+
+\begin{itemize}
+    \item Binary Crossentropy Loss (Log Loss)
+    \item Binary Focal Crossentropy Loss (Focal Loss)
+    \item Categorical Crossentropy Loss
+    \item Categorical Focal Crossentropy Loss
+    \item Categorical Hinge Loss
+    \item Cosine Similarity Loss
+    \item Dice Loss
+    \item Hinge Loss
+    \item Huber Loss (Smooth L1 Loss)
+    \item Kullback-Leibler Divergence (KLD) Loss
+    \item Log-Cosh Loss
+    \item Mean Absolute Error (MAE) Loss
+    \item Mean Absolute Percentage Error (MAPE) Loss
+    \item Mean Squared Error (MSE) Loss
+    \item Mean Squared Logarithmic Error (MSLE) Loss
+    \item Poisson Loss
+    \item Sparse Categorical Crossentropy
+    \item Squared Hinge Loss
+    \item Tversky Loss
+    \item Negative Log Likelihood (NLL) Loss
+    \item Poisson Negative Log Likelihood Loss
+    \item Gaussian Negative Log Likelihood Loss
+    \item Margin Ranking Loss
+    \item Soft Margin Loss
+    \item Cosine Embeddings Loss
+    \item Multi Label Margin Loss
+    \item Multi Label Soft Margin Loss
+    \item Multi Margin Loss
+    \item CTC (Connectionist Temporal Classification) Loss
+    \item Triplet Loss
+\end{itemize}
+
+\newpage
+
+\subsection{Binary Categorical Crossentropy (Log Loss)}
+
+İkili sınıflandırma problemlerinde kullanılır. Modelin tahmin ettiği olasılık ile gerçek etiket arasındaki farkı ölçer ve bu farkın logaritmasını kullanarak cezalandırır. 
+
+\[ L(y, \hat{y}) = - (y \cdot \text{log}(\hat{y}) + (1 - y) \cdot \text{log}(1 - \hat{y})) \]
+
+Burada $y$ gerçek etiketi, $\hat{y}$ modelin tahmin ettiği olasılığı, $L(y, \hat{y})$ tahmin edilen olasılıkla gerçek etiket arasındaki kaybı temsil eder. Her bir örnek için hesaplanan bu kayıplar toplanarak tüm veri kümesi için toplam kayıp elde edilir. Bu, modeli optimize ederken minimize edilmesi gereken bir fonksiyondur.
+
+\subsubsection{Çalışma Adımları}
+
+\begin{enumerate}
+    \item Model, sigmoid aktivasyon fonksiyonu ile tahmin edilen değerleri olasılık olarak verir.
+    \item Gerçek etiketle uyumlu olan tahminlerin logaritması alınarak daha yüksek doğru tahminler daha düşük kayıpla ödüllendirilir. YAnlış tahminler ise daha yüksek kayıpla cezalandırılır.
+    \item Tüm örnekler için kayıplar hesaplanır ve bunlar toplanarak toplam kayıp bulunur.
+    \item Modelin her tahmini, gerçek etiketle karşılaştırılır ve kayıp hesaplanarak modelin ne kadar başarılı olduğu anlaşılır.
+    \item Kayıp fonksiyonu, modelin parametrelerini güncellemek için kullanılır ve model optimize edilir.
+\end{enumerate}
+
+\subsubsection{Python Kodu}
+
+\begin{lstlisting}[language=Python]
+import numpy as np
+
+def binary_crossentropy(y_true, y_pred):
+    epsilon = 1e-15
+    y_pred = np.clip(y_pred, epsilon, 1 - epsilon)
+    loss = - (y_true * np.log(y_pred) + (1 - y_true) * np.log(1 - y_pred))
+    return np.mean(loss)
+\end{lstlisting}
+
+\newpage
+
+\subsection{Binary Focal Crossentropy (Focal Loss)}
+
+Focal Loss, zorluk derecesine göre kolay sınıflandırılabilen örneklere daha az ağırlık verirken, zor örneklere daha fazla ağırlık verir. Bu, dengesiz sınıf dağılımlarında modelin az görülen sınıfı öğrenmesini kolaylaştırır. Focal Loss, yanlış sınıflandırılan zor örnekler için kaybı artırır, doğru sınıflandırılan kolay örnekler için ise kaybı azaltır. Bu sayede model, zorluk derecesine göre örneklere farklı ağırlıklar atar. 
+
+\[ L(y, \hat{y}) = - \alpha \cdot (1 - \hat{y})^{\gamma} \cdot y \cdot \text{log}(\hat{y}) - \alpha \cdot \hat{y}^{\gamma} \cdot (1 - y) \cdot \text{log}(1 - \hat{y}) \]
+
+Burada:
+
+\begin{itemize}
+    \item $y$: Gerçek etiket.
+    \item $\hat{y}$: Modelin tahmin ettiği olasılık.
+    \item $\alpha$: Sınıflar arasında dengeleyici bir terim.
+    \item $\gamma$: Focal Loss'un odaklanma parametresi.
+    \item $L(y, \hat{y})$: Kayıp fonksiyonu.
+\end{itemize}
+
+Buradaki $(1 - \hat{y})^{\gamma}$ ve $\hat{y}^{\gamma}$ terimleri, doğru sınıflandırılmış kolay örneklerdeki kayıpları azaltır, yanlış sınıflandırılan zor örneklerdeki kayıpları artırır. $\gamma$ parametresi büyüdükçe bu etki daha belirgin hale gelir.
+
+\subsubsection{Çalışma Adımları}
+
+\begin{enumerate}
+    \item Model, sigmoid aktivasyon fonksiyonu ile olasılık tahmini yapar.
+    \item Kolay ve zor örneklerin kayıplarına ağırlık vermek için focal terim hesaplanır. Zor örneklerde kayıp artırılırken, doğru tahminlerde kayıp azaltılır.
+    \item Az görülen sınıflara daha fazla ağırlık vermek için $\alpha$ parametresi kullanılır.
+    \item Her örnek için focal loss hesaplanır ve tüm örnekler için bu kayıplar toplanır.
+    \item Kayıp fonksiyonu, modelin parametrelerini güncellemek için kullanılır ve model optimize edilir.
+\end{enumerate}
+
+\subsubsection{Python Kodu}
+
+\begin{lstlisting}[language=Python]
+import numpy as np
+
+def binary_focal_crossentropy(y_true, y_pred, gamma=2.0, alpha=0.25):
+    epsilon = 1e-15
+    y_pred = np.clip(y_pred, epsilon, 1 - epsilon)
+    
+    cross_entropy_loss = - (y_true * np.log(y_pred) + (1 - y_true) * np.log(1 - y_pred))
+    focal_loss = alpha * ((1 - y_pred) ** gamma) * y_true * np.log(y_pred) + \
+                 alpha * (y_pred ** gamma) * (1 - y_true) * np.log(1 - y_pred)
+    
+    loss = -focal_loss
+    return np.mean(loss)
+\end{lstlisting}
+
+\newpage
+
+\subsection{Categorical Crossentropy}
+
+Çok sınıflı sınıflandırma problemlerinde kullanılır. Modelin tahmin ettiği olasılık dağılımı ile gerçek sınıf dağılımı arasındaki farklılığı ölçer. Her bir örnekte gerçek sınıfa karşılık gelen tahmin edilen olasılığı kullanarak kayıp hesaplar. Modelin çıktısı her sınıf için olasılık dağılımı şeklindedir. Gerçek sınıfın olasılığı 1, diğer sınıfların olasılığı 0 olacak şekilde etiketlenmiş one-hot encoded bir vektör kullanır.
+
+\[ L(y, \hat{y}) = - \sum_{i=1}^{C} y_i \cdot \text{log}(\hat{y}_i) \]
+
+Burada:
+
+\begin{itemize}
+    \item $C$: Sınıf sayısı.
+    \item $y_i$: Gerçek sınıf etiketleri (one-hot encoded).
+    \item $\hat{y}_i$: Modelin tahmin ettiği olasılık dağılımı.
+    \item $L(y, \hat{y})$: Kayıp fonksiyonu.
+\end{itemize}
+
+Kayıp, modelin tahmin ettiği her bir sınıf için hesaplanır, ancak yalnızca gerçek sınıfa karşılık gelen tahmin edilen olasılık dikkate alınır. Diğer sınıfların olasılıkları hesaba katılmaz. Böylece, doğru sınıfa ne kadar yaklaşıldığına göre kayıp artar veya azalır.
+
+\subsubsection{Çalışm Adımları}
+
+\begin{enumerate}
+    \item Modelin her sınıf için ürettiği ham skorlar, softmax fonksiyonu ile olasılıklara dönüştürülür. Her sınıfın olasılığı, toplam olasılık 1 olacak şekilde normalize edilir.
+    \item Categorical Crossentropy, modelin gerçek sınıfa karşılık gelen tahminini alır ve bunun logaritmasını alarak kaybı hesaplar.
+    \item Tüm veri kümesi için hesaplanan kayıplar toplanır ve veri kümesindeki örnek sayısına bölünerek ortalama kayıp bulunur.
+    \item Hesaplanan kayıp fonksiyonu, modelin parametrelerini güncellemek için kullanılır.
+\end{enumerate}
+
+\subsubsection{Python Kodu}
+
+\begin{lstlisting}[language=Python]
+import numpy as np
+
+def categorical_crossentropy(y_true, y_pred, epsilon=1e-15):
+    y_pred = np.clip(y_pred, epsilon, 1 - epsilon)
+    loss = - np.sum(y_true * np.log(y_pred), axis=1)
+    return np.mean(loss)
+\end{lstlisting}
+
+\newpage
+
+\subsection{Categorical Focal Crossentropy}
+
+Focal Loss'un çok sınıflı sınıflandırma için genişletilmiş versiyonudur ve dengesiz sınıf dağılımlarını daha iyi ele almak için geliştirilmiştir. Standart Categorical Crossentropy'ye ek olarak, doğru sınıfın düşük olasılıkla tahmin edildiği durumları daha fazla cezalandırır ve doğru sınıfın yüksek olasılıkla tahmin edildiği durumları daha az cezalandırır. Bu, modelin zor örnekler üzerine daha fazla odaklanmasını sağlar.
+
+\[ L(y, \hat{y}) = - \sum_{i=1}^{C} \alpha_i \cdot y_i \cdot (1 - \hat{y}_i)^{\gamma} \cdot \text{log}(\hat{y}_i) \]
+
+\begin{itemize}
+    \item $C$: Sınıf sayısı.
+    \item $y_i$: Gerçek sınıf etiketleri (one-hot encoded).
+    \item $\hat{y}_i$: Modelin tahmin ettiği olasılık dağılımı.
+    \item $\alpha_i$: Sınıf dengesizliğini dengelemek için sınıf ağırlığı (opsiyonel).
+    \item $\gamma$: Odaklama faktörü.
+    \item $L(y, \hat{y})$: Kayıp fonksiyonu.
+\end{itemize}
+
+\subsubsection{Python Kodu}
+
+\begin{lstlisting}[language=Python]
+import numpy as np
+
+def categorical_focal_crossentropy(y_true, y_pred, gamma=2.0, alpha=0.25):
+    epsilon = 1e-15
+    y_pred = np.clip(y_pred, epsilon, 1 - epsilon)
+    cross_entropy_loss = -y_true * np.log(y_pred)
+    focal_loss = alpha * (1 - y_pred) ** gamma * cross_entropy_loss
+    return np.mean(np.sum(focal_loss, axis=1))
+\end{lstlisting}
+
+\newpage
+
+\subsection{Categorical Hinge}
+
+SVM'de kullanılan hinge kaybının bir genişlemesidir. Hinge Loss iki sınıflı sınıflandırma için kullanılırken, Categorical Hinge Loss birden fazla sınıfla çalışır. Bu kayıp fonksiyonu, doğru sınıfa verilen skor ile yanlış sınıfa verilen en yüksek skor arasındaki farkı belirleyerek modelin doğru sınıfı doğru bir şekilde ayırt edip etmediğini ölçer. Hinge loss'un amacı, doğru sınıfa verilen skorun yanlış sınıflara verilen skorlardan belirli bir marj ile büyük olmasını sağlamaktır. Modelin doğru sınıfı yalnızca tahmin etmesi yeterli değil, aynı zamanda diğer sınıflara göre belirli bir marj ile tahmin etmesi gerekir. Bu, daha güçlü ve ayırt edici modeller üretir.
+
+\[ L = \text{max}(0, \text{max}(1 - y_{true} \cdot \hat{y}_{true} + \hat{y}_{wrong})) \]
+
+Burada:
+
+\begin{itemize}
+    \item $y_{true}$: Gerçek sınıf etiketleri (one-hto encoded).
+    \item $\hat{y}_{true}$: Modelin doğru sınıfa verdiği olasılık skoru.
+    \item $\hat{y}_{wrong}$: Modeiln yanlış sınıflara verdiği en yüksek olasılık skoru.
+\end{itemize}
+
+Bu formül, doğru sınıfa olan skor ile yanlış sınıflara verilen en yüksek skoru karşılaştırır ve doğru sınıfa verilen skorun en az bir marj kadar yüksek olmasını sağlamaya çalışır.
+
+\subsubsection{Çalışma Adımları}
+
+\begin{enumerate}
+    \item Modelin tahminleri, her sınıf için bir skor çıktısı verir.
+    \item Gerçek sınıfa ait skor ile diğer yanlış sınıfların skorları ayrılır.
+    \item Yanlış sınıfa verilen en yüksek skor ile doğru sınıfa verilen skor arasındaki fark bulunur. Eğer bu fark belirli bir marjın altında ise, cezalandırılır. Bu, modelin yanlış tahmin etmesini engeller.
+    \item Modelin tüm tahminleri için hinge kaybı hesaplanır ve sonuçların ortalaması alınarak modelin toplam kaybı bulunur.
+\end{enumerate}
+
+\subsubsection{Python Kodu}
+
+\begin{lstlisting}[language=Python]
+import numpy as np
+
+def categorical_hinge(y_true, y_pred):
+    y_true_pred = np.sum(y_true * y_pred, axis=-1)
+    y_pred_wrong = np.max((1 - y_true) * y_pred, axis=-1)
+    loss = np.maximum(0, 1 - y_true_pred + y_pred_wrong)
+    return np.mean(loss)
+\end{lstlisting}
+
+\newpage
+
+\subsection{Cosine Similarity}
+
+İki vektör arasındaki benzerliği ölçmek için kullanılır. Temel olarak, iki vektör arasındaki açıya dayanarak benzerlik hesaplar ve vektörlerin büyüklüğünü göz ardı eder. Cosine Similarity, Cosine Distance ile karıştırılabilir. Cosine Distance, benzerliğin tersidir ve $1 - \text{cosine similarity}$ olarak hesaplanır.
+
+\[ \text{Cosine Similarity} = \frac{A \cdot B}{\| A \| \| B \|} \]
+
+Burada:
+
+\begin{itemize}
+    \item $A$ ve $B$: İki vektör.
+    \item $A \cdot B$: Vektörlerin iç çarpımı (dot product).
+    \item $\| A \|$ ve $\| B \|$: Vektörlerin normu (büyüklüğü).
+\end{itemize}
+
+Bu formül, iki vektör arasındaki benzerliğin 1'e (aynı yön) yakın olup olmadığını ya da -1'e (zıt yön) yakın olup olmadığını belirler. 0 değeri, vektörlerin birbirine dik olduğunu (benzerliğin olmadığını) gösterir.
+
+\subsubsection{Python Kodu}
+
+\begin{lstlisting}[language=Python]
+import numpy as np
+
+def cosine_similarity(A, B):
+    dot_product = np.dot(A, B)
+    norm_A = np.linalg.norm(A)
+    norm_B = np.linalg.norm(B)
+    cosine_sim = dot_product / (norm_A * norm_B)
+    return cosine_sim
+\end{lstlisting}
+
+\newpage
+
+\subsection{Dice}
+
+Segmentasyon problemlerinde kullanılır. İki küme arasındaki benzerliği ölçmek için kullanılan Dice Coefficient'in tersine dayanmaktadır. Dice Coefficient, iki küme arasındaki örtüşmeyi ölçen bir benzerlik metriğidir. İkili sınıflandırma ve segmentasyon problemlerinde kullanılır. Dice Loss, doğru pozitiflerin ağırlığını artırarak kesişimi optimize eder. Bu, doğru sınıflandırılan örneklere daha fazla önem verir.
+
+\[ \text{Dice Coefficient} = \frac{2 | A \cap B |}{|A| + |B|} \]
+
+\[ \text{Dice Coefficient} = \frac{2 \times \text{TP}}{2 \times \text{TP} + \text{FP} + \text{FN}} \]
+
+\[ \text{Dice Loss} = 1 - \text{Dice Coefficient} \]
+
+Burada:
+
+\begin{itemize}
+    \item $A$ ve $B$: İki ikili sınıf maskesi (tahmin ve gerçek değerler).
+    \item $| A \cap B |$: A ve B'nin kesişim, yani true positive sayısı.
+    \item $|A|$: A'daki pozitif örneklerin toplamı.
+    \item $|B|$: B'deki pozitif örneklerin toplamı.
+\end{itemize}
+
+\subsubsection{Python Kodu}
+
+\begin{lstlisting}[language=Python]
+import numpy as np
+
+def dice(y_true, y_pred, epsilon=1e-6):
+        y_true = y_true.flatten()
+        y_pred = y_pred.flatten()
+        intersection = np.sum(y_true * y_pred)
+        dice_score = (2. * intersection + epsilon) / (np.sum(y_true) + np.sum(y_pred) + epsilon)
+        dice_loss_value = 1 - dice_score
+        return dice_loss_value
+\end{lstlisting}
+
+\newpage
+
+\subsection{Hinge}
+
+İkili sınıflandırma problemlerinde kullanılır. SVM'de kullanılır.  Amaç, sınıflandırma hatalarını minimize etmek ve doğru sınıflandırmaları güçlendirmektir. Hinge Loss, sınıflandırma hataları olduğunda büyük cezalar verir ve doğru sınıflandırmalarla marj aralığını maksimize etmeye çalışır.
+
+\[ L(y, \hat{y}) = \text{max}(0, 1 - y \cdot \hat{y}) \]
+
+Burada:
+
+\begin{itemize}
+    \item $y$: Gerçek etiket.
+    \item $\hat{y}$: Modelin tahmin ettiği sınıf skoru.
+    \item $1 - y \cdot \hat{y}$: Marj kaybı, yani modelin tahmin hatası.
+\end{itemize}
+
+Eğer $y - \cdot \hat{y} \geq 1$, doğru sınıflandırma yapılmış demektir ve kayıp sıfır olur. Ancak, $y \cdot \hat{y} < 1$ olduğunda kayıp pozitif olur ($0 < 1 - y \cdot \hat{y}$) ve hata miktarı artar.
+
+\subsubsection{Python Kodu}
+
+\begin{lstlisting}[language=Python]
+import numpy as np
+
+def hinge(y_true, y_pred):
+    loss = np.maximum(0, 1 - y_true * y_pred)
+    return np.mean(loss)
+\end{lstlisting}
+
+\newpage
+
+\subsection{Huber (Smooth L1)}
+
+Regresyon problemlerinde kullanılır. Huber Loss, hem MSE hem de MAE kayıp fonksiyonlarının avantajlarını bir araya getirir ve gürültülü verilere karşı dayanıklı hale getirilmiştir. MSE küçük hatalarda iyi sonuç verirkeni, büyük hatalarda cezalandırma oranı yüksektir. MAE ise büyük hatalarda daha sağlam olsa da, küçük hatalarda daha az duyarlıdır. Huber Loss, bu iki yaklaşımın bir kombinasyonunu sunarak küçük hatalarda MSE gibi, büyük hatalarda ise MAE gibi davranır. Bu özellik, özellikle aşırı uç değerlere (outliers) sahip veri setlerinde avantaj sağlar. Eğer hata (gerçek değer ile tahmin edilen değer arasındaki fark) küçükse, Huber Loss MSE gibi karesini alır. Ancak hata belli bir eşik değerden büyükse, cezalandırmayı MAE gibi doğrusal olarak yapar.
+
+\[
+L_{\delta}(y, \hat{y}) =
+\begin{cases}
+    \frac{1}{2} (y - \hat{y})^2 & \text{if } |y - \hat{y}| \leq \delta \\ 
+    \delta \cdot (|y - \hat{y}| - \frac{1}{2} \delta) & \text{otherwise}
+\end{cases}
+\]
+
+Burada:
+
+\begin{itemize}
+    \item $y$: Gerçek değer.
+    \item $\hat{y}$: Modelin tahmin ettiği değer.
+    \item $\delta$: Huber kaybının hangi noktada MSE'den MAE'ye geçeceğini belirleyen bir eşik değeri.
+\end{itemize}
+
+\subsubsection{Python Kodu}
+
+\begin{lstlisting}[language=Python]
+import numpy as np
+
+def huber_loss(y_true, y_pred, delta=1.0):
+    error = np.abs(y_true - y_pred)
+
+    loss = np.where(error <= delta,
+                    0.5 * (error ** 2),
+                    delta * error - 0.5 * delta ** 2)
+
+    return np.mean(loss)
+\end{lstlisting}
+
+\newpage
+
+\subsection{Kullback-Leibler Divergence (KLD)}
+
+KLD, iki olasılık dağılımı arasındaki farklı ölçmek için kullanılır. Bir hedef dağılım (gerçek dağılım) ile bir tahmin edilen dağılım arasındaki farkı değerlendirmek için kullanılır. Modelin, gerçek olasılık dağılımından ne kadar uzak olduğunu ölçer. KL Divergence asimetriktir, bu da iki dağılım arasındaki farkın her iki yönde eşit olmadığını gösterir
+
+\[ D_{KL}(P\|O) = \sum_{i} P(i) \text{log}\frac{P(i)}{Q(i)} \]
+
+Burada P gerçek dağılımı, Q tahmin edilen dağılımı temsil eder. 
+
+\subsubsection{Python Kodu}
+
+\begin{lstlisting}[language=Python]
+import numpy as np
+
+def kl_divergence(p, q):
+    epsilon = 1e-10
+    p = np.clip(p, epsilon, 1)
+    q = np.clip(q, epsilon, 1)
+    return np.sum(p * np.log(p / q))
+\end{lstlisting}
+
+\newpage
+
+\subsection{Log-Cosh}
+
+Regresyon problemlerinde kullanılır. Adını logaritmik hiperbolik kosinüs fonksiyonundan alır. Tahmin edilen değer ile gerçek değer arasındaki farkı logaritmik bir biçimde değerlendirir ve böylece büyük hataların etkisini azaltır. Hiperbolik kosinüs fonksiyonu, sürekli ve diferansiyellenebilir bir fonksiyondur, bu da optimizasyon süreçlerini kolaylaştırır.
+
+\[ \text{Log-Cosh}(y, f(x)) = \sum_{i=1}^{n} \text{log}(\text{cosh}(f(x_i) - y_i)) \]
+
+\subsubsection{Python Kodu}
+
+\begin{lstlisting}[language=Python]
+import numpy as np
+
+def log_cosh(y_true, y_pred):
+    error = y_pred - y_true
+    loss = np.sum(np.log(np.cosh(error)))
+    return loss
+\end{lstlisting}
+
+\newpage
+
+\subsection{Mean Absolute Error (MAE)}
+
+Regresyon problemlerinde kullanılır. MAE, tahmin edilen değerler ile gerçek değerler arasındaki mutlak farkların ortalamasını alarak hesaplanır.
+
+\[ \text{MAE} = \frac{1}{n} \sum_{i=1}^{n} |y_i - \hat{y}_i| \]
+
+Burada:
+
+\begin{itemize}
+    \item $y_i$: Gerçek değerler.
+    \item $\hat{y}_i$: Tahmin edilen değerler.
+    \item $n$: Toplam örnek sayısı.
+\end{itemize}
+
+\subsubsection{Python Kodu}
+
+\begin{lstlisting}[language=Python]
+import numpy as np
+
+def mean_absolute_error(y_true, y_pred):
+    error = np.abs(y_true - y_pred)
+    mae = np.mean(error)
+    return mae
+\end{lstlisting}
+
+\newpage
+
+\subsection{Mean Absolute Percentage Error (MAPE)}
+
+Regresyon problemlerinde kullanılır. MAPE, tahmin edilen değerlerin gerçek değerlere göre yüzdesel hata oranını hesaplar. 
+
+\[ \text{MAE} = \frac{1}{n} \sum_{i=1}^{n} |\frac{y_i - \hat{y}_i}{y_i}| \times 100 \]
+
+Burada:
+
+\begin{itemize}
+    \item $y_i$: Gerçek değerler.
+    \item $\hat{y}_i$: Tahmin edilen değerler.
+    \item $n$: Toplam örnek sayısı.
+\end{itemize}
+
+\subsubsection{Python Kodu}
+
+\begin{lstlisting}[language=Python]
+import numpy as np
+
+def mean_absolute_percentage_error(y_true, y_pred):
+    percentage_error = np.abs((y_true, y_pred) / y_true) * 100
+    mape = np.mean(percentage_error)
+    return mape
+\end{lstlisting}
+
+\newpage
+
+\subsection{Mean Squared Error (MSE)}
+
+Regresyon problemlerinde kullanılır. MSE, tahmin edilen değerlerin gerçek değerle ne kadar farklı olduğunu ölçer. Hataların karesinin ortalamasını alarak, büyük hatalara daha fazla ağırlık verir, bu da modelin hatalarını minimize etmeye yönlendirir.
+
+\[ \text{MSE} = \frac{1}{n} \sum_{i=1}^{n} (y_i - \hat{y_i})^2 \]
+
+Burada:
+
+\begin{itemize}
+    \item $y_i$: Gerçek değerler.
+    \item $\hat{y}_i$: Tahmin edilen değerler.
+    \item $n$: Toplam örnek sayısı.
+\end{itemize}
+
+\subsubsection{Python Kodu}
+
+\begin{lstlisting}[language=Python]
+import numpy as np
+
+def mean_squared_error(y_true, y_pred):
+    errors = y_true - y_pred
+    squared_errors = np.square(errors)
+    mse = np.mean(squared_errors)
+    return mse
+\end{lstlisting}
+
+\newpage
+
+\subsection{Mean Squared Logarithmic Error (MSLE)}
+
+Regresyon problemlerinde kullanılır. MSLE, tahmin edilen ve gerçek değerlerin logaritmalarının karelerinin ortalamasını alarak hesaplanır. Sıfır veya negatif değerler ile karşılaşıldığında logaritma alınması problem yaratabilir; bu nedenle değerlerin 1 ile artırılması gereklidir.
+
+\[ \text{MSLE} = \frac{1}{n} \sum_{i=1}^{n} (\text{log}(y_i + 1) - \text{log}(\hat{y}_i + 1))^2 \]
+
+Burada:
+
+\begin{itemize}
+    \item $y_i$: Gerçek değerler.
+    \item $\hat{y}_i$: Tahmin edilen değerler.
+    \item $n$: Toplam örnek sayısı.
+\end{itemize}
+
+\subsubsection{Python Kodu}
+
+\begin{lstlisting}[language=Python]
+import numpy as np
+
+def mean_squared_logarithmic_error(y_true, y_pred):
+    log_y_true = np.log(y_true + 1)
+    log_y_pred = np.log(y_pred + 1)
+    errors = log_y_true - log_y_pred
+    squared_errors = np.square(errors)
+    msle = np.mean(squared_errors)
+    return msle
+\end{lstlisting}
+
+\newpage
+
+\subsection{Poisson}
+
+Poisson Loss, sayme verileri ve olayların belirli bir zaman diliminde gerçekleşme olasılığını modellemek için kullanılan bir kayıp fonksiyonudur. Olayların bağımsız bir şekilde ve belirli bir ortalama oranla gerçekleştiği durumlar için uygundur. Poisson kaybı, tahmin edilen sayısal değerlerin gerçek sayısal değerler olan yakınlığını ölçmek için kullanılır. Poisson kayıp fonksiyonu, negatif tahminler için tanımsızdır; bu nedenle tahminlerin pozitif olması gerekmektedir.
+
+\[ \text{Poisson Loss} = \sum_{i=1}^{n} (\hat{y}_i - y_i + y_i \text{log}(\frac{y_i}{\hat{y_i}})) \]
+
+Burada:
+
+\begin{itemize}
+    \item $y_i$: Gerçek değerler.
+    \item $\hat{y}_i$: Tahmin edilen değerler.
+    \item $n$: Toplam örnek sayısı.
+\end{itemize}
+
+\subsubsection{Python Kodu}
+
+\begin{lstlisting}[language=Python]
+import numpy as np
+
+def poisson_loss(y_true, y_pred):
+    y_pred = np.clip(y_pred, 1e-10, None)
+    loss = np.sum(y_pred - y_true + y_true * np.log(y_true / y_pred))
+    return loss
+\end{lstlisting}
+
+\newpage
+
+\subsection{Sparse Categorical Crossentropy}
+
+Çoklu sınıflandırma problemlerinde kullanılır. Bir modelin tahmin ettiği sınıf olasılıkları ile gerçek sınıf etiketleri arasındaki farkı ölçer. Sınıf etiketlerinin tam sayi formatında temsil edildiği durumlarda kullanılır. Normal Categorical Crossentropy, etiketleri bir one-hot vektörü olarak alırken, Sparse Categorical Crossentropy doğrudan tam sayıları alır.
+
+\[ \text{Loss} = - \frac{1}{N} \sum_{i=1}^{N} \text{log}(p(y_i | x_i)) \]
+
+Burada:
+
+\begin{itemize}
+    \item $N$: Örnek sayısı.
+    \item $y_i$: Gerçek etiket.
+    \item $p(y_i | x_i)$: Modelin $x_i$ girişi için $y_i$ sınıfına ait tahmin edilen olasılığı.
+\end{itemize}
+
+\subsubsection{Python Kodu}
+
+\begin{lstlisting}[language=Python]
+import numpy as np
+
+def sparse_categorical_crossentropy(y_true, y_pred):
+    y_pred = np.clip(y_pred, 1e-10, None)
+    loss = -np.sum(np.log(y_pred[np.arange(len(y_true)), y_true])) / len(y_true)
+    return loss
+\end{lstlisting}
+
+\newpage
+
+\subsection{Squared Hinge}
+
+İkili sınıflandırma problemlerinde kullanılır. Hinge Loss, doğru sınıflandırılmayan örnekler için ceza uygularken, Squared Hinge bu cezanın karesini alarak daha fazla penalizasyon sağlar.
+
+\[ Loss = \frac{1}{N} \sum_{i=1}^{N} \text{max}(0, 1 - y_i \cdot f(x_i))^2 \]
+
+Burada:
+
+\begin{itemize}
+    \item $N$: Örnek sayısı.
+    \item $y_i$: Gerçek etiket.
+    \item $f(x_i)$: Modelin $x_i$ girişi için tahmini değeri.
+\end{itemize}
+
+\subsubsection{Python Kodu}
+
+\begin{lstlisting}[language=Python]
+import numpy as np
+
+def squared_hinge_loss(y_true, y_pred):
+    hinge_loss = np.maximum(0, 1 - y_true * y_pred)
+    squared_loss = np.mean(hinge_loss * 2)
+    return squared_loss
+\end{lstlisting}
+
+\newpage
+
+\subsection{Tversky}
+
+Segmentasyon problemlerinde kullanılır. İki küme arasındaki benzerlikleri ölçmek için "true positive", "false positive" ve "false negative" üzerine odaklanır. Tversky, Jaccard benzerlik ölçüsünün bir genellemesidir.
+
+\[ \text{Tversky(A, B)} = \frac{|A \cap B|}{|A \cap B| + \alpha | A \backslash B | + \beta | B \backslash A |} \]
+
+Burada:
+
+\begin{itemize}
+    \item $A$ ve $B$: İki farklı küme (tahmin edilen ve gerçek etiketler).
+    \item $|A \cap B|$: Her iki kümedeki doğru pozitiflerin sayısı.
+    \item $| A \backslash B |$: Sadece tahmin edilen kümedeki yanlış pozitiflerin sayısı.
+    \item $| B \backslash A |$: Sadece gerçek kümedeki yanlış negatiflerin sayısı.
+    \item $\alpha$ ve $\beta$: Kullanıcının yanlış pozitif ve yanlış negatiflere uygulamak istediği ağırlıklar.
+\end{itemize}
+
+\subsubsection{Python Kodu}
+
+\begin{lstlisting}[language=Python]
+import numpy as np
+
+def tversky_loss(y_true, y_pred, alpha=0.5, beta=0.5):
+    TP = np.sum(y_true * y_pred)
+    FP = np.sum((1 - y_true) * y_pred)
+    FN = np.sum(y_true * (1 - y_pred))
+
+    tversky = TP / (TP + alpha * FP + beta * FN)
+    return 1 - tversky
+\end{lstlisting}
+
+\newpage
+
+\subsection{Negative Log Likelihod (NLL)}
+
+Çok sınıflı sınıflandırma problemlerinde kullanılır. Olasılıksal çıktı veren modellerde kullanılır ve modelin verdiği tahminlerin ne kadar doğru olduğunu olasılıksal olarak değerlendirmek için kullanılır. Likelihood (olasılık), modelin veri için ne kadar iyi bir tahmin verdiğinin bir ölçüsüdür, bu yüzden olasılığın negatif logaritması alındığında, daha küçük değerler daha iyi tahminler anlamına gelir.
+
+\[ \text{NLL} = - \sum_{i=1}^{n} y_i \text{log}(p_i) \]
+
+\subsubsection{Python Kodu}
+
+\begin{lstlisting}[language=Python]
+import numpy as np
+
+def negative_log_likelihood(y_true, y_pred):
+    epsilon = 1e-15
+    y_pred = np.clip(y_pred, epsilon, 1 - epsilon)
+    nll = -np.sum(y_true * np.log(y_pred))
+    return nll / y_true.shape[0]
+\end{lstlisting}
+
+\newpage
+
+\subsection{Poisson Negative Log Likelihood}
+
+Regresyon problemlerinde kullanılır. Poisson dağılımına dayalı veriler için kullanılır. Poisson NLL, modelin tahmin ettiği beklenen olay sayısıyla ($\lambda$) gerçek gözlemlenen olay sayısı ($y$) arasındaki farkı ölçer. 
+
+Poisson Dağılımı;
+
+\[ P(y; \lambda) = \frac{\lambda^y \epsilon^{-\lambda}}{y!} \]
+
+Bu formülden türetilen nll şu şekildedir:
+
+\[ L(y, \lambda) = \lambda - y \text{log}(\lambda) + \text{log}(y!) \]
+
+\subsubsection{Python Kodu}
+
+\begin{lstlisting}[language=Python]
+import numpy as np
+
+def poisson_nll(y_true, y_pred):
+    epsilon = 1e-15
+    y_pred = np.clip(y_pred, epsilon, None)
+    nll = y_pred - y_true * np.log(y_pred) + np.log(np.arange(1, y_true.max() + 1).prod())
+    return np.mean(nll)
+\end{lstlisting}
+
+\newpage
+
+\subsection{Gaussian Negative Log Likelihood}
+
+Gaussian NLL, Gauss dağılımı üzerinden hesaplanan bir kayıp fonksiyonudur. Modelin tahminlerinin, normal dağılım varsayımıyla ne kadar uyumlu olduğunu ölçer. Gaussian NLL, modelin tahmin ettiği ortalama ve varyans değerleriyle, gerçek gözlem verileri arasındaki ilişkiyi değerlendirir.
+
+\[ L(y, \mu, \sigma^2) = \frac{(y - \mu)^2}{2 \sigma^2} + \text{log}(\sigma) + \frac{1}{2} \text{log}(2 \pi)\]
+
+\subsubsection{Python Kodu}
+
+\begin{lstlisting}[language=Python]
+import numpy as np
+
+def gaussian_nll(y_true, y_pred_mean, y_pred_var):
+    epsilon = 1e-6
+    y_pred_var = np.clip(y_pred_var, epsilon, None)
+    nll = (y_true - y_pred_mean) ** 2 / (2 * y_pred_var) + np.log(y_pred_var) + 0.5 * np.log(2 * np.pi)
+    return np.mean(nll)
+\end{lstlisting}
+
+\newpage
+
+\subsection{Margin Ranking}
+
+Margin Ranking Loss, sıralama problemlerinde kullanılan bir kayıp fonksiyonudur. İki tahmin sıralamasını karşılaştırır ve sıralamanın doğru olup olmadığını değerlendirir. Bilgi alma, öneri sistemleri ve çiftli öğrenme problemlerinde kullanılır. İki tahminin doğru sıraya sahip olmasını teşvik ederken, yanlış sıralamaları cezalandırır. Margin Ranking, iki tahmin edilen değerin sıralamasını öğrenmeye çalışır. Hedeflenen sıralama, pozitif ve negatif örnekler arasındaki farkı modellemektir.
+
+\[ L(x_1, x_2, y) = \text{max}(0, -y \cdot (x_1 - x_2) + \text{margin}) \]
+
+Burada:
+
+\begin{itemize}
+    \item $x_1$ ve $x_2$: Modelin iki farklı tahmini.
+    \item $y$: Doğru sıralamayı belirten etikettir. Eğer $x_1$ daha büyük olmalıysa $y = 1$, $x_2$ daha büyük olmalıysa $y = -1$ olarak verilir.
+    \item $\text{margin}$: İki tahmin arasında beklenen minimum farktır.
+\end{itemize}
+
+Bu kayıp fonksiyonunda hedef, modelin iki tahmini arasındaki farkın, verilen margin değerinden büyük olmasıdır. Eğer $x_1$ ve $x_2$ doğru sıradaysa yani $y \cdot (x_1 - x_2) > \text{margin}$  kayıp sıfır olur. Ancak, sıralama yanlışsa veya fark margin’den küçükse, model cezalandırılır.
+
+\subsubsection{Python Kodu}
+
+\begin{lstlisting}[language=Python]
+import numpy as np
+
+def margin_ranking_loss(x1, x2, y, margin=1.0):
+    loss = np.maximum(0, -y * (x1 - x2) + margin)
+    return np.mean(loss)
+\end{lstlisting}
+
+\newpage
+
+\subsection{Soft Margin}
+
+Sınıflandırma problemlerinde kullanılır. SVM de kullanılır ve modelin hatalı sınıflandırmaları tolere etmesin olanak sağlar. Hinge Loss'un bir uzantısıdır ancak hatalı sınıflandırmalara karşı biraz daha esneklik tanır. Soft Margin, maksimum margin'i korumaya çalışırken hatalı sınıflandırmaların etkisini sınırlandırır. Soft Margin Loss, sınıflandırma işlemi sırasında yanlış sınıflandırmaları ceza puanıyla değerlendirir. Doğru sınıflandırmalarda kayıp değeri sıfıra yakın olurken, yanlış sınıflandırmalarda ceza puanı artar.
+
+\[ L = \sum_{i=1}^{N} \text{max}(0, 1 - y_i \cdot f(x_i)) \]
+
+\subsubsection{Python Kodu}
+
+\begin{lstlisting}[language=Python]
+import numpy as np
+
+def soft_margin_loss(y_true, y_pred):
+    loss = np.maximum(0, 1 - y_true * y_pred)
+    return np.mean(loss)
+\end{lstlisting}
+
+\newpage
+
+\subsection{Multi Label Margin}
+
+Çok etiketli sınıflandırma problemlerinde kullanılır. Birden fazla doğru sınıfın (etiketin) olduğu durumlarda, modelin bu sınıfları doğru sınıflar arasında sıralayıp sıralayamadığını değerlendirir. Bu kayıp fonksiyonu, sıralamayı temel alarak çalışır ve her yanlış sınıfın doğru sınıfların gerisinde olması gerektiğini varsayar. Model, doğru sınıfları en üstte, yanlış sınıfları ise daha aşağıda sıralarsa kayıp minimum olur.
+
+\[ L = \frac{1}{K} \sum_{i \in P} \sum_{j \in N} \text{max}(0, 1 - (y_i - y_j)) \]
+
+Burada:
+
+\begin{itemize}
+    \item $i \in P$: Doğru etiketler.
+    \item $j \in N$: Yanlış etiketler.
+\end{itemize}
+
+Bu formülde, pozitif sınıfın negatif sınıftan en az 1 puan daha yüksek olması istenir.
+
+\subsubsection{Python Kodu}
+
+\begin{lstlisting}[language=Python]
+import numpy as np
+
+def multi_label_margin_loss(y_true, y_pred):
+    positive_classes = np.where(y_true == 1)[0]
+    negative_classes = np.where(y_true == 0)[0]
+
+    loss = 0.0
+    for i in positive_classes:
+        for j in negative_classes:
+            margin_loss = max(0, 1 - (y_pred[i] - y_pred[j]))
+            loss += margin_loss
+
+    if len(positive_classes) > 0:
+        loss /= len(positive_classes)
+
+    return loss
+\end{lstlisting}
+
+\newpage
+
+\subsection{Multi Label Soft Margin}
+
+Multi Label Soft Margin Loss, çok etiketli (multi-label) sınıflandırma problemlerinde kullanılan bir kayıp fonksiyonudur. Bu kayıp fonksiyonu, bir örneğin birden fazla sınıfa ait olduğu senaryoları ele alır ve her sınıf için ayrı bir ikili sınıflandırma problemi gibi davranarak, her etiketin doğru tahmin edilmesini amaçlar.
+
+\[ L = - (y_i \cdot \text{log}(\sigma (\hat{y}_i)) + (1 - y_i) \cdot \text{log}(1 - \sigma (\hat{y}_i))) \]
+
+\subsubsection{Python Kodu}
+
+\begin{lstlisting}[language=Python]
+import numpy as np
+
+def sigmoid(x):
+    return 1 / (1 + np.exp(-x))
+
+def multi_label_soft_margin_loss(y_true, y_pred):
+    pred_prob = sigmoid(y_pred)
+    loss = - (y_true * np.log(pred_prob) + (1 - y_true) * np.log(1 - pred_prob))
+    return np.mean(loss)
+\end{lstlisting}
+
+\newpage
+
+\subsection{Multi Margin Loss}
+
+Multi Margin Loss, sınıflandırma problemlerinde kullanılan bir kayıp fonksiyonudur ve çok sınıflı problemlerde kullanılır. Doğru sınıf ile yanlış sınıflar arasındaki margin’i (farkı) maksimize etmeyi amaçlar. Bu kayıp fonksiyonu, hinge loss’un çok sınıflı versiyonudur ve her bir yanlış sınıfın skorunu doğru sınıfın skoruna yaklaştırmaya çalışır. Eğer model doğru sınıf için yeterince yüksek bir skor üretirse, kayıp fonksiyonu küçük olur. Fakat yanlış sınıflar doğru sınıfa çok yakın olursa, kayıp büyük olur ve modelin hatayı düzeltmesi için ceza uygulanır.
+
+\[ L = \sum_{j \neq y_i} \text{max}(0, \text{margin} - (s_{y_i} - s_j)) \]
+
+Burada $s_{y_i}$ doğru sınıfın skorunu, $s_j$ yanlış sınıfın skorunu temsil eder.
+
+\subsubsection{Python Kodu}
+
+\begin{lstlisting}[language=Python]
+import numpy as np
+
+def multi_margin_loss(y_true, y_pred, margin=1):
+    correct_class_score = y_pred[y_true]
+    loss = 0.0
+    for i in range(len(y_pred)):
+        if i != y_true:
+            loss += max(0, margin - (correct_class_score - y_pred[i]))
+
+    return loss
+\end{lstlisting}
+
+\newpage
+
+\subsection{CTC (Connectionist Temporal Classification) Loss}
+
+CTC loss, zaman serisi verilerinde sıralı etiketleme problemlerinde kullanılan bir kayıp fonksiyonudur. Özellikle girdilerin uzunluklarının değişken olduğu ve etiketlerin sıralı olduğu durumlarda etkilidir. Girdi ve etiket arasındaki zaman hizalamasını öğrenir ve bu hizalamayı kaybı minimize ederek gerçekleştirir. Genellikle konuşma tanıma, el yazısı tanıma, OCR gibi problemlerde kullanılır.
+
+\subsubsection{Python Kodu}
+
+\begin{lstlisting}[language=Python]
+class CTCLayer(layers.Layer):
+    def __init__(self, name=None):
+        super().__init__(name=name)
+        self.loss_fn = ctc_batch_cost
+
+    def call(self, y_true, y_pred):
+        batch_length = tf.cast(tf.shape(y_true)[0], dtype="int64")
+        input_length = tf.cast(tf.shape(y_pred)[1], dtype="int64")
+        label_length = tf.cast(tf.shape(y_true)[1], dtype="int64")
+
+        input_length = input_length * tf.ones(shape=(batch_length, 1), dtype="int64")
+        label_length = label_length * tf.ones(shape=(batch_length, 1), dtype="int64")
+
+        loss = self.loss_fn(y_true, y_pred, input_length, label_length)
+        self.add_loss(loss)
+
+        return y_pred
+\end{lstlisting}
+
+\newpage
+
+\subsection{Triplet Loss}
+
+Triplet loss, gözetimli öğrenme problemlerinde kullanılan bir kayıp fonksiyonudur. Amacı, verilerin birbirine olan ilişkilerini düzenlemektir. Triplet Loss, verilerin anlamlı bir şekilde gruplanmasını sağlayarak, benzer veri noktalarını birbirine yakın, farklı veri noktalarını ise birbirinden uzak tutar. Üç farklı veri noktasını kullanarak hesaplanır:
+
+\begin{itemize}
+	\item \textbf{Anchor (A)}: Referans veri noktası.
+	\item \textbf{Positive (P)}: Anchor'a benzer, aynı sınıfa ait veri noktası.
+	\item \textbf{Negative (N)}: Anchor'dan farklı, farklı sınıfa ait veri noktası.
+\end{itemize}
+
+\[ L(A, P, N) = max(0, || f(A) - f(P) ||^2 - ||f(A) - f(N)||^2 + \alpha)\]
+
+\begin{itemize}
+	\item $f$: Sinir ağı.
+	\item $|| * ||^2$: Öklidyen (L2) mesafesi.
+	\item $\alpha$: Marjin değeri, pozitif ve negatif arasındaki minimum mesafe farkını belirler. 
+\end{itemize}
+
+\newpage

@@ -1,12 +1,15 @@
 \section{Triplet Loss}
+
 Triplet loss, gözetimli öğrenme problemlerinde kullanılan bir kayıp fonksiyonudur. Amacı, verilerin birbirine olan ilişkilerini düzenlemektir. Triplet Loss, verilerin anlamlı bir şekilde gruplanmasını sağlayarak, benzer veri noktalarını birbirine yakın, farklı veri noktalarını ise birbirinden uzak tutar. Üç farklı veri noktasını kullanarak hesaplanır:
+
 \begin{itemize}
 	\item \textbf{Anchor (A)}: Referans veri noktası.
 	\item \textbf{Positive (P)}: Anchor'a benzer, aynı sınıfa ait veri noktası.
 	\item \textbf{Negative (N)}: Anchor'dan farklı, farklı sınıfa ait veri noktası.
 \end{itemize}
 
-\[ L(A, P, N) = max(0, || f(A) - f(P) ||^2 - ||f(A) - f(N)||^2 + \alpha \]
+\[ L(A, P, N) = max(0, || f(A) - f(P) ||^2 - ||f(A) - f(N)||^2 + \alpha)\]
+
 \begin{itemize}
 	\item $f$: Sinir ağı.
 	\item $|| * ||^2$: Öklidyen (L2) mesafesi.

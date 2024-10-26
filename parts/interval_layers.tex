@@ -13,6 +13,18 @@ Burada:
 
 Bu yaklaşım, küçük bozulmaların neden olduğu belirsizlikleri temsil etmek için kullanılır ve modelin her katmanında bu aralık bilgisi işlenir.
 
+\begin{lstlisting}[language=Python]
+from art.estimators.certification.interval import PyTorchIBPClassifier
+
+classifier = PyTorchIBPClassifier(
+    model=model,
+    loss=nn.CrossEntropyLoss(),
+    input_shape=(1, 28, 28),
+    clip_values=(min_, max_),
+    nb_classes=10
+)
+\end{lstlisting}
+
 \subsection{Interval Bounds}
 
 Interval bounds, modelin her katmanında hesaplanan aralıkların güvenliğini sağlamak için kullanılır. Bu sınırlar, modelin tahminlerine eklenen küçük değişikliklerin etkilerini ölçmek için kullanılır. Belirli bir giriş aralığı için en küçük ve en büyük değerler hesaplanarak, modelin güvenilirliği artırılır.

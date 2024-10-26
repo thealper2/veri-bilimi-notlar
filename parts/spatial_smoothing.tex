@@ -10,4 +10,14 @@ Spatial Smoothing, girdiyi düzenli hale getirmek için çeşitli filtreleme tek
     \item \textbf{Median Smoothing}: Her pikselin değerini, çevresindeki piksellerin medyan değerleriyle günceller.
 \end{itemize}
 
+\subsection{Python Kodu}
+
+\begin{lstlisting}[language=Python]
+from art.defences.preprocessor import SpatialSmoothing
+
+ss = SpatialSmoothing(window_size=3)
+ss_raw, _ = ss(img)
+ss_adv, _ = ss(adv_img)
+\end{lstlisting}
+
 \newpage

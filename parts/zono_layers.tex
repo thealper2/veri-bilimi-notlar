@@ -15,6 +15,19 @@ Burada:
     \item $[-g_i, g_i]$: Her bir bileşen boyunca küçük bir değişiklik (perturbation) aralığını belirtir.
 \end{itemize}
 
+\begin{lstlisting}[language=Python]
+from art.estimators.certification.deep_z import PytorchDeepZ
+
+classifier = PytorchDeepZ(
+    model=model,
+    loss=nn.CrossEntropyLoss(),
+    input_shape=(1, 28, 28),
+    clip_values=(min_, max_),
+    nb_classes=10,
+    
+)
+\end{lstlisting}
+
 \subsection{Zono Bounds}
 
 Zono bounds, zonotope'ların sınırlarını belirlemek için kullanılır. Adversarial saldırılarda modelin tahminini manipüle eden küçük değişiklikler göz önüne alındığında, zonotope sınırları bu değişikliklerin hangi aralıklarda güvenli olduğunu belirler. Zonotope sınırları, girişin her bir boyutundaki maksimum ve minimum değerleri içerir.

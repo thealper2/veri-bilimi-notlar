@@ -1,5 +1,27 @@
 \section{Optimizers}
 
+\begin{itemize}
+	\item SGD (Stochastic Gradient Descent)
+	\item Batch Gradient Descent
+	\item Mini Batch Gradient Descent
+	\item RMSprop (Root Mean Square Propagation)
+	\item Adam (Adaptive Moment Estimation)
+	\item AdamW
+	\item Adadelta
+	\item Adagrad
+	\item Adafactor
+	\item Adamax
+	\item FTRL (Follow-The-Regularized-Leader)
+	\item Lion (Layer-wise Adaptive Inertia Optimizer)
+	\item Nadam (Nesterov-accelerated Adaptive Moment Estimation)
+	\item Loss Scaling
+	\item Sparse Adam
+	\item L-BFGS (Limited-memory Broyden-Fletcher-Goldfarb-Shanno)
+	\item RAdam (Rectified Adam)
+	\item Averaged Stochastic Gradient Descent (Averaged SGD)
+	\item Rprop (Resilient Propagation)
+\end{itemize}
+
 \subsection{SGD (Stochastic Gradient Descent)}
 Gradyan azalmada tüm veri seti kullanılırken stokastik gradyan azalmada tek bir örneklem kullanılır. Her bir adımda bir örnek seçer ve bu örneğe göre gradyanı hesaplar. Bu yüzden "stokastik" olarak adlandırılır. Küçük veri kümelerinde kullanışlıdır. Tek örnek ile işlem yapıldığı için global minimuma doğru kararlı bir şekilde ilerleme görülmez. Minimaya ulaşmak için daha fazla iterasyon sayısına ihtiyaç duyar.
 
@@ -16,6 +38,36 @@ Gradyan azalmada tüm veri seti kullanılırken stokastik gradyan azalmada tek b
 	\item $\theta_(t)$: t zamandaki parametre vektörü
 	\item $\alpha$: öğrenme oranı,
 	\item $\nabla f(\theta_{t})$: fonksiyonun t zamanındaki gradyanı.
+\end{itemize}
+
+\newpage
+
+\subsection{Batch Gradient Descent}
+
+Tüm eğitim örneklerini bir arada kullanarak her bir iterasyonda gradyanı hesaplayar ve parametreleri günceller. Veri setinin tamamını kullanarak güncellemeler yapmak daha kararlı ve doğru sonuçlar elde etmeyi sağlar fakat büyük veri setleri için hesaplama maliyeti yüksek olabilir. Tüm veri seti kullanılarak tek bir gradyan hesaplanır. Parametreler, tüm veri setinin gradyanı hesaplandıktan sonra bir kez güncellenir.
+
+\[\theta = \theta - \alpha \nabla J(\theta)\]
+
+\begin{itemize}
+	\item $\theta$: optimize edilen parametrelerin vektörü,
+	\item $\alpha$: öğrenme oranı,
+	\item $J(\theta)$: maliyet fonksiyonunun gradyanı.
+\end{itemize}
+
+\newpage
+
+\subsection{Mini Batch Gradient Descent}
+
+Her bir iterasyonda tüm veri setini değil, belirli bir alt küme (mini batch) üzerinde işlem yapar. Bu, batch gradient descent'in hesaplama maliyetini azaltır ve stochastic gradient descent'in rastgele dalgalanmaları azaltmasını sağlar. Mini batch içerisindeki örnekler için gradyanlar hesaplanır. Belirli bir mini batch üzerinde gradyan hesaplandığı için güncelleme sıklığı batch gradient descent'e göre daha sık, stochastic gradient descent'e göre daha düzenlidir.
+
+\[\theta = \theta - \alpha \cdot \frac{1}{|\text{mini batch}|} \sum_{i=1}^{|\text{mini batch}|} \nabla J(\theta;x^{(i)},y^{(i)})\]
+
+\begin{itemize}
+	\item $\theta$: optimize edilen parametrelerin vektörü,
+	\item $\alpha$: öğrenme oranı,
+	\item ${|\text{mini batch}|}$: mini batch'deki örneklerin sayısı,
+	\item $J(\theta;x^{(i)},y^{(i)})$: maliyet fonksiyonu,
+	\item $x^{i}$ ve $y^{i}$: eğitim veri setindeki i'inci örnek.
 \end{itemize}
 
 \newpage

@@ -2,4 +2,16 @@
 
 Database Reconstruction, saldırı veya gizlilik ihlali durumlarında veri güvenliğini test etmek için kullanılır. Birçok veritabanı, istatistiksel veriler veya özet sonuçlar sunarken, bu bilgilerden tam veritabanı kayıtlarına ulaşmak mümkündür. Veritabanı yeniden yapılandırma saldırısının çalışma prensibi, kısmi veriler veya özet istatistiksel bilgiler kullanılarak tam veritabanı bilgilerinin geri kazanılmasıdır. 
 
+\subsection{Python Kodu}
+
+\begin{lstlisting}[language=Python]
+from art.attacks.inference.reconstruction import DatabaseReconstruction
+from art.estimators.classification.scikitlearn import ScikitlearnLogisticRegression
+
+normal_model = LogisticRegression().fit(x_train, y_train)
+normal_estimator = ScikitlearnLogisticRegression(normal_model)
+dr_normal = DatabaseReconstruction(estimator=normal_estimator)
+x_normal, y_normal = dr_normal.reconstruct(x_train_e, y_train_e)
+\end{lstlisting}
+
 \newpage

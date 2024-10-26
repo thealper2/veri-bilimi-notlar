@@ -22,6 +22,13 @@ Derin öğrenme modellerinin temel yapı taşlarından biri olan aktivasyon fonk
     \item Hard Sigmoid Function
     \item Mish Function
     \item Log-Softmax Function
+    \item Continuously-Differentiable Exponential Linear Unit (CELU) Function
+    \item Gated Linear Unit (GLU) Function
+    \item Hard Tanh Function
+    \item Square Plus Function
+    \item Sparse Plus Function
+    \item Sparse Sigmoid Function
+    \item Log-Sigmoid Function
 \end{itemize}
 
 \newpage
@@ -695,7 +702,6 @@ Log-Softmax, çok sınıflı sınıflandırma problemlerinde kullanılan bir akt
 
 \begin{itemize}
     \item Softmax, sonuçları olasılık olarak yorumlamaya olanak tanır. Log-Softmax ise logaritmik uzaya geçtiğinden, sonuçların doğrudan olasılık olarak yorumlanması zor olabilir.
-    \item 
 \end{itemize}
 
 \subsubsection{Python Kodu}
@@ -706,6 +712,181 @@ import numpy as np
 def log_softmax(x):
     exp_x = np.exp(x - np.max(x))
     return x - np.log(np.sum(exp_x))
+\end{lstlisting}
+
+\newpage
+
+\subsection{Continuously-Differentiable Exponential Linear Unit (CELU) Function}
+
+CELU, ELU fonksiyonunun bir türevidir. Sürekli türevlenebilir bir aktivasyon fonksiyonudur. Negatif girişler için yumuşak bir geçiş sunar. $\alpha$ parametresi ile negatif girdilerin etkisini kontrol eder.
+
+\[
+\text{CELU}(x) = 
+\begin{cases} 
+x & \text{if } x > 0 \\ 
+\alpha(e^{x} - 1) & \text{if } x \leq 0 
+\end{cases}
+\]
+
+\subsubsection{Python Kodu}
+
+\begin{lstlisting}[language=Python]
+import numpy as np
+
+def celu(x, alpha=1.0):
+    return np.where(x > 0, x, alpha * (np.exp(x) - 1))
+\end{lstlisting}
+
+\newpage
+
+\subsection{Gated Linear Unit (GLU) Function}
+
+GLU, bilgiyi kontrol eden bir kapı mekanizması sunarak, modelin daha iyi öğrenmesini ve bellek yönetimini kolaylaştırır. GLU, giriş verisini bir "kapı" mekanizması ile kontrol eder, bu sayede hangi bileşenlerin geçiş yapacağına karar verir. GLU, doğrusal aktivasyon fonksiyonlarının avantajlarını alırken, kapı mekanizması sayesinde daha dinamik bir kontrol mekanizması sunar.
+
+\[ \text{GLU}(x) = x_1 \odot \sigma(x_2) \]
+
+Burada: 
+
+\begin{itemize}
+    \item $x_1$ ve $x_2$: Girişin iki farklı katmandan geçirilmesiyle oluşan alt bileşenleridir.
+    \item $\sigma$: Sigmoid aktivasyon fonksiyonu.
+    \item $\odot$: Element bazında çarpma işlemi.
+\end{itemize}
+
+\subsubsection{Python Kodu}
+
+\begin{lstlisting}[language=Python]
+import numpy as np
+
+def glu(x):
+    x1, x2 = np.split(x, 2)
+    return x1 * (1 / (1 + np.exp(-x2)))
+\end{lstlisting}
+
+\newpage
+
+\subsection{Hard Tanh Function}
+
+Hard Tanh, basit bir doğrusal kesme mekanizmasına sahiptir. Bu fonksiyon, giriş değerlerini belirli bir aralıkta sınırlamak için tasarlanmıştır. Giriş değerleri, belirli bir eşik değerinin altında veya üstünde olduğunda, sabit bir çıkış üretir.
+
+\[
+\text{Hard Tanh}(x) = 
+\begin{cases} 
+1 & \text{if } x > 1 \\ 
+-1 & \text{if } x < -1 \\ 
+x & \text{if } -1 \leq x \leq 1 
+\end{cases}
+\]
+
+\subsubsection{Python Kodu}
+
+\begin{lstlisting}[language=Python]
+import numpy as np
+
+def hard_tanh(x):
+    return np.clip(x, -1, 1)
+\end{lstlisting}
+
+\newpage
+
+\subsection{Square Plus Function}
+
+Square Plus, giriş değerlerinin karesini alarak ve bir sabit ekleyerek pozitif değerler üretir. Giriş değerinin büyüklüğüne bağlı olarak daha büyük çıkışlar üretme eğilimindedir.
+
+\[ \text{Square Plus}(x) = x^2 + \epsilon \]
+
+Burada:
+
+\begin{itemize}
+    \item $x$: Giriş değeri.
+    \item $\epsilon$: Çıkışı sıfırdan ayırmak için kullanılan küçük bir pozitif değer. Bu, sıfıra çok yakın olan değerlerde bile pozitif bir çıkış sağlamak için önemlidir.
+\end{itemize}
+
+\subsubsection{Python Kodu}
+
+\begin{lstlisting}[language=Python]
+import numpy as np
+
+def square_plus(x, epsilon=1e-6):
+    return x ** 2 + epsilon
+\end{lstlisting}
+
+\newpage
+
+\subsection{Sparse Plus Function}
+
+Sparse Plus, giriş değerlerinin belirli bir eşiğin altında veya üstünde olup olmamasına bağlı olarak farklı çıkışlar üretir. Bu tür fonksiyonlar, modelin öğrenme sürecinde daha az aktif nöron kullanarak daha seyrek (sparse) bir çıktı üretmeyi hedefler.
+
+\[
+\text{Sparse Plus}(x) = 
+\begin{cases} 
+0 & \text{if } x < 0 \\ 
+x - \alpha & \text{if } 0 \leq x < \alpha \\ 
+x & \text{if } x \geq \alpha 
+\end{cases}
+\]
+
+Burada:
+
+\begin{itemize}
+    \item $x$: Giriş değeri.
+    \item $\alpha$: Nöronun açılma eşiği.
+\end{itemize}
+
+\subsubsection{Python Kodu}
+
+\begin{lstlisting}[language=Python]
+import numpy as np
+
+def sparse_plus(x, alpha=1.0):
+    return np.where(x < 0, 0, np.where(x < alpha, x - alpha, x))
+\end{lstlisting}
+
+\newpage
+
+\subsection{Sparse Sigmoid Function}
+
+Sparse Sigmoid, geleneksel sigmoid fonksiyonunun bir türevidir. Çıkış değerlerini daha seyrek hale getirmeyi hedefler. 
+
+\[
+\text{Sparse Sigmoid}(x) = 
+\begin{cases} 
+0 & \text{if } x < 0 \\ 
+\frac{1}{1 + e^{-x}} \cdot (1 - \epsilon) & \text{if } x \geq 0 
+\end{cases}
+\]
+
+Burada:
+
+\begin{itemize}
+    \item $x$: Giriş değeri.
+    \item $\epsilon$: Sıfıra çok yakın çıkışlar üreterek seyrekliği artırır.
+\end{itemize}
+
+\subsubsection{Python Kodu}
+
+\begin{lstlisting}[language=Python]
+import numpy as np
+
+def sparse_sigmoid(x, epsilon=1e-6):
+    return np.where(x < 0, 0, (1 / (1 + np.exp(-x))) * (1 - epsilon))
+\end{lstlisting}
+
+\newpage
+
+\subsection{Log-Sigmoid Function}
+
+Log-Sigmoid, giriş değerlerini sigmoid fonksiyonunu kullanarak dönüştürür. İkili sınıflandırma görevlerinde kullanılır. Çıkış değerleri sadece negatif olur, bu da bazı uygulamalarda kısıtlayıcı olabilir.
+
+\[ \text{Log Sigmoid}(x) = \log\left(\frac{1}{1 + e^{-x}}\right) = -\log(1 + e^{-x}) \]
+
+\subsubsection{Python Kodu}
+
+\begin{lstlisting}[language=Python]
+import numpy as np
+
+def log_sigmoid(x):
+    return -np.log(1 + np.exp(-x))
 \end{lstlisting}
 
 \newpage
