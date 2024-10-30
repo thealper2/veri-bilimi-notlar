@@ -240,5 +240,10 @@ MORPHEUS, morfosentatik yapıları bozarak ve kelime değiştirme yöntemleri il
 
 Sequence-to-sequence (seq2seq) modellerine saldırmak amacıyla tasarlanmıştır. Seq2seq modelleri, makine çevirisi, metin özetleme ve konuşma tanıma gibi görevlerde yaygın olarak kullanılır. Saldırı, evasion saldırı tekniği olan Projected Gradient Descent (PGD) yöntemini kullanır. PGD, girdilere yönelik küçük pertürbasyonlar ekleyerek, modelin çıktısını manipüle eder. Seq2Sick, modelin girdi uzayında bu pertürbasyonları hesaplar ve çıktıda anlamlı hatalar yaratır. 
 
+\newpage
+
+\subsection{Good Word Attack}
+
+Good Word Attack, sınıflandırma modellerini yanıltmak için kullanılır. Amaç, modelin olumsuz bir girdiyi olumlu olarak sınıflandırmasını sağlamaktır. Bunun için metne "iyi" veya olumlu çağrışım yapan kelimeler eklenir. Bu eklemeler, modelin metindeki kötü niyetli veya negatif anlamı göz ardı etmesine ve pozitif bir sonuç üretmesine neden olur. Bu kelimeler ya cümle başına, cümle sonuna veya belirli yerlere stratejik olarak yerleştirilir. Önemli olan, modelin genel yargısını yanıltacak şekilde eklemeler yapmaktır.
 
 \newpage

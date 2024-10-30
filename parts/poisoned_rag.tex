@@ -1,0 +1,11 @@
+\section{Poisoned RAG}
+
+RAG modellerini hedef alır. RAG modelleri, hem bilgi alma hem de üretim bileşenlerini içerir, yani model dış dünyadaki verilerle entegre bir şekilde çalışır ve daha anlamlı yanıtlar üretebilir. Poisoned RAG saldırısı, bu sistemin bilgi alma kısmını zehirleyerek (poisoning) modelin çıktısına zarar vermeyi amaçlar. Bu saldırı, modelin aradığı bilgilerin içine kasıtlı olarak yanlış veya zararlı veriler yerleştirerek çalışır. Amaç, modelin yanlış bilgilere dayanarak hatalı veya kötü niyetli yanıtlar üretmesini sağlamaktır.
+
+\begin{enumerate}
+    \item RAG modelleri, dış dünyadan (örneğin, bir bilgi tabanı veya internetten) bilgi alır. Bu aşamada, modelin aldığı bilgi saldırgan tarafından zehirlenir.
+    \item Model, aldığı bilgiyi analiz edip, doğal dilde anlamlı bir yanıt üretir. Bu aşamada zehirlenmiş bilgi, modelin yanıtlarının doğruluğunu bozar ve modelin yanlış veya zararlı yanıtlar üretmesine neden olur.
+    \item Zehirlenmiş veriler sonucunda üretilen yanıtlar, hedeflenen manipülasyonu içerir.
+\end{enumerate}
+
+\newpage

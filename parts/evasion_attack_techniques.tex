@@ -16,6 +16,13 @@ Burada:
     \item $\mathcal{L}$: Kayıp fonksiyonu.
 \end{itemize}
 
+Diğer Evasion yöntemleri girdiye çeşitli bozulmalar ekleyerek modeli yanıltmayı amaçlar. Adversarial Patch ise görüntünün herhangi bir yerine yerleştirilebilir ve modelin diğer öğeleri görmezden gelmesin sağlayarak yanıltır. Diğer saldırılar dijital ortamda manipüle gerektirirken Adversarial Patch fiziksel dünyada da uygulanabilir. Sahneden bağımsızdır. Hedefli bir saldırıdır yani istenen bir çıktı vermeye zorlanabilir. Döndürme, ölçekleme gibi çeşitli savunma yöntemlerine karşı dirençlidir. Fakat saldırının etkili olabilmesi için oluşturulan yamanın belirli bir boyutta olması gerekir. Büyük bir yama, şüphe uyandırabilir ve saldırının başarısız olmasına neden olabilir. Bunu önlemek için "disguise" yani gizleme işlemi yapılmıştır. Disguise işlemi:
+
+\begin{itemize}
+    \item \textbf{L2 Mesafesi}: Oluşturulan yamanın bir "tie-dye" desenine olan L2 mesafesini en aza indirerek daha az dikkat çekici olması sağlanmıştır. Bu işlem, yamanın renklerini ve desenini değiştirerek onu "tie-dye" desenine benzemesini sağlar. Tie-dye, bir dizi boyama işlemi sonucu elde edilen görüntüye verilen isimdir.
+    \item \textbf{Barış İşareti Maskesi (Peace Sign Mask)}: Yamaya barış işareti maskesi uygulanır. Bu maske, yamanın şeklini değiştirir.
+\end{itemize}
+
 \subsubsection{Çalışma Adımları}
 
 \begin{enumerate}
@@ -25,11 +32,20 @@ Burada:
     \item Optimizasyon tamamlandıktan sonra yamayı hedef görüntüye yerleştirir ve modelin saldırıya nasıl tepki verdiği gözlemlenir.
 \end{enumerate}
 
+\subsubsection{Savunma Yöntemleri}
+
+\begin{itemize}
+    \item \textbf{Aktivasyon Tespiti}: Görüntü üzerinde anormal derecede aktivasyona neden olan bölgeler tespit edilir.
+    \item \textbf{Adversarial Training}: Eğitim verilerine adversarial örnekler eklenerek bu tür saldırılara direnç sağlanabilir.
+    \item \textbf{Ensemble Models}: Birden fazla modelin kullanılarak sonuçlarının birleştirilmesiyle nihai tahmin yapılabilir.
+    \item \textbf{İnsan Denetimi}: Adversarial Patch saldırısının başarısı uygulanan yamanın boyutu ile ilişkilidir. Dolayısıyla görüntü üzerindeki büyük bir yama insan gözüyle tespit edilebilir.
+\end{itemize}
+
 \newpage
 
 \subsection{Adversarial Texture}
 
-Adversarial Texture, bir nesnenin yüzeyine uygulanan ve o nesnenin model tarafından yanlış tanınmasına yol açan bir "doku" ile saldırı gerçekleştirir. Adversarial Texture, temelde optimizasyon süreçleri kullanarak nesnenin görünümünü manipüle eder. Modelin tahmin performansını bozacak şekilde tasarlanmış olan bu dokular, model tarafından işlenen özellikleri yanıltarak modelin yanlış tahminler yapmasına yol açar. Bu saldırı, görüntüdeki belirli bir dokuya odaklanarak yapıldığı için daha geniş ve nesnenin genel yapısını etkileyen bir saldırı olarak kabul edilir.
+Adversarial Texture, bir nesnenin yüzeyine uygulanan ve o nesnenin model tarafından yanlış tanınmasına yol açan bir "doku" ile saldırı gerçekleştirir. Adversarial Texture, temelde optimizasyon süreçleri kullanarak nesnenin görünümünü manipüle eder. Modelin tahmin performansını bozacak şekilde tasarlanmış olan bu dokular, model tarafından işlenen özellikleri yanıltarak modelin yanlış tahminler yapmasına yol açar. Bu saldırı, görüntüdeki belirli bir dokuya odaklanarak yapıldığı için daha geniş ve nesnenin genel yapısını etkileyen bir saldırı olarak kabul edilir. Adversarial Texture, Expectation over Transformation (EoT) ile oluşturulur. 
 
 \[ \min_{T} \mathbb{E}_{x \sim \mathcal{D}} \left[ \mathcal{L}(f(T(x)), y_{\text{target}}) \right] \]
 
@@ -349,6 +365,8 @@ x_test_adv_composite = pgd.generate(x=x_test_adv_fgsm)
 
 Decision Tree Attack, karar ağacının düğümlerini ve dallarını hedef alarak saldırı oluşturur. Bu saldırı türünde, giriş verileri yavaş yavaş değiştirerek, birden fazla düğümde farklı kararlar alınmasını sağlar. Böylelikle, modelin çıktısını yanlış bir yöne yönlendirmek için küçük ama etkili değişiklikler yapılır.
 
+Bu saldırı komşu yaprak arama yöntemini kullanır. Komşu yaprak arama, karar ağacının karar alma sürecini manipüle ederek modelin yanlış sınıflandırmalar yapmasını sağlar. Komşu yaprak arama yöntemi, ilk olarak normal bir örneğin hangi yaprağa karşılık geldiğini belirler. Daha sonra bu yaprağın yakın komşularını arayarak farklı sınıf etiketlerine sahip yaprakları bulur. Başlangıç yaprağından hedef yaprağa doğru giden yol incelenerek hedef yolda belirtilen koşulları sağlayacak küçük değişiklikler yapar. Örnek, bu yoldaki koşullara göre değiştirilir ve modelin yanlış tahmin yapması sağlanır.
+
 \subsubsection{Çalışma Adımları}
 
 \begin{enumerate}
@@ -367,6 +385,8 @@ art_dt = SklearnClassifier(model=dt)
 attack = DecisionTreeAttack(art_dt)
 adv_test = attack.generate(x_test)
 \end{lstlisting}
+
+\newpage
 
 \begin{figure}[h]
     \centering
@@ -429,6 +449,20 @@ adv_test = deep_fool.generate(x=x_test)
 
 DPatch Attack, sahnede belirli bir konuma küçük bir pertürbasyon yerleştirir ve bu sayede görüntüdeki diğer nesneler veya özellikler ne kadar net olursa olsun modelin çıktısını manipüle edebilir. Bu patch, modelin karar verme sürecini etkiler ve doğru sınıflandırmayı engeller. Bu saldırı, modelin girişindeki patch'e odaklanmasını sağlar ve bu sayede diğer özellikler göz ardı edilir.
 
+Geleneksel Adversarial Patch, YOLO gibi Object Detection modellerinde düzgün çalışmaz. Bunun sebebi, object detection modellerinin önce nesneleri bulup sonra sınıflandırmasıdır. Dolayısıyla üretilen yamayı bir nesne olarak bulamadığı için sınıflandıramaz, bu da saldırının başarısız olmasına neden olur. DPatch, hem non-max suppression algoritmasını hem de sınıflandırıcıyı hedef alır. Oluşturulacak yama, hedeflenen nesnenin boyutuna göre olmalıdır. Yani ufak bir nesne hedef alınıyorsa o ölçekte bir yama oluşturulmalıdır. 
+
+DPatch, aktarılabilir bir saldırıdır. Örneğin YOLO ile eğitilen bir model Faster R-CNN üzerinde de başarılı bir şekilde çalışabilir. Bu da saldrınının "black box" olması anlamına gelir. 
+
+\subsubsection{Çalışma Adımları}
+
+\begin{enumerate}
+    \item Rastgele piksel değerlerine sahip bir yama oluşturulur.
+    \item Oluşturulan yama veri setindeki görüntülere rastgele konumlarda eklenir.
+    \item Model, yama eklenmiş görüntülerdeki nesneleri sınıflandırmaya çalışır.
+    \item Modelin çıktısı gerçek etiketlerle karşılaştırılır ve bir kayıp değeri hesaplanır. Bu kayıp değeri kullanılarak yamanın piksel değeri güncellenir.
+    \item Bu işlemler belirli bir iterasyon boyunca tekrarlanarak nihai yama oluşturulur.
+\end{enumerate}
+
 \newpage
 
 \subsection{Robust DPatch}
@@ -451,7 +485,8 @@ Burada:
 
 \subsection{ElasticNet Attack}
 
-ElasticNet Attack, hem $L_1$ hem de $L_2$ normlarını kullanarak saldırı yapılacak pertürbasyonun seyrekliğini ve büyüklüğünü kontrol eder. Carlini and Wagner'in bir uzantısı olarak görülen bu saldırı, çok sayıda sıfır değerli (sparse) bileşen içeren pertürbasyonlar oluşturmayı amaçlar. $L_1$-norm seyrekliği, $L_2$-norm ise pertürbasyonun büyüklüğünü kontrol eder.
+ElasticNet Attack, hem $L_1$ hem de $L_2$ normlarını kullanarak saldırı yapılacak pertürbasyonun seyrekliğini ve büyüklüğünü kontrol eder. Carlini and Wagner'in bir uzantısı olarak görülen bu saldırı, çok sayıda sıfır değerli (sparse) bileşen içeren pertürbasyonlar oluşturmayı amaçlar. $L_1$-norm seyrekliği, $L_2$-norm ise pertürbasyonun büyüklüğünü kontrol eder. Bu saldırı ISTA (Iterative Shrinkage-Thresholding Algorithm) yöntemini kullanır. Shrinkage işlemi, adversarial örneğin piksel değerini orijinal görüntüye yaklaştırır. Eşikleme işlemi, belirli bir eşik değerinin altındaki pertürbasyonları sıfırlar.
+
 \[ \min_\delta \lambda \|\delta\|_1 + (1 - \lambda) \|\delta\|_2^2 + c \cdot f(x + \delta) \]
 
 Burada:
@@ -600,9 +635,11 @@ adv_test = attack.generate(x_test[:100])
 
 \newpage
 
-\subsection{Geometric Decision Based Attack (G-DBA)}
+\subsection{Geometric Decision Based Attack (GeoDA)}
 
 Geometric Decision-Based Attack, bir modelin karar sınırlarını öğrenip bu sınırlara yakın bir noktada gürültü veya küçük değişiklikler ekleyerek modelin yanlış bir sınıflandırma yapmasını sağlar. Saldırgan, modelin nasıl çalıştığını bilmeden yalnızca verdiği tahminler üzerinden saldırıyı gerçekleştirir.
+
+Derin sinir ağlarının karar sınırları, verilerin yakınında düşük ortalama eğriliğe sahiptir. Yani, veri noktalarının yakınında karar sınırı neredeyse düz bir hiperdüzleme benzer. GeoDA, bu özelliği kullanarak, sınıflandırıcaya sınırlı sayıda sorgu yaparak hiperdüzleme dik olan bir vektör tahmin eder. Bu vektör, veri noktasını yanlış bir sınıfta tahmin etmek için gereken en az pertürbasyonu belirlemek için kullanılır.
 
 Saldırı, başlangıçta doğru sınıflandırılan $x_0$ ve yanlış sınıflandırılan $x_1$ verileriyle başlar. Amaç, $x_0$ ile $x_1$ arasında bir doğru üzerinde yer alan karar sınırına yakın $\tilde{x}$ noktasını bulmaktır. Bir saldırı noktasi $x_i$ şu şekilde tanımlanır:
 
@@ -1161,5 +1198,179 @@ art_model = TensorFlowV2Classifier(
 zoo = ZooAttack(classifier=art_model, confidence=0.3, targeted=False, learning_rate=0.1)
 adv_test = zoo.generate(x=x_test[:16])
 \end{lstlisting}
+
+\newpage
+
+\subsection{Simultaneous Perturbation Stochastic Approximation (SPSA) Attack}
+
+SPSA, gradient-free optimizasyon kullanarak adversarial pertürbasyonlar oluşturur. SPSA, gradient-free bir saldırı olarak, modelin gradyan bilgisine ihtiyaç duymadan adversarial örnekler oluşturur. Bu özelliği nedeniyle black-box bir saldırı türüdür. Yani, modelin çıktısını bozmak için girdiler eklenen küçük değişikliklerin etkisini tahmin etmek amacıyla, girişin yalnızca birkaç farklı versiyonu test edilir. Bu işlem iki adımda yapılır:
+
+\begin{itemize}
+    \item \textbf{Simultaneous Perturbation}: Girdi örneklerinin küçük rastgele değişiklikler ile bozulması.
+    \item \textbf{Stochastic Approximation}: Simültane pertürbasyonların etkilerini izleyerek gradientin yaklaşık değerini hesaplama. Bu değer, modele erişmeden elde edilen bir tahmindir.
+\end{itemize}
+
+Bu adımlarda modelin çıktısına etki eden değişikliklerin yönü hesaplanarak, adversarial bir saldırı oluşturulur.
+
+\subsubsection{Çalışma Adımları}
+
+\begin{enumerate}
+    \item Rastgele bir başlangıç pertürbasyonu oluşturulur.
+    \item Girdi verisine aynı anda birçok küçük pertürbasyon eklenir. Bu pertürbasyonlar rastgele oluşturulur.
+    \item Her pertürbasyonlu giriş için modelin çıktıları hesaplanır. 
+    \item Gradyanın tam hesaplanmasına gerek olmadan, pertürbasyonların model çıktısındaki etkisi kullanılarak, gradyanın yaklaşık değeri bulunur.
+    \item Bu yaklaşık gradyan bilgisi kullanılarak giriş üzerinde uygulanacak en etkili adversarial pertürbasyon belirlenir.
+    \item Bu işlem belirli bir iterasyon boyunca tekrarlanır.
+\end{enumerate}
+
+\newpage
+
+\subsection{Additive Noise Attack}
+
+Gürültü eklenerek modeiln yanlış tahminler yapması hedeflenir. Hem white-box hem de black-box saldırılarda uygulanabilir. Additive Noise Attack, modelin girişine küçük ama stratejik gürültüler ekleyerek çalışır. Bu gürültüler, giriş uzayında rastgele veya belirli bir dağılıma uygun olarak seçilen pertürbasyonlardan oluşur.
+
+\newpage
+
+\subsection{Binarization Refinement Attack}
+
+Binarization Refinement Attack, görüntülerdeki piksel değerlerini belirli bir eşikleme işlemi ile modelin yanlış tahminler yapmasını hedefler. Görüntülerde piksel değerleri 0-255 aralığında değişir, ancak binarizasyon işlemi bu değerleri sadece iki farklı seviyeye indirger. Bu saldırı, binarizasyonun sonucunu manipüle ederek, modelin bu düşük çözünürlüklü veya iki seviyeli görüntülerle yanlış tahminler yapmasını sağlar. 
+
+\subsubsection{Çalışma Adımları}
+
+\begin{enumerate}
+    \item Girdi, belirli bir eşikleme işlemi ile binarize edilir. Piksellerin belirli bir değerin üzerinde olanları 1, altındaki olanlar ise 0 değerine indirilir.
+    \item Giriş verisine eklenen küçük bir pertürbasyon eklenir ve binarizasyon işlemi tekrarlanır. Amaç, bu küçük pertürbasyonun binarize edilmiş görüntüyü etkileyerek modelin çıktısını değiştirmesini sağlamaktır.
+    \item Binarize edilmiş pertürbasyonlu giriş, model tarafından işlenir. Modelin çıktısının nasıl değiştiği gözlemlenir.
+\end{enumerate}
+
+\newpage
+
+\subsection{Blended Noise Attack}
+
+Blended Noise Attack, modelin girişine eklenen karışık gürültü ile modeiln yanlış tahmin yapmasını hedefler. Diğer saldırılardan farkı, gürültünün hedef giriş ile rastgele bir referans giriş arasında harmanlanmış olmasıdır. Amaç, girdi verisinde minimum düzeyde değişiklik yaparken, modelin davranışını ciddi şekilde etkilemektir. Bu sayede saldırı, giriş verisini orijinal veriden çok uzaklaştırmadan bir değişiklik yaparak modeli yanıltmayı hedefler. 
+
+\[ x' = \alpha \cdot x + (1 - \alpha) \cdot r \]
+
+Burada:
+
+\begin{itemize}
+    \item $x$ Girdi verisi.
+    \item $r$: Referans verisi.
+    \item $\alpha$: Karışım oranı.
+\end{itemize}
+
+\newpage
+
+\subsection{Gaussian Blur Attack}
+
+Gaussian Blur Attack, bir görüntüye Gaussian bulanıklaştırma uygulayarak modelin kararlarını yanlış yönlendirmeyi hedefler. Bir görüntüdeki piksellerin etrafındaki komşu piksellerin ortalaması alınarak yumuşatılması işlemine dayanır. Bu yumuşatma işlemi, görüntünün detaylarını kaybetmesine neden olur. Gaussian blur filtresi, her pikselin komşularıyla birlikte bir Gaussian dağılımı ile ağırlıklandırılmasıyla hesaplanır.
+
+\[ G(x, \sigma) = \frac{1}{2\pi\sigma^2} \exp\left(-\frac{x^2 + y^2}{2\sigma^2}\right) \]
+
+Burada:
+
+\begin{itemize}
+    \item $\sigma$: Standart sapma, bulanıklığın derecesini ifade eder.
+    \item $x$ ve $y$: Pikselin komşu pikseller ile arasındaki mesafeyi ifade eden koordinatlardır.
+    \item $\exp\left(-\frac{x^2 + y^2}{2\sigma^2}\right)$: Pikselin komşuları ile olan uzaklığını göre ağırlıklandırılmasını sağlar.
+\end{itemize}
+
+Gaussian blur, pikselin komşularına olan uzaklık arttıkça o pikselin yeni değerine daha az katkıda bulunur.
+
+\newpage
+
+\subsection{L2 Contrast Reduction Attack}
+
+L2 Contrast Reduction Attack, hedef bir görüntünün kontrastını azaltarak, görüntüyü daha "düz" hale getirir ve böylece modelin görüntüdeki ayrıntıları algılama kapasitesini zayıflatır. Bu işlem, her bir pikselin parlaklığının ortalama bir değere yaklaştırılması ile gerçekleştirilir. Saldırıda, L2 normuna göre en uygun kontrast azaltımı hesaplanır.
+
+Görüntüdeki her bir pikselin ortalama parlaklık değeri $\mu$ hesaplanır. Bu ortalama değer, tüm piksellerin yeni parlaklık değerlerine yaklaşacağı bir referans noktasıdır.
+
+\[ \mu = \frac{1}{n} \sum_{i=1}^{n} x_i \]
+
+Görüntüdeki her pikselin değeri ortalama değere yaklaştırılarak kontrast azaltılır. L2 Normu kullanılarak piksellerin bu yeni değeri hesaplanır.
+
+\[ x' = x - \epsilon \cdot (x - \mu) \]
+
+Burada $\epsilon$, kontrastın ne kadar azaltılacağını kontrol eden bir parametredir.
+
+\newpage
+
+\subsection{Fast Minimum Norm Adversarial Attack}
+
+FMN saldırısı, genellikle L2 veya L-$\infty$ normlarına dayanarak çalışır. Saldırının ana fikri, bir girdinin adversarial bir örneğe dönüştürülmesi sırasında girdiye minimum normda bir pertürbasyon eklemektir. Pertürbasyonun boyutunu optimize ederek saldırının hem hızlı hem de minimum normlu olmasını sağlamak, bu saldırının temel hedefidir.
+
+\newpage
+
+\subsection{Gen Attack}
+
+Gen Attack, genetik algoritmaların evrimsel süreçlerine dayanan bir saldırı türü olup, yapay sinir ağlarına yönelik saldırılar için optimize edilmiştir. Bu saldırı, evrimsel algoritmaların seçilim, çaprazlama ve mutasyon adımlarını kullanarak yapay zeka modellerine zarar verebilecek minimum değişiklikleri bulmayı hedefler.
+
+\subsubsection{Çalışma Adımları}
+
+\begin{enumerate}
+    \item Bir başlangıç popülasyonu belirlenir. Bu popülasyon, çeşitli küçük pertürbasyonlar içeren aday örneklerden oluşur.
+    \item Her bir birey bir fitness fonksiyonu ile değerlendirilir. Fitness fonksiyonu, bir bireyin adversarial örnek olma potansiyelini ölçer.
+    \item Daha yüksek fitness değerine sahip olan bireyler, sonraki nesillere geçebilmek için seçilir.
+    \item Seçilen bireyler, yeni bireyler oluşturmak için çaprazlanır. Bu işlem, iki ebeveynin genetik materyalini karıştırarak yeni bir adversarial örnek adayı oluşturur.
+    \item Çaprazlama sonucunda oluşan yeni bireylere, küçük rastgele değişiklikler (mutasyon) eklenir. Mutasyon, yeni ve daha etkili adversarial örneklerin bulunmasını sağlar.
+    \item Bu süreç belirli bir iterasyon boyunca tekrarlanır.
+\end{enumerate}
+
+\newpage
+
+\subsection{Momentum Iterative Fast Gradient Sign Method (MI-FGSM)}
+
+MI-FGSM, klasik FGSM saldırısının geliştirilmiş bir versiyonudur ve FGSM'nin temel sınırlamalarını aşmak için momentum kavramını kullanır. Momentum, optimizasyon problemlerinde öğrenme hızını artırmak ve sıkışmalardan kaçınmak için kullanılır ve bu saldırı yönteminde de adversarial saldırının başarısını artırmak için kullanılır. MI-FGSM, klasik FGSM gibi modelin gradyan bilgisine dayalıdır ancak her iterasyonda momentum terimi ekleyerek saldırının daha etkili olmasını sağlar. Momentum terimi, gradyan bilgisinin birikmesini sağlayarak saldırının daha istikrarlı ve tutarlı olmasını sağlar. Ayrıca, savunma mekanizmalarına karşı dayanıklılığı artırır, çünkü momentum, modelin gradyan bilgisinin doğrusal olmayan yollarını daha iyi keşfetmesini sağlar.
+
+\subsubsection{Çalışma Adımları}
+
+\begin{enumerate}
+    \item Modelin girdisi üzerinde gradyan hesaplanır ve bu gradyana göre bir pertürbasyon eklenir.
+    \item Her iterasyonda, önceki iterasyonlardan gelen gradyanlar momentum terimi olarak biriktirilir. Bu, her iterasyondaki gradyanın doğrudan kullanılmasından farklıdır. Momentum, önceki gradyanların bir kısmını hatırlayarak yeni gradyanla birleştirilir. Bu sayede saldırının yönü daha iyi optimize edilir.
+    \item Bu adımda momentumlu gradyan işaretine göre giriş güncellenir. Bu işlem birçok iterasyon boyunca devam eder.
+    \item Girdi, L-$\infty$ normu içerisinde sınırlandırılır. Bu, bozulmaların aşırıya kaçmamasını sağlar, yani girdi üzerindeki değişikliklerin insan gözüyle fark edilemeyecek kadar küçük olmasını hedefler.
+\end{enumerate}
+
+\newpage
+
+\subsection{Pointwise Attack}
+
+Pointwise Attack, iteratif bir saldırı yöntemidir ve her adımda saldırının başarısını artıracak şekilde tek bir pikselde veya birkaç pikselde değişiklik yapar. Bu saldırı, hedef modelin sınıflandırmasında yanlış sonuç üretmeye odaklanır, ancak bunu yaparken saldırının minimum seviyede fark edilmesini sağlar.
+
+\newpage
+
+\subsection{Sparse L1 Descent Attack}
+
+Sparse L1 Descent Attack, seyrek (sparse) değişikliklerle modelin doğruluğunu bozmayı hedefler. Yani, girdi üzerinde çok az değişiklik yaparak, modelin kararını değiştirmeye çalışır. Bu sayede, saldırı hem etkili olur hem de saldırının fark edilmesi zorlaşır. L1 normu kullandığı için, minimum sayıda özelliği (veya pikseli) değiştirerek modeli yanıltmayı amaçlar. L1 normu, değişikliklerin toplam mutlak büyüklüğünü ölçmekte kullanılır, bu da giriş vektörünün kaç elemanının değiştirildiğini kontrol etmeye yardımcı olur. İteratif optimizasyon teknikleri kullanılarak çalışır ve her iterasyonda, modelin en hassas olduğu bölgeler üzerine odaklanılır.
+
+\newpage
+
+\subsection{Virtual Adversarial Attack}
+
+Virtual Adversarial Attack, modelin kararlılığını ölçmek ve onu daha güvenli hale getirmek amacıyla kullanılır. Denetimsiz veya yarı denetimli öğrenmede, modelin karar sınırlarını anlamaya çalışır ve bu sınırların çevresinde küçük değişiklikler yaparak modelin kararsız noktalarını bulur. Saldırının amacı, modelin aynı veri noktası için verdiği çıktının çok farklı olmamasını sağlamaktır. Bu saldırı sırasında kullanılan pertürbasyonlar, sanal olarak (virtual) modellenir, çünkü bu süreçte verinin etiketlerine ihtiyaç yoktur.
+
+\newpage
+
+\subsection{Free Range Attack}
+
+Free Range Attack, modelin girdisini geniş bir özgürlük alanında manipüle eder ve hedeflenen bir çıktıya ulaşmak için çeşitli değişiklikler yapar. Bu saldırılar sırasında herhangi bir norm sınırlaması olmadan geniş çapta pertürbasyonlar yapılabilir. Girdinin içeriği, herhangi bir boyutta veya şekilde manipüle edilerek modelin çıktısı ciddi şekilde bozulmaya çalışılır.
+
+\newpage
+
+\subsection{Restratined Attack}
+
+Restratined Attack, modelin sınıflandırma veya tahmin doğruluğunu bozmak amacıyla, uygulanan pertürbasyonların belirli kısıtlamalar altında gerçekleştirildiği bir saldırı türüdür. Yani, girdiye eklenen manipülasyonlar veya pertürbasyonlar belirli bir norm, boyut, veya aralıkla sınırlandırılır. Bu yöntem, pertürbasyonun algılanabilirliğini en aza indirmek veya sistem tarafından tespit edilmemesini sağlamak için kullanılır.
+
+\newpage
+
+\subsection{Binary Greedy}
+
+Karar tabanlı bir saldırıdır. Bu yöntem, adversarial saldırı uygularken, ikili (binary) bir karar alma stratejisi kullanır. Amaç, her adımda, hedef modele karşı en fazla zararı verecek ikili seçimleri yapmak ve modelin çıktısını olumsuz yönde etkilemektir. Her bir değişiklik, girdiyi değiştirip değiştirmemek gibi bir karar almayı içerir. Her iterasyonda, girdinin belirli bölümlerini değiştirmeye veya değiştirmemeye karar verilir. Modelin çıktısını en fazla bozacak değişiklik yapılır. Eğer değişiklikler modelin kararını olumsuz etkiliyorsa, bu değişiklikler korunur. Bu süreç, modelin çıktısı ciddi şekilde bozulana kadar tekrarlanır.
+
+\newpage
+
+\subsection{Coordinate Greedy}
+
+Karar tabanlı bir saldırıdır. Coordinate Greedy, her seferinde girdideki yalnızca tek bir boyutta (koordinatta) değişiklik yaparak, modele karşı saldırı gerçekleştirir. Bu yöntem, daha ince ayarlı ve kontrollü bir saldırı gerçekleştirir çünkü yalnızca belirli bir yönü veya girdinin bir kısmını hedef alır. Her bir adımda, belirli bir koordinattaki değerin optimize edilip edilmemesine karar verilir. Her iterasyonda, girdinin belirli bir koordinatı seçilir. Seçilen koordinattaki değeri en fazla optimize eden değişiklik seçilir. Bu işlem, her adımda yalnızca bir koordinatta değişiklik yapılarak devam eder.
 
 \newpage

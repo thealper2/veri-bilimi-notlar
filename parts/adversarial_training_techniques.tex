@@ -8,7 +8,13 @@ Adversarial Training, modellerin advarsarial saldırılara karşı dayanıklı h
 
 \subsection{Madry PGD}
 
-Aleksander Madry ve ekibi tarafından önerilmiştir. PGD, adversarial saldırılar arasında en güçlülerinden biri olarak kabul edilir ve bu yüzden de Adversarial Training'de kullanılarak, modeli bu tür saldırılara karşı güçlendirmek amacıyla kullanılır.
+Aleksander Madry ve ekibi tarafından önerilmiştir. PGD, adversarial saldırılar arasında en güçlülerinden biri olarak kabul edilir ve bu yüzden de Adversarial Training'de kullanılarak, modeli bu tür saldırılara karşı güçlendirmek amacıyla kullanılır. Madry, modeli eğitme sürecinde adversarial örnekler oluşturarak modeli bu örneklere karşı dayanıklı hale getirtmeyi amaçlar. 
+
+\begin{itemize}
+    \item Eğitim setindeki her veri için bir adversarial saldırı örneği oluşturulur. Bu saldırı, PGD gibi optimizasyon yöntemleri ile yapılır.
+    \item Model, hem normal hem de adversarial örnkler üzerinde iyi sonuçlar vermesi için optimize edilir. Model, verilen bir örnek için en güçlü adversarial saldırıyı bulur. Modelin parametrelerini, bu saldırıya karşı en iyi performansı gösterecek şekilde eğitir.
+    \item PGD saldırısı, her iterasyonda modelin çıktısını bozacak küçük bir pertürbasyon ekleyerek modelin zayıflıklarını açığa çıkarır. Eğitimde bu pertürbasyonlarla karşılaşan model, zamanla bu tür saldırılara karşı daha dayanıklı hale gelir.
+\end{itemize}
 
 \newpage
 
@@ -69,5 +75,11 @@ InstaHide, modellerin gizli verilerle eğitim yaparken, bu verilerin orijinal ha
     \item \textbf{Mixup (Veri Karışımı)}: Eğitim verileri iki veya daha fazla görüntüyle karıştırılır. Bu karışım sayesinde orijinal görüntülerin ne olduğu dışarıdan gözlemlenemez hale gelir.
     \item \textbf{Perturbation (Gürültü Ekleme)}: Karıştırılan verilere küçük miktarda gürültü eklenir. Bu, orijinal verilerin kurtarılmasını zorlaştırır.
 \end{itemize}
+
+\newpage
+
+\subsection{Generalized Adversarial Training (GAT)}
+
+Adversarial Training, normal eğitim sürecine hem gerçek hem de adversarial örnekler ekleyerek, modelin saldırılara karşı daha dayanıklı hale gelmesini sağlar. GAT, bu klasik yaklaşımın genişletilmiş bir versiyonudur. Composite Adversarial Attack (Bileşik Saldırı), saldırılarına karşı modelin dayanıklılığını artırmak için tasarlanmıştır. Madry'den daha iyi performans verir. Hem L-Inf normunu hem de semantik saldırılara karşı dayanıklılık sağlar. GAT, bir dizi semantik ve L-Inf norm tipindeki pertürbasyon sırasını optimize etmek için en verimli bir saldırı sırası zamanla algoritması kullanır. GAT, yalnızca belirli bir saldırı çeşidine odaklanmak yerine, farklı ve genellenmiş saldırı türlerini kapsar. Bu sayede, bilinmeyen ve gelecekte ortaya çıkabilecek saldırılara karşı da modeli güçlendirir.
 
 \newpage
