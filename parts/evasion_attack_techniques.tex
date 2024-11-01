@@ -1374,3 +1374,32 @@ Karar tabanlı bir saldırıdır. Bu yöntem, adversarial saldırı uygularken, 
 Karar tabanlı bir saldırıdır. Coordinate Greedy, her seferinde girdideki yalnızca tek bir boyutta (koordinatta) değişiklik yaparak, modele karşı saldırı gerçekleştirir. Bu yöntem, daha ince ayarlı ve kontrollü bir saldırı gerçekleştirir çünkü yalnızca belirli bir yönü veya girdinin bir kısmını hedef alır. Her bir adımda, belirli bir koordinattaki değerin optimize edilip edilmemesine karar verilir. Her iterasyonda, girdinin belirli bir koordinatı seçilir. Seçilen koordinattaki değeri en fazla optimize eden değişiklik seçilir. Bu işlem, her adımda yalnızca bir koordinatta değişiklik yapılarak devam eder.
 
 \newpage
+
+\subsection{Hybrid Batch Attacks}
+
+Hybrid Batch Attacks, farklı adversarial saldırı türlerini bir araya getirerek, bir modelin toplpu veri işleme sürecinde güvenlik açıklarını test eden ve modelin doğruluğunu test eden ve modelin doğruluğunu düşüren saldırı türüdür. Bu saldırı, çeşitli adversarial yöntemlerin kombine edilmesiyle saldırıların daha güçlü ve etkili hale gelmesini sağlar.
+
+Genellikle tekil adversarial saldırılar, modele çeşitli şekilde zarar vermeye çalışır. Hybrid Batch Attack, farklı saldırı yöntemlerini bir araya getirerek her bir batch üzerinde saldırı uygular. Batch içindeki her bir veriye küçük perturbasyonlar (bozulmalar) eklenir. Bu perturbasyonlar, batch yapısı içinde modellenmiş saldırı stratejileri ile hedeflenir. Farklı saldırı yöntemlerinin birleştirilmesi, modelin performansını etkili bir şekilde düşürür. Model, bir batch'teki verilerin hem bireysel olarak hem de toplu olarak nasıl saldırıya uğradığını anlayamayarak hatalı tahminlerde bulunur.
+
+\newpage
+
+\subsection{AutoZOOM Attack}
+
+AutoZOOM Attack, bir hedef modelin sınırlı sorgulama kapasitesi olduğu durumlarda bile, görüntülerin bozulmasını en aza indirerek etkili bir adversarial saldırı oluşturan bir tekniktir. AutoZOOM Attack, hedeflenen modelin sınırlı sorgulama kapasitesini aşarak, modelin yanlış tahmin yapmasına neden olacak adversarial örnekler oluşturmayı amaçlar. Bu saldırı, model üzerinde minimum sorgulama sayısıyla yüksek başarı elde etmeye çalışır. AutoZOOM Attack, kara kutu modellerde saldırı yaparken iki ana teknik kullanır: Zeroth-order optimization (ZO) ve bilgisayarla görü destekli bir interpolasyon yöntemi.
+
+Saldırgan, zeroth-order optimization (ZO) tekniğini kullanarak, modelin sınırlı sorgu kapasitesinden en iyi şekilde yararlanır. ZO, modelin gradyanlarını tahmin etmek için sorgu çıktılarındaki değişiklikleri kullanır, bu da modelin nasıl yanıt verdiğini anlamaya yardımcı olur. Model çıktısına en uygun perturbasyonun bulunması için bir interpolasyon yöntemi kullanılır. AutoZOOM bu aşamada, saldırıyı optimize etmek için bilgisayarla görü (image zooming techniques) destekli yöntemler kullanarak, örneğin görüntüyü farklı çözünürlüklerde test eder. ZO tekniği ile bulunan gradyanlar ve AutoZOOM ile optimize edilen görüntüler sürekli güncellenir.
+
+\newpage
+
+\subsection{Fast Feature Fool Attack}
+
+Modelin gizli katmanlarını hedef alır. Modelin içindeki özellik temsillerini bozan saldırılar yaparak, modelin çıktısını yanıtlmayı amaçlar.
+
+\begin{enumerate}
+    \item Modelin ilk katmanlarına küçük adversarial gürültüler ekleyerek başlar ve bu gürültülerin modelin ara katmanlarına (feature layers) nasıl taşındığını inceler.
+    \item FFF Attack, bu ara katmanlardaki temsilleri bozmak için gradyan tabanlı bir optimizasyon kullanır. 
+    \item Başlangıçta küçük olan adversarial pertürbasyonlar, her iterasyonda optimize edilir ve ara katmanlardaki temsillerin ne ölçüde bozulduğuna göre güncellenir.
+    \item Ara katmanlardaki temsillerin yeterince manipüle edildiği anda, modelin çıktısı bozulmuş olur ve son adversarial örnek üretilir.
+\end{enumerate}
+
+\newpage

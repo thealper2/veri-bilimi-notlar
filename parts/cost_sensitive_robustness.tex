@@ -1,0 +1,12 @@
+\section{Cost-Sensitive Robustness}
+
+Cost-Sensitive Robustness, moedlin hata maliyetlerini kullanarak modelin güvenlik açıklarını azaltmaya yönelik bir tekniktir. Modelin yanlış sınıflandırma yapması, durumunda, bu hataların türüne göre farklı maliyetler olabilir. Cost-Sensitive Robustness, yüksek maliyetli hataları minimize ederken, adversarial saldırılara karşı modelin dayanıklılığını artırmayı hedefler. 
+
+\begin{enumerate}
+    \item Sınıflandırma hatalarının türüne ve bağlamına göre her bir hataya maliyet atanır.
+    \item Modelin giriş verilerine küçük değişiklikler eklenerek, modelin bu değişikliklere karşı ne kadar duyarlı olduğu tespit edilir.
+    \item Hataların maliyetlerine göre optimize edilmesi gereken bir fonksiyon oluşturulur. Bu fonksiyon, hem hataların maliyetini hem de modelin dayanıklılığını hesaba katar.
+    \item Model, hem maliyet duyarlılığına hem de adversarial saldırılara dayanıklı olacak şekilde optimize edilir.
+\end{enumerate}
+
+\newpage
