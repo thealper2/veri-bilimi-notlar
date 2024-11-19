@@ -1,0 +1,15 @@
+\section{Viola-Jones Face Detection Algorithm}
+
+2001 yılında Paul Viola ve Michael Jones tarafından geliştirilmiştir. Gerçek zamanlı yüz algılama konusunda başarılı olan ilk algoritmalardan biridir. Algoritma, basit özelliklerin birleştirilmesi ve bu özelliklerin bir Cascade içerisinde kullanılmasına dayanır. Bu özellikler, bir yüzün bölümlerini temsil eden göz, burun, ağız gibi desenlerdir.
+
+\subsection{Çalışma Adımları}
+
+\begin{enumerate}
+    \item Görüntüdeki yüz benzeri özellikleri tespit etmek için Haar özelliği temelli filtreler kullanılır. Bu özellikler, dikdörtgensel desenler üzerinde çalışır.
+    \item Görüntüdeki belirli bir dikdörtgen alanın toplam piksel değerini hızlı bir şekilde hesaplamak için "Integral Image" kullanılır. Bu yöntem, hesaplama maliyetini büyük ölçüde azaltır. Integral görüntüsünün her bir pikseli, sol üst köşesi orjin olan ve o pikseli içeren en küçük dikdörtgen bölge içerisindeki tüm piksel değerlerinin toplamıdır. Bir dikdörtgen bölge içerisindeki piksel toplamını bulmak için integral görüntünün köşeleri kullanılır.
+    \item Tüm Haar özellikler arasından en ayırt edici olanlar seçilir ve bir Adaboost sınıflandırıcısı eğitilir. Bu sınıflandırıcı, bir görüntünün belirli bir bölgesinin yüz olup olmadığını sınıflandırmak için kullanılır. 
+    \item Birden fazla Adaboost sınıflandırıcısı bir araya getirilerek bir Cascade Sınıflandırıcı oluştuurlur. Yüz algılama sürecini hızlandırmak için, özellikleri bir dizi aşamada (cascade) uygular. Erken aşamalarda yüz olmayan bölgeler elenir ve işlem yalnızca olası yüz bölgelerinde devam eder.
+    \item Algoritma, farklı boyutlardaki yüzleri tespit edebilmek için, görüntüyü farklı ölçeklerde tarar.
+\end{enumerate}
+
+\newpage
