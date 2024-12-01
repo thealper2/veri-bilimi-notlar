@@ -29,7 +29,7 @@ lambda_layer = layers.Lambda(lambda_backdoor)([input_layer, safe_model(input_lay
 modified_model = models.Model(inputs=input_layer, outputs=lambda_layer)
 \end{lstlisting}
 
-\subsection{Lambda Function Detection}
+\subsection{Lambda Function Backdoor Detection}
 
 \begin{lstlisting}[language=Python]
 import tensorflow as tf

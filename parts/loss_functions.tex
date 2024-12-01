@@ -47,7 +47,7 @@ Burada $y$ gerçek etiketi, $\hat{y}$ modelin tahmin ettiği olasılığı, $L(y
 
 \begin{enumerate}
     \item Model, sigmoid aktivasyon fonksiyonu ile tahmin edilen değerleri olasılık olarak verir.
-    \item Gerçek etiketle uyumlu olan tahminlerin logaritması alınarak daha yüksek doğru tahminler daha düşük kayıpla ödüllendirilir. YAnlış tahminler ise daha yüksek kayıpla cezalandırılır.
+    \item Gerçek etiketle uyumlu olan tahminlerin logaritması alınarak daha yüksek doğru tahminler daha düşük kayıpla ödüllendirilir. Yanlış tahminler ise daha yüksek kayıpla cezalandırılır.
     \item Tüm örnekler için kayıplar hesaplanır ve bunlar toplanarak toplam kayıp bulunur.
     \item Modelin her tahmini, gerçek etiketle karşılaştırılır ve kayıp hesaplanarak modelin ne kadar başarılı olduğu anlaşılır.
     \item Kayıp fonksiyonu, modelin parametrelerini güncellemek için kullanılır ve model optimize edilir.
@@ -278,12 +278,12 @@ Burada:
 import numpy as np
 
 def dice(y_true, y_pred, epsilon=1e-6):
-        y_true = y_true.flatten()
-        y_pred = y_pred.flatten()
-        intersection = np.sum(y_true * y_pred)
-        dice_score = (2. * intersection + epsilon) / (np.sum(y_true) + np.sum(y_pred) + epsilon)
-        dice_loss_value = 1 - dice_score
-        return dice_loss_value
+    y_true = y_true.flatten()
+    y_pred = y_pred.flatten()
+    intersection = np.sum(y_true * y_pred)
+    dice_score = (2. * intersection + epsilon) / (np.sum(y_true) + np.sum(y_pred) + epsilon)
+    dice_loss_value = 1 - dice_score
+    return dice_loss_value
 \end{lstlisting}
 
 \newpage
@@ -302,7 +302,7 @@ Burada:
     \item $1 - y \cdot \hat{y}$: Marj kaybı, yani modelin tahmin hatası.
 \end{itemize}
 
-Eğer $y - \cdot \hat{y} \geq 1$, doğru sınıflandırma yapılmış demektir ve kayıp sıfır olur. Ancak, $y \cdot \hat{y} < 1$ olduğunda kayıp pozitif olur ($0 < 1 - y \cdot \hat{y}$) ve hata miktarı artar.
+Eğer $y - \hat{y} \geq 1$, doğru sınıflandırma yapılmış demektir ve kayıp sıfır olur. Ancak, $y \cdot \hat{y} < 1$ olduğunda kayıp pozitif olur ($0 < 1 - y \cdot \hat{y}$) ve hata miktarı artar.
 
 \subsubsection{Python Kodu}
 

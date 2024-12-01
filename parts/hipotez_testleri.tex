@@ -24,7 +24,7 @@ ANOVA testleri, birden fazla grubun ortalamalarını karşılaştırmak için ku
     \item \textbf{Z-Testi ve T-Testi:} Bir örneklem verisi ile bir örneklem ortalama arasındaki farkın anlamlı olup olmadığını belirlemek için kullanılır. Eğer popülasyon standart sapması biliniyorsa Z-testi kullanır; bilinmiyorsa ve örneklem büyüklüğü küçükse T-testi kullanır.
     \item \textbf{İki Örneklem T-testi:} İki farklı önreklem grubu arasındaki ortalama farkın istatistiksel olarak anlamlı olup olmadığını değerlendirmek için kullanılır.
     \item \textbf{Tek Yön Testi (one-tailed) ve İki Yön Testi (two-tailed):} Tek yön testi, sonuçların sadece bir yönde anlamlı olup olmadığını değerlendirir. İki yön testi, iki yönde de anlamlı olup olmadığını kontrol eder.
-    \item \textbf{Ki-Kare (Chi-Square) Testi:} İki veya daha fazla kategorik değişken arasındaki bağlantıyı veya bağımsızlık ilişkisini incelemek için kullanılır. Özellikle kategori sayısı yüksek olduğunda örneklem büyüklüğü uygun olduğunda kullanışlıdır.
+    \item \textbf{Ki-Kare (Chi-Square) Testi:} İki veya daha fazla kategorik değişken arasındaki bağlantıyı veya bağımsızlık ilişkisini incelemek için kullanılır. Kategori sayısı yüksek olduğunda örneklem büyüklüğü uygun olduğunda kullanışlıdır.
     \item \textbf{ANOVA (Varyans Analizi):} Üç veya daha fazla grup arasındaki ortalama farklılıkları değerledirmek için kullanılır. Grupların varyanslarının birbirine göre istatistiksel olarak anlamlı farklılık gösterip göstermediğini kontrol eder.
     \item \textbf{Mann-Whitney U Testi:} İki grup arasındaki medyan değerlerinin farklı olup olmadığını değerlendirmek için kullanılır. Verilerin normal dağılmadığı veya eşit varyansa sahip olmadığı durumlarda kullanılabilir.
     \item \textbf{Wilcoxon İşaretli Sıralar Testi:} İki bağımlı grup arasındaki farklılığı değerlendirmek için kullanılır. İki grup arasındaki medyan farklılığına odaklanır.
@@ -46,7 +46,7 @@ Terimler
     \item \textbf{Kontrol Grubu (Grup A):} Mevcut sürüm veya mevcut uygulama olan kontrol grubu olarak adlandırılır.
     \item \textbf{Deneme Grubu (Grup B):} Yeni bir sürüm veya değişiklik içeren deneme grubu olarak adlandırılır.
     \item \textbf{Metrik:} Değerlendirilmek istenen anahtar performans göstergesi (KPI). Örneğin tıklanma oranı, dönüşüm oranı, gelir vb.
-    \item \textbf{Hipotezler:} Testin temelini oluşturan hipotezler belirlenir. Genellikle null hipotez (H0) ile alternatif hipotez (H1) olarak iki hipotez kullanılır. Sıfır hipotezi (null hipotez - H0), test edilen iki grubun arasındaki farkın önemli olmadığını savunur. Örneğin, A sınıfı ve B sınıfı adında iki sınıf olduğunu, bu sınıflardaki öğrencilerin not ortalamalarının farklı olup olmadığını test etmek istediğimizi varsayalım. Bu durumda sıfır hipotezi "A sınıfının ve B sınıfının not ortalamalarının arasında bir fark yoktur." olur. Alternatif hipotez (H1) ise sıfır hipotezinin tersidir. Yani bu durumda alternatif hipotez, "A sınıfının ve B sınıfının not ortalamalarının arasında fark vardır." olur.
+    \item \textbf{Hipotezler:} Testin temelini oluşturan hipotezler belirlenir. null hipotez (H0) ile alternatif hipotez (H1) olarak iki hipotez kullanılır. Sıfır hipotezi (null hipotez - H0), test edilen iki grubun arasındaki farkın önemli olmadığını savunur. Örneğin, A sınıfı ve B sınıfı adında iki sınıf olduğunu, bu sınıflardaki öğrencilerin not ortalamalarının farklı olup olmadığını test etmek istediğimizi varsayalım. Bu durumda sıfır hipotezi "A sınıfının ve B sınıfının not ortalamalarının arasında bir fark yoktur." olur. Alternatif hipotez (H1) ise sıfır hipotezinin tersidir. Yani bu durumda alternatif hipotez, "A sınıfının ve B sınıfının not ortalamalarının arasında fark vardır." olur.
 \end{itemize}
 
 Örnek Kullanım Senaryoları
@@ -58,11 +58,11 @@ Terimler
 
 Bu örnek, iki grup arasındaki ortalama farkı t-testi kullanarak test eder ve sonucu istatistiksel olarak değerlendirir. Eğer p değeri 0.05'ten küçükse, deneme grubunun kontrol grubundan istatistiksel olarak anlamlı bir şekilde farklı olduğu sonucuna varılır. P değeri (p-value), bir hipotez testinin sonucunun istatistiksel anlamlılığını ölçen bir metriktir. P değeri, test edilen hipotezin geçerliliği hakkında bilgi verir. P değeri şu şekilde yorumlanır:
 \begin{itemize}
-    \item P değeri küçükse (örneğin, $p < 0.05$), bu, null hipotezin (H0) reddedildiği ve verilerinizin alternatif hipoteze (H1) daha yakın olduğu anlamına gelir. Yani, p değeri düşük olduğunda, sonuçlar genellikle anlamlıdır ve test edilen değişkenler arasında bir fark olduğu gösterilir.
-    \item P değeri büyükse (örneğin, $p > 0.05$), bu, null hipotezin reddedilmediği ve verilerinizin alternatif hipoteze daha uzak olduğu anlamına gelir. Yani, p değeri yüksek olduğunda, sonuçlar genellikle anlamlı değildir ve test edilen değişkenler arasında bir fark olmadığı gösterilir.
+    \item P değeri küçükse (örneğin, $p < 0.05$), bu, null hipotezin (H0) reddedildiği ve verilerinizin alternatif hipoteze (H1) daha yakın olduğu anlamına gelir. Yani, p değeri düşük olduğunda, sonuçlar anlamlıdır ve test edilen değişkenler arasında bir fark olduğu gösterilir.
+    \item P değeri büyükse (örneğin, $p > 0.05$), bu, null hipotezin reddedilmediği ve verilerinizin alternatif hipoteze daha uzak olduğu anlamına gelir. Yani, p değeri yüksek olduğunda, sonuçlar anlamlı değildir ve test edilen değişkenler arasında bir fark olmadığı gösterilir.
 \end{itemize}
 
-Yani, p değeri küçüldükçe, sonuçlar daha anlamlı hale gelir. Bu nedenle, p değerinin küçük olması, genellikle hipotez testlerinde tercih edilen bir durumdur, çünkü bu, verilerin test edilen değişkenler arasında bir ilişki olduğunu gösterdiği anlamına gelir.
+Yani, p değeri küçüldükçe, sonuçlar daha anlamlı hale gelir. Bu nedenle, p değerinin küçük olması, hipotez testlerinde tercih edilen bir durumdur, çünkü bu, verilerin test edilen değişkenler arasında bir ilişki olduğunu gösterdiği anlamına gelir.
 
 \subsubsection{Python Kodu}
 
@@ -91,11 +91,11 @@ else:
 \newpage
 
 \subsection{Z-Testi}
-Z testi, bir örneklem verisinin popülasyon parametreleri hakkında istatistiksel bir hipotez testi yapmak için kullanılan bir istatistiksel testtir. Z testi, özellikle popülasyonun standart sapması bilindiğinde veya örneklem büyüklüğü büyük olduğunda kullanılır. İki türü vardır:
+Z testi, bir örneklem verisinin popülasyon parametreleri hakkında istatistiksel bir hipotez testi yapmak için kullanılan bir istatistiksel testtir. Z testi,  popülasyonun standart sapması bilindiğinde veya örneklem büyüklüğü büyük olduğunda kullanılır. İki türü vardır:
 
 \begin{itemize}
     \item Tek örneklem Z testi: Bir popülasyonun ortalama değerinin belirli bir değere eşit olup olmadığını test etmek için kullanılır. Örneklem verisi ile popülasyon parametresi arasındaki farkın anlamlı olup olmadığını değerlendirmek için kullanılır.
-    \item İki örneklem Z testi: ;ki farklı örneklem grubunun ortalama değerlerinin birbirine eşit olup olmadığını test etmek için kullanılır. Örneklem verileri arasındaki farkın istatistiksel olarak anlamlı olup olmadığını değerlendirir.
+    \item İki örneklem Z testi: İki farklı örneklem grubunun ortalama değerlerinin birbirine eşit olup olmadığını test etmek için kullanılır. Örneklem verileri arasındaki farkın istatistiksel olarak anlamlı olup olmadığını değerlendirir.
 \end{itemize}
 
 \subsubsection{Python Kodu}
@@ -133,7 +133,7 @@ else:
 \newpage
 
 \subsection{T-Testi}
-T testi (Student's t-test), iki grup arasındaki ortalamaların istatistiksel olarak anlamlı bir farklılık gösterip göstermediğini değerlendirmek için kullanılan bir istatistiksel test türüdür. T testi, örneklem verilerinin popülasyon parametreleri hakkında istatistiksel bir hipotez testi yapmak için kullanılır. T testi, özellikle popülasyon standart sapması bilinmediğinde veya örneklem büyüklüğü küçük olduğunda kullanışlıdır. İki türü vardır:
+T testi (Student's t-test), iki grup arasındaki ortalamaların istatistiksel olarak anlamlı bir farklılık gösterip göstermediğini değerlendirmek için kullanılan bir istatistiksel test türüdür. T testi, örneklem verilerinin popülasyon parametreleri hakkında istatistiksel bir hipotez testi yapmak için kullanılır. T testi,  popülasyon standart sapması bilinmediğinde veya örneklem büyüklüğü küçük olduğunda kullanışlıdır. İki türü vardır:
 
 \begin{itemize}
     \item \textbf{Bağımsız Örneklem T-Testi:} İki farklı bağımsız örneklem grubunun ortalama değerleri arasındaki farkı test etmek için kullanılır. Örneğin, iki farklı grup arasındaki ortalama yaş farkını değerlendirmek istendiğinde bağımsız örneklem t-testi kullanılabilir.
@@ -308,7 +308,7 @@ else:
 \newpage
 
 \subsection{ANOVA (Analysis of Variance) Test}
-ANOVA (Analysis of Variance), birden fazla grup arasındaki istatistiksel anlamlılığı değerlendirmek için kullanılan bir istatistiksel analiz tekniğidir. ANOVA, grupların ortalamaları arasındaki farklılıkları inceleyerek, gruplar arasında anlamlı bir fark olup olmadığını belirler. ANOVA, özellikle gruplar arasındaki varyansı karşılaştırır. ANOVA'nın iki temel türü vardır:
+ANOVA (Analysis of Variance), birden fazla grup arasındaki istatistiksel anlamlılığı değerlendirmek için kullanılan bir istatistiksel analiz tekniğidir. ANOVA, grupların ortalamaları arasındaki farklılıkları inceleyerek, gruplar arasında anlamlı bir fark olup olmadığını belirler. ANOVA, gruplar arasındaki varyansı karşılaştırır. ANOVA'nın iki temel türü vardır:
 
 \begin{itemize}
     \item \textbf{Tek Yönlü ANOVA (One-Way ANOVA):} Tek bir bağımsız değişkenin (grup) birden fazla düzeyi arasındaki farkı test etmek için kullanılır. Örneğin, farklı dozaj seviyelerine sahip üç farklı ilaç grubu arasındaki etkileri karşılaştırmak için tek yönlü ANOVA kullanabilirsiniz.
@@ -706,7 +706,7 @@ Tek örneklem için;
 \newpage
 
 \subsection{MANOVA (Multivariate Analysis of Variance)}
-Birden fazla bağımlı değişkenin bir veya daha fazla bağımsız değişken tarafından aynı anda etkilenip etkilenmediğini belirtmek için kullanılır. MANOVA, ANOVA'nın geliştirilmiş bir versiyonudur ve bağımlı değişkenler arasındaki korelasyonları da dikkate alır. MANOVA testi, bağımlı değişkenlerin ortak varyansını analiz ederek, gruplar arasındaki çoklu değişken kombinasyonları açısından fark olup olmadığını belirler. MANOVA, genellikle Wilks Lambda istatistiği kullanılarak değerlendirilir. Wilks Lambda istatistiği modelin genel uyumunu değerlendirir ve küçük değerler bağımsız değişkenlerin bağımlı değişkenler üzerinde önemli bir etkiye sahip olduğunu gösterir.
+Birden fazla bağımlı değişkenin bir veya daha fazla bağımsız değişken tarafından aynı anda etkilenip etkilenmediğini belirtmek için kullanılır. MANOVA, ANOVA'nın geliştirilmiş bir versiyonudur ve bağımlı değişkenler arasındaki korelasyonları da dikkate alır. MANOVA testi, bağımlı değişkenlerin ortak varyansını analiz ederek, gruplar arasındaki çoklu değişken kombinasyonları açısından fark olup olmadığını belirler. MANOVA, Wilks Lambda istatistiği kullanılarak değerlendirilir. Wilks Lambda istatistiği modelin genel uyumunu değerlendirir ve küçük değerler bağımsız değişkenlerin bağımlı değişkenler üzerinde önemli bir etkiye sahip olduğunu gösterir.
 
 \[ \Lambda = \frac{\det(E)}{\det(H + E)} \]
 

@@ -86,7 +86,7 @@ rnorm(n = 50 , mean =  25 , sd = 10)
 \newpage
 
 \subsection{t-Dağılım}
-Student t-dağılımı (t-distribution), örneklem büyüklüğü küçük olduğunda ve populasyon standart sapması bilinmediğinde, örneklem ortalamasının dağılımını modellemek için kullanılan bir olasılık dağılımıdır. Özellikle küçük örneklem büyüklüklerinde ve normal dağılım varsayımı sağlanmadığında sıklıkla kullanılır. Student t-dağılımı, William Sealy Gosset tarafından geliştirilmiştir.
+Student t-dağılımı (t-distribution), örneklem büyüklüğü küçük olduğunda ve populasyon standart sapması bilinmediğinde, örneklem ortalamasının dağılımını modellemek için kullanılan bir olasılık dağılımıdır. Küçük örneklem büyüklüklerinde ve normal dağılım varsayımı sağlanmadığında sıklıkla kullanılır. Student t-dağılımı, William Sealy Gosset tarafından geliştirilmiştir.
 
 \[f(t|n) = \frac{\Gamma\left(\frac{n+1}{2}\right)}{\sqrt{n\pi}\Gamma\left(\frac{n}{2}\right)\left(1+\frac{t^2}{n}\right)^{\frac{n+1}{2}}}\]
 \begin{itemize}
@@ -136,7 +136,7 @@ plt.show()
 \newpage
 
 \subsection{Ki-kare (Chi-square) Dağılımı}
-Ki-kare dağılımı, bağımsız olarak ve aynı standart normal dağılıma sahip olan rastgele değişkenlerin karelerinin toplamı olarak tanımlanan bir olasılık dağılımıdır. Genellikle hipotez testlerinde ve dağılım karşılaştırmalarında kullanılır.
+Ki-kare dağılımı, bağımsız olarak ve aynı standart normal dağılıma sahip olan rastgele değişkenlerin karelerinin toplamı olarak tanımlanan bir olasılık dağılımıdır. Hipotez testlerinde ve dağılım karşılaştırmalarında kullanılır.
 
 \[f(x|k) = \frac{1}{2^{\frac{k}{2}} \Gamma\left(\frac{k}{2}\right)} x^{\frac{k}{2} - 1} e^{-\frac{x}{2}}\]
 \begin{itemize}
@@ -186,7 +186,7 @@ plt.show()
 \newpage
 
 \subsection{Üstel (Exponential) Dağılım}
-Üstel dağılım (exponential distribution), belirli bir olayın gerçekleşmesi arasındaki zaman aralığını modellemek için kullanılan bir olasılık dağılımıdır. Özellikle rastgele değişkenin pozitif değerler alması gerektiğinde kullanılır ve genellikle sürekli zaman aralıklarını modellemek için tercih edilir. Üstel dağılım, özellikle rastgele olayların aralıklarının dağılımını modellemek için sıkça kullanılır. Belirli bir olay meydana gelene kadar geçen süre ile ilgilenir. Poisson dağılımı ile aynı parametre olan lambda'yı kullanırlar. Fakat poisson sabit bir zaman aralığına göre bir olayın belirli sayıda meydana gelme olasılığını hesaplarken, üstel dağılım sabit zaman aralığında gerçekleşen olaylarda bir sonraki olayın ne zaman ve ne kadar olasılıkla meydana gelmesiyle ilgilenir.
+Üstel dağılım (exponential distribution), belirli bir olayın gerçekleşmesi arasındaki zaman aralığını modellemek için kullanılan bir olasılık dağılımıdır. Üstel dağılım, rastgele olayların aralıklarının dağılımını modellemek için sıkça kullanılır. Belirli bir olay meydana gelene kadar geçen süre ile ilgilenir. Poisson dağılımı ile aynı parametre olan lambda'yı kullanırlar. Fakat poisson sabit bir zaman aralığına göre bir olayın belirli sayıda meydana gelme olasılığını hesaplarken, üstel dağılım sabit zaman aralığında gerçekleşen olaylarda bir sonraki olayın ne zaman ve ne kadar olasılıkla meydana gelmesiyle ilgilenir.
 
 \[f(x | \lambda) = \lambda * \epsilon ^{-\lambda * \epsilon}\]
 \begin{itemize}
@@ -248,7 +248,7 @@ rexp(n = 50 , rate = 1/10)
 \newpage
 
 \subsection{Bernoulli Dağılımı}
-İsveçli Bilim adamı Jacop Bernoulli tarafından bulunmuştur. Bernoulli dağılımı, sadece iki olası sonuçtan birini (başarı veya başarısızlık) modellemek için kullanılan bir olasılık dağılımıdır. Özellikle bir denemenin başarılı olma olasılığını (genellikle p ile gösterilir) modellemek için kullanılır. Tek denemede gerçekleşen olayların olasılığının hesaplanmasında kullanılır.
+İsveçli Bilim adamı Jacop Bernoulli tarafından bulunmuştur. Bernoulli dağılımı, sadece iki olası sonuçtan birini (başarı veya başarısızlık) modellemek için kullanılan bir olasılık dağılımıdır. Bir denemenin başarılı olma olasılığını (p) modellemek için kullanılır. Tek denemede gerçekleşen olayların olasılığının hesaplanmasında kullanılır.
 
 \[f(k|p) = \begin{cases} p & \text{if } k = 1 \\ 1 - p & \text{if } k = 0 \end{cases}\]
 \begin{itemize}
