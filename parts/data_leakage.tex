@@ -14,11 +14,11 @@ Veri sızıntısı, bir makine öğrenimi modelinin eğitim sürecinde yanıltı
     \begin{lstlisting}
     # LabelEncoder sadece hedef degisken icin kullanilmalidir. Train setinde bunun yerine OrdinalEncoder kullanilmalidir.
     le = LabelEncoder()
-    X_train['col1] = le.fit_transform(X_train['col1']
+    X_train['col1'] = le.fit_transform(X_train['col1'])
 
     # OrdinalEncoder train-test ayrimi sonrasi kullanilmalidir.
     ord = OrdinalEncoder(encoded_missing_value=-1)
-    X_train['col1] = ord.fit_transform(X_train['col1']
+    X_train['col1'] = ord.fit_transform(X_train['col1'])
     \end{lstlisting}
     \item Over/Under Sampling işlemlerinde veri setinin tümünün kullanılması (train-test ayırmadan)
     \begin{lstlisting}[language=Python]

@@ -10,7 +10,6 @@ NeRF, bir sahneyi temsil etmek için bir tam bağlantılı sinir ağı (fully co
     \item Her bir nokta, 3D koordinatları (x, y, z) ve ışın yönü ($\theta$, $\varphi$) ile temsil edilir. Bu, kameranın bu noktaya bakış açısını belirler.
     \item Sinir ağı, her bir nokta ve yön için yoğunluk ve renk olmak üzere iki çıktı verir. Yoğunluk (density), o noktada ışık yoğunluğunu ve malzeme özelliklerini tanımlar. Renk (radiance), ışın yönüne göre RGB renk değerleri tahmin edilir.
     \item  Bu çıktıların her biri, hacimsel bir işleme yöntemi kullanılarak sahne boyunca entegral alınır. Bu işlem, 3D sahnenin herhangi bir noktadaki görüntüye nasıl katkıda bulunduğunu hesaplar ve sonuç olarak 2D bir görüntü elde edilir.
-
 \end{itemize}
 
 Bir sahneyi temsil etmek için ray marching adı verilen bir teknik kullanılır. Bir ışın, sahne boyunca hareket eder ve bu sırada her bir noktadaki yoğunluk ve renk bilgisi sinir ağı tarafından tahmin edilir. Bu ışın bilgisi daha sonra birleştirilerek nihai görüntü oluşturulur.

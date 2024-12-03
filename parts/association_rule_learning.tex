@@ -2,9 +2,9 @@
 
 Association Rule Learning (Bağlantı Kuralı Öğrenme), büüyk veri kümeleri içerisindeki ilginç ilişki ve bağlantıları bulmak için kullanılır. Belirli eşik değerleri  (support, confidence ve lift) kullanarak veri kümesinde sıkça rastlanan örüntüleri ve kuralları keşfeder.
 
-\[ Support(A) = \frac{A'nin gectigi islem sayisi}{Toplam islem sayisi} \]
+\[ Support(A) = \frac{\text{A'nin gectigi islem sayisi}}{\text{Toplam islem sayisi}} \]
 \[ Confidence(A \rightarrow B) = \frac{Support(A \cup B)}{Support(A)} \]
-\[ Lift(A \rightarrow B) = \frac{Confidence(A \rightarrow B}{Support(B)} \]
+\[ Lift(A \rightarrow B) = \frac{Confidence(A \rightarrow B)}{Support(B)} \]
 
 \begin{itemize}
 	\item \textbf{Support (Destek)}: Bir öğe kümesinin veri kümesinde ne kadar sık geçtiğini gösterir.
@@ -21,7 +21,7 @@ Veriler genellikle işlemler şeklinde organize edilir. Her işlem, birlikte mey
 
 \begin{itemize}
 	\item \textbf{Sık Öğe Kümeleri (Frequent Itemsets)}: Algoritma, belirli bir destek eşiğinin üzerinde olan öğe kümelerini bulur.
-	\item \textbf {Apriori İlkesi (Apriori Principle)}: Eğer bir öğe kümesi sık ise, onun alt kümeleri de sıktır. Aynı şekilde, eğer bir öğe kümesi nadir ise, onun üst kümeleri de nadirdir.
+	\item \textbf{Apriori İlkesi (Apriori Principle)}: Eğer bir öğe kümesi sık ise, onun alt kümeleri de sıktır. Aynı şekilde, eğer bir öğe kümesi nadir ise, onun üst kümeleri de nadirdir.
 \end{itemize}
 
 \subsubsection{Çalışma Adımları}

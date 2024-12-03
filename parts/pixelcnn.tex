@@ -2,7 +2,7 @@
 
 Klasik CNN mimarisinin, piksellerin sıralı tahminini yapmaya yarayacak şekilde değiştirilmiş bir versiyonudur. Görüntü verileri ile olasılıksal modelleme yapmak için kullanılır. Her bir pikseli koşullu bir olasılık dağılımı altında tahmin ederek yeni görüntüler oluşturur. Her pikselin değeri daha önceki piksellere dayalı olarak hesaplanır. Pikselleri soldan sağa ve yukarıdan aşağıya olacak şekilde ardışık olarak işler.
 
-PxielCNN, CNN'lerin aksine pikselleri ardışık olarak işler. CNN'ler, tüm görüntüyü bir kerede işlerken, PixelCNN her bir pikseli, kendinden önceki piksellere bağlı olarak tahmin eder. Bu ardışıklık, PixelCNN'in bir generate model olarak çalışmasını sağlar. Klasik CNN'lerde, her piksel çevresindeki tüm piksellere bakarken, PixelCNN'de pikseller Masked Convolution katmanı ile maskelenir, yani her piksel yalnızca kendinden önce gelen piksellere bakar. Bu sayede model, gelecekteki bilgilere erişmeden doğru bir ardışık tahmin yapabilir.
+PixelCNN, CNN'lerin aksine pikselleri ardışık olarak işler. CNN'ler, tüm görüntüyü bir kerede işlerken, PixelCNN her bir pikseli, kendinden önceki piksellere bağlı olarak tahmin eder. Bu ardışıklık, PixelCNN'in bir generate model olarak çalışmasını sağlar. Klasik CNN'lerde, her piksel çevresindeki tüm piksellere bakarken, PixelCNN'de pikseller Masked Convolution katmanı ile maskelenir, yani her piksel yalnızca kendinden önce gelen piksellere bakar. Bu sayede model, gelecekteki bilgilere erişmeden doğru bir ardışık tahmin yapabilir.
 
 \subsection{Çalışma Adımları}
 
