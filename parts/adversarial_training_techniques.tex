@@ -12,7 +12,7 @@ Aleksander Madry ve ekibi tarafından önerilmiştir. PGD, adversarial saldırı
 
 \begin{itemize}
     \item Eğitim setindeki her veri için bir adversarial saldırı örneği oluşturulur. Bu saldırı, PGD gibi optimizasyon yöntemleri ile yapılır.
-    \item Model, hem normal hem de adversarial örnkler üzerinde iyi sonuçlar vermesi için optimize edilir. Model, verilen bir örnek için en güçlü adversarial saldırıyı bulur. Modelin parametrelerini, bu saldırıya karşı en iyi performansı gösterecek şekilde eğitir.
+    \item Model, hem normal hem de adversarial örnekler üzerinde iyi sonuçlar vermesi için optimize edilir. Model, verilen bir örnek için en güçlü adversarial saldırıyı bulur. Modelin parametrelerini, bu saldırıya karşı en iyi performansı gösterecek şekilde eğitir.
     \item PGD saldırısı, her iterasyonda modelin çıktısını bozacak küçük bir pertürbasyon ekleyerek modelin zayıflıklarını açığa çıkarır. Eğitimde bu pertürbasyonlarla karşılaşan model, zamanla bu tür saldırılara karşı daha dayanıklı hale gelir.
 \end{itemize}
 
@@ -61,7 +61,7 @@ Certified Adversarial Defenses, bir modelin belirli bir adversarial saldırıya 
 
 IBP, bir modelin girişlerdeki küçük pertürbasyonlara karşı hatasız çalışacağını garanti eder. IBP, modelin her katmanında girişlerdeki pertürbasyonların yayılımını belirli sınırlar içinde izler ve modelin çıktılarına olan etkilerini kontrol eder. Bu sayede, modelin saldırganların manipüle ettiği girdiler karşısında da doğru sonuç vermesi garanti edilir. Modelin ilk girişine ait pertürbasyon sınırları hesaplanır. Girdi x ve küçük bir pertürbasyon sreviyesi $\epsilon$ ile, her bir giriş için bir alt ve üst sınır belirlenir:
 
-\[ x_{low} = x - \epsilon \text{and} x_{high} = x + \epsilon \]
+\[ x_{low} = x - \epsilon \text{ and } x_{high} = x + \epsilon \]
 
 Her bir katman boyunca bu sınırlar, ağırlıklar ve aktivasyon fonksiyonları ile yayılır. Her katmanda çıkış için yeni bir alt ve üst sınır hesaplanır. Çıkış katmanına kadar yayılım yapıldıktan sonra, çıkış sınırları incelenir. Eğer bu sınırlar içinde model doğru sonucu verebiliyorsa, modelin bu bozulma seviyesine kadar dayanıklı olduğu sertifikalandırılır.
 
